@@ -1,0 +1,42 @@
+name: Turf Engine 24/7 Cloud Sync & Deploy
+
+on:
+  schedule:
+    # Matin : 08h30 GMT (Pronostics du jour)
+    - cron: '30 8 * * *'
+    # Midi / Après-midi : 13h00 GMT (Actualisation T-90 / T-30 Quinté+)
+    - cron: '0 13 * * *'
+    # Soir : 21h30 GMT (Consolidation des arrivées & Bilans)
+    - cron: '30 21 * * *'
+  workflow_dispatch: # Déclenchement manuel 1-clic depuis smartphone ou PC
+
+jobs:
+  sync_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run Turf Prediction Engine & PMU Sync
+        run: |
+          python main.py --action sync --days 2
+
+      - name: Commit & Push Updated Database (Persistance des données)
+        run: |
+          git config --global user.name "Turf-Automation-Bot"
+          git config --global user.email "bot@elite-turf.fr"
+          git add turf_bench.db benchmark_report.json benchmark_dashboard.html site/index.html || true
+          git commit -m "Auto-sync PMU & predictions [skip ci]" || true
+          git push || true
+
+      - name: Deploy to Cloudflare Pages (prono.elite-turf.fr)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          python -c "from turf_lab.cloudflare_deploy import CloudflarePagesDeployer; d = CloudflarePagesDeployer.from_config(); d.deploy_direct('site')"
