@@ -15,7 +15,6 @@ from typing import Any, Dict, List, Optional, Tuple
 from turf_lab.database import TurfDatabase
 from turf_lab.engine import NewValueEngine
 from turf_lab.baselines import ETPEEngineProxy, PressSynthesisEngine, MarketOddsEngine
-from turf_lab.historical_archive import seed_historical_meetings
 
 
 class PMUDataFetcher:
@@ -74,12 +73,41 @@ class DailySyncManager:
         self.etpe_engine = ETPEEngineProxy()
         self.press_engine = PressSynthesisEngine()
         self.market_engine = MarketOddsEngine()
-        # Ensure 29/08 and historical meetings are always seeded
-        seed_historical_meetings(self.db)
+        # Transparence « aucun chiffre retouché » : purge définitive des
+        # courses de référence fictives et des dividendes estimés (idempotent).
+        purged = self.db.purge_fictitious_data()
+        if purged["fictitious_races"] or purged["estimated_rapports"]:
+            print(f"[+] Purge transparence : {purged['fictitious_races']} courses fictives et "
+                  f"{purged['estimated_rapports']} jeux de dividendes estimés supprimés.")
 
     @staticmethod
-    def parse_pmu_time(course_obj: Dict[str, Any], date_str_db: str, c_num: int) -> Tuple[str, str]:
-        """Converts PMU timestamp or time string into precise GMT (Abidjan) and Paris strings."""
+    def paris_utc_offset(dt_utc: datetime) -> int:
+        """Décalage réel Paris vs UTC/GMT : +2 en heure d'été, +1 en heure d'hiver.
+        Règle officielle de l'Union Européenne : l'heure d'été court du dernier
+        dimanche de mars (01:00 UTC) au dernier dimanche d'octobre (01:00 UTC)."""
+        def last_sunday_utc(year: int, month: int) -> datetime:
+            d = datetime(year, month, 31)
+            while d.weekday() != 6:  # 6 = dimanche
+                d -= timedelta(days=1)
+            return d.replace(hour=1)
+
+        year = dt_utc.year
+        if last_sunday_utc(year, 3) <= dt_utc < last_sunday_utc(year, 10):
+            return 2  # heure d'été
+        return 1      # heure d'hiver
+
+    @classmethod
+    def parse_pmu_time(cls, course_obj: Dict[str, Any], date_str_db: str, c_num: int) -> Tuple[str, str]:
+        """Converts PMU timestamp or time string into precise GMT (Abidjan) and Paris strings.
+        Le double affichage « HH:MM GMT (HH:MM Paris) » est conservé, avec le
+        décalage Paris réel selon la saison (heure d'été/hiver)."""
+        # Décalage Paris valable pour la date de la course (calé à midi UTC)
+        try:
+            probe = datetime.strptime(date_str_db, "%Y-%m-%d").replace(hour=12)
+        except Exception:
+            probe = datetime.utcnow()
+        off = cls.paris_utc_offset(probe)
+
         # 1. Check heureDepart (timestamp in ms)
         h_dep = course_obj.get("heureDepart")
         if h_dep and isinstance(h_dep, (int, float)) and h_dep > 0:
@@ -88,10 +116,10 @@ class DailySyncManager:
             else:  # seconds
                 dt_utc = datetime.utcfromtimestamp(h_dep)
             gmt_str = dt_utc.strftime("%H:%M")
-            paris_str = (dt_utc + timedelta(hours=2)).strftime("%H:%M")
+            paris_str = (dt_utc + timedelta(hours=cls.paris_utc_offset(dt_utc))).strftime("%H:%M")
             return f"{gmt_str} GMT ({paris_str} Paris)", dt_utc.isoformat()
 
-        # 2. Check heure string e.g. "15h15" or "15:15"
+        # 2. Check heure string e.g. "15h15" or "15:15" (heure locale Paris)
         h_str = course_obj.get("heure") or course_obj.get("heureTexte") or course_obj.get("heureDepartString")
         if h_str and isinstance(h_str, str):
             clean = h_str.replace("h", ":").replace("H", ":").strip()
@@ -100,7 +128,7 @@ class DailySyncManager:
                 try:
                     p_h = int(parts[0])
                     p_m = int(parts[1])
-                    gmt_h = (p_h - 2) % 24
+                    gmt_h = (p_h - off) % 24
                     return f"{gmt_h:02d}:{p_m:02d} GMT ({p_h:02d}:{p_m:02d} Paris)", f"{date_str_db}T{gmt_h:02d}:{p_m:02d}:00Z"
                 except Exception:
                     pass
@@ -108,7 +136,7 @@ class DailySyncManager:
         # 3. Known standard timetable based on race number (e.g. C1 ~ 11h55 GMT / 13h55 Paris, C2 ~ 12h30, C3 ~ 13h15...)
         standard_gmt_hours = {1: (11, 55), 2: (12, 30), 3: (13, 15), 4: (13, 50), 5: (14, 25), 6: (15, 0), 7: (15, 35), 8: (16, 10), 9: (16, 45)}
         gh, gm = standard_gmt_hours.get(c_num, (11 + (c_num * 35 // 60), (c_num * 35) % 60))
-        ph = (gh + 2) % 24
+        ph = (gh + off) % 24
         return f"{gh:02d}:{gm:02d} GMT ({ph:02d}:{gm:02d} Paris)", f"{date_str_db}T{gh:02d}:{gm:02d}:00Z"
 
     # ------------------------------------------------------------------
@@ -192,8 +220,50 @@ class DailySyncManager:
         return 1
 
     def inject_recent_real_meetings(self):
-        """Compatibilité: ré-injecte les réunions de référence (idempotent)."""
-        seed_historical_meetings(self.db)
+        """Désactivé : plus aucune donnée fictive n'est injectée (transparence)."""
+        return None
+
+    def _fetch_official_rapports(self, date_str_api: str, r_num: int, c_num: int) -> List[Dict[str, Any]]:
+        """Récupère les dividendes définitifs OFFICIELS du flux PMU (jamais estimés).
+
+        Structure réelle de l'API /rapports-definitifs :
+            [ { "typePari": "SIMPLE_GAGNANT",
+                "rapports": [ { "dividendePourUnEuro": 720, "combinaison": "11", ... } ] },
+              ... ]
+        (le dividende est en centimes pour 1 EUR de mise : 720 => 7,20 EUR).
+        L'ancien lecteur cherchait 'dividende' au premier niveau => toujours vide,
+        ce qui déclenchait l'estimation. Corrigé ici, avec repli sur l'ancien
+        format à plat par sécurité."""
+        rapports: List[Dict[str, Any]] = []
+        rap_data = self.fetcher.fetch_rapports(date_str_api, r_num, c_num)
+        if not rap_data:
+            return rapports
+
+        rap_list = rap_data if isinstance(rap_data, list) else rap_data.get("rapports", [])
+        for rp in rap_list:
+            if not isinstance(rp, dict):
+                continue
+            t = rp.get("typePari", "")
+            if not t:
+                continue
+            nested = rp.get("rapports")
+            if isinstance(nested, list):
+                # Format officiel : liste de combinaisons par type de pari
+                for line in nested:
+                    if not isinstance(line, dict):
+                        continue
+                    raw_div = line.get("dividendePourUnEuro", line.get("dividende", 0.0)) or 0.0
+                    div = float(raw_div) / 100.0
+                    comb = str(line.get("combinaison", ""))
+                    if div > 0 and comb:
+                        rapports.append({"bet_type": t, "combination": comb, "dividend": div})
+            else:
+                # Repli : ancien format à plat
+                div = float(rp.get("dividende", 0.0) or 0.0) / 100.0
+                comb = str(rp.get("combinaison", ""))
+                if div > 0 and comb:
+                    rapports.append({"bet_type": t, "combination": comb, "dividend": div})
+        return rapports
 
     def sync_date(self, target_date: Optional[datetime] = None) -> Dict[str, int]:
         if target_date is None:
@@ -251,6 +321,13 @@ class DailySyncManager:
                 existing_race = self.db.get_race(race_id)
                 if existing_race and existing_race.get("status") == "FINISHED":
                     stats["races_frozen"] += 1
+                    # Seule exception au gel : compléter les dividendes OFFICIELS
+                    # s'ils manquent encore (publiés en léger différé par le PMU).
+                    if not self.db.has_rapports(race_id):
+                        late_rapports = self._fetch_official_rapports(date_str_api, r_num, c_num)
+                        if late_rapports:
+                            self.db.save_rapports(race_id, late_rapports)
+                            stats["rapports_backfilled"] = stats.get("rapports_backfilled", 0) + 1
                     continue
                 if existing_race and existing_race.get("status"):
                     race_data["status"] = existing_race["status"]
@@ -371,39 +448,11 @@ class DailySyncManager:
                                 arrival_order.append(item)
 
                 if arrival_order:
-                    rapports = []
-                    rap_data = self.fetcher.fetch_rapports(date_str_api, r_num, c_num)
-                    
-                    if rap_data:
-                        rap_list = rap_data if isinstance(rap_data, list) else rap_data.get("rapports", [])
-                        for rp in rap_list:
-                            if isinstance(rp, dict):
-                                t = rp.get("typePari", "")
-                                div = float(rp.get("dividende", 0.0) or 0.0) / 100.0
-                                comb = str(rp.get("combinaison", ""))
-                                if t and div > 0:
-                                    rapports.append({
-                                        "bet_type": t,
-                                        "combination": comb,
-                                        "dividend": div
-                                    })
-
-                    if not rapports and len(arrival_order) >= 3:
-                        winner_num = arrival_order[0]
-                        second_num = arrival_order[1]
-                        third_num = arrival_order[2]
-
-                        w_odds = next((r["final_odds"] for r in runners if r["num"] == winner_num), 5.0)
-                        s_odds = next((r["final_odds"] for r in runners if r["num"] == second_num), 6.0)
-                        t_odds = next((r["final_odds"] for r in runners if r["num"] == third_num), 8.0)
-
-                        rapports = [
-                            {"bet_type": "SIMPLE_GAGNANT", "combination": str(winner_num), "dividend": max(1.10, round(w_odds * 0.85, 2))},
-                            {"bet_type": "SIMPLE_PLACE", "combination": str(winner_num), "dividend": max(1.10, round(1.0 + (w_odds - 1.0) * 0.28, 2))},
-                            {"bet_type": "SIMPLE_PLACE", "combination": str(second_num), "dividend": max(1.10, round(1.0 + (s_odds - 1.0) * 0.28, 2))},
-                            {"bet_type": "SIMPLE_PLACE", "combination": str(third_num), "dividend": max(1.10, round(1.0 + (t_odds - 1.0) * 0.28, 2))},
-                        ]
-
+                    # UNIQUEMENT les dividendes OFFICIELS PMU. Aucun dividende
+                    # n'est estimé/inventé : sans rapports officiels, la course
+                    # reste dans l'historique et les taux de réussite mais est
+                    # exclue du calcul de ROI (transparence éditoriale).
+                    rapports = self._fetch_official_rapports(date_str_api, r_num, c_num)
                     self.db.save_results(race_id, arrival_order, disqualified=disqualified_list, rapports=rapports)
                     stats["results_resolved"] += 1
 

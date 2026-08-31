@@ -346,7 +346,7 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                 <h3>🛡️ Formule Sécurité Abonnés</h3>
                 <p><strong>Pari recommandé :</strong> Couplé Placé ou 2sur4</p>
                 <p>Jeu direct sur les 2 Bases solides avec filtration des forfaits (NP).</p>
-                <span class="badge-rec">ROI Banc : +24.1%</span>
+                <span class="badge-rec">ROI Banc : {new_sp_roi:+.1f}%</span>
             </div>
             <div class="strategy-card amber">
                 <h3>⭐ Couplé Maître / Spéculatif</h3>

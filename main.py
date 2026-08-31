@@ -140,10 +140,8 @@ def main():
             print(f"    - Pronostics verrouilles : {stats['predictions_locked']}")
             print(f"    - Resultats resolus : {stats['results_resolved']}")
 
-        if len(db.get_finished_races()) == 0:
-            print("[*] Injection des reunions reelles verifiees (Vincennes & Cabourg)...")
-            manager.inject_recent_real_meetings()
-            print("[+] Reunions reelles injectees avec succes.")
+        # (Transparence) Plus aucune injection de reunions de reference :
+        # seules les courses reelles du flux PMU alimentent la base.
 
     print("[*] Calcul des metriques d'evaluation sur le banc de mesure...")
     lab = TurfBenchmarkLab(db)

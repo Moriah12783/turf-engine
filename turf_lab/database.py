@@ -239,6 +239,93 @@ class TurfDatabase:
                 json.dumps(prediction_data.get("metadata", {}))
             ))
 
+    # ------------------------------------------------------------------
+    # Transparence éditoriale (« aucun chiffre retouché »)
+    # ------------------------------------------------------------------
+    FICTITIOUS_RACE_IDS = (
+        [f"R9C{i}_29082026_STGALMIER" for i in range(1, 9)] +
+        [f"R8C{i}_29082026_CAVAILLON" for i in range(1, 9)] +
+        [f"R1C{i}_29082026_VINC" for i in range(1, 10)] +
+        [f"R1C{i}_28082026_CAB" for i in range(1, 9)]
+    )
+
+    def purge_fictitious_data(self) -> Dict[str, int]:
+        """Purge définitive des données non réelles :
+        1) les 33 courses de référence injectées à la main (chevaux, cotes et
+           rapports fictifs) — supprimées de toutes les tables ;
+        2) les dividendes ESTIMÉS par l'ancienne formule (SG = cote x 0.85,
+           SP = 1 + (cote-1) x 0.28) — supprimés ; la course reste dans
+           l'historique et les taux de réussite, mais sort du calcul de ROI
+           tant qu'aucun dividende officiel n'est disponible.
+        Idempotent : ne fait rien si tout est déjà propre."""
+        removed = {"fictitious_races": 0, "estimated_rapports": 0}
+        with self.transaction() as conn:
+            cursor = conn.cursor()
+
+            # 1) Courses fictives
+            for race_id in self.FICTITIOUS_RACE_IDS:
+                cursor.execute("SELECT 1 FROM races WHERE race_id = ?", (race_id,))
+                if not cursor.fetchone():
+                    continue
+                for table in ("odds_snapshots", "rapports", "race_results", "predictions", "runners", "races"):
+                    cursor.execute(f"DELETE FROM {table} WHERE race_id = ?", (race_id,))
+                removed["fictitious_races"] += 1
+
+            # 2) Dividendes estimés (signature exacte de l'ancienne formule)
+            cursor.execute("""
+                SELECT rr.race_id, rr.arrival_order_json FROM race_results rr
+                WHERE EXISTS (SELECT 1 FROM rapports rp WHERE rp.race_id = rr.race_id)
+            """)
+            for row in cursor.fetchall():
+                race_id = row["race_id"]
+                try:
+                    arrival = json.loads(row["arrival_order_json"])
+                except Exception:
+                    continue
+                if not arrival:
+                    continue
+                winner = arrival[0]
+                cursor.execute("SELECT final_odds FROM runners WHERE race_id = ? AND num = ?", (race_id, winner))
+                w_row = cursor.fetchone()
+                if not w_row or w_row["final_odds"] is None:
+                    continue
+                w_odds = float(w_row["final_odds"])
+
+                cursor.execute("SELECT bet_type, combination, dividend FROM rapports WHERE race_id = ?", (race_id,))
+                raps = cursor.fetchall()
+                # L'estimation produisait exactement 1 SG + 3 SP, rien d'autre
+                types = [r["bet_type"] for r in raps]
+                if sorted(set(types)) != ["SIMPLE_GAGNANT", "SIMPLE_PLACE"] or len(raps) != 4:
+                    continue
+                sg = next((r for r in raps if r["bet_type"] == "SIMPLE_GAGNANT"), None)
+                sp_w = next((r for r in raps if r["bet_type"] == "SIMPLE_PLACE" and str(r["combination"]) == str(winner)), None)
+                if not sg or not sp_w or str(sg["combination"]) != str(winner):
+                    continue
+                est_sg = max(1.10, round(w_odds * 0.85, 2))
+                est_sp = max(1.10, round(1.0 + (w_odds - 1.0) * 0.28, 2))
+                if abs(float(sg["dividend"]) - est_sg) <= 0.011 and abs(float(sp_w["dividend"]) - est_sp) <= 0.011:
+                    cursor.execute("DELETE FROM rapports WHERE race_id = ?", (race_id,))
+                    removed["estimated_rapports"] += 1
+
+        return removed
+
+    def has_rapports(self, race_id: str) -> bool:
+        with self.transaction() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT 1 FROM rapports WHERE race_id = ? LIMIT 1", (race_id,))
+            return cursor.fetchone() is not None
+
+    def save_rapports(self, race_id: str, rapports: List[Dict[str, Any]]):
+        """Enregistre des dividendes OFFICIELS pour une course (sans toucher au reste)."""
+        with self.transaction() as conn:
+            cursor = conn.cursor()
+            for rap in rapports:
+                rap_id = f"{race_id}_{rap['bet_type']}_{rap['combination']}"
+                cursor.execute("""
+                INSERT OR IGNORE INTO rapports (rapport_id, race_id, bet_type, combination, dividend)
+                VALUES (?, ?, ?, ?, ?)
+                """, (rap_id, race_id, rap["bet_type"], str(rap["combination"]), float(rap["dividend"])))
+
     def has_prediction(self, race_id: str, engine_name: str, horizon: str) -> bool:
         """True if a prediction is already locked for this (race, engine, horizon).
         Used to guarantee that a locked horizon is NEVER overwritten by later syncs."""

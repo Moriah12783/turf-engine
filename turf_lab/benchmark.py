@@ -119,8 +119,12 @@ class TurfBenchmarkLab:
                 if outsider in top3:
                     outsider_placed += 1
 
-            # Financials
+            # Financials — UNIQUEMENT sur dividendes officiels : une course sans
+            # rapports PMU réels reste comptée dans les taux de réussite mais est
+            # exclue des mises/ROI (aucun dividende n'est jamais estimé).
             rapports = eval_data.get("rapports", [])
+            has_sg_rapports = any(r.get("bet_type") == "SIMPLE_GAGNANT" for r in rapports)
+            has_sp_rapports = any(r.get("bet_type") == "SIMPLE_PLACE" for r in rapports)
             sg_dividend = 0.0
             sp_dividend_b1 = 0.0
             sp_dividend_b2 = 0.0
@@ -138,17 +142,19 @@ class TurfBenchmarkLab:
                     if b2 and comb == str(b2):
                         sp_dividend_b2 = div
 
-            sg_stake += 1.0
-            sg_return += sg_dividend
-            sg_bankroll_history.append(sg_return - sg_stake)
+            if has_sg_rapports:
+                sg_stake += 1.0
+                sg_return += sg_dividend
+                sg_bankroll_history.append(sg_return - sg_stake)
 
-            if b1:
-                sp_stake += 1.0
-                sp_return += sp_dividend_b1
-            if b2:
-                sp_stake += 1.0
-                sp_return += sp_dividend_b2
-            sp_bankroll_history.append(sp_return - sp_stake)
+            if has_sp_rapports:
+                if b1:
+                    sp_stake += 1.0
+                    sp_return += sp_dividend_b1
+                if b2:
+                    sp_stake += 1.0
+                    sp_return += sp_dividend_b2
+                sp_bankroll_history.append(sp_return - sp_stake)
 
             # Probabilities calibration
             if probs:
