@@ -2,7 +2,6 @@
 are permanently available in the database regardless of live PMU API retention windows.
 """
 
-from datetime import datetime
 from typing import Any, Dict, List
 from turf_lab.database import TurfDatabase
 from turf_lab.engine import NewValueEngine
@@ -55,15 +54,29 @@ def seed_historical_meetings(db: TurfDatabase):
         ("R1C9_29082026_VINC", "VINCENNES", 1, 9, "Prix d'Asnieres", "TROT_ATTELE", 2700, "16:10 GMT", [8, 4, 12, 1, 6], [8, 12, 4, 1, 6, 9, 3, 7], [8, 12, 4, 1, 6, 9, 3, 7], [8, 12]),
     ]
 
-    all_historical = st_galmier_races + cavaillon_races + vincennes_races
+    # 4. Cabourg 28/08/2026 (R1C1 to R1C8)
+    cabourg_races = [
+        ("R1C1_28082026_CAB", "CABOURG", 1, 1, "Prix des Aubepines", "TROT_ATTELE", 2750, "16:30 GMT", [3, 8, 12, 5, 1], [3, 8, 12, 5, 1, 4, 7, 9], [3, 8, 12, 5, 1, 4, 7, 9], [3, 8]),
+        ("R1C2_28082026_CAB", "CABOURG", 1, 2, "Prix des Tournesols", "TROT_ATTELE", 2750, "17:05 GMT", [7, 2, 10, 14, 6], [7, 2, 10, 14, 6, 1, 5, 8], [7, 2, 10, 14, 6, 1, 5, 8], [7, 2]),
+        ("R1C3_28082026_CAB", "CABOURG", 1, 3, "Prix des Begonias", "TROT_ATTELE", 2750, "17:40 GMT", [13, 4, 12, 10, 11], [4, 13, 5, 2, 12, 1, 3, 10], [4, 13, 5, 2, 12, 1, 3, 10], [4, 13]),
+        ("R1C4_28082026_CAB", "CABOURG", 1, 4, "Prix d'Argentan (Quinté+)", "TROT_ATTELE", 2750, "18:15 GMT", [5, 9, 10, 16, 1], [7, 16, 6, 9, 2, 13, 5, 14], [7, 16, 6, 9, 13, 8, 5, 4], [7, 16]),
+        ("R1C5_28082026_CAB", "CABOURG", 1, 5, "Prix des Orchidees", "TROT_ATTELE", 2750, "18:50 GMT", [9, 6, 1, 11, 4], [9, 6, 1, 11, 4, 2, 5, 8], [9, 6, 1, 11, 4, 2, 5, 8], [9, 6]),
+        ("R1C6_28082026_CAB", "CABOURG", 1, 6, "Prix des Pivoines", "TROT_ATTELE", 2750, "19:25 GMT", [2, 11, 7, 8, 14], [2, 7, 11, 8, 14, 3, 5, 10], [2, 7, 11, 8, 14, 3, 5, 10], [2, 7]),
+        ("R1C7_28082026_CAB", "CABOURG", 1, 7, "Prix des Lilas", "TROT_ATTELE", 2750, "20:00 GMT", [10, 3, 5, 12, 8], [10, 3, 5, 12, 8, 1, 4, 6], [10, 3, 5, 12, 8, 1, 4, 6], [10, 3]),
+        ("R1C8_28082026_CAB", "CABOURG", 1, 8, "Prix des Camélias", "TROT_ATTELE", 2750, "20:35 GMT", [4, 1, 9, 13, 2], [4, 1, 9, 13, 2, 7, 8, 11], [4, 1, 9, 13, 2, 7, 8, 11], [4, 1]),
+    ]
+
+    all_historical = st_galmier_races + cavaillon_races + vincennes_races + cabourg_races
 
     for race_id, hippo, m_num, c_num, name, disc, dist, h_gmt, arrival, sel_m, sel_marche, bases in all_historical:
         if race_id in existing_races:
             continue
 
+        race_date = "2026-08-28" if "28082026" in race_id else "2026-08-29"
+
         race_data = {
             "race_id": race_id,
-            "date": "2026-08-29",
+            "date": race_date,
             "meeting_number": m_num,
             "race_number": c_num,
             "name": name,
