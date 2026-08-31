@@ -2,19 +2,22 @@ name: Turf Engine 24/7 Cloud Sync & Deploy
 
 on:
   schedule:
-    # Matin : 08h30 GMT (Pronostics du jour)
+    # Matin : 08h30 GMT (Préparation Matin)
     - cron: '30 8 * * *'
-    # Midi / Après-midi : 13h00 GMT (Actualisation T-90 / T-30 Quinté+)
-    - cron: '0 13 * * *'
+    # Midi : 12h00 GMT (Édition Abonnés T-90 premières courses)
+    - cron: '0 12 * * *'
+    # Début Après-midi : 12h45 GMT (Cockpit Live T-30 Quinté+)
+    - cron: '45 12 * * *'
     # Soir : 21h30 GMT (Consolidation des arrivées & Bilans)
     - cron: '30 21 * * *'
   workflow_dispatch: # Déclenchement manuel 1-clic depuis smartphone ou PC
 
+permissions:
+  contents: write
+
 jobs:
   sync_and_deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -24,16 +27,16 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Run Turf Prediction Engine & PMU Sync (5 Jours d'Historique)
+      - name: Run Turf Prediction Engine (7 Jours d'Historique & 4 Horizons T_MATIN, T90, T30, T15)
         run: |
-          python main.py --action sync --days 5
+          python main.py --action sync --days 7
 
-      - name: Commit & Push Updated Database (Persistance de l'historique)
+      - name: Commit & Push Updated Database (Persistance définitive de l'historique)
         run: |
           git config --global user.name "Turf-Automation-Bot"
           git config --global user.email "bot@elite-turf.fr"
           git add turf_bench.db benchmark_report.json benchmark_dashboard.html site/index.html || true
-          git commit -m "Auto-sync PMU & predictions 5-days history [skip ci]" || true
+          git commit -m "Auto-sync PMU 7-days multi-horizon [skip ci]" || true
           git push || true
 
       - name: Deploy to Cloudflare Pages (prono.elite-turf.fr)

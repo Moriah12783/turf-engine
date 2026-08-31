@@ -1,5 +1,5 @@
 """HTML Dashboard generator with interactive Date Tabs, GMT Start Times,
-Bi-Horizon T-90 (Édition Abonnés) & T-30 (Cockpit Live LONACI Online),
+Full 4-Horizon Continuum (T-Matin, T-90 Abonnés, T-30 Live, T-15 Clôture, Clôturé),
 Interactive Copyable Smart Tickets, and 1-Click Deep Race Inspector Modal.
 """
 
@@ -9,7 +9,7 @@ from typing import Any, Dict, List
 
 
 def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "benchmark_dashboard.html") -> str:
-    """Generate an interactive, modern, client-side searchable HTML dashboard with 1-click modal inspector, GMT timestamps, and bi-horizon indicators."""
+    """Generate an interactive, modern, client-side searchable HTML dashboard with 1-click modal inspector, GMT timestamps, and full 4-horizon indicators."""
     evals = report_data.get("evaluations", {})
     total_races = report_data.get("total_finished_races", 0)
     disc_breakdown = report_data.get("discipline_breakdown", {})
@@ -414,7 +414,7 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                 <p id="modal-subtitle">⏰ Départ : --:-- GMT • Hippodrome • Discipline • Distance</p>
             </div>
 
-            <!-- Confidence & Bi-Horizon Banner -->
+            <!-- Confidence & 4-Horizon Banner -->
             <div style="background:#0e1726; border:1px solid var(--border); border-radius:10px; padding:14px 18px; margin-bottom:18px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
                 <div>
                     <span style="color:var(--text-muted); font-size:0.85rem; font-weight:600; text-transform:uppercase;">Indice de Confiance :</span>
@@ -662,7 +662,7 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
             renderTable();
         }}
 
-        // Bi-Horizon Modal Inspector Functions
+        // Full 4-Horizon Modal Inspector Functions
         function openRaceModal(raceId) {{
             const item = allLogs.find(r => r.race_id === raceId);
             if (!item) return;
@@ -682,7 +682,7 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                 badgeBox.innerHTML = `<span class="badge-base">Course Régulière</span>`;
             }}
 
-            // Bi-Horizon Dynamic Indicator
+            // Full 4-Horizon Dynamic Indicator
             const horizonBadge = document.getElementById("modal-horizon-badge");
             const horizonInfo = document.getElementById("horizon-info-text");
             const oddsHeader = document.getElementById("modal-odds-header");
@@ -705,7 +705,13 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                     }}
                 }}
 
-                if (diffMin <= 30) {{
+                if (diffMin <= 15) {{
+                    horizonBadge.textContent = "🔒 Clôture Finale (T-15 Smart Money)";
+                    horizonBadge.style.borderColor = "#ef4444";
+                    horizonBadge.style.color = "#f87171";
+                    horizonInfo.textContent = "Dernières minutes avant le départ. Cotes ultra-directes et mouvements d'argent verrouillés à T-15.";
+                    oddsHeader.textContent = "Cote T-15 Directe";
+                }} else if (diffMin <= 30) {{
                     horizonBadge.textContent = "⚡ Cockpit Live (T-30 LONACI Online)";
                     horizonBadge.style.borderColor = "var(--green)";
                     horizonBadge.style.color = "var(--green)";

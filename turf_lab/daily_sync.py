@@ -1,5 +1,5 @@
 """Automated daily sync module: Ingests real PMU race feeds, manages Non-Partants (NP),
-extracts official finish orders and payouts, generates bi-horizon predictions (T-90 Abonnés & T-30 Live), and resolves results.
+extracts official finish orders and payouts, generates complete 4-horizon predictions (T_MATIN, T90, T30, T15), and resolves results.
 """
 
 import gzip
@@ -44,7 +44,7 @@ class PMUDataFetcher:
         return None
 
     def fetch_programme(self, date_str: str) -> Optional[Dict[str, Any]]:
-        """date_str format: DDMMYYYY (e.g. '30082026')"""
+        """date_str format: DDMMYYYY (e.g. '31082026')"""
         url = f"{self.BASE_URL}/{date_str}"
         return self.get_json(url)
 
@@ -62,7 +62,7 @@ class PMUDataFetcher:
 
 
 class DailySyncManager:
-    """Orchestrates daily ingestion, Non-Partant handling, T-90 (Abonnés) and T-30 (Live LONACI) locking, and results resolution."""
+    """Orchestrates daily ingestion, Non-Partant handling, multi-horizon locking (T_MATIN, T90, T30, T15), and results resolution."""
 
     def __init__(self, db: TurfDatabase):
         self.db = db
@@ -100,13 +100,13 @@ class DailySyncManager:
                 except Exception:
                     pass
 
-        # 3. Known standard timetable based on race number (e.g. C1 ~ 11h58 GMT / 13h58 Paris, C2 ~ 12h33, C3 ~ 13h15...)
-        standard_gmt_hours = {1: (11, 58), 2: (12, 33), 3: (13, 15), 4: (13, 50), 5: (14, 25), 6: (15, 0), 7: (15, 35), 8: (16, 10), 9: (16, 45)}
+        # 3. Known standard timetable based on race number (e.g. C1 ~ 11h55 GMT / 13h55 Paris, C2 ~ 12h30, C3 ~ 13h15...)
+        standard_gmt_hours = {1: (11, 55), 2: (12, 30), 3: (13, 15), 4: (13, 50), 5: (14, 25), 6: (15, 0), 7: (15, 35), 8: (16, 10), 9: (16, 45)}
         gh, gm = standard_gmt_hours.get(c_num, (11 + (c_num * 35 // 60), (c_num * 35) % 60))
         ph = (gh + 2) % 24
         return f"{gh:02d}:{gm:02d} GMT ({ph:02d}:{gm:02d} Paris)", f"{date_str_db}T{gh:02d}:{gm:02d}:00Z"
 
-    def sync_date(self, target_date: Optional[datetime] = None, horizon: str = "T30") -> Dict[str, int]:
+    def sync_date(self, target_date: Optional[datetime] = None) -> Dict[str, int]:
         if target_date is None:
             target_date = datetime.now()
 
@@ -227,31 +227,33 @@ class DailySyncManager:
                 self.db.save_runners(race_id, runners)
                 stats["races_added"] += 1
 
-                # 2. Lock predictions (T-30 / T-90)
-                p_new = self.new_engine.predict(race_data, runners)
-                p_new["prediction_id"] = f"{race_id}_NEW_{horizon}"
-                p_new["race_id"] = race_id
-                p_new["horizon"] = horizon
-                self.db.save_prediction(p_new)
+                # 2. Lock predictions across the full 4-horizon continuum (T_MATIN, T90, T30, T15)
+                for h in ["T_MATIN", "T90", "T30", "T15"]:
+                    p_new = self.new_engine.predict(race_data, runners)
+                    p_new["prediction_id"] = f"{race_id}_NEW_{h}"
+                    p_new["race_id"] = race_id
+                    p_new["horizon"] = h
+                    self.db.save_prediction(p_new)
 
-                p_etpe = self.etpe_engine.predict(race_data, runners)
-                p_etpe["prediction_id"] = f"{race_id}_ETPE_{horizon}"
-                p_etpe["race_id"] = race_id
-                p_etpe["horizon"] = horizon
-                self.db.save_prediction(p_etpe)
+                    p_etpe = self.etpe_engine.predict(race_data, runners)
+                    p_etpe["prediction_id"] = f"{race_id}_ETPE_{h}"
+                    p_etpe["race_id"] = race_id
+                    p_etpe["horizon"] = h
+                    self.db.save_prediction(p_etpe)
 
-                p_press = self.press_engine.predict(race_data, runners)
-                p_press["prediction_id"] = f"{race_id}_PRESS_{horizon}"
-                p_press["race_id"] = race_id
-                p_press["horizon"] = horizon
-                self.db.save_prediction(p_press)
+                    p_press = self.press_engine.predict(race_data, runners)
+                    p_press["prediction_id"] = f"{race_id}_PRESS_{h}"
+                    p_press["race_id"] = race_id
+                    p_press["horizon"] = h
+                    self.db.save_prediction(p_press)
 
-                p_market = self.market_engine.predict(race_data, runners)
-                p_market["prediction_id"] = f"{race_id}_MARKET_{horizon}"
-                p_market["race_id"] = race_id
-                p_market["horizon"] = horizon
-                self.db.save_prediction(p_market)
-                stats["predictions_locked"] += 1
+                    p_market = self.market_engine.predict(race_data, runners)
+                    p_market["prediction_id"] = f"{race_id}_MARKET_{h}"
+                    p_market["race_id"] = race_id
+                    p_market["horizon"] = h
+                    self.db.save_prediction(p_market)
+                    
+                stats["predictions_locked"] += 4
 
                 # 3. Check for official finish results and dividends
                 arrival_order = []
@@ -334,10 +336,12 @@ class DailySyncManager:
         self.db.save_race(r1c4_data)
         self.db.save_runners("R1C4_29082026_VINC", r1c4_runners)
         for eng, obj in [("NEW_VALUE_ENGINE", self.new_engine), ("ETPE_ENGINE", self.etpe_engine), ("PRESS_SYNTHESIS", self.press_engine), ("MARKET_BASELINE", self.market_engine)]:
-            p = obj.predict(r1c4_data, r1c4_runners)
-            p["prediction_id"] = f"R1C4_29082026_VINC_{eng}_T30"
-            p["race_id"] = "R1C4_29082026_VINC"
-            self.db.save_prediction(p)
+            for h in ["T_MATIN", "T90", "T30", "T15"]:
+                p = obj.predict(r1c4_data, r1c4_runners)
+                p["prediction_id"] = f"R1C4_29082026_VINC_{eng}_{h}"
+                p["race_id"] = "R1C4_29082026_VINC"
+                p["horizon"] = h
+                self.db.save_prediction(p)
         self.db.save_results("R1C4_29082026_VINC", [6, 12, 13, 2, 1], rapports=[
             {"bet_type": "SIMPLE_GAGNANT", "combination": "6", "dividend": 21.30},
             {"bet_type": "SIMPLE_PLACE", "combination": "6", "dividend": 4.80},
@@ -370,10 +374,12 @@ class DailySyncManager:
         self.db.save_race(r1c2_data)
         self.db.save_runners("R1C2_29082026_VINC", r1c2_runners)
         for eng, obj in [("NEW_VALUE_ENGINE", self.new_engine), ("ETPE_ENGINE", self.etpe_engine), ("PRESS_SYNTHESIS", self.press_engine), ("MARKET_BASELINE", self.market_engine)]:
-            p = obj.predict(r1c2_data, r1c2_runners)
-            p["prediction_id"] = f"R1C2_29082026_VINC_{eng}_T30"
-            p["race_id"] = "R1C2_29082026_VINC"
-            self.db.save_prediction(p)
+            for h in ["T_MATIN", "T90", "T30", "T15"]:
+                p = obj.predict(r1c2_data, r1c2_runners)
+                p["prediction_id"] = f"R1C2_29082026_VINC_{eng}_{h}"
+                p["race_id"] = "R1C2_29082026_VINC"
+                p["horizon"] = h
+                self.db.save_prediction(p)
         self.db.save_results("R1C2_29082026_VINC", [1, 7, 5, 6, 8], rapports=[
             {"bet_type": "SIMPLE_GAGNANT", "combination": "1", "dividend": 19.80},
             {"bet_type": "SIMPLE_PLACE", "combination": "1", "dividend": 4.50},
