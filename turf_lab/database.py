@@ -262,11 +262,21 @@ class TurfDatabase:
         with self.transaction() as conn:
             cursor = conn.cursor()
 
-            # 1) Courses fictives
+            # 1) Courses fictives — suppression CHIRURGICALE : certaines vraies
+            # courses PMU (ex: Cavaillon 29/08) portent le même identifiant que
+            # des courses injectées. On ne supprime que si la course porte la
+            # signature des données fabriquées (partants "J.DRIVER"/"T.TRAINER") ;
+            # une vraie course ré-importée du flux PMU n'est JAMAIS touchée.
             for race_id in self.FICTITIOUS_RACE_IDS:
                 cursor.execute("SELECT 1 FROM races WHERE race_id = ?", (race_id,))
                 if not cursor.fetchone():
                     continue
+                cursor.execute(
+                    "SELECT 1 FROM runners WHERE race_id = ? AND (driver_jockey = 'J.DRIVER' OR trainer = 'T.TRAINER') LIMIT 1",
+                    (race_id,)
+                )
+                if not cursor.fetchone():
+                    continue  # données réelles : on préserve
                 for table in ("odds_snapshots", "rapports", "race_results", "predictions", "runners", "races"):
                     cursor.execute(f"DELETE FROM {table} WHERE race_id = ?", (race_id,))
                 removed["fictitious_races"] += 1
