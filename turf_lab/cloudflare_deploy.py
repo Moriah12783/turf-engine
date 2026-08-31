@@ -62,22 +62,47 @@ class CloudflarePagesDeployer:
         ctx.check_hostname = False
         ctx.verify_mode = ssl.CERT_NONE
 
-        try:
-            with open(index_file, "rb") as f:
-                content = f.read()
-            file_hash = hashlib.sha256(content).hexdigest()
+        content_types = {
+            ".html": "text/html",
+            ".json": "application/json",
+            ".css": "text/css",
+            ".js": "application/javascript",
+            ".txt": "text/plain",
+        }
 
-            # Step A: Check and upload missing asset
+        try:
+            # Collecte de TOUS les fichiers du site (index.html + archives mensuelles
+            # site/archive/*.json) pour un déploiement complet de l'historique.
+            manifest = {}
+            assets = []
+            for root, _dirs, files in os.walk(site_dir):
+                for fname in files:
+                    fpath = os.path.join(root, fname)
+                    rel = "/" + os.path.relpath(fpath, site_dir).replace(os.sep, "/")
+                    ext = os.path.splitext(fname)[1].lower()
+                    if ext not in content_types:
+                        continue
+                    with open(fpath, "rb") as f:
+                        content = f.read()
+                    file_hash = hashlib.sha256(content).hexdigest()
+                    manifest[rel] = file_hash
+                    assets.append({
+                        "key": file_hash,
+                        "value": content.decode("utf-8", errors="replace"),
+                        "metadata": {"contentType": content_types[ext]}
+                    })
+
+            # Step A: Check and upload missing assets
             upload_url = f"https://api.cloudflare.com/client/v4/accounts/{self.account_id}/pages/assets/upload"
             headers_upload = {
                 "Authorization": f"Bearer {self.api_token}",
                 "Content-Type": "application/json",
                 "User-Agent": "TurfEngine-Deployer/1.0"
             }
-            payload_upload = json.dumps([{"key": file_hash, "value": content.decode("utf-8", errors="replace"), "metadata": {"contentType": "text/html"}}]).encode("utf-8")
+            payload_upload = json.dumps(assets).encode("utf-8")
             req_up = urllib.request.Request(upload_url, data=payload_upload, headers=headers_upload, method="POST")
             try:
-                urllib.request.urlopen(req_up, context=ctx, timeout=10)
+                urllib.request.urlopen(req_up, context=ctx, timeout=30)
             except Exception:
                 pass
 
@@ -89,7 +114,7 @@ class CloudflarePagesDeployer:
                 "User-Agent": "TurfEngine-Deployer/1.0"
             }
             manifest_payload = json.dumps({
-                "manifest": {"/index.html": file_hash}
+                "manifest": manifest
             }).encode("utf-8")
 
             req_dep = urllib.request.Request(deploy_url, data=manifest_payload, headers=headers_deploy, method="POST")

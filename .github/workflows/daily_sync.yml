@@ -2,18 +2,25 @@ name: Turf Engine 24/7 Cloud Sync & Deploy
 
 on:
   schedule:
-    # Matin : 08h30 GMT (Préparation Matin)
+    # Matin : 08h30 GMT — Préparation Matin (fenêtre 7 jours, verrouillage T_MATIN)
     - cron: '30 8 * * *'
-    # Midi : 12h00 GMT (Édition Abonnés T-90 premières courses)
-    - cron: '0 12 * * *'
-    # Début Après-midi : 12h45 GMT (Cockpit Live T-30 Quinté+)
-    - cron: '45 12 * * *'
-    # Soir : 21h30 GMT (Consolidation des arrivées & Bilans)
+    # Passes LIVE : toutes les ~15 min de 09h à 20h59 GMT (jour de courses).
+    # Chaque passe verrouille automatiquement les horizons atteints (T-90, T-30, T-15)
+    # course par course, met à jour les cotes en direct et rapatrie les arrivées.
+    # Les minutes décalées (6,21,36,51) évitent les pics de charge GitHub (crons à :00).
+    - cron: '6,21,36,51 9-20 * * *'
+    # Soir : 21h30 GMT — Consolidation des arrivées & Bilans (fenêtre 7 jours)
     - cron: '30 21 * * *'
   workflow_dispatch: # Déclenchement manuel 1-clic depuis smartphone ou PC
 
 permissions:
   contents: write
+
+# Un seul sync à la fois : les runs se mettent en file d'attente au lieu de
+# s'exécuter en parallèle (protège la base de données contre les écrasements).
+concurrency:
+  group: turf-sync
+  cancel-in-progress: false
 
 jobs:
   sync_and_deploy:
@@ -27,21 +34,47 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Run Turf Prediction Engine (7 Jours d'Historique & 4 Horizons T_MATIN, T90, T30, T15)
+      - name: Run Turf Prediction Engine (verrouillage multi-horizon T_MATIN/T90/T30/T15)
         run: |
-          python main.py --action sync --days 7
+          # Passes du matin (08h30) et du soir (21h30) : fenêtre complète de 7 jours.
+          # Passes live (toutes les 15 min) : uniquement la journée en cours (rapide).
+          if [ "${{ github.event.schedule }}" = "30 8 * * *" ] || [ "${{ github.event.schedule }}" = "30 21 * * *" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            DAYS=7
+          else
+            DAYS=1
+          fi
+          echo "[*] Fenêtre de synchronisation : $DAYS jour(s)"
+          python main.py --action sync --days $DAYS
 
       - name: Commit & Push Updated Database (Persistance définitive de l'historique)
         run: |
           git config --global user.name "Turf-Automation-Bot"
           git config --global user.email "bot@elite-turf.fr"
-          git add turf_bench.db benchmark_report.json benchmark_dashboard.html site/index.html || true
-          git commit -m "Auto-sync PMU 7-days multi-horizon [skip ci]" || true
-          git push || true
+          git add turf_bench.db benchmark_report.json benchmark_dashboard.html site/
+          # Ne committe que s'il y a un vrai changement (évite les commits vides)
+          if git diff --staged --quiet; then
+            echo "[*] Aucun changement à committer."
+            exit 0
+          fi
+          git commit -m "Auto-sync PMU multi-horizon [skip ci]"
+          # Push robuste : jamais de force-push, 3 tentatives avec rebase.
+          # En cas d'échec définitif le job ÉCHOUE (visible), au lieu de perdre
+          # silencieusement les données comme avec l'ancien '|| true'.
+          for i in 1 2 3; do
+            if git push origin HEAD:main; then
+              echo "[+] Push réussi."
+              exit 0
+            fi
+            echo "[!] Push refusé (tentative $i/3), rebase sur origin/main..."
+            git pull --rebase origin main || git rebase --abort
+            sleep 10
+          done
+          echo "[ERREUR] Impossible de pousser la base après 3 tentatives."
+          exit 1
 
       - name: Deploy to Cloudflare Pages (prono.elite-turf.fr)
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
-          python -c "from turf_lab.cloudflare_deploy import CloudflarePagesDeployer; d = CloudflarePagesDeployer.from_config(); d.deploy_direct('site')"
+          python -c "from turf_lab.cloudflare_deploy import CloudflarePagesDeployer; d = CloudflarePagesDeployer.from_config(); r = d.deploy_direct('site'); print(r)"

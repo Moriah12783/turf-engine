@@ -5,7 +5,47 @@ Direct Horizon Tags in Table, Interactive Copyable Smart Tickets, and 1-Click De
 
 import json
 import os
-from typing import Any, Dict, List
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Tuple
+
+
+def export_site_archives(report_data: Dict[str, Any], site_dir: str, recent_days: int = 21) -> Tuple[List[Dict[str, Any]], Dict[str, int]]:
+    """Persistance « pour toujours » de l'historique des courses.
+
+    Les courses des `recent_days` derniers jours restent embarquées dans
+    index.html (affichage instantané). Tout le reste est archivé dans des
+    fichiers mensuels statiques `site/archive/AAAA-MM.json`, chargés à la
+    demande par le navigateur (recherche dans tout l'historique).
+
+    Retourne (logs_recents, manifeste {mois: nb_courses}).
+    """
+    logs = report_data.get("historical_logs", [])
+    if not logs:
+        return [], {}
+
+    latest_date = max((l.get("date", "") for l in logs if l.get("date")), default=datetime.utcnow().strftime("%Y-%m-%d"))
+    try:
+        cutoff = (datetime.strptime(latest_date, "%Y-%m-%d") - timedelta(days=recent_days)).strftime("%Y-%m-%d")
+    except Exception:
+        cutoff = "0000-00-00"
+
+    recent = [l for l in logs if l.get("date", "") >= cutoff]
+    older = [l for l in logs if l.get("date", "") < cutoff]
+
+    months: Dict[str, List[Dict[str, Any]]] = {}
+    for l in older:
+        months.setdefault(str(l.get("date", "0000-00"))[:7], []).append(l)
+
+    archive_dir = os.path.join(site_dir, "archive")
+    os.makedirs(archive_dir, exist_ok=True)
+
+    manifest: Dict[str, int] = {}
+    for m, items in sorted(months.items(), reverse=True):
+        with open(os.path.join(archive_dir, f"{m}.json"), "w", encoding="utf-8") as f:
+            json.dump(items, f, ensure_ascii=False)
+        manifest[m] = len(items)
+
+    return recent, manifest
 
 
 def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "benchmark_dashboard.html") -> str:
@@ -130,6 +170,8 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
             """)
 
     logs_json = json.dumps(historical_logs, ensure_ascii=False)
+    archive_manifest = report_data.get("archive_manifest", {})
+    manifest_json = json.dumps(archive_manifest, ensure_ascii=False)
 
     html = f"""<!DOCTYPE html>
 <html lang="fr">
@@ -520,7 +562,11 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                             <th>Ferrure</th>
                             <th>Corde</th>
                             <th>Musique</th>
-                            <th id="modal-odds-header">Cote (T-90)</th>
+                            <th>Matin</th>
+                            <th>T-90</th>
+                            <th>T-30</th>
+                            <th>T-15</th>
+                            <th id="modal-odds-header">Cote Finale</th>
                             <th>Signal</th>
                             <th>Proba %</th>
                             <th>Indice Value</th>
@@ -536,11 +582,64 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
     <div id="toast" class="toast-notify">✓ Ticket copié dans le presse-papier !</div>
 
     <script>
-        const allLogs = {logs_json};
+        let allLogs = {logs_json};
+        const archiveManifest = {manifest_json};
+        const loadedMonths = new Set();
+        const knownRaceIds = new Set(allLogs.map(item => item.race_id));
         let selectedDate = "ALL";
         let searchQuery = "";
         let currentPage = 1;
         const pageSize = 15;
+
+        // ---- Archives mensuelles (historique permanent, chargé à la demande) ----
+        async function ensureMonthLoaded(month) {{
+            if (loadedMonths.has(month)) return true;
+            try {{
+                const resp = await fetch(`archive/${{month}}.json`, {{ cache: "no-cache" }});
+                if (!resp.ok) throw new Error(`HTTP ${{resp.status}}`);
+                const items = await resp.json();
+                items.forEach(item => {{
+                    if (!knownRaceIds.has(item.race_id)) {{
+                        knownRaceIds.add(item.race_id);
+                        allLogs.push(item);
+                    }}
+                }});
+                loadedMonths.add(month);
+                return true;
+            }} catch (e) {{
+                showToast(`⚠️ Archive ${{month}} indisponible`);
+                return false;
+            }}
+        }}
+
+        async function selectArchiveMonth(month, btnElement) {{
+            const originalText = btnElement.textContent;
+            btnElement.textContent = "⏳ Chargement...";
+            const ok = await ensureMonthLoaded(month);
+            btnElement.textContent = originalText;
+            if (!ok) return;
+            selectedDate = "M:" + month;
+            currentPage = 1;
+            document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+            btnElement.classList.add("active");
+            renderTable();
+        }}
+
+        async function loadFullHistory(btnElement) {{
+            const months = Object.keys(archiveManifest);
+            const originalText = btnElement.textContent;
+            let done = 0;
+            for (const m of months) {{
+                btnElement.textContent = `⏳ Archives ${{++done}}/${{months.length}}...`;
+                await ensureMonthLoaded(m);
+            }}
+            btnElement.textContent = originalText;
+            selectedDate = "ALL";
+            currentPage = 1;
+            document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+            btnElement.classList.add("active");
+            renderTable();
+        }}
 
         function getHorizonForRace(item) {{
             if (item.is_finished) {{
@@ -600,6 +699,26 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                 btn.onclick = () => selectDate(dStr, btn);
                 container.appendChild(btn);
             }});
+
+            // Boutons d'archives mensuelles (historique permanent)
+            const months = Object.keys(archiveManifest).sort().reverse();
+            months.forEach(m => {{
+                const btn = document.createElement("button");
+                btn.className = "tab-btn";
+                btn.style.borderColor = "#8b5cf6";
+                btn.textContent = `📚 ${{m}} [${{archiveManifest[m]}}]`;
+                btn.onclick = () => selectArchiveMonth(m, btn);
+                container.appendChild(btn);
+            }});
+
+            if (months.length > 0) {{
+                const btnAll = document.createElement("button");
+                btnAll.className = "tab-btn";
+                btnAll.style.borderColor = "#f59e0b";
+                btnAll.textContent = `📚 Tout l'historique`;
+                btnAll.onclick = () => loadFullHistory(btnAll);
+                container.appendChild(btnAll);
+            }}
         }}
 
         function selectDate(dateStr, btnElement) {{
@@ -620,7 +739,14 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
 
         function renderTable() {{
             const filtered = allLogs.filter(item => {{
-                const matchDate = (selectedDate === "ALL" || item.date === selectedDate);
+                let matchDate;
+                if (selectedDate === "ALL") {{
+                    matchDate = true;
+                }} else if (selectedDate.startsWith("M:")) {{
+                    matchDate = item.date.slice(0, 7) === selectedDate.slice(2);
+                }} else {{
+                    matchDate = (item.date === selectedDate);
+                }}
                 const matchSearch = (!searchQuery || 
                     item.course.toLowerCase().includes(searchQuery) ||
                     item.date.includes(searchQuery) ||
@@ -688,6 +814,10 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
         function nextPage() {{
             currentPage++;
             renderTable();
+        }}
+
+        function fmtOdds(v) {{
+            return (v === null || v === undefined || v === "") ? "–" : v;
         }}
 
         // Modal Inspector Functions
@@ -786,6 +916,10 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                         <td><span style="font-family:monospace; color:#38bdf8;">${{rn.shoeing}}</span></td>
                         <td>${{rn.draw}}</td>
                         <td style="font-family:monospace; color:var(--text-muted); font-size:0.8rem;">${{rn.music || '-'}}</td>
+                        <td style="color:var(--text-muted);">${{fmtOdds(rn.morning_odds)}}</td>
+                        <td style="color:var(--text-muted);">${{fmtOdds(rn.o_t90)}}</td>
+                        <td style="color:var(--text-muted);">${{fmtOdds(rn.o_t30)}}</td>
+                        <td style="color:#f87171; font-weight:700;">${{fmtOdds(rn.o_t15)}}</td>
                         <td><strong>${{rn.live_odds}}</strong></td>
                         <td style="font-size:0.78rem; color:${{rn.smart_signal.includes('BAISSE') ? 'var(--green)' : 'var(--text-muted)'}};">${{rn.smart_signal}}</td>
                         <td class="val-pos"><strong>${{rn.prob_pct}}%</strong></td>

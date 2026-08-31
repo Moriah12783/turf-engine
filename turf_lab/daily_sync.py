@@ -6,6 +6,7 @@ ensures historical archive persistence, and resolves results.
 import gzip
 import json
 import os
+import re
 import ssl
 import urllib.request
 import urllib.error
@@ -110,14 +111,99 @@ class DailySyncManager:
         ph = (gh + 2) % 24
         return f"{gh:02d}:{gm:02d} GMT ({ph:02d}:{gm:02d} Paris)", f"{date_str_db}T{gh:02d}:{gm:02d}:00Z"
 
+    # ------------------------------------------------------------------
+    # Fenêtres de verrouillage par horizon (en minutes avant le départ).
+    # Une petite tolérance absorbe la latence des crons GitHub Actions
+    # (un cron planifié à H peut démarrer à H+3..H+8).
+    # ------------------------------------------------------------------
+    HORIZON_WINDOWS = [
+        ("T90", 100),   # verrouillé dès que départ <= 100 min
+        ("T30", 35),    # verrouillé dès que départ <= 35 min
+        ("T15", 18),    # verrouillé dès que départ <= 18 min (vraie cote T-15)
+    ]
+    ALL_HORIZONS = ["T_MATIN", "T90", "T30", "T15"]
+    ENGINE_KEYS = ["NEW", "ETPE", "PRESS", "MARKET"]
+
+    @staticmethod
+    def minutes_to_start(time_display: str, race_date_db: str, now_utc: Optional[datetime] = None) -> Optional[float]:
+        """Minutes restantes avant le départ, à partir du libellé 'HH:MM GMT (...)' et de la date de course.
+        Négatif si la course est déjà partie. None si l'heure est illisible."""
+        if now_utc is None:
+            now_utc = datetime.utcnow()
+        if not time_display:
+            return None
+        m = re.match(r"^\s*(\d{1,2}):(\d{2})", str(time_display))
+        if not m:
+            return None
+        try:
+            race_dt = datetime.strptime(race_date_db, "%Y-%m-%d").replace(hour=int(m.group(1)), minute=int(m.group(2)))
+        except Exception:
+            return None
+        return (race_dt - now_utc).total_seconds() / 60.0
+
+    def due_horizons(self, time_display: str, race_date_db: str, now_utc: Optional[datetime] = None) -> List[str]:
+        """Horizons qui DOIVENT être verrouillés maintenant pour cette course.
+        - T_MATIN est toujours dû (verrouillé à la première vue de la course).
+        - T90/T30/T15 deviennent dus quand on entre dans leur fenêtre temporelle.
+        - Pour une date passée (rattrapage/backfill), tous les horizons sont dus
+          afin de conserver le comportement historique.
+        """
+        if now_utc is None:
+            now_utc = datetime.utcnow()
+        today_db = now_utc.strftime("%Y-%m-%d")
+
+        if race_date_db < today_db:
+            return list(self.ALL_HORIZONS)
+
+        diff = self.minutes_to_start(time_display, race_date_db, now_utc)
+        due = ["T_MATIN"]
+        if diff is None:
+            return due
+        for horizon, window in self.HORIZON_WINDOWS:
+            if diff <= window:
+                due.append(horizon)
+        return due
+
+    def _lock_horizon(self, race_data: Dict[str, Any], runners: List[Dict[str, Any]], horizon: str) -> int:
+        """Verrouille les 4 moteurs pour un horizon donné, UNE SEULE FOIS.
+        Retourne le nombre de verrous réellement posés (0 si déjà verrouillé).
+        Le pronostic est calculé avec les cotes du moment => chaque horizon
+        capture un état de marché différent, sans jamais écraser le précédent."""
+        race_id = race_data["race_id"]
+        if self.db.has_prediction(race_id, "NEW_VALUE_ENGINE", horizon):
+            return 0
+
+        engines = [
+            ("NEW", self.new_engine),
+            ("ETPE", self.etpe_engine),
+            ("PRESS", self.press_engine),
+            ("MARKET", self.market_engine),
+        ]
+        for key, eng in engines:
+            p = eng.predict(race_data, runners)
+            p["prediction_id"] = f"{race_id}_{key}_{horizon}"
+            p["race_id"] = race_id
+            p["horizon"] = horizon
+            self.db.save_prediction(p)
+
+        # Photographie des cotes au moment du verrouillage (historique permanent)
+        odds_map = {r["num"]: r.get("odds_t15", r.get("final_odds")) for r in runners}
+        self.db.save_odds_snapshots(race_id, horizon, odds_map)
+        return 1
+
+    def inject_recent_real_meetings(self):
+        """Compatibilité: ré-injecte les réunions de référence (idempotent)."""
+        seed_historical_meetings(self.db)
+
     def sync_date(self, target_date: Optional[datetime] = None) -> Dict[str, int]:
         if target_date is None:
             target_date = datetime.now()
 
         date_str_api = target_date.strftime("%d%m%Y")
         date_str_db = target_date.strftime("%Y-%m-%d")
+        now_utc = datetime.utcnow()
 
-        stats = {"races_added": 0, "predictions_locked": 0, "results_resolved": 0, "np_detected": 0}
+        stats = {"races_added": 0, "predictions_locked": 0, "results_resolved": 0, "np_detected": 0, "races_frozen": 0}
 
         programme = self.fetcher.fetch_programme(date_str_api)
         if not programme or not isinstance(programme, dict) or "programme" not in programme:
@@ -159,6 +245,16 @@ class DailySyncManager:
                     "status": "SCHEDULED"
                 }
 
+                # 0. Course déjà clôturée en base => archive GELÉE.
+                # On ne retouche plus jamais ni les partants, ni les cotes,
+                # ni les pronostics d'une course terminée (persistance définitive).
+                existing_race = self.db.get_race(race_id)
+                if existing_race and existing_race.get("status") == "FINISHED":
+                    stats["races_frozen"] += 1
+                    continue
+                if existing_race and existing_race.get("status"):
+                    race_data["status"] = existing_race["status"]
+
                 # 1. Fetch participants
                 part_data = self.fetcher.fetch_participants(date_str_api, r_num, c_num)
                 if not part_data or not isinstance(part_data, dict) or "participants" not in part_data:
@@ -187,8 +283,16 @@ class DailySyncManager:
                     if pos is not None and isinstance(pos, int) and pos > 0:
                         placed_participants.append((pos, p_num))
 
-                    m_odds = float(p.get("rapportReference", {}).get("rapport", 15.0) or 15.0)
-                    live_odds = float(p.get("dernierRapportDirect", {}).get("rapport", m_odds) or m_odds)
+                    ref_obj = p.get("rapportReference") or {}
+                    live_obj = p.get("dernierRapportDirect") or {}
+                    live_odds = float(live_obj.get("rapport", 0.0) or 0.0)
+                    m_odds = float(ref_obj.get("rapport", 0.0) or 0.0)
+                    # Cote du matin : rapport de référence PMU, sinon première cote
+                    # directe vue (capturée au run du matin), sinon défaut neutre.
+                    if m_odds <= 0:
+                        m_odds = live_odds if live_odds > 0 else 15.0
+                    if live_odds <= 0:
+                        live_odds = m_odds
 
                     shoeing = p.get("deferre", "FERRE")
                     if shoeing == "DEFERRE_ANTERIEURS_POSTERIEURS":
@@ -225,37 +329,31 @@ class DailySyncManager:
                 if not runners:
                     continue
 
+                # 1bis. Préservation des cotes archivées (jamais écrasées) :
+                #  - morning_odds : figée à la première capture de la course
+                #  - odds_t15    : figée dès que l'horizon T15 est verrouillé
+                if existing_race:
+                    existing_runners = {r["num"]: r for r in self.db.get_runners(race_id)}
+                    t15_locked = "T15" in self.db.get_locked_horizons(race_id)
+                    for r in runners:
+                        prev = existing_runners.get(r["num"])
+                        if prev:
+                            if prev.get("morning_odds") is not None:
+                                r["morning_odds"] = prev["morning_odds"]
+                            if t15_locked and prev.get("odds_t15") is not None:
+                                r["odds_t15"] = prev["odds_t15"]
+
                 self.db.save_race(race_data)
                 self.db.save_runners(race_id, runners)
                 stats["races_added"] += 1
 
-                # 2. Lock predictions across the full 4-horizon continuum
-                for h in ["T_MATIN", "T90", "T30", "T15"]:
-                    p_new = self.new_engine.predict(race_data, runners)
-                    p_new["prediction_id"] = f"{race_id}_NEW_{h}"
-                    p_new["race_id"] = race_id
-                    p_new["horizon"] = h
-                    self.db.save_prediction(p_new)
-
-                    p_etpe = self.etpe_engine.predict(race_data, runners)
-                    p_etpe["prediction_id"] = f"{race_id}_ETPE_{h}"
-                    p_etpe["race_id"] = race_id
-                    p_etpe["horizon"] = h
-                    self.db.save_prediction(p_etpe)
-
-                    p_press = self.press_engine.predict(race_data, runners)
-                    p_press["prediction_id"] = f"{race_id}_PRESS_{h}"
-                    p_press["race_id"] = race_id
-                    p_press["horizon"] = h
-                    self.db.save_prediction(p_press)
-
-                    p_market = self.market_engine.predict(race_data, runners)
-                    p_market["prediction_id"] = f"{race_id}_MARKET_{h}"
-                    p_market["race_id"] = race_id
-                    p_market["horizon"] = h
-                    self.db.save_prediction(p_market)
-                    
-                stats["predictions_locked"] += 4
+                # 2. Verrouillage par fenêtres temporelles réelles.
+                # T_MATIN est posé à la première vue de la course ; T90, T30 puis
+                # T15 sont posés uniquement quand leur fenêtre est atteinte, avec
+                # les cotes du moment. Un horizon verrouillé n'est JAMAIS recalculé.
+                due = self.due_horizons(time_display, date_str_db, now_utc)
+                for h in due:
+                    stats["predictions_locked"] += self._lock_horizon(race_data, runners, h)
 
                 # 3. Check for official finish results and dividends
                 arrival_order = []

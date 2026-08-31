@@ -246,7 +246,7 @@ class TurfBenchmarkLab:
 
         return results
 
-    def get_historical_race_logs(self, limit: Optional[int] = 1000) -> List[Dict[str, Any]]:
+    def get_historical_race_logs(self, limit: Optional[int] = None) -> List[Dict[str, Any]]:
         """Extract all races (both finished and scheduled upcoming) with permanent cumulative history."""
         with self.db.transaction() as conn:
             cursor = conn.cursor()
@@ -266,6 +266,7 @@ class TurfBenchmarkLab:
 
             runners = self.db.get_runners(r_id)
             predictions = self.db.get_predictions(r_id)
+            odds_snaps = self.db.get_odds_snapshots(r_id)
 
             date_str = race.get("date", "2026-08-31")
             m_num = race.get("meeting_number", 1)
@@ -280,7 +281,21 @@ class TurfBenchmarkLab:
             course_label = f"{hippo.upper()} - R{m_num}C{c_num}"
 
             # 1. Top 8 Moteur (NEW_VALUE_ENGINE)
-            p_new = next((p for p in predictions if p["engine_name"] == "NEW_VALUE_ENGINE"), None)
+            # Priorité au pronostic le plus proche du départ réellement verrouillé
+            # (T15 > T30 > T90 > T_MATIN), sans jamais mélanger les horizons.
+            horizon_priority = ["T15", "T30", "T90", "T_MATIN"]
+
+            def pick_prediction(engine: str):
+                cands = [p for p in predictions if p["engine_name"] == engine]
+                if not cands:
+                    return None
+                for h in horizon_priority:
+                    for p in cands:
+                        if p.get("horizon") == h:
+                            return p
+                return cands[0]
+
+            p_new = pick_prediction("NEW_VALUE_ENGINE")
             sel_moteur = p_new["selection"][:8] if p_new and p_new.get("selection") else []
             sel_moteur_str = "-".join(map(str, sel_moteur)) if sel_moteur else "-"
             bases = p_new.get("bases", []) if p_new else []
@@ -301,12 +316,12 @@ class TurfBenchmarkLab:
             )
 
             # 2. Top 8 Marché (MARKET_BASELINE)
-            p_market = next((p for p in predictions if p["engine_name"] == "MARKET_BASELINE"), None)
+            p_market = pick_prediction("MARKET_BASELINE")
             sel_marche = p_market["selection"][:8] if p_market and p_market.get("selection") else []
             sel_marche_str = "-".join(map(str, sel_marche)) if sel_marche else "-"
 
             # 3. Fav Presse & Fav Marché
-            p_press = next((p for p in predictions if p["engine_name"] == "PRESS_SYNTHESIS"), None)
+            p_press = pick_prediction("PRESS_SYNTHESIS")
             fav_presse = p_press["selection"][0] if p_press and p_press.get("selection") else "-"
             fav_marche = sel_marche[0] if sel_marche else "-"
 
@@ -365,6 +380,7 @@ class TurfBenchmarkLab:
             for r in runners:
                 r_num = r.get("num")
                 r_num_str = str(r_num)
+                r_snaps = odds_snaps.get(r_num, {})
                 detailed_runners.append({
                     "num": r_num,
                     "name": r.get("horse_name", f"Cheval_{r_num}"),
@@ -374,6 +390,9 @@ class TurfBenchmarkLab:
                     "music": r.get("music", ""),
                     "morning_odds": r.get("morning_odds", 10.0),
                     "live_odds": r.get("odds_t15", r.get("final_odds", 10.0)),
+                    "o_t90": r_snaps.get("T90"),
+                    "o_t30": r_snaps.get("T30"),
+                    "o_t15": r_snaps.get("T15"),
                     "prob_pct": round(float(probabilities.get(r_num_str, 0.0)) * 100.0, 1),
                     "value_index": value_indices.get(r_num_str, 1.0),
                     "smart_signal": smart_signals.get(r_num_str, "STABLE"),
@@ -433,7 +452,10 @@ class TurfBenchmarkLab:
             evaluations[eng] = self.evaluate_engine(eng)
 
         discipline_breakdown = self.evaluate_by_discipline("NEW_VALUE_ENGINE")
-        historical_logs = self.get_historical_race_logs(limit=1000)
+        # Historique permanent : aucune limite — toutes les courses archivées
+        # sont conservées et exposées (la pagination/les archives mensuelles
+        # gèrent le volume côté site).
+        historical_logs = self.get_historical_race_logs(limit=None)
 
         return {
             "engines_evaluated": engines,

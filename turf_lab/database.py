@@ -120,10 +120,21 @@ class TurfDatabase:
                 FOREIGN KEY (race_id) REFERENCES races (race_id)
             );
 
+            CREATE TABLE IF NOT EXISTS odds_snapshots (
+                race_id TEXT NOT NULL,
+                num INTEGER NOT NULL,
+                horizon TEXT NOT NULL,
+                odds REAL,
+                captured_at TEXT NOT NULL,
+                PRIMARY KEY (race_id, num, horizon),
+                FOREIGN KEY (race_id) REFERENCES races (race_id)
+            );
+
             CREATE INDEX IF NOT EXISTS idx_races_date ON races (date);
             CREATE INDEX IF NOT EXISTS idx_runners_race ON runners (race_id);
             CREATE INDEX IF NOT EXISTS idx_pred_race ON predictions (race_id);
             CREATE INDEX IF NOT EXISTS idx_rapports_race ON rapports (race_id);
+            CREATE INDEX IF NOT EXISTS idx_snapshots_race ON odds_snapshots (race_id);
             """)
 
             # Safe migrations for existing databases
@@ -227,6 +238,49 @@ class TurfDatabase:
                 json.dumps(prediction_data.get("probabilities", {})),
                 json.dumps(prediction_data.get("metadata", {}))
             ))
+
+    def has_prediction(self, race_id: str, engine_name: str, horizon: str) -> bool:
+        """True if a prediction is already locked for this (race, engine, horizon).
+        Used to guarantee that a locked horizon is NEVER overwritten by later syncs."""
+        with self.transaction() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "SELECT 1 FROM predictions WHERE race_id = ? AND engine_name = ? AND horizon = ? LIMIT 1",
+                (race_id, engine_name, horizon)
+            )
+            return cursor.fetchone() is not None
+
+    def save_odds_snapshots(self, race_id: str, horizon: str, odds_map: Dict[int, float]):
+        """Persist the odds of every runner at a given horizon (T_MATIN/T90/T30/T15).
+        INSERT OR IGNORE: the first captured snapshot for a horizon is immutable."""
+        now_iso = datetime.utcnow().isoformat()
+        with self.transaction() as conn:
+            cursor = conn.cursor()
+            for num, odds in odds_map.items():
+                cursor.execute("""
+                INSERT OR IGNORE INTO odds_snapshots (race_id, num, horizon, odds, captured_at)
+                VALUES (?, ?, ?, ?, ?)
+                """, (race_id, int(num), horizon, float(odds) if odds is not None else None, now_iso))
+
+    def get_odds_snapshots(self, race_id: str) -> Dict[int, Dict[str, float]]:
+        """Return {num: {horizon: odds}} for a race."""
+        with self.transaction() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT num, horizon, odds FROM odds_snapshots WHERE race_id = ?", (race_id,))
+            out: Dict[int, Dict[str, float]] = {}
+            for row in cursor.fetchall():
+                out.setdefault(row["num"], {})[row["horizon"]] = row["odds"]
+            return out
+
+    def get_locked_horizons(self, race_id: str, engine_name: str = "NEW_VALUE_ENGINE") -> List[str]:
+        """List of horizons already locked for a race (for the given engine)."""
+        with self.transaction() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "SELECT DISTINCT horizon FROM predictions WHERE race_id = ? AND engine_name = ?",
+                (race_id, engine_name)
+            )
+            return [row["horizon"] for row in cursor.fetchall()]
 
     def save_results(self, race_id: str, arrival_order: List[int], disqualified: Optional[List[int]] = None, rapports: Optional[List[Dict[str, Any]]] = None):
         with self.transaction() as conn:
