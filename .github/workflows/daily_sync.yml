@@ -13,6 +13,8 @@ on:
 jobs:
   sync_and_deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -22,16 +24,16 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Run Turf Prediction Engine & PMU Sync
+      - name: Run Turf Prediction Engine & PMU Sync (5 Jours d'Historique)
         run: |
-          python main.py --action sync --days 2
+          python main.py --action sync --days 5
 
-      - name: Commit & Push Updated Database (Persistance des données)
+      - name: Commit & Push Updated Database (Persistance de l'historique)
         run: |
           git config --global user.name "Turf-Automation-Bot"
           git config --global user.email "bot@elite-turf.fr"
           git add turf_bench.db benchmark_report.json benchmark_dashboard.html site/index.html || true
-          git commit -m "Auto-sync PMU & predictions [skip ci]" || true
+          git commit -m "Auto-sync PMU & predictions 5-days history [skip ci]" || true
           git push || true
 
       - name: Deploy to Cloudflare Pages (prono.elite-turf.fr)

@@ -1,5 +1,5 @@
 """Benchmarking and evaluation lab for comparative turf prediction analysis with discipline breakdowns,
-dual Top 8 comparisons (Moteur vs Marché), interactive race logs, and deep race modal inspector.
+dual Top 8 comparisons (Moteur vs Marché), permanent historical race logs, and deep race modal inspector.
 """
 
 import json
@@ -10,7 +10,7 @@ from turf_lab.database import TurfDatabase
 
 class TurfBenchmarkLab:
     """Evaluation lab calculating quantitative hit rates, financial ROI,
-    probabilistic calibration, comparative rankings, and interactive race logs.
+    probabilistic calibration, comparative rankings, and permanent cumulative race logs.
     """
 
     def __init__(self, db: TurfDatabase):
@@ -246,14 +246,16 @@ class TurfBenchmarkLab:
 
         return results
 
-    def get_historical_race_logs(self, limit: int = 250) -> List[Dict[str, Any]]:
-        """Extract all races (both finished and scheduled upcoming) with full deep analysis and accurate scheduled_start_time."""
+    def get_historical_race_logs(self, limit: Optional[int] = 1000) -> List[Dict[str, Any]]:
+        """Extract all races (both finished and scheduled upcoming) with permanent cumulative history."""
         with self.db.transaction() as conn:
             cursor = conn.cursor()
             cursor.execute("SELECT race_id, status FROM races ORDER BY date DESC, meeting_number ASC, race_number ASC")
             all_races_meta = cursor.fetchall()
 
-        all_races_meta = all_races_meta[:limit]
+        if limit is not None:
+            all_races_meta = all_races_meta[:limit]
+            
         logs = []
 
         for r_row in all_races_meta:
@@ -422,7 +424,7 @@ class TurfBenchmarkLab:
         return logs
 
     def generate_comparative_report(self, engines: Optional[List[str]] = None) -> Dict[str, Any]:
-        """Generate full comparative report across engines, discipline breakdowns, and historical logs."""
+        """Generate full comparative report across engines, discipline breakdowns, and permanent logs."""
         if engines is None:
             engines = ["NEW_VALUE_ENGINE", "ETPE_ENGINE", "PRESS_SYNTHESIS", "MARKET_BASELINE"]
 
@@ -431,7 +433,7 @@ class TurfBenchmarkLab:
             evaluations[eng] = self.evaluate_engine(eng)
 
         discipline_breakdown = self.evaluate_by_discipline("NEW_VALUE_ENGINE")
-        historical_logs = self.get_historical_race_logs(limit=250)
+        historical_logs = self.get_historical_race_logs(limit=1000)
 
         return {
             "engines_evaluated": engines,

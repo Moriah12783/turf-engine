@@ -95,7 +95,7 @@ def main():
                         help="Action to perform: sync (fetch real PMU feeds), simulate (run benchmark), evaluate (generate reports)")
     parser.add_argument("--db", type=str, default=default_db, help="Path to SQLite database")
     parser.add_argument("--simulate", type=int, default=None, help="Number of simulated races to run (for --action simulate)")
-    parser.add_argument("--days", type=int, default=2, help="Number of past days to sync for live data")
+    parser.add_argument("--days", type=int, default=5, help="Number of past days to sync for live data")
     parser.add_argument("--export", type=str, default=default_export, help="Path to export JSON report")
     parser.add_argument("--html", type=str, default=default_html, help="Path to export HTML dashboard")
     parser.add_argument("--config", type=str, default=default_config, help="Path to Cloudflare config.json")
@@ -120,7 +120,7 @@ def main():
         print("[+] Simulation terminee avec succes.")
 
     elif action == "sync":
-        print("[*] Synchronisation des courses reelles PMU...")
+        print(f"[*] Synchronisation des courses reelles PMU (Fenetre de {args.days} jours)...")
         manager = DailySyncManager(db)
         
         target_dates = []
