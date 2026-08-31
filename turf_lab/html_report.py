@@ -1,6 +1,6 @@
 """HTML Dashboard generator with interactive Date Tabs, GMT Start Times,
 Full 4-Horizon Continuum (T-Matin, T-90 Abonnés, T-30 Live, T-15 Clôture, Clôturé),
-Interactive Copyable Smart Tickets, and 1-Click Deep Race Inspector Modal.
+Direct Horizon Tags in Table, Interactive Copyable Smart Tickets, and 1-Click Deep Race Inspector Modal.
 """
 
 import json
@@ -215,6 +215,7 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
         .badge-base {{ background: rgba(59, 130, 246, 0.15); color: #93c5fd; padding: 3px 8px; border-radius: 6px; }}
         
         .badge-horizon {{ background: #1e293b; color: #38bdf8; border: 1px solid #38bdf8; padding: 4px 12px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }}
+        .badge-horizon-small {{ background: #1e293b; border: 1px solid #38bdf8; color: #38bdf8; padding: 2px 6px; border-radius: 10px; font-size: 0.70rem; font-weight: 700; margin-left: 6px; }}
 
         .section-divider td {{ background: #0b1120; color: #38bdf8; font-size: 0.85rem; letter-spacing: 1px; padding: 10px 16px; border-top: 2px solid var(--border); }}
         .val-pos {{ color: var(--green); font-weight: 700; }}
@@ -541,6 +542,32 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
         let currentPage = 1;
         const pageSize = 15;
 
+        function getHorizonForRace(item) {{
+            if (item.is_finished) {{
+                return {{ code: "FINI", label: "🏁 Clôturé", badgeClass: "couv-5", header: "Cote Finale" }};
+            }}
+            let diffMin = 120;
+            if (item.scheduled_start_time && item.scheduled_start_time.includes(":")) {{
+                const cleanTime = item.scheduled_start_time.split(" ")[0].trim();
+                const parts = cleanTime.split(":");
+                if (parts.length === 2) {{
+                    const raceMin = parseInt(parts[0]) * 60 + parseInt(parts[1]);
+                    const now = new Date();
+                    const nowMin = now.getUTCHours() * 60 + now.getUTCMinutes();
+                    diffMin = raceMin - nowMin;
+                }}
+            }}
+            if (diffMin <= 15) {{
+                return {{ code: "T15", label: "🔒 T-15 Live", badgeClass: "couv-1", header: "Cote T-15 Directe", fullText: "🔒 Horizon T-15 (Direct Live & Smart Money)", info: "Dernières minutes avant le départ. Cotes ultra-directes et mouvements Smart Money verrouillés à T-15." }};
+            }} else if (diffMin <= 30) {{
+                return {{ code: "T30", label: "⚡ T-30 Live", badgeClass: "couv-5", header: "Cote T-30 (Live)", fullText: "⚡ Cockpit Live (T-30 LONACI Online)", info: "Cockpit Live verrouillé à T-30 min pour prise de jeu en ligne (LONACI Online). Smart Money capté à plus de 80%." }};
+            }} else if (diffMin <= 90) {{
+                return {{ code: "T90", label: "📢 T-90 Abonnés", badgeClass: "couv-3", header: "Cote T-90 (Abonnés)", fullText: "📢 Édition Abonnés (T-90 Kiosques)", info: "Édition validée pour les abonnés en agences et kiosques physiques (LONACI/PMU). Non-Partants éliminés et cotes stabilisées." }};
+            }} else {{
+                return {{ code: "T_MATIN", label: "📡 T-Matin", badgeClass: "couv-4", header: "Cote Réf. (Matin)", fullText: "📡 Édition Préparatoire (T-Matin)", info: "Pronostic initial établi le matin. L'Édition Abonnés sera automatiquement générée à T-90 min (1h30 avant) et le Cockpit Live à T-30 min." }};
+            }}
+        }}
+
         function initDateTabs() {{
             const datesSet = new Set(allLogs.map(item => item.date));
             const sortedDates = Array.from(datesSet).sort().reverse();
@@ -628,10 +655,11 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                     else if (item.couv_moteur_count === 2) badgeClass = "couv-2";
 
                     const timeInfo = item.scheduled_start_time || "12:00 GMT";
+                    const hObj = getHorizonForRace(item);
 
                     tr.innerHTML = `
                         <td style="text-align:left;">
-                            <strong style="color:#60a5fa;">🔍 ${{item.course}}</strong><br>
+                            <strong style="color:#60a5fa;">🔍 ${{item.course}}</strong> <span class="badge-horizon-small">${{hObj.label}}</span><br>
                             <small style="color:#38bdf8; font-weight:700;">⏰ ${{timeInfo}}</small> • 
                             <small style="color:var(--text-muted); font-family:monospace;">${{item.date}}</small>
                         </td>
@@ -662,7 +690,7 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
             renderTable();
         }}
 
-        // Full 4-Horizon Modal Inspector Functions
+        // Modal Inspector Functions
         function openRaceModal(raceId) {{
             const item = allLogs.find(r => r.race_id === raceId);
             if (!item) return;
@@ -682,54 +710,28 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                 badgeBox.innerHTML = `<span class="badge-base">Course Régulière</span>`;
             }}
 
-            // Full 4-Horizon Dynamic Indicator
+            // Dynamic 4-Horizon Indicator
+            const hObj = getHorizonForRace(item);
             const horizonBadge = document.getElementById("modal-horizon-badge");
             const horizonInfo = document.getElementById("horizon-info-text");
             const oddsHeader = document.getElementById("modal-odds-header");
 
-            if (item.is_finished) {{
-                horizonBadge.textContent = "🏁 Clôturé (Cotes & Arrivée Finales)";
+            horizonBadge.textContent = hObj.fullText || hObj.label;
+            horizonInfo.textContent = hObj.info || "Informations consolidées.";
+            oddsHeader.textContent = hObj.header;
+
+            if (hObj.code === "T15") {{
+                horizonBadge.style.borderColor = "#ef4444";
+                horizonBadge.style.color = "#f87171";
+            }} else if (hObj.code === "T30" || hObj.code === "FINI") {{
                 horizonBadge.style.borderColor = "var(--green)";
                 horizonBadge.style.color = "var(--green)";
-                horizonInfo.textContent = "Course terminée. Les cotes et arrivées officielles sont consolidées.";
-                oddsHeader.textContent = "Cote Finale";
+            }} else if (hObj.code === "T90") {{
+                horizonBadge.style.borderColor = "var(--amber)";
+                horizonBadge.style.color = "var(--amber)";
             }} else {{
-                let diffMin = 120;
-                if (item.scheduled_start_time && item.scheduled_start_time.includes(":")) {{
-                    const parts = item.scheduled_start_time.split(" ")[0].split(":");
-                    if (parts.length === 2) {{
-                        const raceMin = parseInt(parts[0]) * 60 + parseInt(parts[1]);
-                        const now = new Date();
-                        const nowMin = now.getUTCHours() * 60 + now.getUTCMinutes();
-                        diffMin = raceMin - nowMin;
-                    }}
-                }}
-
-                if (diffMin <= 15) {{
-                    horizonBadge.textContent = "🔒 Clôture Finale (T-15 Smart Money)";
-                    horizonBadge.style.borderColor = "#ef4444";
-                    horizonBadge.style.color = "#f87171";
-                    horizonInfo.textContent = "Dernières minutes avant le départ. Cotes ultra-directes et mouvements d'argent verrouillés à T-15.";
-                    oddsHeader.textContent = "Cote T-15 Directe";
-                }} else if (diffMin <= 30) {{
-                    horizonBadge.textContent = "⚡ Cockpit Live (T-30 LONACI Online)";
-                    horizonBadge.style.borderColor = "var(--green)";
-                    horizonBadge.style.color = "var(--green)";
-                    horizonInfo.textContent = "Cockpit Live verrouillé à T-30 min pour prise de jeu en ligne (LONACI Online). Smart Money capté à plus de 80%.";
-                    oddsHeader.textContent = "Cote T-30 (Live)";
-                }} else if (diffMin <= 90) {{
-                    horizonBadge.textContent = "📢 Édition Abonnés (T-90 Kiosques)";
-                    horizonBadge.style.borderColor = "var(--amber)";
-                    horizonBadge.style.color = "var(--amber)";
-                    horizonInfo.textContent = "Édition validée pour les abonnés en agences et kiosques physiques (LONACI/PMU). Non-Partants éliminés et cotes stabilisées.";
-                    oddsHeader.textContent = "Cote T-90 (Abonnés)";
-                }} else {{
-                    horizonBadge.textContent = "📡 Édition Préparatoire (T-Matin)";
-                    horizonBadge.style.borderColor = "#38bdf8";
-                    horizonBadge.style.color = "#38bdf8";
-                    horizonInfo.textContent = "Pronostic initial établi le matin. L'Édition Abonnés sera automatiquement générée à T-90 min (1h30 avant) et le Cockpit Live à T-30 min.";
-                    oddsHeader.textContent = "Cote Réf. (Matin)";
-                }}
+                horizonBadge.style.borderColor = "#38bdf8";
+                horizonBadge.style.color = "#38bdf8";
             }}
 
             document.getElementById("modal-bases").textContent = item.bases.length ? item.bases.join(" - ") : "N/A";
