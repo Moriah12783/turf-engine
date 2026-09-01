@@ -22,8 +22,8 @@ def format_markdown_table(report: dict) -> str:
 
     md = []
     md.append(f"### Rapport d'Evaluation Comparatif du Banc de Mesure ({total_races} courses analysees)\n")
-    md.append("| Metrique d'Evaluation | Nouveau Moteur (Value) | ETPE (Heuristique) | Synthese Presse | Favoris Marche (PMU) |")
-    md.append("| :--- | :---: | :---: | :---: | :---: |")
+    md.append("| Metrique d'Evaluation | Nouveau Moteur (Value) | ETPE (Heuristique) | Favoris Marche (PMU) |")
+    md.append("| :--- | :---: | :---: | :---: |")
 
     # Hit rates
     row_top1 = "| **Victoire Top 1 (Gagnant direct)** |"
@@ -44,7 +44,7 @@ def format_markdown_table(report: dict) -> str:
     # Stats
     row_brier = "| **Brier Score (Calibration proba)** |"
 
-    for eng in ["NEW_VALUE_ENGINE", "ETPE_ENGINE", "PRESS_SYNTHESIS", "MARKET_BASELINE"]:
+    for eng in ["NEW_VALUE_ENGINE", "ETPE_ENGINE", "MARKET_BASELINE"]:
         e = evals.get(eng, {})
         hr = e.get("hit_rates", {})
         fin = e.get("financial_performance", {})
@@ -74,9 +74,9 @@ def format_markdown_table(report: dict) -> str:
     md.extend([
         row_top1, row_winner_top3, row_winner_top8,
         row_base_top3, row_both_bases, row_tierce, row_quinte, row_outsider,
-        "| **--- PERFORMANCE FINANCIERE ---** | | | | |",
+        "| **--- PERFORMANCE FINANCIERE ---** | | | |",
         row_sg_roi, row_sg_dd, row_sp_roi, row_sp_dd,
-        "| **--- CALIBRATION STATISTIQUE ---** | | | | |",
+        "| **--- CALIBRATION STATISTIQUE ---** | | | |",
         row_brier
     ])
 

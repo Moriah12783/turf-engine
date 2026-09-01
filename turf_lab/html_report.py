@@ -55,7 +55,7 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
     disc_breakdown = report_data.get("discipline_breakdown", {})
     historical_logs = report_data.get("historical_logs", [])
 
-    engines = ["NEW_VALUE_ENGINE", "ETPE_ENGINE", "PRESS_SYNTHESIS", "MARKET_BASELINE"]
+    engines = ["NEW_VALUE_ENGINE", "ETPE_ENGINE", "MARKET_BASELINE"]
 
     new_eng = evals.get("NEW_VALUE_ENGINE", {})
     new_sg_roi = new_eng.get("financial_performance", {}).get("simple_gagnant", {}).get("roi_pct", 0.0)
@@ -87,7 +87,7 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
         if key is None:
             table_rows_html.append(f"""
             <tr class="section-divider">
-                <td colspan="5"><strong>{label}</strong></td>
+                <td colspan="4"><strong>{label}</strong></td>
             </tr>
             """)
             continue
@@ -372,7 +372,6 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                         <th style="width: 32%;">Métrique d'Évaluation</th>
                         <th><span class="badge badge-primary">Nouveau Moteur (Value)</span></th>
                         <th><span class="badge badge-secondary">ETPE (Heuristique)</span></th>
-                        <th><span class="badge badge-warning">Synthèse Presse</span></th>
                         <th><span class="badge badge-neutral">Favoris Marché (PMU)</span></th>
                     </tr>
                 </thead>
@@ -518,6 +517,20 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                 </div>
             </div>
 
+            <!-- Éditions verrouillées : preuve d'immuabilité, horizon par horizon -->
+            <div style="background:#0e1726; border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:20px;">
+                <h3 style="font-size:1.02rem; color:#fff; margin-bottom:4px;">🔒 Éditions verrouillées (immuables)</h3>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:10px;">Chaque édition est figée à l'heure indiquée et ne peut plus jamais changer. « — » : passe non exécutée avant le départ, l'édition n'existe pas.</p>
+                <div style="overflow-x:auto;">
+                    <table class="runner-table">
+                        <thead>
+                            <tr><th style="text-align:left;">Édition</th><th>Verrou (GMT)</th><th style="text-align:left;">Moteur 8</th><th style="text-align:left;">Marché 8 (PMU)</th></tr>
+                        </thead>
+                        <tbody id="modal-editions-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
             <!-- Interactive Smart Ready-to-Bet Tickets with 1-Click Copy -->
             <div style="margin-bottom:22px;">
                 <h3 style="font-size:1.1rem; color:#fff; margin-bottom:12px;">🎟️ Formules de Jeux Prêtes à Jouer (Cliquez pour copier)</h3>
@@ -641,30 +654,23 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
             renderTable();
         }}
 
+        const HORIZON_META = {{
+            "T15":     {{ code: "T15", label: "🔒 T-15 Live", badgeClass: "couv-1", header: "Cote T-15 Directe", fullText: "🔒 Horizon T-15 (Direct Live & Smart Money)", info: "Dernières minutes avant le départ. Cotes ultra-directes et mouvements Smart Money verrouillés à T-15." }},
+            "T30":     {{ code: "T30", label: "⚡ T-30 Live", badgeClass: "couv-5", header: "Cote T-30 (Live)", fullText: "⚡ Cockpit Live (T-30 LONACI Online)", info: "Cockpit Live verrouillé à T-30 min pour prise de jeu en ligne (LONACI Online). Smart Money capté à plus de 80%." }},
+            "T90":     {{ code: "T90", label: "📢 T-90 Abonnés", badgeClass: "couv-3", header: "Cote T-90 (Abonnés)", fullText: "📢 Édition Abonnés (T-90 Kiosques)", info: "Édition validée pour les abonnés en agences et kiosques physiques (LONACI/PMU). Non-Partants éliminés et cotes stabilisées." }},
+            "T_MATIN": {{ code: "T_MATIN", label: "📡 T-Matin", badgeClass: "couv-4", header: "Cote Réf. (Matin)", fullText: "📡 Édition Préparatoire (T-Matin)", info: "Pronostic initial établi le matin. L'Édition Abonnés est générée à T-90 min (1h30 avant) puis le Cockpit Live à T-30 et T-15 min." }}
+        }};
+
         function getHorizonForRace(item) {{
             if (item.is_finished) {{
                 return {{ code: "FINI", label: "🏁 Clôturé", badgeClass: "couv-5", header: "Cote Finale" }};
             }}
-            let diffMin = 120;
-            if (item.scheduled_start_time && item.scheduled_start_time.includes(":")) {{
-                const cleanTime = item.scheduled_start_time.split(" ")[0].trim();
-                const parts = cleanTime.split(":");
-                if (parts.length === 2) {{
-                    const raceMin = parseInt(parts[0]) * 60 + parseInt(parts[1]);
-                    const now = new Date();
-                    const nowMin = now.getUTCHours() * 60 + now.getUTCMinutes();
-                    diffMin = raceMin - nowMin;
-                }}
+            // Le badge reflète l'édition RÉELLEMENT verrouillée en base
+            // (display_horizon), jamais une simple estimation par l'horloge.
+            if (item.display_horizon && HORIZON_META[item.display_horizon]) {{
+                return HORIZON_META[item.display_horizon];
             }}
-            if (diffMin <= 15) {{
-                return {{ code: "T15", label: "🔒 T-15 Live", badgeClass: "couv-1", header: "Cote T-15 Directe", fullText: "🔒 Horizon T-15 (Direct Live & Smart Money)", info: "Dernières minutes avant le départ. Cotes ultra-directes et mouvements Smart Money verrouillés à T-15." }};
-            }} else if (diffMin <= 30) {{
-                return {{ code: "T30", label: "⚡ T-30 Live", badgeClass: "couv-5", header: "Cote T-30 (Live)", fullText: "⚡ Cockpit Live (T-30 LONACI Online)", info: "Cockpit Live verrouillé à T-30 min pour prise de jeu en ligne (LONACI Online). Smart Money capté à plus de 80%." }};
-            }} else if (diffMin <= 90) {{
-                return {{ code: "T90", label: "📢 T-90 Abonnés", badgeClass: "couv-3", header: "Cote T-90 (Abonnés)", fullText: "📢 Édition Abonnés (T-90 Kiosques)", info: "Édition validée pour les abonnés en agences et kiosques physiques (LONACI/PMU). Non-Partants éliminés et cotes stabilisées." }};
-            }} else {{
-                return {{ code: "T_MATIN", label: "📡 T-Matin", badgeClass: "couv-4", header: "Cote Réf. (Matin)", fullText: "📡 Édition Préparatoire (T-Matin)", info: "Pronostic initial établi le matin. L'Édition Abonnés sera automatiquement générée à T-90 min (1h30 avant) et le Cockpit Live à T-30 min." }};
-            }}
+            return {{ code: "AUCUN", label: "⏳ Édition à venir", badgeClass: "couv-2", header: "Cote", fullText: "⏳ Aucune édition verrouillée pour l'instant", info: "L'édition du matin sera posée à partir de 06h30 GMT, puis T-90, T-30 et T-15 à l'approche du départ." }};
         }}
 
         function initDateTabs() {{
@@ -886,6 +892,25 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
             const trioStr = `${{bStr}} - ${{outNum}}`;
             const associes = item.sel_moteur_list.filter(n => !item.bases.includes(n)).slice(0, 4).join(", ");
             const quinteStr = `${{bStr}} - X - X - X / ${{associes}}`;
+
+            // Tableau des éditions verrouillées (transparence totale)
+            const edLabels = {{ "T_MATIN": "📡 Matin", "T90": "📢 T-90", "T30": "⚡ T-30", "T15": "🔒 T-15" }};
+            const edTbody = document.getElementById("modal-editions-tbody");
+            edTbody.innerHTML = "";
+            ["T_MATIN", "T90", "T30", "T15"].forEach(h => {{
+                const em = (item.editions_moteur || {{}})[h];
+                const ema = (item.editions_marche || {{}})[h];
+                const isShown = (item.display_horizon === h);
+                const tr = document.createElement("tr");
+                if (isShown) tr.style.background = "rgba(59,130,246,0.10)";
+                tr.innerHTML = `
+                    <td style="text-align:left; font-weight:700;">${{edLabels[h]}}${{isShown ? ' <span style="color:#60a5fa; font-size:0.72rem;">(affichée)</span>' : ''}}</td>
+                    <td style="font-family:monospace;">${{em ? em.lock : (ema ? ema.lock : '—')}}</td>
+                    <td style="text-align:left; font-family:monospace; color:#60a5fa;">${{em ? em.sel : '—'}}</td>
+                    <td style="text-align:left; font-family:monospace; color:#94a3b8;">${{ema ? ema.sel : '—'}}</td>
+                `;
+                edTbody.appendChild(tr);
+            }});
 
             document.getElementById("ticket-1-text").textContent = `Bases : ${{bStr}}`;
             document.getElementById("ticket-2-text").textContent = `Trio / Couplé : ${{trioStr}}`;

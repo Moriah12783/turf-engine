@@ -61,7 +61,15 @@ class TurfBenchmarkLab:
             if not arrival:
                 continue
 
-            pred = next((p for p in eval_data["predictions"] if p["engine_name"] == engine_name), None)
+            # Évaluer l'horizon le plus proche du départ réellement verrouillé
+            engine_preds = [p for p in eval_data["predictions"] if p["engine_name"] == engine_name]
+            pred = None
+            for h in ["T15", "T30", "T90", "T_MATIN"]:
+                pred = next((p for p in engine_preds if p.get("horizon") == h), None)
+                if pred:
+                    break
+            if pred is None and engine_preds:
+                pred = engine_preds[0]
             if not pred or not pred["selection"]:
                 continue
 
@@ -301,6 +309,19 @@ class TurfBenchmarkLab:
                             return p
                 return cands[0]
 
+            def editions_for(engine: str) -> Dict[str, Dict[str, str]]:
+                """Toutes les éditions verrouillées d'un moteur, par horizon,
+                avec leur heure de verrouillage — pour affichage transparent."""
+                eds: Dict[str, Dict[str, str]] = {}
+                for h in ["T_MATIN", "T90", "T30", "T15"]:
+                    p = next((q for q in predictions if q["engine_name"] == engine and q.get("horizon") == h), None)
+                    if p and p.get("selection"):
+                        eds[h] = {
+                            "sel": "-".join(map(str, p["selection"][:8])),
+                            "lock": str(p.get("lock_time", ""))[11:16]
+                        }
+                return eds
+
             p_new = pick_prediction("NEW_VALUE_ENGINE")
             sel_moteur = p_new["selection"][:8] if p_new and p_new.get("selection") else []
             sel_moteur_str = "-".join(map(str, sel_moteur)) if sel_moteur else "-"
@@ -409,6 +430,9 @@ class TurfBenchmarkLab:
 
             logs.append({
                 "race_id": r_id,
+                "display_horizon": p_new.get("horizon") if p_new else None,
+                "editions_moteur": editions_for("NEW_VALUE_ENGINE"),
+                "editions_marche": editions_for("MARKET_BASELINE"),
                 "date": date_str,
                 "course": course_label,
                 "race_name": race_name,
@@ -451,7 +475,9 @@ class TurfBenchmarkLab:
     def generate_comparative_report(self, engines: Optional[List[str]] = None) -> Dict[str, Any]:
         """Generate full comparative report across engines, discipline breakdowns, and permanent logs."""
         if engines is None:
-            engines = ["NEW_VALUE_ENGINE", "ETPE_ENGINE", "PRESS_SYNTHESIS", "MARKET_BASELINE"]
+            # PRESS_SYNTHESIS retiré : aucune donnée presse réelle n'est branchée,
+            # on ne compare pas le moteur à un adversaire fictif.
+            engines = ["NEW_VALUE_ENGINE", "ETPE_ENGINE", "MARKET_BASELINE"]
 
         evaluations = {}
         for eng in engines:

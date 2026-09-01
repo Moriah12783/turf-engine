@@ -1,0 +1,62 @@
+{
+  "name": "Turf Engine — Métronome GitHub",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            { "field": "cronExpression", "expression": "6,21,36,51 9-20 * * *" },
+            { "field": "cronExpression", "expression": "30 8 * * *" },
+            { "field": "cronExpression", "expression": "30 21 * * *" }
+          ]
+        }
+      },
+      "id": "schedule-metronome",
+      "name": "Cadence (UTC)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [260, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.github.com/repos/Moriah12783/turf-engine/actions/workflows/daily_sync.yml/dispatches",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Accept", "value": "application/vnd.github+json" },
+            { "name": "X-GitHub-Api-Version", "value": "2022-11-28" },
+            { "name": "User-Agent", "value": "elite-turf-metronome" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{ \"ref\": \"main\" }",
+        "options": {}
+      },
+      "id": "dispatch-github",
+      "name": "Déclencher le run GitHub",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [520, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "name": "GitHub PAT Turf Engine"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Cadence (UTC)": {
+      "main": [
+        [ { "node": "Déclencher le run GitHub", "type": "main", "index": 0 } ]
+      ]
+    }
+  },
+  "settings": {
+    "timezone": "UTC",
+    "executionOrder": "v1"
+  }
+}

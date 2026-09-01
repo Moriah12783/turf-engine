@@ -15,43 +15,40 @@ class NewValueEngine:
         self.temperature = temperature
 
     def calculate_intrinsic_score(self, feats: Dict[str, Any], discipline: str) -> float:
-        """Calculate weighted intrinsic capability score for a runner."""
+        """Calculate weighted intrinsic capability score for a runner.
+
+        Si un capteur n'a AUCUNE donnée réelle (press_score <= 0 tant que la
+        presse n'est pas branchée), son poids est redistribué proportionnellement
+        sur les capteurs réels au lieu d'injecter une constante fictive."""
         is_trot = "TROT" in discipline.upper()
 
         if is_trot:
-            w_form = 0.20
-            w_speed = 0.24
-            w_shoeing = 0.18
-            w_bias = 0.10
-            w_smart_money = 0.15
-            w_press = 0.13
+            weights = {
+                "form_score": 0.20,
+                "speed_score": 0.24,
+                "shoeing_score": 0.18,
+                "track_bias_score": 0.10,
+                "smart_money_score": 0.15,
+                "press_score": 0.13,
+            }
             penalty_dai = feats["dai_rate"] * 25.0
-
-            raw = (
-                w_form * feats["form_score"] +
-                w_speed * feats["speed_score"] +
-                w_shoeing * feats["shoeing_score"] +
-                w_bias * feats["track_bias_score"] +
-                w_smart_money * feats["smart_money_score"] +
-                w_press * feats["press_score"] -
-                penalty_dai
-            )
         else:
-            w_form = 0.24
-            w_speed = 0.26
-            w_equip = 0.10
-            w_bias = 0.15
-            w_smart_money = 0.13
-            w_press = 0.12
+            weights = {
+                "form_score": 0.24,
+                "speed_score": 0.26,
+                "equip_score": 0.10,
+                "track_bias_score": 0.15,
+                "smart_money_score": 0.13,
+                "press_score": 0.12,
+            }
+            penalty_dai = 0.0
 
-            raw = (
-                w_form * feats["form_score"] +
-                w_speed * feats["speed_score"] +
-                w_equip * feats["equip_score"] +
-                w_bias * feats["track_bias_score"] +
-                w_smart_money * feats["smart_money_score"] +
-                w_press * feats["press_score"]
-            )
+        if feats.get("press_score", 0.0) <= 0.0:
+            dropped = weights.pop("press_score")
+            scale = 1.0 / (1.0 - dropped)
+            weights = {k: w * scale for k, w in weights.items()}
+
+        raw = sum(w * feats.get(k, 50.0) for k, w in weights.items()) - penalty_dai
 
         return round(max(5.0, raw), 2)
 

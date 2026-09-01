@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional, Tuple
 from turf_lab.database import TurfDatabase
 from turf_lab.engine import NewValueEngine
-from turf_lab.baselines import ETPEEngineProxy, PressSynthesisEngine, MarketOddsEngine
+from turf_lab.baselines import ETPEEngineProxy, MarketOddsEngine
 
 
 class PMUDataFetcher:
@@ -66,12 +66,27 @@ class PMUDataFetcher:
 class DailySyncManager:
     """Orchestrates daily ingestion, Non-Partant handling, multi-horizon locking (T_MATIN, T90, T30, T15), and results resolution."""
 
+    # Vocabulaire PMU réel -> vocabulaire interne du moteur.
+    # Sans cette normalisation, ATTELE/MONTE étaient traités comme du galop
+    # (déferrage neutralisé, pénalité DAI ignorée, pondérations plat).
+    DISCIPLINE_MAP = {
+        "ATTELE": "TROT_ATTELE",
+        "MONTE": "TROT_MONTE",
+        "TROT_ATTELE": "TROT_ATTELE",
+        "TROT_MONTE": "TROT_MONTE",
+        "PLAT": "PLAT",
+        "HAIE": "OBSTACLE_HAIE",
+        "STEEPLECHASE": "OBSTACLE_STEEPLE",
+        "STEEPLE": "OBSTACLE_STEEPLE",
+        "CROSS": "OBSTACLE_CROSS",
+        "STEEPLE_CROSS": "OBSTACLE_CROSS",
+    }
+
     def __init__(self, db: TurfDatabase):
         self.db = db
         self.fetcher = PMUDataFetcher()
         self.new_engine = NewValueEngine()
         self.etpe_engine = ETPEEngineProxy()
-        self.press_engine = PressSynthesisEngine()
         self.market_engine = MarketOddsEngine()
         # Transparence « aucun chiffre retouché » : purge définitive des
         # courses de référence fictives et des dividendes estimés (idempotent).
@@ -180,15 +195,31 @@ class DailySyncManager:
             now_utc = datetime.utcnow()
         today_db = now_utc.strftime("%Y-%m-%d")
 
-        if race_date_db < today_db:
-            return list(self.ALL_HORIZONS)
+        # INTÉGRITÉ ÉDITORIALE : aucun verrou rétroactif, jamais.
+        # Un pronostic posé après le départ (avec les cotes finales) serait
+        # faussement « prophétique ». Si une passe a été manquée, l'horizon
+        # reste vide — c'est visible et honnête.
+        if race_date_db != today_db:
+            return []
 
         diff = self.minutes_to_start(time_display, race_date_db, now_utc)
-        due = ["T_MATIN"]
+        if diff is not None and diff <= 0:
+            return []  # course partie : plus aucun verrouillage
+
+        due = []
+        # T_MATIN = édition du MATIN : posée à partir de 06:30 GMT le jour de la
+        # course. Le programme PMU apparaît dès la veille au soir, mais les cotes
+        # n'ouvrent vraiment que le matin — verrouiller pendant la nuit figerait
+        # des cotes par défaut (15.0) et fausserait le signal Smart Money.
+        if now_utc.hour > 6 or (now_utc.hour == 6 and now_utc.minute >= 30):
+            due.append("T_MATIN")
+
         if diff is None:
             return due
         for horizon, window in self.HORIZON_WINDOWS:
             if diff <= window:
+                if "T_MATIN" not in due:
+                    due.append("T_MATIN")  # jamais d'horizon live sans référence matin
                 due.append(horizon)
         return due
 
@@ -204,7 +235,6 @@ class DailySyncManager:
         engines = [
             ("NEW", self.new_engine),
             ("ETPE", self.etpe_engine),
-            ("PRESS", self.press_engine),
             ("MARKET", self.market_engine),
         ]
         for key, eng in engines:
@@ -289,7 +319,8 @@ class DailySyncManager:
             for c in courses:
                 c_num = c.get("numOrdre", 1)
                 race_id = f"R{r_num}C{c_num}_{date_str_api}_{hippo}"
-                discipline = c.get("discipline", "TROT_ATTELE")
+                raw_disc = str(c.get("discipline", "TROT_ATTELE")).upper()
+                discipline = self.DISCIPLINE_MAP.get(raw_disc, raw_disc)
                 distance = c.get("distance", 2700)
                 name = c.get("libelle", f"Prix de {hippo}")
                 corde = c.get("corde", "CORDE_A_DROITE")
@@ -360,16 +391,33 @@ class DailySyncManager:
                     if pos is not None and isinstance(pos, int) and pos > 0:
                         placed_participants.append((pos, p_num))
 
-                    ref_obj = p.get("rapportReference") or {}
+                    # Cote de référence OFFICIELLE du flux PMU (le champ réel est
+                    # 'dernierRapportReference' — l'ancien 'rapportReference'
+                    # n'existe pas dans le flux), repli sur la première cote
+                    # directe vue, sinon défaut neutre 15.0.
+                    ref_obj = p.get("dernierRapportReference") or p.get("rapportReference") or {}
                     live_obj = p.get("dernierRapportDirect") or {}
                     live_odds = float(live_obj.get("rapport", 0.0) or 0.0)
                     m_odds = float(ref_obj.get("rapport", 0.0) or 0.0)
-                    # Cote du matin : rapport de référence PMU, sinon première cote
-                    # directe vue (capturée au run du matin), sinon défaut neutre.
                     if m_odds <= 0:
                         m_odds = live_odds if live_odds > 0 else 15.0
                     if live_odds <= 0:
                         live_odds = m_odds
+
+                    # Capteurs RÉELS du flux (remplacent les constantes 74.0/34.0/5) :
+                    # - chrono trot : reductionKilometrique en millisecondes (78300 = 78,3 s/km)
+                    red_km = float(p.get("reductionKilometrique", 0.0) or 0.0)
+                    record_chrono = round(red_km / 1000.0, 2) if red_km > 1000 else red_km
+                    # - valeur officielle handicap (galop)
+                    official_rating = float(p.get("handicapValeur", 0.0) or 0.0)
+                    # - poids en kg : le flux livre des hectogrammes (585 = 58,5 kg)
+                    poids_raw = float(p.get("poidsConditionMonte") or p.get("handicapPoids") or 0.0)
+                    if poids_raw > 200:
+                        poids_raw = poids_raw / 10.0
+                    weight_kg = poids_raw if poids_raw > 0 else 60.0
+                    # - gains carrière réels (objet gainsParticipant, en centimes)
+                    gains_obj = p.get("gainsParticipant") or {}
+                    earnings_eur = float(gains_obj.get("gainsCarriere", p.get("gainsCarriere", 0.0)) or 0.0) / 100.0
 
                     shoeing = p.get("deferre", "FERRE")
                     if shoeing == "DEFERRE_ANTERIEURS_POSTERIEURS":
@@ -388,7 +436,7 @@ class DailySyncManager:
                         "age": p.get("age", 5),
                         "driver_jockey": driver,
                         "trainer": trainer,
-                        "weight": float(p.get("poidsConditionMonte", 60.0) or 60.0),
+                        "weight": weight_kg,
                         "draw": p.get("placeCorde", p_num),
                         "shoeing": shoeing_code,
                         "blinkers": p.get("oeilleres", "SANS"),
@@ -396,11 +444,13 @@ class DailySyncManager:
                         "odds_t15": live_odds,
                         "final_odds": live_odds,
                         "is_non_partant": is_np,
-                        "press_citation_count": 5,
+                        # Presse : AUCUNE donnée réelle branchée -> 0 (jamais de
+                        # constante fictive ; le moteur redistribue ce poids).
+                        "press_citation_count": 0,
                         "music": music,
-                        "earnings": float(p.get("gainsCarriere", 0.0) or 0.0) / 100.0,
-                        "record_chrono": 74.0,
-                        "official_rating": 34.0
+                        "earnings": earnings_eur,
+                        "record_chrono": record_chrono,
+                        "official_rating": official_rating
                     })
 
                 if not runners:
@@ -415,8 +465,12 @@ class DailySyncManager:
                     for r in runners:
                         prev = existing_runners.get(r["num"])
                         if prev:
-                            if prev.get("morning_odds") is not None:
-                                r["morning_odds"] = prev["morning_odds"]
+                            prev_matin = prev.get("morning_odds")
+                            # 15.0 est la valeur PAR DÉFAUT (marché fermé, cote
+                            # inconnue) : la cote du matin n'est figée qu'une
+                            # fois une VRAIE valeur capturée.
+                            if prev_matin is not None and float(prev_matin) != 15.0:
+                                r["morning_odds"] = prev_matin
                             if t15_locked and prev.get("odds_t15") is not None:
                                 r["odds_t15"] = prev["odds_t15"]
 

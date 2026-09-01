@@ -20,9 +20,9 @@ class FakeFetcher:
     """Simule l'API PMU avec des courses à différentes distances temporelles du départ."""
 
     def __init__(self):
-        # course_num -> minutes avant départ
-        self.races = {1: 200, 2: 80, 3: 25, 4: 10}
-        self.live_odds = {1: 5.0, 2: 6.0, 3: 7.0, 4: 8.0}
+        # course_num -> minutes avant départ (5 : course déjà partie)
+        self.races = {1: 200, 2: 80, 3: 25, 4: 10, 5: -5}
+        self.live_odds = {1: 5.0, 2: 6.0, 3: 7.0, 4: 8.0, 5: 9.0}
         self.finished = set()
 
     def fetch_programme(self, date_str):
@@ -95,15 +95,17 @@ def main():
     # --- PASSE 1 : verrouillage selon la fenêtre temporelle ---
     stats1 = mgr.sync_date(NOW)
     print("PASSE 1:", stats1)
-    a1 = get_horizons(db, rid(1)); a2 = get_horizons(db, rid(2)); a3 = get_horizons(db, rid(3)); a4 = get_horizons(db, rid(4))
+    a1 = get_horizons(db, rid(1)); a2 = get_horizons(db, rid(2)); a3 = get_horizons(db, rid(3)); a4 = get_horizons(db, rid(4)); a5 = get_horizons(db, rid(5))
     print("  C1 (H-200):", a1, "| attendu [T_MATIN]")
     print("  C2 (H-80): ", a2, "| attendu [T90, T_MATIN]")
     print("  C3 (H-25): ", a3, "| attendu [T30, T90, T_MATIN]")
     print("  C4 (H-10): ", a4, "| attendu [T15, T30, T90, T_MATIN]")
+    print("  C5 (partie):", a5, "| attendu [] (JAMAIS de verrou après le départ)")
     assert a1 == ["T_MATIN"], a1
     assert a2 == ["T90", "T_MATIN"], a2
     assert a3 == ["T30", "T90", "T_MATIN"], a3
     assert a4 == ["T15", "T30", "T90", "T_MATIN"], a4
+    assert a5 == [], a5
 
     # cotes archivées passe 1
     r4 = {r["num"]: r for r in db.get_runners(rid(4))}
@@ -114,7 +116,7 @@ def main():
     lock_time_before = [p for p in db.get_predictions(rid(4)) if p["horizon"] == "T15" and p["engine_name"] == "NEW_VALUE_ENGINE"][0]["lock_time"]
 
     # --- PASSE 2 : les cotes bougent, rien de verrouillé ne doit changer ---
-    mgr.fetcher.live_odds = {1: 2.0, 2: 3.0, 3: 3.5, 4: 4.0}
+    mgr.fetcher.live_odds = {1: 2.0, 2: 3.0, 3: 3.5, 4: 4.0, 5: 9.5}
     stats2 = mgr.sync_date(NOW)
     print("PASSE 2:", stats2)
     assert stats2["predictions_locked"] == 0, stats2  # rien de nouveau à verrouiller
@@ -138,7 +140,7 @@ def main():
     assert race4["status"] == "FINISHED", race4["status"]
 
     # --- PASSE 4 : course terminée => archive gelée ---
-    mgr.fetcher.live_odds = {1: 9.9, 2: 9.9, 3: 9.9, 4: 99.0}
+    mgr.fetcher.live_odds = {1: 9.9, 2: 9.9, 3: 9.9, 4: 99.0, 5: 9.9}
     stats4 = mgr.sync_date(NOW)
     print("PASSE 4:", stats4)
     assert stats4["races_frozen"] >= 1, stats4
@@ -146,13 +148,13 @@ def main():
     assert r4c[1]["final_odds"] == 4.0 + 1, "cote finale modifiée après clôture !"
     print("  [OK] course terminée gelée définitivement")
 
-    # --- PASSE 5 : backfill d'une date passée => tous les horizons ---
+    # --- PASSE 5 : date passée => AUCUN verrou rétroactif (intégrité éditoriale) ---
     yesterday = NOW - timedelta(days=1)
     stats5 = mgr.sync_date(yesterday)
     rid_y = f"R1C1_{yesterday.strftime('%d%m%Y')}_TESTVILLE"
     ay = get_horizons(db, rid_y)
-    print("PASSE 5 (backfill hier):", ay, "| attendu les 4 horizons")
-    assert ay == ["T15", "T30", "T90", "T_MATIN"], ay
+    print("PASSE 5 (date passée):", ay, "| attendu [] (aucun pronostic rétroactif)")
+    assert ay == [], ay
 
     print("\n=== TOUS LES TESTS T-15 / PERSISTANCE PASSENT ===")
 
