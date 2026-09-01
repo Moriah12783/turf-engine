@@ -484,6 +484,10 @@ class TurfBenchmarkLab:
             evaluations[eng] = self.evaluate_engine(eng)
 
         discipline_breakdown = self.evaluate_by_discipline("NEW_VALUE_ENGINE")
+        # Comparatif par discipline : les mêmes métriques pour le MARCHÉ (favoris
+        # PMU), affichées côte à côte sur le site pour conseiller les abonnés
+        # selon leur discipline et leur type de pari préférés.
+        discipline_breakdown_market = self.evaluate_by_discipline("MARKET_BASELINE")
         # Historique permanent : aucune limite — toutes les courses archivées
         # sont conservées et exposées (la pagination/les archives mensuelles
         # gèrent le volume côté site).
@@ -494,5 +498,6 @@ class TurfBenchmarkLab:
             "total_finished_races": len(self.db.get_finished_races()),
             "evaluations": evaluations,
             "discipline_breakdown": discipline_breakdown,
+            "discipline_breakdown_market": discipline_breakdown_market,
             "historical_logs": historical_logs
         }

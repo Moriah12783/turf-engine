@@ -125,7 +125,10 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
 
         table_rows_html.append(f"<tr>{''.join(cells)}</tr>")
 
-    # 2. Discipline breakdown table
+    # 2. Discipline breakdown table — comparatif Moteur vs Marché, avec le
+    # Quarté, pour conseiller les abonnés chiffres en main selon leur
+    # discipline et leur type de pari préférés.
+    disc_breakdown_market = report_data.get("discipline_breakdown_market", {})
     discipline_rows_html = []
     disc_titles = [
         ("TROT", "🐎 Trot (Attelé & Monté)", "Vincennes, Enghien, Cabourg..."),
@@ -133,39 +136,41 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
         ("OBSTACLE", "🌿 Obstacle (Haies & Steeple)", "Auteuil, Compiègne, Pau...")
     ]
 
-    for disc_key, disc_label, disc_sub in disc_titles:
-        d_data = disc_breakdown.get(disc_key, {})
+    def _disc_cells(d_data, highlight_class):
+        """Cellules de métriques pour une source (Moteur ou Marché)."""
         d_races = d_data.get("total_races", 0)
+        if d_races <= 0:
+            return "<td>0</td>" + "<td>N/A</td>" * 7
         d_hr = d_data.get("hit_rates", {})
         d_fin = d_data.get("financial_performance", {})
         d_sg = d_fin.get("simple_gagnant", {}).get("roi_pct", 0.0)
         d_sp = d_fin.get("simple_place", {}).get("roi_pct", 0.0)
+        return (
+            f"<td><strong>{d_races}</strong></td>"
+            f"<td class='{highlight_class}'>{d_hr.get('winner_in_top8_pct', 0.0):.1f}%</td>"
+            f"<td>{d_hr.get('tierce_in_top8_pct', 0.0):.1f}%</td>"
+            f"<td>{d_hr.get('quarte_in_top8_pct', 0.0):.1f}%</td>"
+            f"<td class='{highlight_class}'><strong>{d_hr.get('quinte_in_top8_pct', 0.0):.1f}%</strong></td>"
+            f"<td>{d_hr.get('at_least_one_base_placed_pct', 0.0):.1f}%</td>"
+            f"<td class=\"{'val-pos' if d_sg > 0 else 'val-neg'}\"><strong>{d_sg:+.1f}%</strong></td>"
+            f"<td class=\"{'val-pos' if d_sp > 0 else 'val-neg'}\"><strong>{d_sp:+.1f}%</strong></td>"
+        )
 
-        if d_races > 0:
-            discipline_rows_html.append(f"""
+    for disc_key, disc_label, disc_sub in disc_titles:
+        moteur_cells = _disc_cells(disc_breakdown.get(disc_key, {}), "val-pos")
+        marche_cells = _disc_cells(disc_breakdown_market.get(disc_key, {}), "val-norm")
+        discipline_rows_html.append(f"""
             <tr>
-                <td style="text-align:left;">
+                <td rowspan="2" style="text-align:left; vertical-align:middle; border-right:1px solid var(--border);">
                     <strong>{disc_label}</strong><br>
                     <small style="color:var(--text-muted);">{disc_sub}</small>
                 </td>
-                <td><strong>{d_races}</strong></td>
-                <td class="val-pos">{d_hr.get('winner_in_top8_pct', 0.0):.1f}%</td>
-                <td class="val-pos"><strong>{d_hr.get('quinte_in_top8_pct', 0.0):.1f}%</strong></td>
-                <td>{d_hr.get('tierce_in_top8_pct', 0.0):.1f}%</td>
-                <td>{d_hr.get('at_least_one_base_placed_pct', 0.0):.1f}%</td>
-                <td class="{'val-pos' if d_sg > 0 else 'val-neg'}"><strong>{d_sg:+.1f}%</strong></td>
-                <td class="{'val-pos' if d_sp > 0 else 'val-neg'}"><strong>{d_sp:+.1f}%</strong></td>
+                <td style="text-align:left;"><span class="badge badge-primary" style="font-size:0.75rem;">Moteur</span></td>
+                {moteur_cells}
             </tr>
-            """)
-        else:
-            discipline_rows_html.append(f"""
-            <tr>
-                <td style="text-align:left;">
-                    <strong>{disc_label}</strong><br>
-                    <small style="color:var(--text-muted);">{disc_sub}</small>
-                </td>
-                <td>0</td>
-                <td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td>
+            <tr style="border-bottom:2px solid var(--border);">
+                <td style="text-align:left;"><span class="badge badge-neutral" style="font-size:0.75rem;">Marché</span></td>
+                {marche_cells}
             </tr>
             """)
 
@@ -383,16 +388,19 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
 
         <div class="card">
             <div class="card-header">
-                <h2>Répartition des Performances par Discipline (Nouveau Moteur)</h2>
+                <h2>Répartition des Performances par Discipline — Moteur vs Marché</h2>
+                <span class="badge-count">Conseillez vos abonnés chiffres en main : Tiercé, Quarté, Quinté par discipline</span>
             </div>
             <table>
                 <thead>
                     <tr>
-                        <th style="width: 28%;">Discipline</th>
+                        <th style="width: 20%;">Discipline</th>
+                        <th style="text-align:left;">Source</th>
                         <th>Courses</th>
                         <th>Gagnant dans les 8</th>
-                        <th>Quinté dans les 8</th>
                         <th>Tiercé dans les 8</th>
+                        <th>Quarté dans les 8</th>
+                        <th>Quinté dans les 8</th>
                         <th>Base dans Top 3</th>
                         <th>ROI Gagnant</th>
                         <th>ROI Placé</th>
