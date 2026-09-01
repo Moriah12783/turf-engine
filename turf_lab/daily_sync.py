@@ -354,7 +354,13 @@ class DailySyncManager:
                     stats["races_frozen"] += 1
                     # Seule exception au gel : compléter les dividendes OFFICIELS
                     # s'ils manquent encore (publiés en léger différé par le PMU).
-                    if not self.db.has_rapports(race_id):
+                    # PLAFONNÉ à 8 tentatives par passe : certaines courses
+                    # étrangères n'ont jamais de dividendes, et des dizaines
+                    # d'appels à 10s de timeout chacun allongeaient les runs
+                    # jusqu'à engorger la file d'attente. Le reste attend la
+                    # passe suivante.
+                    if stats.get("rapports_backfill_attempts", 0) < 8 and not self.db.has_rapports(race_id):
+                        stats["rapports_backfill_attempts"] = stats.get("rapports_backfill_attempts", 0) + 1
                         late_rapports = self._fetch_official_rapports(date_str_api, r_num, c_num)
                         if late_rapports:
                             self.db.save_rapports(race_id, late_rapports)

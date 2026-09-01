@@ -25,6 +25,10 @@ concurrency:
 jobs:
   sync_and_deploy:
     runs-on: ubuntu-latest
+    # Garde-fou anti-blocage : un run coincé est tué après 12 minutes au lieu
+    # de bloquer la file d'attente (concurrency) pendant des heures — cause du
+    # silence de 2h18 constaté le 01/09 entre 17h51 et 20h09.
+    timeout-minutes: 12
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -36,9 +40,11 @@ jobs:
 
       - name: Run Turf Prediction Engine (verrouillage multi-horizon T_MATIN/T90/T30/T15)
         run: |
-          # Passes du matin (08h30) et du soir (21h30) : fenêtre complète de 7 jours.
-          # Passes live (toutes les 15 min) : uniquement la journée en cours (rapide).
-          if [ "${{ github.event.schedule }}" = "30 8 * * *" ] || [ "${{ github.event.schedule }}" = "30 21 * * *" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          # Ancres du matin (08h30) et du soir (21h30) : fenêtre complète de 7 jours.
+          # TOUTES les autres passes (crons live ET frappes du métronome
+          # n8n/Cloudflare via workflow_dispatch) : journée en cours uniquement,
+          # pour rester rapides et ne jamais engorger la file d'attente.
+          if [ "${{ github.event.schedule }}" = "30 8 * * *" ] || [ "${{ github.event.schedule }}" = "30 21 * * *" ]; then
             DAYS=7
           else
             DAYS=1
