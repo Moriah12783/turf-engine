@@ -83,6 +83,12 @@ class DailySyncManager:
         "STEEPLE_CROSS": "OBSTACLE_CROSS",
     }
 
+    # ── PARITÉ LONACI : pays des réunions ingérées ───────────────────────
+    # LONACI = réunions françaises du flux PMU (+ Maroc via SOREC, source
+    # séparée à brancher plus tard). Ajouter un code ISO ici suffit pour
+    # élargir le périmètre (ex. "BEL" si LONACI ajoute la Belgique).
+    SUBSCRIBER_COUNTRIES = {"FRA"}
+
     def __init__(self, db: TurfDatabase):
         self.db = db
         self.fetcher = PMUDataFetcher()
@@ -326,6 +332,23 @@ class DailySyncManager:
             r_num = r.get("numOfficiel", 1)
             hippo = r.get("hippodrome", {}).get("libelleCourt", "HIPPO")
             courses = r.get("courses", [])
+
+            # ── PARITÉ LONACI : périmètre abonnés ────────────────────────
+            # LONACI (le canal de jeu des abonnés) n'offre que les réunions
+            # FRANÇAISES du flux PMU (plus les réunions marocaines, servies
+            # par la source SOREC — hors de ce flux). Les réunions
+            # étrangères (ESP/GBR/SWE/ARG/CHL…) sont injouables pour les
+            # abonnés et souvent sans cotes : elles ne sont plus ingérées.
+            # Clause de transition : une réunion hors périmètre dont des
+            # courses sont DÉJÀ en base (verrouillées avant ce réglage)
+            # reste traitée jusqu'à résolution de ses arrivées — on ne
+            # laisse jamais une course « En attente » pour toujours.
+            pays_code = str((r.get("pays") or {}).get("code", "FRA")).upper()
+            if pays_code not in self.SUBSCRIBER_COUNTRIES:
+                first_course_num = courses[0].get("numOrdre", 1) if courses else 1
+                probe_id = f"R{r_num}C{first_course_num}_{date_str_api}_{hippo}"
+                if not self.db.get_race(probe_id):
+                    continue  # réunion hors périmètre, jamais ingérée : ignorée
 
             for c in courses:
                 c_num = c.get("numOrdre", 1)
