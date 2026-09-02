@@ -175,6 +175,43 @@ def compute_speed_rating_score(record_chrono: float, official_rating: float, wei
         return round(max(10.0, min(100.0, score)), 2)
 
 
+def compute_human_factor_score(runner: Dict[str, Any]) -> float:
+    """F2 — Score du facteur humain (driver/jockey + entraîneur), appris
+    depuis notre propre historique permanent via HumanStatsBook.
+
+    Le score mesure l'écart du taux top-3 LISSÉ de chaque acteur par
+    rapport à la moyenne globale de la base : 50 = dans la moyenne,
+    au-dessus = surperformeur avéré, en dessous = sous-performeur.
+    Bonus si le couple driver-cheval a déjà brillé ensemble.
+
+    Retourne 0.0 (capteur MUET, poids redistribué par le moteur) quand
+    aucune statistique n'atteint l'échantillon minimum — jamais de
+    constante fictive."""
+    hs = runner.get("human_stats") or {}
+    baseline = float(hs.get("global_top3_rate", 0.25)) or 0.25
+
+    parts = []  # (poids, score)
+    d_rate = hs.get("driver_top3_shrunk")
+    if d_rate is not None:
+        parts.append((0.6, 50.0 + (float(d_rate) - baseline) * 250.0))
+    t_rate = hs.get("trainer_top3_shrunk")
+    if t_rate is not None:
+        parts.append((0.4, 50.0 + (float(t_rate) - baseline) * 250.0))
+
+    if not parts:
+        return 0.0
+
+    total_w = sum(w for w, _ in parts)
+    score = sum(w * s for w, s in parts) / total_w
+
+    # Couple driver-cheval déjà performant ensemble : léger bonus.
+    c_rate = hs.get("couple_top3_shrunk")
+    if c_rate is not None and float(c_rate) > baseline:
+        score += 5.0
+
+    return round(max(5.0, min(95.0, score)), 2)
+
+
 def extract_runner_features(runner: Dict[str, Any], race: Dict[str, Any]) -> Dict[str, Any]:
     """Extract a comprehensive feature vector including Track Bias and Smart Money Velocity."""
     discipline = race.get("discipline", "TROT_ATTELE")
@@ -223,6 +260,7 @@ def extract_runner_features(runner: Dict[str, Any], race: Dict[str, Any]) -> Dic
         "smart_money_score": smart_money_score,
         "smart_signal": smart_signal,
         "press_score": press_score,
+        "human_score": compute_human_factor_score(runner),
         "morning_odds": morning_odds,
         "odds": live_odds,
         "implied_prob": round(implied_prob, 4)

@@ -15,6 +15,7 @@ from typing import Any, Dict, List, Optional, Tuple
 from turf_lab.database import TurfDatabase
 from turf_lab.engine import NewValueEngine
 from turf_lab.baselines import ETPEEngineProxy, MarketOddsEngine
+from turf_lab.human_stats import HumanStatsBook
 
 
 class PMUDataFetcher:
@@ -88,6 +89,10 @@ class DailySyncManager:
         self.new_engine = NewValueEngine()
         self.etpe_engine = ETPEEngineProxy()
         self.market_engine = MarketOddsEngine()
+        # F2 — carnet de stats humaines : construit à la demande, UNE fois
+        # par passe, uniquement depuis les courses déjà terminées (aucune
+        # information du futur ne peut fuiter dans un pronostic).
+        self._human_book = None  # type: HumanStatsBook
         # Transparence « aucun chiffre retouché » : purge définitive des
         # courses de référence fictives et des dividendes estimés (idempotent).
         purged = self.db.purge_fictitious_data()
@@ -231,6 +236,12 @@ class DailySyncManager:
         race_id = race_data["race_id"]
         if self.db.has_prediction(race_id, "NEW_VALUE_ENGINE", horizon):
             return 0
+
+        # F2 — enrichissement des partants avec les stats humaines apprises
+        # (drivers/entraîneurs/couples) avant tout calcul de pronostic.
+        if self._human_book is None:
+            self._human_book = HumanStatsBook(self.db)
+        self._human_book.enrich_runners(runners)
 
         engines = [
             ("NEW", self.new_engine),

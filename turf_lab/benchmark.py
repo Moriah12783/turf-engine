@@ -13,11 +13,24 @@ class TurfBenchmarkLab:
     probabilistic calibration, comparative rankings, and permanent cumulative race logs.
     """
 
+    # ── F3 : BANC DE MESURE PAR HORIZON ──────────────────────────────
+    # Date de la réforme des éditions immuables. Avant cette date, les
+    # quatre horizons étaient verrouillés simultanément avec les mêmes
+    # cotes (T-15 fictif) : les comparer n'aurait aucun sens. Le banc
+    # par horizon ne mesure donc que les courses à partir de cette date,
+    # où chaque édition a été réellement verrouillée à son heure.
+    HORIZON_BENCH_START_DATE = "2026-09-01"
+
     def __init__(self, db: TurfDatabase):
         self.db = db
 
-    def evaluate_engine(self, engine_name: str, race_ids: Optional[List[str]] = None, exclude_no_bet: bool = False) -> Dict[str, Any]:
-        """Compute full performance metrics for a specific prediction engine on a given set of races."""
+    def evaluate_engine(self, engine_name: str, race_ids: Optional[List[str]] = None, exclude_no_bet: bool = False, horizon: Optional[str] = None) -> Dict[str, Any]:
+        """Compute full performance metrics for a specific prediction engine on a given set of races.
+
+        Si `horizon` est fourni (F3), seule l'édition verrouillée à CET
+        horizon est évaluée — une course sans édition à cet horizon est
+        ignorée. Sinon, comportement historique : l'édition la plus
+        proche du départ (T15 > T30 > T90 > T_MATIN)."""
         if race_ids is None:
             race_ids = self.db.get_finished_races()
 
@@ -61,15 +74,19 @@ class TurfBenchmarkLab:
             if not arrival:
                 continue
 
-            # Évaluer l'horizon le plus proche du départ réellement verrouillé
             engine_preds = [p for p in eval_data["predictions"] if p["engine_name"] == engine_name]
-            pred = None
-            for h in ["T15", "T30", "T90", "T_MATIN"]:
-                pred = next((p for p in engine_preds if p.get("horizon") == h), None)
-                if pred:
-                    break
-            if pred is None and engine_preds:
-                pred = engine_preds[0]
+            if horizon is not None:
+                # F3 : évaluation de l'édition de CET horizon uniquement.
+                pred = next((p for p in engine_preds if p.get("horizon") == horizon), None)
+            else:
+                # Évaluer l'horizon le plus proche du départ réellement verrouillé
+                pred = None
+                for h in ["T15", "T30", "T90", "T_MATIN"]:
+                    pred = next((p for p in engine_preds if p.get("horizon") == h), None)
+                    if pred:
+                        break
+                if pred is None and engine_preds:
+                    pred = engine_preds[0]
             if not pred or not pred["selection"]:
                 continue
 
@@ -260,6 +277,28 @@ class TurfBenchmarkLab:
 
         return results
 
+    def evaluate_by_horizon(self, engine_name: str = "NEW_VALUE_ENGINE") -> Dict[str, Any]:
+        """F3 — Banc de mesure par horizon de verrouillage.
+
+        Mesure séparément les performances des éditions Matin / T-90 /
+        T-30 / T-15, uniquement sur les courses depuis la réforme des
+        éditions immuables (HORIZON_BENCH_START_DATE) : c'est la preuve
+        chiffrée de la valeur de chaque horizon, à montrer aux abonnés."""
+        finished_races = self.db.get_finished_races()
+        eligible = []
+        for r_id in finished_races:
+            race = self.db.get_race(r_id)
+            if race and str(race.get("date", "")) >= self.HORIZON_BENCH_START_DATE:
+                eligible.append(r_id)
+
+        results: Dict[str, Any] = {}
+        for h in ["T_MATIN", "T90", "T30", "T15"]:
+            if eligible:
+                results[h] = self.evaluate_engine(engine_name, race_ids=eligible, horizon=h)
+            else:
+                results[h] = {"total_races": 0, "status": "NO_DATA"}
+        return results
+
     def get_historical_race_logs(self, limit: Optional[int] = None) -> List[Dict[str, Any]]:
         """Extract all races (both finished and scheduled upcoming) with permanent cumulative history."""
         with self.db.transaction() as conn:
@@ -281,6 +320,25 @@ class TurfBenchmarkLab:
             runners = self.db.get_runners(r_id)
             predictions = self.db.get_predictions(r_id)
             odds_snaps = self.db.get_odds_snapshots(r_id)
+
+            # ── Honnêteté des cotes : détection des courses SANS cotes PMU ──
+            # Les réunions étrangères hors mutualisation (Suède, Argentine,
+            # Chili…) n'ont AUCUNE cote dans le flux : chaque partant reste
+            # alors à la valeur par défaut 15.0 sur tous les champs de cotes.
+            # On détecte cette signature pour afficher « cotes indisponibles »
+            # au lieu de fausses cotes uniformes à 15.0.
+            def _all_default_odds(runner: Dict[str, Any]) -> bool:
+                for field in ("morning_odds", "odds_t15", "final_odds"):
+                    v = runner.get(field)
+                    if v is not None and abs(float(v) - 15.0) > 1e-9:
+                        return False
+                return True
+
+            active_runners = [r for r in runners if not r.get("is_non_partant", False)] or runners
+            priced_count = sum(1 for r in active_runners if not _all_default_odds(r))
+            market_odds_available = bool(active_runners) and (
+                priced_count / len(active_runners) >= 0.5
+            )
 
             date_str = race.get("date", "2026-08-31")
             m_num = race.get("meeting_number", 1)
@@ -369,7 +427,12 @@ class TurfBenchmarkLab:
                 matches_marche = [n for n in top5_arrival if n in sel_marche]
                 c_moteur = len(matches_moteur)
                 c_marche = len(matches_marche)
-                couverture_label = f"Moteur {c_moteur}/5 · Marché {c_marche}/5"
+                if market_odds_available:
+                    couverture_label = f"Moteur {c_moteur}/5 · Marché {c_marche}/5"
+                else:
+                    # Sans cotes PMU, la « sélection marché » est purement
+                    # nominale : on ne lui attribue pas de score de couverture.
+                    couverture_label = f"Moteur {c_moteur}/5 · Marché —"
             else:
                 c_moteur = 0
                 c_marche = 0
@@ -423,13 +486,17 @@ class TurfBenchmarkLab:
                     "prob_pct": round(float(probabilities.get(r_num_str, 0.0)) * 100.0, 1),
                     "value_index": value_indices.get(r_num_str, 1.0),
                     "smart_signal": smart_signals.get(r_num_str, "STABLE"),
-                    "is_np": bool(r.get("is_non_partant", False))
+                    "is_np": bool(r.get("is_non_partant", False)),
+                    # Honnêteté : partant jamais coté par le flux PMU
+                    # (toutes ses cotes à la valeur par défaut 15.0).
+                    "odds_real": not _all_default_odds(r)
                 })
 
             detailed_runners.sort(key=lambda x: x["prob_pct"], reverse=True)
 
             logs.append({
                 "race_id": r_id,
+                "market_odds_available": market_odds_available,
                 "display_horizon": p_new.get("horizon") if p_new else None,
                 "editions_moteur": editions_for("NEW_VALUE_ENGINE"),
                 "editions_marche": editions_for("MARKET_BASELINE"),
@@ -488,6 +555,11 @@ class TurfBenchmarkLab:
         # PMU), affichées côte à côte sur le site pour conseiller les abonnés
         # selon leur discipline et leur type de pari préférés.
         discipline_breakdown_market = self.evaluate_by_discipline("MARKET_BASELINE")
+        # F3 — Banc par horizon (Moteur et Marché côte à côte) : quelle
+        # édition rapporte le plus, mesuré sur les seules éditions
+        # authentiques (depuis la réforme des éditions immuables).
+        horizon_breakdown = self.evaluate_by_horizon("NEW_VALUE_ENGINE")
+        horizon_breakdown_market = self.evaluate_by_horizon("MARKET_BASELINE")
         # Historique permanent : aucune limite — toutes les courses archivées
         # sont conservées et exposées (la pagination/les archives mensuelles
         # gèrent le volume côté site).
@@ -499,5 +571,8 @@ class TurfBenchmarkLab:
             "evaluations": evaluations,
             "discipline_breakdown": discipline_breakdown,
             "discipline_breakdown_market": discipline_breakdown_market,
+            "horizon_breakdown": horizon_breakdown,
+            "horizon_breakdown_market": horizon_breakdown_market,
+            "horizon_bench_start_date": self.HORIZON_BENCH_START_DATE,
             "historical_logs": historical_logs
         }

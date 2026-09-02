@@ -10,6 +10,23 @@ class NewValueEngine:
     track bias, smart money velocity, NO_BET filtering, Master Couplé alerts, and smart tickets.
     """
 
+    # ── F1 : CALIBRATION MARCHÉ ──────────────────────────────────────
+    # Poids des probabilités implicites du marché dans la probabilité
+    # finale. Un moteur fiable ne combat pas le marché, il le corrige à
+    # la marge : le marché (dominant) fixe l'ossature des probabilités,
+    # le modèle (correcteur ~30 %) déplace les curseurs là où ses
+    # capteurs réels (déferrage, Smart Money, chrono, forme) détectent
+    # un écart. La value se mesure ensuite sur ces VRAIS écarts.
+    MARKET_WEIGHT = 0.70
+    # En dessous de cette part de partants réellement cotés, la course
+    # est considérée SANS cotes PMU (réunions étrangères hors
+    # mutualisation : Suède, Argentine, Chili…) : repli automatique sur
+    # le modèle pur — on ne calibre jamais sur des cotes fictives.
+    MIN_MARKET_COVERAGE = 0.5
+    # Valeur par défaut injectée par la synchronisation quand le flux
+    # PMU ne fournit aucune cote pour un partant.
+    DEFAULT_ODDS = 15.0
+
     def __init__(self, engine_name: str = "NEW_VALUE_ENGINE", temperature: float = 12.0):
         self.engine_name = engine_name
         self.temperature = temperature
@@ -17,34 +34,42 @@ class NewValueEngine:
     def calculate_intrinsic_score(self, feats: Dict[str, Any], discipline: str) -> float:
         """Calculate weighted intrinsic capability score for a runner.
 
-        Si un capteur n'a AUCUNE donnée réelle (press_score <= 0 tant que la
-        presse n'est pas branchée), son poids est redistribué proportionnellement
-        sur les capteurs réels au lieu d'injecter une constante fictive."""
+        Si un capteur n'a AUCUNE donnée réelle (press_score tant que la
+        presse n'est pas branchée, human_score tant que le driver ou
+        l'entraîneur n'a pas assez d'historique appris — F2), son poids est
+        redistribué proportionnellement sur les capteurs réels au lieu
+        d'injecter une constante fictive."""
         is_trot = "TROT" in discipline.upper()
 
         if is_trot:
             weights = {
-                "form_score": 0.20,
-                "speed_score": 0.24,
+                "form_score": 0.18,
+                "speed_score": 0.22,
                 "shoeing_score": 0.18,
-                "track_bias_score": 0.10,
-                "smart_money_score": 0.15,
-                "press_score": 0.13,
+                "track_bias_score": 0.09,
+                "smart_money_score": 0.13,
+                "press_score": 0.10,
+                "human_score": 0.10,
             }
             penalty_dai = feats["dai_rate"] * 25.0
         else:
             weights = {
-                "form_score": 0.24,
-                "speed_score": 0.26,
-                "equip_score": 0.10,
-                "track_bias_score": 0.15,
-                "smart_money_score": 0.13,
-                "press_score": 0.12,
+                "form_score": 0.22,
+                "speed_score": 0.24,
+                "equip_score": 0.09,
+                "track_bias_score": 0.13,
+                "smart_money_score": 0.12,
+                "press_score": 0.10,
+                "human_score": 0.10,
             }
             penalty_dai = 0.0
 
-        if feats.get("press_score", 0.0) <= 0.0:
-            dropped = weights.pop("press_score")
+        # Capteurs muets (aucune donnée réelle) : poids redistribué.
+        dropped = 0.0
+        for silent_key in ("press_score", "human_score"):
+            if feats.get(silent_key, 0.0) <= 0.0 and silent_key in weights:
+                dropped += weights.pop(silent_key)
+        if dropped > 0.0 and weights:
             scale = 1.0 / (1.0 - dropped)
             weights = {k: w * scale for k, w in weights.items()}
 
@@ -167,8 +192,33 @@ class NewValueEngine:
 
         for r, exp_s in zip(scored_runners, exp_scores):
             prob = exp_s / sum_exp
+            r["model_prob"] = round(prob, 4)
             r["estimated_prob"] = round(prob, 4)
             r["value_index"] = round(prob * r["odds"], 2)
+
+        # 2bis. F1 — CALIBRATION MARCHÉ
+        # Probabilité finale = MARKET_WEIGHT × prob. implicite du marché
+        # (cotes dé-margées) + (1 − MARKET_WEIGHT) × prob. du modèle.
+        # Value index = probabilité finale × cote : un indice > 1 signale
+        # désormais un écart RÉEL détecté par les capteurs, et non plus un
+        # simple désaccord de classement avec le marché.
+        priced = [
+            r for r in scored_runners
+            if r["odds"] and r["odds"] > 1.01 and abs(r["odds"] - self.DEFAULT_ODDS) > 1e-9
+        ]
+        market_coverage = len(priced) / len(scored_runners)
+        market_available = market_coverage >= self.MIN_MARKET_COVERAGE
+
+        if market_available:
+            implied = {r["num"]: 1.0 / max(1.05, float(r["odds"])) for r in scored_runners}
+            total_implied = sum(implied.values()) or 1.0
+            for r in scored_runners:
+                p_market = implied[r["num"]] / total_implied
+                p_final = self.MARKET_WEIGHT * p_market + (1.0 - self.MARKET_WEIGHT) * r["model_prob"]
+                r["estimated_prob"] = round(p_final, 4)
+                r["value_index"] = round(p_final * r["odds"], 2)
+        # Sinon (course sans cotes PMU) : les probabilités restent celles
+        # du modèle pur, déjà en place — aucune calibration fictive.
 
         # 3. Probabilistic & Value Ranking
         ranked_by_prob = sorted(scored_runners, key=lambda x: x["estimated_prob"], reverse=True)
@@ -228,6 +278,21 @@ class NewValueEngine:
                 "smart_signals": signal_dict,
                 "top_score": max_score,
                 "discipline": discipline,
-                "runners_count": len(valid_runners)
+                "runners_count": len(valid_runners),
+                # F1 — traçabilité de la calibration : appliquée ou non,
+                # poids du marché et couverture réelle en cotes, plus les
+                # probabilités du modèle pur pour la transparence.
+                "market_calibration": {
+                    "applied": market_available,
+                    "market_weight": self.MARKET_WEIGHT if market_available else 0.0,
+                    "coverage_pct": round(market_coverage * 100.0, 1)
+                },
+                # F2 — part des partants pour lesquels le capteur humain
+                # appris a émis un signal (monte avec la taille des archives).
+                "human_coverage_pct": round(
+                    100.0 * sum(1 for f in features_list if f.get("human_score", 0.0) > 0.0)
+                    / max(1, len(features_list)), 1
+                ),
+                "model_probs": {str(r["num"]): r["model_prob"] for r in scored_runners}
             }
         }

@@ -174,6 +174,39 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
             </tr>
             """)
 
+    # 2bis. F3 — Banc de mesure par horizon de verrouillage : quelle édition
+    # (Matin / T-90 / T-30 / T-15) rapporte le plus, Moteur et Marché côte à
+    # côte, mesuré uniquement sur les éditions authentiques (depuis la
+    # réforme des éditions immuables).
+    horizon_breakdown = report_data.get("horizon_breakdown", {})
+    horizon_breakdown_market = report_data.get("horizon_breakdown_market", {})
+    horizon_bench_start = report_data.get("horizon_bench_start_date", "2026-09-01")
+    horizon_rows_html = []
+    horizon_titles = [
+        ("T_MATIN", "📡 Édition Matin", "verrouillée dès 06h30 GMT"),
+        ("T90", "📢 Édition T-90", "~90 min avant le départ"),
+        ("T30", "⚡ Édition T-30", "~30 min avant le départ"),
+        ("T15", "🔒 Édition T-15", "~15 min avant le départ")
+    ]
+
+    for h_key, h_label, h_sub in horizon_titles:
+        h_moteur_cells = _disc_cells(horizon_breakdown.get(h_key, {}), "val-pos")
+        h_marche_cells = _disc_cells(horizon_breakdown_market.get(h_key, {}), "val-norm")
+        horizon_rows_html.append(f"""
+            <tr>
+                <td rowspan="2" style="text-align:left; vertical-align:middle; border-right:1px solid var(--border);">
+                    <strong>{h_label}</strong><br>
+                    <small style="color:var(--text-muted);">{h_sub}</small>
+                </td>
+                <td style="text-align:left;"><span class="badge badge-primary" style="font-size:0.75rem;">Moteur</span></td>
+                {h_moteur_cells}
+            </tr>
+            <tr style="border-bottom:2px solid var(--border);">
+                <td style="text-align:left;"><span class="badge badge-neutral" style="font-size:0.75rem;">Marché</span></td>
+                {h_marche_cells}
+            </tr>
+            """)
+
     logs_json = json.dumps(historical_logs, ensure_ascii=False)
     archive_manifest = report_data.get("archive_manifest", {})
     manifest_json = json.dumps(archive_manifest, ensure_ascii=False)
@@ -259,6 +292,7 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
 
         .badge-master {{ background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; padding: 3px 8px; border-radius: 6px; font-weight: 700; }}
         .badge-nobet {{ background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; padding: 3px 8px; border-radius: 6px; font-weight: 700; }}
+        .badge-nocotes {{ background: rgba(148, 163, 184, 0.12); color: #94a3b8; border: 1px dashed #64748b; padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: 700; }}
         .badge-base {{ background: rgba(59, 130, 246, 0.15); color: #93c5fd; padding: 3px 8px; border-radius: 6px; }}
         
         .badge-horizon {{ background: #1e293b; color: #38bdf8; border: 1px solid #38bdf8; padding: 4px 12px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }}
@@ -410,6 +444,47 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                     {''.join(discipline_rows_html)}
                 </tbody>
             </table>
+            <p style="margin-top:10px; font-size:0.78rem; color:var(--text-muted);">
+                📵 Les courses des réunions étrangères sans cotes PMU sont incluses dans ces totaux :
+                la ligne « Marché » y est purement nominale (aucune cote réelle) et le moteur y travaille
+                sur ses capteurs hors marché uniquement. Ces courses sont signalées individuellement
+                dans le cockpit ci-dessous.
+            </p>
+        </div>
+
+        <!-- Section 2bis (F3): Banc de mesure par horizon de verrouillage -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Banc de Mesure par Horizon — Quelle édition rapporte le plus ?</h2>
+                <span class="badge-count">La preuve chiffrée de la valeur du T-15, édition par édition</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 20%;">Horizon de verrouillage</th>
+                        <th style="text-align:left;">Source</th>
+                        <th>Courses</th>
+                        <th>Gagnant dans les 8</th>
+                        <th>Tiercé dans les 8</th>
+                        <th>Quarté dans les 8</th>
+                        <th>Quinté dans les 8</th>
+                        <th>Base dans Top 3</th>
+                        <th>ROI Gagnant</th>
+                        <th>ROI Placé</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {''.join(horizon_rows_html)}
+                </tbody>
+            </table>
+            <p style="margin-top:10px; font-size:0.78rem; color:var(--text-muted);">
+                ⏱️ Chaque ligne mesure l'édition telle qu'elle a été verrouillée à cet horizon — jamais
+                recalculée après coup. Banc démarré le {horizon_bench_start} (réforme des éditions
+                immuables) : avant cette date, les quatre horizons étaient posés simultanément et ne
+                peuvent être comparés honnêtement. Les effectifs par horizon diffèrent : une course dont
+                le programme est chargé tard n'a pas d'édition Matin, et les passes rattrapent parfois
+                T-90/T-30/T-15 en un seul verrouillage.
+            </p>
         </div>
 
         <!-- Section 3: Interactive Results Cockpit with 1-Click Modal Inspector -->
@@ -796,15 +871,18 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
 
                     const timeInfo = item.scheduled_start_time || "12:00 GMT";
                     const hObj = getHorizonForRace(item);
+                    // Honnêteté : course sans cotes PMU (réunion étrangère) —
+                    // badge dédié et sélection marché masquée (elle serait fictive).
+                    const noCotes = (item.market_odds_available === false);
 
                     tr.innerHTML = `
                         <td style="text-align:left;">
-                            <strong style="color:#60a5fa;">🔍 ${{item.course}}</strong> <span class="badge-horizon-small">${{hObj.label}}</span><br>
-                            <small style="color:#38bdf8; font-weight:700;">⏰ ${{timeInfo}}</small> • 
+                            <strong style="color:#60a5fa;">🔍 ${{item.course}}</strong> <span class="badge-horizon-small">${{hObj.label}}</span>${{noCotes ? ' <span class="badge-nocotes">📵 Cotes PMU indispo.</span>' : ''}}<br>
+                            <small style="color:#38bdf8; font-weight:700;">⏰ ${{timeInfo}}</small> •
                             <small style="color:var(--text-muted); font-family:monospace;">${{item.date}}</small>
                         </td>
                         <td style="font-family:monospace; color:#60a5fa; font-weight:700; letter-spacing:0.5px;">${{item.sel_moteur}}</td>
-                        <td style="font-family:monospace; color:#94a3b8; letter-spacing:0.5px;">${{item.sel_marche}}</td>
+                        <td style="font-family:monospace; color:#94a3b8; letter-spacing:0.5px;">${{noCotes ? '<em style="color:var(--text-muted); font-family:inherit;">indisponible</em>' : item.sel_marche}}</td>
                         <td style="font-family:monospace; color:#f8fafc; font-weight:700; letter-spacing:0.5px;">${{item.arrivee}}</td>
                         <td><span class="couv-tag ${{badgeClass}}">${{item.couverture_label}}</span></td>
                         <td style="font-size:0.85rem;"><span class="${{item.decision_badge}}">${{item.decision}}</span></td>
@@ -845,6 +923,8 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
             document.getElementById("modal-subtitle").textContent = `⏰ Départ : ${{timeInfo}} • ${{item.date}} • ${{item.discipline}} • ${{item.distance}}m (Corde à ${{item.rope.toLowerCase()}})${{item.autostart ? ' • Autostart' : ''}} • Statut : ${{item.status}}`;
             document.getElementById("modal-confidence").textContent = item.confidence_label || "⭐⭐⭐";
 
+            const noCotes = (item.market_odds_available === false);
+
             const badgeBox = document.getElementById("modal-badge-container");
             if (item.is_master) {{
                 badgeBox.innerHTML = `<span class="badge-master">⭐ COUPLE MAITRE DU JOUR</span>`;
@@ -852,6 +932,9 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                 badgeBox.innerHTML = `<span class="badge-nobet">⚠️ ABSTENTION / NO_BET</span>`;
             }} else {{
                 badgeBox.innerHTML = `<span class="badge-base">Course Régulière</span>`;
+            }}
+            if (noCotes) {{
+                badgeBox.innerHTML += ` <span class="badge-nocotes">📵 Cotes PMU indisponibles — analyse sur capteurs hors marché uniquement</span>`;
             }}
 
             // Dynamic 4-Horizon Indicator
@@ -883,7 +966,7 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
             document.getElementById("modal-regrets").textContent = item.regrets.length ? item.regrets.join(" - ") : "N/A";
 
             document.getElementById("modal-sel-moteur").textContent = item.sel_moteur;
-            document.getElementById("modal-sel-marche").textContent = item.sel_marche;
+            document.getElementById("modal-sel-marche").textContent = noCotes ? "Indisponible (pas de cotes PMU)" : item.sel_marche;
             document.getElementById("modal-arrival").textContent = item.arrivee;
 
             const couvBox = document.getElementById("modal-coverage-badge");
@@ -915,7 +998,7 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                     <td style="text-align:left; font-weight:700;">${{edLabels[h]}}${{isShown ? ' <span style="color:#60a5fa; font-size:0.72rem;">(affichée)</span>' : ''}}</td>
                     <td style="font-family:monospace;">${{em ? em.lock : (ema ? ema.lock : '—')}}</td>
                     <td style="text-align:left; font-family:monospace; color:#60a5fa;">${{em ? em.sel : '—'}}</td>
-                    <td style="text-align:left; font-family:monospace; color:#94a3b8;">${{ema ? ema.sel : '—'}}</td>
+                    <td style="text-align:left; font-family:monospace; color:#94a3b8;">${{noCotes ? '<em style="color:var(--text-muted); font-family:inherit;">indispo.</em>' : (ema ? ema.sel : '—')}}</td>
                 `;
                 edTbody.appendChild(tr);
             }});
@@ -942,6 +1025,12 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                     else if (isOutsider) roleTag = `<span class="badge-master" style="font-size:0.75rem;">OUTSIDER</span>`;
                     else if (inTop8) roleTag = `<span style="color:#60a5fa; font-weight:600; font-size:0.75rem;">TOP 8</span>`;
 
+                    // Honnêteté : partant (ou course entière) jamais coté par
+                    // le flux PMU — on affiche « — » au lieu du 15.0 par
+                    // défaut, et ni signal Smart Money ni value fictifs.
+                    const oddsOk = !noCotes && (rn.odds_real !== false);
+                    const showOdds = (v) => oddsOk ? fmtOdds(v) : "—";
+
                     rTr.innerHTML = `
                         <td><strong>${{rn.num}}</strong></td>
                         <td style="text-align:left;"><strong>${{rn.name}}</strong> ${{roleTag}} ${{rn.is_np ? '<span class=\"badge-nobet\" style=\"font-size:0.7rem;\">NP</span>' : ''}}</td>
@@ -949,14 +1038,14 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                         <td><span style="font-family:monospace; color:#38bdf8;">${{rn.shoeing}}</span></td>
                         <td>${{rn.draw}}</td>
                         <td style="font-family:monospace; color:var(--text-muted); font-size:0.8rem;">${{rn.music || '-'}}</td>
-                        <td style="color:var(--text-muted);">${{fmtOdds(rn.morning_odds)}}</td>
-                        <td style="color:var(--text-muted);">${{fmtOdds(rn.o_t90)}}</td>
-                        <td style="color:var(--text-muted);">${{fmtOdds(rn.o_t30)}}</td>
-                        <td style="color:#f87171; font-weight:700;">${{fmtOdds(rn.o_t15)}}</td>
-                        <td><strong>${{rn.live_odds}}</strong></td>
-                        <td style="font-size:0.78rem; color:${{rn.smart_signal.includes('BAISSE') ? 'var(--green)' : 'var(--text-muted)'}};">${{rn.smart_signal}}</td>
+                        <td style="color:var(--text-muted);">${{showOdds(rn.morning_odds)}}</td>
+                        <td style="color:var(--text-muted);">${{showOdds(rn.o_t90)}}</td>
+                        <td style="color:var(--text-muted);">${{showOdds(rn.o_t30)}}</td>
+                        <td style="color:#f87171; font-weight:700;">${{showOdds(rn.o_t15)}}</td>
+                        <td><strong>${{oddsOk ? rn.live_odds : "—"}}</strong></td>
+                        <td style="font-size:0.78rem; color:${{(oddsOk && rn.smart_signal.includes('BAISSE')) ? 'var(--green)' : 'var(--text-muted)'}};">${{oddsOk ? rn.smart_signal : "—"}}</td>
                         <td class="val-pos"><strong>${{rn.prob_pct}}%</strong></td>
-                        <td style="font-weight:700; color:${{rn.value_index >= 1.15 ? 'var(--green)' : 'var(--text-muted)'}};">${{rn.value_index}}</td>
+                        <td style="font-weight:700; color:${{(oddsOk && rn.value_index >= 1.15) ? 'var(--green)' : 'var(--text-muted)'}};">${{oddsOk ? rn.value_index : "—"}}</td>
                     `;
                     runnersTbody.appendChild(rTr);
                 }});
