@@ -1,23 +1,14 @@
-CORRECTIF CONSOLIDÉ FINAL (une pierre, CINQ coups) :
-  F1     - Calibration marché (70% marché + 30% modèle)
-  F2     - Stats drivers/entraîneurs auto-apprises (capteur humain)
-  F3     - Banc de mesure par horizon (Matin / T-90 / T-30 / T-15)
-  LONACI - Parité abonnés : réunions françaises uniquement
-  +      - Affichage honnête des courses sans cotes PMU (historique)
-=========================================================================
-Contenu : turf_lab/engine.py, benchmark.py, html_report.py, features.py,
-          daily_sync.py, human_stats.py (NOUVEAU fichier)
+CORRECTIF : Top 8 par probabilité calibrée
+==========================================
+Contenu : turf_lab/engine.py (modifié), backtest_reglages.py (nouvel outil, racine)
 
->>> Ce paquet REMPLACE TOUS les zips précédents de la journée :
->>> n'utiliser que CELUI-CI. <<<
-
-1. Dézipper ce fichier À LA RACINE du dossier "turf projet".
+1. Dézipper À LA RACINE du dossier "turf projet".
 2. Double-cliquer sur publier_vers_github.bat.
 
-Effets :
-- Dès la prochaine passe : plus aucune réunion étrangère n'entre (les
-  étrangères déjà verrouillées aujourd'hui seront résolues normalement,
-  puis le flux devient 100% jouable LONACI).
-- Passes ~2x plus rapides, base plus légère (limite GitHub repoussée).
-- F1/F2 prennent effet sur les prochaines éditions verrouillées.
-- F3 : nouveau tableau "Banc de Mesure par Horizon" sur le site.
+Effet : les places 6-8 du top 8 vont aux chevaux les plus probables au lieu
+des paris de value. Sur 382 courses : Tiercé dans les 8 +14 pts, Quarté +13,
+Quinté +15. Bases, ROI, outsider inchangés. Prend effet sur les prochaines
+éditions verrouillées.
+
+Outil : python backtest_reglages.py turf_bench.db  -> rejoue le moteur avec
+différents réglages sur l'historique réel (à lancer avant tout futur réglage).

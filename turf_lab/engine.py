@@ -220,18 +220,23 @@ class NewValueEngine:
         # Sinon (course sans cotes PMU) : les probabilités restent celles
         # du modèle pur, déjà en place — aucune calibration fictive.
 
-        # 3. Probabilistic & Value Ranking
-        ranked_by_prob = sorted(scored_runners, key=lambda x: x["estimated_prob"], reverse=True)
+        # 3. Classement par probabilité calibrée
+        # Le top 8 est constitué des 8 chevaux LES PLUS PROBABLES (indice de
+        # value en départage). Banc rétrospectif sur 382 courses à cotes
+        # réelles : remplacer les anciens « paris de value » des places 6-8
+        # par les 6e-8e plus probables fait passer le Tiercé dans les 8 de
+        # 55,5 % à 69,9 %, le Quarté de 45,3 % à 58,4 % et le Quinté de
+        # 32,7 % à 47,6 % — bases, ROI et outsider strictement inchangés.
+        # La value conserve sa place : choix du tocard (étape 5) et indice
+        # affiché par partant. La sélection stockée compte 10 chevaux : les
+        # 8 joués, puis les 9e et 10e (« regrets ») pour la transparence.
+        ranked_by_prob = sorted(
+            scored_runners, key=lambda x: (x["estimated_prob"], x["value_index"]), reverse=True
+        )
         top_prob = ranked_by_prob[:5]
-        
-        remaining = [r for r in ranked_by_prob[5:]]
-        value_picks = sorted(remaining, key=lambda x: (x["value_index"], x["estimated_prob"]), reverse=True)
-        
-        final_selected = top_prob + value_picks[:3]
-        if len(final_selected) < 8 and len(remaining) > 3:
-            final_selected += [r for r in remaining if r not in final_selected][:8 - len(final_selected)]
+        final_selected = ranked_by_prob[:10]
 
-        selection_nums = [r["num"] for r in final_selected[:8]]
+        selection_nums = [r["num"] for r in final_selected]
 
         # 4. Bases
         base_candidates = sorted(top_prob, key=lambda x: (x["estimated_prob"], x["regularity"]), reverse=True)
@@ -243,7 +248,7 @@ class NewValueEngine:
             best_outsider = max(outsiders, key=lambda x: x["value_index"])
             outsider_num = best_outsider["num"]
         else:
-            outsider_num = selection_nums[-1] if selection_nums else None
+            outsider_num = selection_nums[:8][-1] if selection_nums else None
 
         # 6. Confidence index, NO_BET filter & Master Couplé detection
         p1 = ranked_by_prob[0]["estimated_prob"] if len(ranked_by_prob) > 0 else 0.2
