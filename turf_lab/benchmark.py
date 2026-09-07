@@ -301,6 +301,39 @@ class TurfBenchmarkLab:
                 results[h] = {"total_races": 0, "status": "NO_DATA"}
         return results
 
+    def evaluate_common_races(self, engines: List[str]) -> Dict[str, Any]:
+        """Pont RADAR_V4 — banc sur les COURSES COMMUNES.
+
+        Par horizon (et « TOUS » = édition la plus proche du départ), ne
+        retient que les courses terminées (depuis HORIZON_BENCH_START_DATE)
+        où CHAQUE moteur de `engines` a un verrou avec sélection, puis
+        recalcule les métriques de chacun sur cette intersection. Les
+        métriques « toutes courses » restent affichées pour continuité."""
+        finished = [r_id for r_id in self.db.get_finished_races()
+                    if str((self.db.get_race(r_id) or {}).get("date", "")) >= self.HORIZON_BENCH_START_DATE]
+        preds_by_race: Dict[str, List[Dict[str, Any]]] = {r_id: self.db.get_predictions(r_id) for r_id in finished}
+
+        def has_lock(preds: List[Dict[str, Any]], engine: str, horizon: Optional[str]) -> bool:
+            for p in preds:
+                if p.get("engine_name") != engine or not p.get("selection"):
+                    continue
+                if horizon is None or p.get("horizon") == horizon:
+                    return True
+            return False
+
+        out: Dict[str, Any] = {"engines": engines, "horizons": {}}
+        for h in ["T_MATIN", "T90", "T30", "T15", "TOUS"]:
+            hz = None if h == "TOUS" else h
+            common = [r_id for r_id, preds in preds_by_race.items() if all(has_lock(preds, e, hz) for e in engines)]
+            entry: Dict[str, Any] = {"courses": len(common), "metriques": {}}
+            for e in engines:
+                if common:
+                    entry["metriques"][e] = self.evaluate_engine(e, race_ids=common, horizon=hz)
+                else:
+                    entry["metriques"][e] = {"engine_name": e, "total_races": 0, "status": "NO_DATA"}
+            out["horizons"][h] = entry
+        return out
+
     def get_historical_race_logs(self, limit: Optional[int] = None) -> List[Dict[str, Any]]:
         """Extract all races (both finished and scheduled upcoming) with permanent cumulative history."""
         with self.db.transaction() as conn:
@@ -577,11 +610,18 @@ class TurfBenchmarkLab:
         if engines is None:
             # PRESS_SYNTHESIS retiré : aucune donnée presse réelle n'est branchée,
             # on ne compare pas le moteur à un adversaire fictif.
-            engines = ["NEW_VALUE_ENGINE", "ETPE_ENGINE", "MARKET_BASELINE"]
+            engines = ["NEW_VALUE_ENGINE", "ETPE_ENGINE", "MARKET_BASELINE", "RADAR_V4"]
 
         evaluations = {}
         for eng in engines:
             evaluations[eng] = self.evaluate_engine(eng)
+
+        # Pont RADAR_V4 (4e moteur, labo) : mêmes bancs que les autres, plus le
+        # bloc « courses communes » — la seule comparaison loyale (mêmes courses,
+        # mêmes cotes, mêmes instants).
+        discipline_breakdown_radar = self.evaluate_by_discipline("RADAR_V4")
+        horizon_breakdown_radar = self.evaluate_by_horizon("RADAR_V4")
+        courses_communes = self.evaluate_common_races(["NEW_VALUE_ENGINE", "MARKET_BASELINE", "RADAR_V4"])
 
         discipline_breakdown = self.evaluate_by_discipline("NEW_VALUE_ENGINE")
         # Comparatif par discipline : les mêmes métriques pour le MARCHÉ (favoris
@@ -606,6 +646,9 @@ class TurfBenchmarkLab:
             "discipline_breakdown_market": discipline_breakdown_market,
             "horizon_breakdown": horizon_breakdown,
             "horizon_breakdown_market": horizon_breakdown_market,
+            "horizon_breakdown_radar": horizon_breakdown_radar,
+            "discipline_breakdown_radar": discipline_breakdown_radar,
+            "courses_communes": courses_communes,
             "horizon_bench_start_date": self.HORIZON_BENCH_START_DATE,
             "historical_logs": historical_logs
         }

@@ -55,7 +55,7 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
     disc_breakdown = report_data.get("discipline_breakdown", {})
     historical_logs = report_data.get("historical_logs", [])
 
-    engines = ["NEW_VALUE_ENGINE", "ETPE_ENGINE", "MARKET_BASELINE"]
+    engines = ["NEW_VALUE_ENGINE", "ETPE_ENGINE", "MARKET_BASELINE", "RADAR_V4"]
 
     new_eng = evals.get("NEW_VALUE_ENGINE", {})
     new_sg_roi = new_eng.get("financial_performance", {}).get("simple_gagnant", {}).get("roi_pct", 0.0)
@@ -87,7 +87,7 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
         if key is None:
             table_rows_html.append(f"""
             <tr class="section-divider">
-                <td colspan="4"><strong>{label}</strong></td>
+                <td colspan="5"><strong>{label}</strong></td>
             </tr>
             """)
             continue
@@ -156,21 +156,27 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
             f"<td class=\"{'val-pos' if d_sp > 0 else 'val-neg'}\"><strong>{d_sp:+.1f}%</strong></td>"
         )
 
+    disc_breakdown_radar = report_data.get("discipline_breakdown_radar", {})
     for disc_key, disc_label, disc_sub in disc_titles:
         moteur_cells = _disc_cells(disc_breakdown.get(disc_key, {}), "val-pos")
         marche_cells = _disc_cells(disc_breakdown_market.get(disc_key, {}), "val-norm")
+        radar_cells = _disc_cells(disc_breakdown_radar.get(disc_key, {}), "val-stat")
         discipline_rows_html.append(f"""
             <tr>
-                <td rowspan="2" style="text-align:left; vertical-align:middle; border-right:1px solid var(--border);">
+                <td rowspan="3" style="text-align:left; vertical-align:middle; border-right:1px solid var(--border);">
                     <strong>{disc_label}</strong><br>
                     <small style="color:var(--text-muted);">{disc_sub}</small>
                 </td>
                 <td style="text-align:left;"><span class="badge badge-primary" style="font-size:0.75rem;">Moteur</span></td>
                 {moteur_cells}
             </tr>
-            <tr style="border-bottom:2px solid var(--border);">
+            <tr>
                 <td style="text-align:left;"><span class="badge badge-neutral" style="font-size:0.75rem;">Marché</span></td>
                 {marche_cells}
+            </tr>
+            <tr style="border-bottom:2px solid var(--border);">
+                <td style="text-align:left;"><span class="badge badge-secondary" style="font-size:0.75rem;">Radar v4</span></td>
+                {radar_cells}
             </tr>
             """)
 
@@ -189,23 +195,64 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
         ("T15", "🔒 Édition T-15", "~15 min avant le départ")
     ]
 
+    horizon_breakdown_radar = report_data.get("horizon_breakdown_radar", {})
     for h_key, h_label, h_sub in horizon_titles:
         h_moteur_cells = _disc_cells(horizon_breakdown.get(h_key, {}), "val-pos")
         h_marche_cells = _disc_cells(horizon_breakdown_market.get(h_key, {}), "val-norm")
+        h_radar_cells = _disc_cells(horizon_breakdown_radar.get(h_key, {}), "val-stat")
         horizon_rows_html.append(f"""
             <tr>
-                <td rowspan="2" style="text-align:left; vertical-align:middle; border-right:1px solid var(--border);">
+                <td rowspan="3" style="text-align:left; vertical-align:middle; border-right:1px solid var(--border);">
                     <strong>{h_label}</strong><br>
                     <small style="color:var(--text-muted);">{h_sub}</small>
                 </td>
                 <td style="text-align:left;"><span class="badge badge-primary" style="font-size:0.75rem;">Moteur</span></td>
                 {h_moteur_cells}
             </tr>
-            <tr style="border-bottom:2px solid var(--border);">
+            <tr>
                 <td style="text-align:left;"><span class="badge badge-neutral" style="font-size:0.75rem;">Marché</span></td>
                 {h_marche_cells}
             </tr>
+            <tr style="border-bottom:2px solid var(--border);">
+                <td style="text-align:left;"><span class="badge badge-secondary" style="font-size:0.75rem;">Radar v4</span></td>
+                {h_radar_cells}
+            </tr>
             """)
+
+    # 2ter. Pont RADAR_V4 — COURSES COMMUNES : la seule comparaison loyale
+    # (mêmes courses, mêmes cotes, mêmes instants), par horizon.
+    courses_communes = report_data.get("courses_communes", {}) or {}
+    cc_engines = courses_communes.get("engines", ["NEW_VALUE_ENGINE", "MARKET_BASELINE", "RADAR_V4"])
+    cc_labels = {"NEW_VALUE_ENGINE": "Moteur", "MARKET_BASELINE": "Marché", "RADAR_V4": "Radar v4"}
+    cc_rows_html = []
+    for h_key, h_label, _h_sub in horizon_titles + [("TOUS", "🧭 Toutes éditions", "édition la plus proche du départ")]:
+        entry = (courses_communes.get("horizons", {}) or {}).get(h_key, {}) or {}
+        n_cc = entry.get("courses", 0)
+        cells = []
+        for e in cc_engines:
+            m = (entry.get("metriques", {}) or {}).get(e, {}) or {}
+            if not m or m.get("total_races", 0) <= 0:
+                cells.append("<td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td>")
+                continue
+            hr = m.get("hit_rates", {})
+            brier = m.get("statistical_calibration", {}).get("brier_score")
+            cells.append(
+                f"<td class='val-stat'>{brier:.4f}</td>" if brier is not None else "<td class='val-na'>N/A</td>"
+            )
+            cells.append(f"<td>{hr.get('top1_win_rate_pct', 0.0):.1f}%</td>")
+            cells.append(f"<td>{hr.get('winner_in_top3_pct', 0.0):.1f}%</td>")
+            cells.append(f"<td>{hr.get('winner_in_top8_pct', 0.0):.1f}%</td>")
+        cc_rows_html.append(f"""
+            <tr>
+                <td style="text-align:left;"><strong>{h_label}</strong></td>
+                <td><strong>{n_cc}</strong></td>
+                {''.join(cells)}
+            </tr>""")
+    cc_head_html = "".join(
+        f"<th colspan='4'><span class='badge {'badge-primary' if e == 'NEW_VALUE_ENGINE' else ('badge-neutral' if e == 'MARKET_BASELINE' else 'badge-secondary')}'>{cc_labels.get(e, e)}</span></th>"
+        for e in cc_engines
+    )
+    cc_sub_html = "".join("<th>Brier</th><th>Top 1</th><th>Gagnant Top 3</th><th>Gagnant Top 8</th>" for _ in cc_engines)
 
     logs_json = json.dumps(historical_logs, ensure_ascii=False)
     archive_manifest = report_data.get("archive_manifest", {})
@@ -415,12 +462,18 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                         <th><span class="badge badge-primary">Nouveau Moteur (Value)</span></th>
                         <th><span class="badge badge-secondary">ETPE (Heuristique)</span></th>
                         <th><span class="badge badge-neutral">Favoris Marché (PMU)</span></th>
+                        <th><span class="badge badge-secondary">Radar v4 (labo)</span></th>
                     </tr>
                 </thead>
                 <tbody>
                     {''.join(table_rows_html)}
                 </tbody>
             </table>
+            <p style="margin-top:10px; font-size:0.78rem; color:var(--text-muted);">
+                🧪 Radar v4 : probabilités scellées le matin (07h35) ou le soir par le laboratoire Radar,
+                jugées aux cotes de chaque horizon. Moteur de banc uniquement — jamais une sélection publiée.
+                Comparaison loyale : voir « Courses communes » plus bas.
+            </p>
         </div>
 
         <div class="card">
@@ -487,6 +540,32 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                 peuvent être comparés honnêtement. Les effectifs par horizon diffèrent : une course dont
                 le programme est chargé tard n'a pas d'édition Matin, et les passes rattrapent parfois
                 T-90/T-30/T-15 en un seul verrouillage.
+            </p>
+        </div>
+
+        <!-- Section 2ter (pont RADAR_V4) : courses communes, la seule comparaison loyale -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Courses Communes — Moteur vs Marché vs Radar v4, aux mêmes cotes, aux mêmes instants</h2>
+                <span class="badge-count">Seules les courses où les trois cerveaux ont un verrou à l'horizon comptent</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th rowspan="2" style="width: 18%;">Horizon</th>
+                        <th rowspan="2">Courses communes</th>
+                        {cc_head_html}
+                    </tr>
+                    <tr>{cc_sub_html}</tr>
+                </thead>
+                <tbody>
+                    {''.join(cc_rows_html)}
+                </tbody>
+            </table>
+            <p style="margin-top:10px; font-size:0.78rem; color:var(--text-muted);">
+                🧪 Radar v4 : probabilités scellées le matin (07h35) ou le soir, jugées aux cotes de chaque horizon.
+                Brier plus bas = mieux calibré. Lecture décisionnelle réservée à l'échéance du pré-enregistrement
+                (clé project_memory.preregistration_pont_radar_v4) : rien n'est promis avant.
             </p>
         </div>
 

@@ -39,6 +39,13 @@ jobs:
           python-version: '3.11'
 
       - name: Run Turf Prediction Engine (verrouillage multi-horizon T_MATIN/T90/T30/T15)
+        # Pont RADAR_V4 (4e moteur du banc) : les trois secrets sont posés dans
+        # GitHub → Settings → Secrets and variables → Actions. Absents => pont
+        # désactivé proprement (RADAR_BRIDGE_DISABLED), rien d'autre ne change.
+        env:
+          RADAR_SUPABASE_URL: ${{ secrets.RADAR_SUPABASE_URL }}
+          RADAR_PUBLISHABLE_KEY: ${{ secrets.RADAR_PUBLISHABLE_KEY }}
+          RADAR_BRIDGE_TOKEN: ${{ secrets.RADAR_BRIDGE_TOKEN }}
         run: |
           # Ancres du matin (08h30) et du soir (21h30) : fenêtre complète de 7 jours.
           # TOUTES les autres passes (crons live ET frappes du métronome

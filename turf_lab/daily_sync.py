@@ -17,6 +17,7 @@ from turf_lab.engine import NewValueEngine
 from turf_lab.baselines import ETPEEngineProxy, MarketOddsEngine
 from turf_lab.human_stats import HumanStatsBook
 from turf_lab.odds_quality import MIN_PRICED_RATIO, priced_ratio
+from turf_lab.radar_bridge import ENGINE_NAME as RADAR_ENGINE, RadarV4Engine
 
 
 class PMUDataFetcher:
@@ -103,6 +104,12 @@ class DailySyncManager:
         # Compteur de verrous refusés par la porte de fraîcheur (remis à zéro
         # à chaque passe, reporté dans les stats de sync_date).
         self.gate_refused = 0
+        # Pont RADAR_V4 (4e moteur du banc) : désactivé proprement si la
+        # configuration (RADAR_SUPABASE_URL / RADAR_PUBLISHABLE_KEY /
+        # RADAR_BRIDGE_TOKEN) est absente — rien d'autre ne change.
+        self.radar_engine = RadarV4Engine()
+        self.gate_refused_radar = 0
+        self.radar_absent = 0
         # Transparence « aucun chiffre retouché » : purge définitive des
         # courses de référence fictives et des dividendes estimés (idempotent).
         purged = self.db.purge_fictitious_data()
@@ -291,6 +298,52 @@ class DailySyncManager:
         self.db.save_odds_snapshots(race_id, horizon, odds_map)
         return 1
 
+    def _lock_radar(self, race_data: Dict[str, Any], runners: List[Dict[str, Any]], horizon: str,
+                    now_utc: Optional[datetime] = None) -> int:
+        """Verrouille le moteur RADAR_V4 (probabilités scellées du journal Radar)
+        pour un horizon, UNE SEULE FOIS, aux mêmes cotes et au même instant que
+        les trois autres moteurs. Retourne 1 si un verrou a été posé, sinon 0.
+
+        - Pont désactivé (config absente) → 0, rien ne change.
+        - Même porte de fraîcheur : priced_ratio ≥ MIN_PRICED_RATIO, sinon
+          GATE_REFUSED (engine RADAR_V4) et retour à la passe suivante.
+        - Ligne Radar absente / couverture < 90 % / scelle_a postérieur au verrou
+          → RADAR_ABSENT, rien n'est enregistré (l'édition du soir arrive à une
+          passe suivante). Jamais de verrou rétroactif (due_horizons décide)."""
+        if not self.radar_engine.enabled:
+            return 0
+        race_id = race_data["race_id"]
+        if self.db.has_prediction(race_id, RADAR_ENGINE, horizon):
+            return 0
+        if now_utc is None:
+            now_utc = datetime.utcnow()
+        ratio = priced_ratio(runners)
+        if ratio < MIN_PRICED_RATIO:
+            self.gate_refused_radar += 1
+            print("GATE_REFUSED " + json.dumps({
+                "race_id": race_id, "horizon": horizon, "engine": RADAR_ENGINE,
+                "priced_ratio": round(ratio, 3), "now_utc": now_utc.isoformat()
+            }))
+            return 0
+        p = self.radar_engine.predict(race_data, runners, as_of_utc=now_utc)
+        meta = p.get("metadata", {}) or {}
+        if meta.get("status") != "OK" or not p.get("selection"):
+            self.radar_absent += 1
+            print("RADAR_ABSENT " + json.dumps({
+                "race_id": race_id, "horizon": horizon,
+                "coverage": meta.get("coverage"), "reason": meta.get("reason"),
+                "now_utc": now_utc.isoformat()
+            }))
+            return 0
+        p["prediction_id"] = f"{race_id}_RADAR_{horizon}"
+        p["race_id"] = race_id
+        p["horizon"] = horizon
+        p["odds_real"] = True
+        p["priced_ratio"] = round(ratio, 4)
+        p["lock_time_utc"] = now_utc.isoformat()
+        self.db.save_prediction(p)
+        return 1
+
     def inject_recent_real_meetings(self):
         """Désactivé : plus aucune donnée fictive n'est injectée (transparence)."""
         return None
@@ -345,8 +398,13 @@ class DailySyncManager:
         date_str_db = target_date.strftime("%Y-%m-%d")
         now_utc = datetime.utcnow()
 
-        stats = {"races_added": 0, "predictions_locked": 0, "results_resolved": 0, "np_detected": 0, "races_frozen": 0, "gate_refused": 0}
+        stats = {"races_added": 0, "predictions_locked": 0, "results_resolved": 0, "np_detected": 0, "races_frozen": 0, "gate_refused": 0,
+                 "radar_locked": 0, "radar_absent": 0, "gate_refused_radar": 0}
         self.gate_refused = 0
+        self.gate_refused_radar = 0
+        self.radar_absent = 0
+        # Une requête Radar par date et par passe (cache vidé à chaque passe).
+        self.radar_engine.client.clear_cache()
 
         programme = self.fetcher.fetch_programme(date_str_api)
         if not programme or not isinstance(programme, dict) or "programme" not in programme:
@@ -551,7 +609,12 @@ class DailySyncManager:
                 due = self.due_horizons(time_display, date_str_db, now_utc)
                 for h in due:
                     stats["predictions_locked"] += self._lock_horizon(race_data, runners, h)
+                    # 4e moteur (pont Radar) : indépendant du résultat ci-dessus,
+                    # une seule fois par (course, horizon), même porte de fraîcheur.
+                    stats["radar_locked"] += self._lock_radar(race_data, runners, h, now_utc)
                 stats["gate_refused"] = self.gate_refused
+                stats["gate_refused_radar"] = self.gate_refused_radar
+                stats["radar_absent"] = self.radar_absent
 
                 # 3. Check for official finish results and dividends
                 arrival_order = []
