@@ -16,6 +16,7 @@ from turf_lab.database import TurfDatabase
 from turf_lab.engine import NewValueEngine
 from turf_lab.baselines import ETPEEngineProxy, MarketOddsEngine
 from turf_lab.human_stats import HumanStatsBook
+from turf_lab.odds_quality import MIN_PRICED_RATIO, priced_ratio
 
 
 class PMUDataFetcher:
@@ -99,6 +100,9 @@ class DailySyncManager:
         # par passe, uniquement depuis les courses déjà terminées (aucune
         # information du futur ne peut fuiter dans un pronostic).
         self._human_book = None  # type: HumanStatsBook
+        # Compteur de verrous refusés par la porte de fraîcheur (remis à zéro
+        # à chaque passe, reporté dans les stats de sync_date).
+        self.gate_refused = 0
         # Transparence « aucun chiffre retouché » : purge définitive des
         # courses de référence fictives et des dividendes estimés (idempotent).
         purged = self.db.purge_fictitious_data()
@@ -243,6 +247,23 @@ class DailySyncManager:
         if self.db.has_prediction(race_id, "NEW_VALUE_ENGINE", horizon):
             return 0
 
+        # ── VERROU DE FRAÎCHEUR (porte de données, Axe 3) ────────────────
+        # Aucun horizon n'est verrouillé sur une édition dont les cotes ne
+        # sont pas réelles : il faut ≥ 90 % de partants actifs cotés (≠ 15.0).
+        # La règle 06h30 de due_horizons() reste le PLANCHER horaire ; cette
+        # porte s'ajoute par-dessus. Refus => l'horizon revient à la passe
+        # suivante (due_horizons le représente tant que la fenêtre est ouverte).
+        ratio = priced_ratio(runners)
+        now_utc = datetime.utcnow()
+        if ratio < MIN_PRICED_RATIO:
+            self.gate_refused += 1
+            print("GATE_REFUSED " + json.dumps({
+                "race_id": race_id, "horizon": horizon,
+                "priced_ratio": round(ratio, 3), "now_utc": now_utc.isoformat()
+            }))
+            return 0
+        lock_time_utc = now_utc.isoformat()
+
         # F2 — enrichissement des partants avec les stats humaines apprises
         # (drivers/entraîneurs/couples) avant tout calcul de pronostic.
         if self._human_book is None:
@@ -259,6 +280,10 @@ class DailySyncManager:
             p["prediction_id"] = f"{race_id}_{key}_{horizon}"
             p["race_id"] = race_id
             p["horizon"] = horizon
+            # Preuve de fraîcheur persistée avec l'édition (immuable).
+            p["odds_real"] = True
+            p["priced_ratio"] = round(ratio, 4)
+            p["lock_time_utc"] = lock_time_utc
             self.db.save_prediction(p)
 
         # Photographie des cotes au moment du verrouillage (historique permanent)
@@ -320,7 +345,8 @@ class DailySyncManager:
         date_str_db = target_date.strftime("%Y-%m-%d")
         now_utc = datetime.utcnow()
 
-        stats = {"races_added": 0, "predictions_locked": 0, "results_resolved": 0, "np_detected": 0, "races_frozen": 0}
+        stats = {"races_added": 0, "predictions_locked": 0, "results_resolved": 0, "np_detected": 0, "races_frozen": 0, "gate_refused": 0}
+        self.gate_refused = 0
 
         programme = self.fetcher.fetch_programme(date_str_api)
         if not programme or not isinstance(programme, dict) or "programme" not in programme:
@@ -525,6 +551,7 @@ class DailySyncManager:
                 due = self.due_horizons(time_display, date_str_db, now_utc)
                 for h in due:
                     stats["predictions_locked"] += self._lock_horizon(race_data, runners, h)
+                stats["gate_refused"] = self.gate_refused
 
                 # 3. Check for official finish results and dividends
                 arrival_order = []

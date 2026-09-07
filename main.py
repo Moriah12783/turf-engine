@@ -138,6 +138,7 @@ def main():
             stats = manager.sync_date(d)
             print(f"    - Courses ajoutees : {stats['races_added']}")
             print(f"    - Pronostics verrouilles : {stats['predictions_locked']}")
+            print(f"    - Verrous refuses (cotes non ouvertes, GATE_REFUSED) : {stats.get('gate_refused', 0)}")
             print(f"    - Resultats resolus : {stats['results_resolved']}")
 
         # (Transparence) Plus aucune injection de reunions de reference :

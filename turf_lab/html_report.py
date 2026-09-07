@@ -293,6 +293,9 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
         .badge-master {{ background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; padding: 3px 8px; border-radius: 6px; font-weight: 700; }}
         .badge-nobet {{ background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; padding: 3px 8px; border-radius: 6px; font-weight: 700; }}
         .badge-nocotes {{ background: rgba(148, 163, 184, 0.12); color: #94a3b8; border: 1px dashed #64748b; padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: 700; }}
+        .badge-provisoire {{ background: rgba(245, 158, 11, 0.14); color: #fbbf24; border: 1px dashed #d97706; padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: 700; }}
+        .banner-provisoire {{ background: rgba(245, 158, 11, 0.10); border: 1px solid #d97706; color: #fcd34d; border-radius: 10px; padding: 14px 16px; margin-bottom: 18px; font-weight: 700; line-height: 1.4; }}
+        .banner-provisoire small {{ display: block; color: var(--text-muted); font-weight: 400; margin-top: 4px; }}
         .badge-base {{ background: rgba(59, 130, 246, 0.15); color: #93c5fd; padding: 3px 8px; border-radius: 6px; }}
         
         .badge-horizon {{ background: #1e293b; color: #38bdf8; border: 1px solid #38bdf8; padding: 4px 12px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }}
@@ -603,11 +606,11 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
             <!-- Éditions verrouillées : preuve d'immuabilité, horizon par horizon -->
             <div style="background:#0e1726; border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:20px;">
                 <h3 style="font-size:1.02rem; color:#fff; margin-bottom:4px;">🔒 Éditions verrouillées (immuables)</h3>
-                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:10px;">Chaque édition est figée à l'heure indiquée et ne peut plus jamais changer. « — » : passe non exécutée avant le départ, l'édition n'existe pas.</p>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:10px;">Chaque édition est figée à l'heure indiquée et ne peut plus jamais changer. « — » : passe non exécutée avant le départ, l'édition n'existe pas. « Cotes réelles » : part des partants cotés par le PMU au moment du verrou — aucune édition n'est posée sous 90 % (verrou de fraîcheur).</p>
                 <div style="overflow-x:auto;">
                     <table class="runner-table">
                         <thead>
-                            <tr><th style="text-align:left;">Édition</th><th>Verrou (GMT)</th><th style="text-align:left;">Moteur 8</th><th style="text-align:left;">Marché 8 (PMU)</th></tr>
+                            <tr><th style="text-align:left;">Édition</th><th>Verrou (GMT)</th><th>Cotes réelles</th><th style="text-align:left;">Moteur 8</th><th style="text-align:left;">Marché 8 (PMU)</th></tr>
                         </thead>
                         <tbody id="modal-editions-tbody"></tbody>
                     </table>
@@ -874,18 +877,22 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                     // Honnêteté : course sans cotes PMU (réunion étrangère) —
                     // badge dédié et sélection marché masquée (elle serait fictive).
                     const noCotes = (item.market_odds_available === false);
+                    // Verrou de fraîcheur : édition provisoire (cotes non ouvertes)
+                    // => aucune sélection, aucune base affichée.
+                    const provisoire = (item.edition_provisoire === true);
+                    const provCell = '<em style="color:#fbbf24; font-family:inherit;">— pas de sélection</em>';
 
                     tr.innerHTML = `
                         <td style="text-align:left;">
-                            <strong style="color:#60a5fa;">🔍 ${{item.course}}</strong> <span class="badge-horizon-small">${{hObj.label}}</span>${{noCotes ? ' <span class="badge-nocotes">📵 Cotes PMU indispo.</span>' : ''}}<br>
+                            <strong style="color:#60a5fa;">🔍 ${{item.course}}</strong> <span class="badge-horizon-small">${{hObj.label}}</span>${{noCotes ? ' <span class="badge-nocotes">📵 Cotes PMU indispo.</span>' : ''}}${{provisoire ? ' <span class="badge-provisoire">🕓 ÉDITION PROVISOIRE</span>' : ''}}<br>
                             <small style="color:#38bdf8; font-weight:700;">⏰ ${{timeInfo}}</small> •
                             <small style="color:var(--text-muted); font-family:monospace;">${{item.date}}</small>
                         </td>
-                        <td style="font-family:monospace; color:#60a5fa; font-weight:700; letter-spacing:0.5px;">${{item.sel_moteur}}</td>
-                        <td style="font-family:monospace; color:#94a3b8; letter-spacing:0.5px;">${{noCotes ? '<em style="color:var(--text-muted); font-family:inherit;">indisponible</em>' : item.sel_marche}}</td>
+                        <td style="font-family:monospace; color:#60a5fa; font-weight:700; letter-spacing:0.5px;">${{provisoire ? provCell : item.sel_moteur}}</td>
+                        <td style="font-family:monospace; color:#94a3b8; letter-spacing:0.5px;">${{(noCotes || provisoire) ? '<em style="color:var(--text-muted); font-family:inherit;">indisponible</em>' : item.sel_marche}}</td>
                         <td style="font-family:monospace; color:#f8fafc; font-weight:700; letter-spacing:0.5px;">${{item.arrivee}}</td>
-                        <td><span class="couv-tag ${{badgeClass}}">${{item.couverture_label}}</span></td>
-                        <td style="font-size:0.85rem;"><span class="${{item.decision_badge}}">${{item.decision}}</span></td>
+                        <td><span class="couv-tag ${{badgeClass}}">${{provisoire ? 'Cotes non ouvertes' : item.couverture_label}}</span></td>
+                        <td style="font-size:0.85rem;"><span class="${{provisoire ? 'badge-provisoire' : item.decision_badge}}">${{provisoire ? 'ÉDITION PROVISOIRE' : item.decision}}</span></td>
                     `;
                     tbody.appendChild(tr);
                 }});
@@ -924,6 +931,29 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
             document.getElementById("modal-confidence").textContent = item.confidence_label || "⭐⭐⭐";
 
             const noCotes = (item.market_odds_available === false);
+            const provisoire = (item.edition_provisoire === true);
+            const provReasons = {{
+                "NOT_LOCKED": "aucune édition du matin verrouillée",
+                "ODDS_DEFAULT": "cotes PMU non ouvertes au verrou (valeurs par défaut)",
+                "PRICED_RATIO_LOW": "moins de 90 % des partants cotés",
+                "BEFORE_0630": "avant 06h30 GMT"
+            }};
+
+            let banner = document.getElementById("modal-provisoire-banner");
+            if (!banner) {{
+                banner = document.createElement("div");
+                banner.id = "modal-provisoire-banner";
+                banner.className = "banner-provisoire";
+                const anchor = document.getElementById("modal-badge-container");
+                anchor.parentNode.insertBefore(banner, anchor);
+            }}
+            if (provisoire) {{
+                banner.style.display = "block";
+                banner.innerHTML = `🕓 ÉDITION PROVISOIRE — cotes non ouvertes, pas de sélection<small>Motif : ${{provReasons[item.provisoire_reason] || item.provisoire_reason || 'fraîcheur non prouvée'}} (cotes réelles : ${{Math.round((item.priced_ratio || 0) * 100)}} % des partants). La sélection apparaîtra dès qu'une édition sera verrouillée sur des cotes réelles.</small>`;
+            }} else {{
+                banner.style.display = "none";
+                banner.innerHTML = "";
+            }}
 
             const badgeBox = document.getElementById("modal-badge-container");
             if (item.is_master) {{
@@ -961,12 +991,12 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                 horizonBadge.style.color = "#38bdf8";
             }}
 
-            document.getElementById("modal-bases").textContent = item.bases.length ? item.bases.join(" - ") : "N/A";
-            document.getElementById("modal-outsider").textContent = item.outsider_num ? `N° ${{item.outsider_num}}` : "N/A";
-            document.getElementById("modal-regrets").textContent = item.regrets.length ? item.regrets.join(" - ") : "N/A";
+            document.getElementById("modal-bases").textContent = provisoire ? "—" : (item.bases.length ? item.bases.join(" - ") : "N/A");
+            document.getElementById("modal-outsider").textContent = provisoire ? "—" : (item.outsider_num ? `N° ${{item.outsider_num}}` : "N/A");
+            document.getElementById("modal-regrets").textContent = provisoire ? "—" : (item.regrets.length ? item.regrets.join(" - ") : "N/A");
 
-            document.getElementById("modal-sel-moteur").textContent = item.sel_moteur;
-            document.getElementById("modal-sel-marche").textContent = noCotes ? "Indisponible (pas de cotes PMU)" : item.sel_marche;
+            document.getElementById("modal-sel-moteur").textContent = provisoire ? "— (édition provisoire, cotes non ouvertes)" : item.sel_moteur;
+            document.getElementById("modal-sel-marche").textContent = (noCotes || provisoire) ? "Indisponible (pas de cotes PMU)" : item.sel_marche;
             document.getElementById("modal-arrival").textContent = item.arrivee;
 
             const couvBox = document.getElementById("modal-coverage-badge");
@@ -978,7 +1008,7 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
             couvBox.innerHTML = `<span class="couv-tag ${{badgeClass}}">${{item.couverture_label}}</span>`;
 
             // Expanded Smart tickets content
-            const bStr = item.bases.join(" - ");
+            const bStr = provisoire ? "—" : item.bases.join(" - ");
             const outNum = item.outsider_num || (item.sel_moteur_list.length > 2 ? item.sel_moteur_list[2] : "");
             const trioStr = `${{bStr}} - ${{outNum}}`;
             const associes = item.sel_moteur_list.filter(n => !item.bases.includes(n)).slice(0, 4).join(", ");
@@ -994,11 +1024,21 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                 const isShown = (item.display_horizon === h);
                 const tr = document.createElement("tr");
                 if (isShown) tr.style.background = "rgba(59,130,246,0.10)";
+                // Preuve de fraîcheur persistée au verrou : part des partants réellement cotés.
+                let fresh = "—";
+                if (em && em.priced_ratio !== null && em.priced_ratio !== undefined) {{
+                    const pct = Math.round(em.priced_ratio * 100);
+                    fresh = (em.odds_real === false) ? `<span style="color:#fbbf24;">${{pct}} % ✗</span>` : `<span style="color:var(--green);">${{pct}} % ✓</span>`;
+                }} else if (em) {{
+                    fresh = '<span style="color:var(--text-muted);">n/d</span>';
+                }}
+                const hideSel = provisoire && !item.is_finished && (!em || em.odds_real === false);
                 tr.innerHTML = `
                     <td style="text-align:left; font-weight:700;">${{edLabels[h]}}${{isShown ? ' <span style="color:#60a5fa; font-size:0.72rem;">(affichée)</span>' : ''}}</td>
                     <td style="font-family:monospace;">${{em ? em.lock : (ema ? ema.lock : '—')}}</td>
-                    <td style="text-align:left; font-family:monospace; color:#60a5fa;">${{em ? em.sel : '—'}}</td>
-                    <td style="text-align:left; font-family:monospace; color:#94a3b8;">${{noCotes ? '<em style="color:var(--text-muted); font-family:inherit;">indispo.</em>' : (ema ? ema.sel : '—')}}</td>
+                    <td style="font-family:monospace;">${{fresh}}</td>
+                    <td style="text-align:left; font-family:monospace; color:#60a5fa;">${{(em && !hideSel) ? em.sel : '—'}}</td>
+                    <td style="text-align:left; font-family:monospace; color:#94a3b8;">${{(noCotes || hideSel) ? '<em style="color:var(--text-muted); font-family:inherit;">indispo.</em>' : (ema ? ema.sel : '—')}}</td>
                 `;
                 edTbody.appendChild(tr);
             }});
@@ -1021,7 +1061,8 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                     const inTop8 = item.sel_moteur_list.includes(rn.num);
 
                     let roleTag = "";
-                    if (isBase) roleTag = `<span class="badge-base" style="font-size:0.75rem;">BASE</span>`;
+                    if (provisoire) {{ /* édition provisoire : ni bases, ni classement */ }}
+                    else if (isBase) roleTag = `<span class="badge-base" style="font-size:0.75rem;">BASE</span>`;
                     else if (isOutsider) roleTag = `<span class="badge-master" style="font-size:0.75rem;">OUTSIDER</span>`;
                     else if (inTop8) roleTag = `<span style="color:#60a5fa; font-weight:600; font-size:0.75rem;">TOP 8</span>`;
 
@@ -1044,8 +1085,8 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                         <td style="color:#f87171; font-weight:700;">${{showOdds(rn.o_t15)}}</td>
                         <td><strong>${{oddsOk ? rn.live_odds : "—"}}</strong></td>
                         <td style="font-size:0.78rem; color:${{(oddsOk && rn.smart_signal.includes('BAISSE')) ? 'var(--green)' : 'var(--text-muted)'}};">${{oddsOk ? rn.smart_signal : "—"}}</td>
-                        <td class="val-pos"><strong>${{rn.prob_pct}}%</strong></td>
-                        <td style="font-weight:700; color:${{(oddsOk && rn.value_index >= 1.15) ? 'var(--green)' : 'var(--text-muted)'}};">${{oddsOk ? rn.value_index : "—"}}</td>
+                        <td class="val-pos"><strong>${{provisoire ? "—" : rn.prob_pct + "%"}}</strong></td>
+                        <td style="font-weight:700; color:${{(oddsOk && !provisoire && rn.value_index >= 1.15) ? 'var(--green)' : 'var(--text-muted)'}};">${{(oddsOk && !provisoire) ? rn.value_index : "—"}}</td>
                     `;
                     runnersTbody.appendChild(rTr);
                 }});

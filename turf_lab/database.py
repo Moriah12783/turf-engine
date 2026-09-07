@@ -150,6 +150,17 @@ class TurfDatabase:
                 cursor.execute("ALTER TABLE runners ADD COLUMN is_non_partant BOOLEAN DEFAULT 0")
             except Exception:
                 pass
+            # Verrou de fraîcheur (Axe 3) : état des cotes au moment du verrou,
+            # persisté sur chaque prédiction (migration idempotente).
+            for ddl in (
+                "ALTER TABLE predictions ADD COLUMN odds_real BOOLEAN",
+                "ALTER TABLE predictions ADD COLUMN priced_ratio REAL",
+                "ALTER TABLE predictions ADD COLUMN lock_time_utc TEXT",
+            ):
+                try:
+                    cursor.execute(ddl)
+                except Exception:
+                    pass
 
     def save_race(self, race_data: Dict[str, Any]):
         with self.transaction() as conn:
@@ -223,8 +234,9 @@ class TurfDatabase:
             INSERT OR REPLACE INTO predictions (
                 prediction_id, race_id, engine_name, horizon, created_at,
                 lock_time, selection_json, bases_json, outsider_num,
-                probabilities_json, metadata_json
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                probabilities_json, metadata_json,
+                odds_real, priced_ratio, lock_time_utc
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 pred_id,
                 prediction_data["race_id"],
@@ -236,7 +248,10 @@ class TurfDatabase:
                 json.dumps(prediction_data.get("bases", [])),
                 prediction_data.get("outsider_num"),
                 json.dumps(prediction_data.get("probabilities", {})),
-                json.dumps(prediction_data.get("metadata", {}))
+                json.dumps(prediction_data.get("metadata", {})),
+                (None if prediction_data.get("odds_real") is None else int(bool(prediction_data.get("odds_real")))),
+                prediction_data.get("priced_ratio"),
+                prediction_data.get("lock_time_utc")
             ))
 
     # ------------------------------------------------------------------

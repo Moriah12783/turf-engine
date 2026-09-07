@@ -6,6 +6,8 @@ import json
 import math
 from typing import Any, Dict, List, Optional
 from turf_lab.database import TurfDatabase
+from turf_lab.odds_quality import MIN_DISPLAY_RATIO, MIN_PRICED_RATIO, all_default_odds, priced_ratio
+from turf_lab.publication_gate import can_publish
 
 
 class TurfBenchmarkLab:
@@ -327,18 +329,12 @@ class TurfBenchmarkLab:
             # alors à la valeur par défaut 15.0 sur tous les champs de cotes.
             # On détecte cette signature pour afficher « cotes indisponibles »
             # au lieu de fausses cotes uniformes à 15.0.
-            def _all_default_odds(runner: Dict[str, Any]) -> bool:
-                for field in ("morning_odds", "odds_t15", "final_odds"):
-                    v = runner.get(field)
-                    if v is not None and abs(float(v) - 15.0) > 1e-9:
-                        return False
-                return True
-
+            # Source de vérité unique : turf_lab.odds_quality (partagée avec le
+            # verrou de fraîcheur et la porte de publication).
+            _all_default_odds = all_default_odds
             active_runners = [r for r in runners if not r.get("is_non_partant", False)] or runners
-            priced_count = sum(1 for r in active_runners if not _all_default_odds(r))
-            market_odds_available = bool(active_runners) and (
-                priced_count / len(active_runners) >= 0.5
-            )
+            ratio_now = priced_ratio(runners)
+            market_odds_available = bool(active_runners) and ratio_now >= MIN_DISPLAY_RATIO
 
             date_str = race.get("date", "2026-08-31")
             m_num = race.get("meeting_number", 1)
@@ -376,7 +372,11 @@ class TurfBenchmarkLab:
                     if p and p.get("selection"):
                         eds[h] = {
                             "sel": "-".join(map(str, p["selection"][:8])),
-                            "lock": str(p.get("lock_time", ""))[11:16]
+                            "lock": str(p.get("lock_time_utc") or p.get("lock_time", ""))[11:16],
+                            # Preuve de fraîcheur persistée au verrou (None = verrou
+                            # antérieur à la porte de fraîcheur, état inconnu).
+                            "priced_ratio": p.get("priced_ratio"),
+                            "odds_real": (None if p.get("odds_real") is None else bool(p.get("odds_real")))
                         }
                 return eds
 
@@ -418,6 +418,34 @@ class TurfBenchmarkLab:
 
             is_finished = bool(res_row)
             arrival = json.loads(res_row["arrival_order_json"]) if res_row else []
+
+            # ── ÉTAT DE FRAÎCHEUR VISIBLE (Axe 3) ─────────────────────────
+            # Une course à venir sans T_MATIN verrouillé, ou dont l'édition
+            # affichée a été verrouillée sur des cotes non réelles, est une
+            # « ÉDITION PROVISOIRE » : aucune sélection, aucune base n'est
+            # montrée. Les courses terminées (archives) ne sont jamais
+            # réécrites : leur affichage reste inchangé.
+            t_matin_pred = next((q for q in predictions
+                                 if q["engine_name"] == "NEW_VALUE_ENGINE" and q.get("horizon") == "T_MATIN"), None)
+            shown_odds_real = None
+            if p_new is not None and p_new.get("odds_real") is not None:
+                shown_odds_real = bool(p_new.get("odds_real"))
+            if shown_odds_real is None:
+                # Verrou antérieur à la porte : on s'en remet aux cotes archivées.
+                shown_odds_real = ratio_now >= MIN_PRICED_RATIO
+            publishable, publication_reason = (False, "RACE_STARTED") if is_finished else can_publish(
+                self.db, r_id, p_new.get("horizon") if p_new else "T_MATIN", log=False)
+            if is_finished:
+                provisoire_reason = None
+            elif t_matin_pred is None:
+                provisoire_reason = "NOT_LOCKED"
+            elif not shown_odds_real:
+                provisoire_reason = "ODDS_DEFAULT"
+            elif publication_reason in ("ODDS_DEFAULT", "PRICED_RATIO_LOW", "BEFORE_0630", "NOT_LOCKED"):
+                provisoire_reason = publication_reason
+            else:
+                provisoire_reason = None
+            edition_provisoire = provisoire_reason is not None
             top5_arrival = arrival[:5] if arrival else []
             arrival_str = "-".join(map(str, top5_arrival)) if arrival else "En attente"
 
@@ -497,6 +525,11 @@ class TurfBenchmarkLab:
             logs.append({
                 "race_id": r_id,
                 "market_odds_available": market_odds_available,
+                "priced_ratio": round(ratio_now, 3),
+                "edition_provisoire": edition_provisoire,
+                "provisoire_reason": provisoire_reason,
+                "publishable": publishable,
+                "publication_reason": publication_reason,
                 "display_horizon": p_new.get("horizon") if p_new else None,
                 "editions_moteur": editions_for("NEW_VALUE_ENGINE"),
                 "editions_marche": editions_for("MARKET_BASELINE"),

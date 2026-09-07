@@ -24,6 +24,9 @@ class FakeFetcher:
         self.races = {1: 200, 2: 80, 3: 25, 4: 10, 5: -5}
         self.live_odds = {1: 5.0, 2: 6.0, 3: 7.0, 4: 8.0, 5: 9.0}
         self.finished = set()
+        # Courses dont le marché n'est PAS ouvert : aucune cote dans le flux
+        # (=> valeur par défaut 15.0 côté synchro). Verrou de fraîcheur attendu.
+        self.market_closed = set()
 
     def fetch_programme(self, date_str):
         import calendar
@@ -62,9 +65,12 @@ class FakeFetcher:
                 "gainsCarriere": 5000000,
                 "deferre": "FERRE",
                 "oeilleres": "SANS",
-                "dernierRapportDirect": {"rapport": self.live_odds[c_num] + num},
+                "dernierRapportDirect": {"rapport": self.live_odds.get(c_num, 5.5) + num},
                 "rapportReference": {"rapport": 10.0 + num},
             }
+            if c_num in self.market_closed:
+                p["dernierRapportDirect"] = {"rapport": 0}
+                p["rapportReference"] = {"rapport": 0}
             if c_num in self.finished:
                 p["ordreArrivee"] = num  # arrivée 1..8
             parts.append(p)
@@ -88,6 +94,10 @@ def main():
     db = TurfDatabase(os.path.join(tmp, "test.db"))
     mgr = DailySyncManager(db)
     mgr.fetcher = FakeFetcher()
+    # Course 6 : départ dans 50 min mais marché fermé (cotes par défaut)
+    mgr.fetcher.races[6] = 50
+    mgr.fetcher.live_odds[6] = 5.5
+    mgr.fetcher.market_closed.add(6)
 
     date_api = NOW.strftime("%d%m%Y")
     rid = lambda c: f"R1C{c}_{date_api}_TESTVILLE"
@@ -106,6 +116,12 @@ def main():
     assert a3 == ["T30", "T90", "T_MATIN"], a3
     assert a4 == ["T15", "T30", "T90", "T_MATIN"], a4
     assert a5 == [], a5
+    # Verrou de fraîcheur : cotes non ouvertes => AUCUN horizon posé (T90 et
+    # T_MATIN étaient dus), et un GATE_REFUSED par horizon dû.
+    a6 = get_horizons(db, rid(6))
+    print("  C6 (H-50, cotes 15.0):", a6, "| attendu [] (GATE_REFUSED)")
+    assert a6 == [], a6
+    assert stats1["gate_refused"] == 2, stats1
 
     # cotes archivées passe 1
     r4 = {r["num"]: r for r in db.get_runners(rid(4))}
@@ -120,6 +136,8 @@ def main():
     stats2 = mgr.sync_date(NOW)
     print("PASSE 2:", stats2)
     assert stats2["predictions_locked"] == 0, stats2  # rien de nouveau à verrouiller
+    assert stats2["gate_refused"] == 2, stats2         # C6 toujours refusée (marché fermé)
+    assert get_horizons(db, rid(6)) == [], "verrou posé sur des cotes par défaut !"
 
     r4b = {r["num"]: r for r in db.get_runners(rid(4))}
     assert r4b[1]["morning_odds"] == morning_before, "morning_odds écrasée !"
@@ -156,7 +174,24 @@ def main():
     print("PASSE 5 (date passée):", ay, "| attendu [] (aucun pronostic rétroactif)")
     assert ay == [], ay
 
-    print("\n=== TOUS LES TESTS T-15 / PERSISTANCE PASSENT ===")
+    # --- PASSE 6 : le marché de la course 6 ouvre => verrous posés, preuve persistée ---
+    mgr.fetcher.market_closed.discard(6)
+    stats6 = mgr.sync_date(NOW)
+    print("PASSE 6 (cotes ouvertes C6):", stats6)
+    a6b = get_horizons(db, rid(6))
+    print("  C6 (H-50, cotes réelles):", a6b, "| attendu [T90, T_MATIN]")
+    assert a6b == ["T90", "T_MATIN"], a6b
+    assert stats6["gate_refused"] == 0, stats6
+    p6 = [p for p in db.get_predictions(rid(6)) if p["engine_name"] == "NEW_VALUE_ENGINE" and p["horizon"] == "T_MATIN"][0]
+    assert p6["odds_real"] == 1 and p6["priced_ratio"] == 1.0 and p6["lock_time_utc"], p6
+    from turf_lab.publication_gate import can_publish
+    ok, reason = can_publish(db, rid(6), "T_MATIN", log=False)
+    assert (ok, reason) == (True, "OK"), (ok, reason)
+    ok5, reason5 = can_publish(db, rid(5), "T_MATIN", log=False)
+    assert (ok5, reason5) == (False, "RACE_STARTED"), (ok5, reason5)
+    print("  [OK] verrou de fraîcheur : refus tant que 15.0, verrou + publication dès cotes réelles")
+
+    print("\n=== TOUS LES TESTS T-15 / PERSISTANCE / FRAÎCHEUR PASSENT ===")
 
 
 if __name__ == "__main__":
