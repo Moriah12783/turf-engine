@@ -1,7 +1,7 @@
 """New Probabilistic & Value Prediction Engine with NO_BET filtering, Master Couplé detection, and Smart Tickets."""
 
 import math
-from typing import Any, Dict, List, Tuple
+from typing import Optional, Any, Dict, List, Tuple
 from turf_lab.features import extract_runner_features
 
 
@@ -101,52 +101,142 @@ class NewValueEngine:
             return True, "⭐ COUPLE MAITRE DÉTECTÉ (Bases dominantes sur le peloton)"
         return False, "Couplé Standard"
 
-    def generate_smart_tickets(self, bases: List[int], selection: List[int], outsider_num: int, is_master_couple: bool, is_no_bet: bool) -> Dict[str, Any]:
-        """Proposition 3: Smart Ready-to-Bet Ticket Generator."""
-        associates = [n for n in selection if n not in bases][:4]
-        
+    # Codes PMU (``paris[].codePari`` du flux) requis par chaque produit proposé.
+    PRODUCT_BET_CODES = {
+        "COUPLE_PLACE": ("COUPLE_PLACE", "E_COUPLE_PLACE"),
+        "DEUX_SUR_QUATRE": ("DEUX_SUR_QUATRE", "E_DEUX_SUR_QUATRE"),
+        "COUPLE_GAGNANT": ("COUPLE_GAGNANT", "E_COUPLE_GAGNANT"),
+        "TRIO": ("TRIO", "E_TRIO"),
+        "QUINTE_PLUS": ("QUINTE_PLUS", "E_QUINTE_PLUS"),
+    }
+    # Mises unitaires de repli (EUR) si le flux ne fournit pas ``miseBase``.
+    DEFAULT_UNIT_STAKE = {"COUPLE_PLACE": 1.50, "DEUX_SUR_QUATRE": 3.00, "COUPLE_GAGNANT": 1.50,
+                          "TRIO": 1.50, "QUINTE_PLUS": 2.00}
+
+    @classmethod
+    def bet_availability(cls, race: Optional[Dict[str, Any]]) -> Optional[Dict[str, float]]:
+        """Paris ouverts sur la course d'après le flux PMU : {code: mise_unitaire_eur}.
+        None si l'information n'est pas connue (archive, simulation)."""
+        if not race:
+            return None
+        bets = race.get("bets")
+        if bets is None:
+            return None
+        out: Dict[str, float] = {}
+        for b in bets or []:
+            if isinstance(b, dict):
+                code = str(b.get("code") or b.get("codePari") or b.get("typePari") or "").upper()
+                stake = b.get("mise_base_eur")
+                if stake is None and b.get("miseBase") is not None:
+                    stake = float(b["miseBase"]) / 100.0
+            else:
+                code, stake = str(b).upper(), None
+            if code:
+                out[code] = float(stake) if stake is not None else out.get(code, 0.0)
+        return out
+
+    @classmethod
+    def _product_eligibility(cls, product: str, available: Optional[Dict[str, float]]):
+        """(eligible, mise_unitaire, motif). eligible = None si non vérifiable."""
+        if available is None:
+            return None, cls.DEFAULT_UNIT_STAKE[product], "DISPONIBILITE_NON_VERIFIEE"
+        for code in cls.PRODUCT_BET_CODES[product]:
+            if code in available:
+                stake = available[code] or cls.DEFAULT_UNIT_STAKE[product]
+                return True, stake, None
+        return False, cls.DEFAULT_UNIT_STAKE[product], "PARI_NON_OUVERT"
+
+    def generate_smart_tickets(self, bases: List[int], selection: List[int], outsider_num: Optional[int],
+                               is_master_couple: bool, is_no_bet: bool,
+                               race: Optional[Dict[str, Any]] = None,
+                               active_nums: Optional[List[int]] = None) -> Dict[str, Any]:
+        """Tickets prêts à jouer — représentation STRUCTURÉE unique (Lot 1, A03/A05/A06/A07).
+
+        - NO_BET : aucun ticket (``tickets = []``), jamais un ticket « à 0 € ».
+        - Chaque ticket porte ses chevaux DISTINCTS et actifs, ses bases/associés,
+          le nombre de combinaisons calculé par énumération (``math.comb``), la
+          mise unitaire et le coût total, et son éligibilité selon les paris
+          réellement ouverts sur la course (``race["bets"]`` issu du flux PMU).
+        - Le texte affiché est dérivé de cette structure, jamais reconstruit.
+        Les clés historiques (``ticket_securite`` …) sont conservées pour
+        compatibilité, dérivées des mêmes tickets."""
+        available = self.bet_availability(race)
+        active = set(int(n) for n in active_nums) if active_nums is not None else None
+
+        def _ok(n: Optional[int]) -> bool:
+            return n is not None and (active is None or int(n) in active)
+
+        bases = [int(b) for b in bases if _ok(b)][:2]
+        base_set = set(bases)
+        associates = [int(n) for n in selection if _ok(n) and int(n) not in base_set][:4]
+        tickets: List[Dict[str, Any]] = []
+
+        def _ticket(product: str, libelle: str, chevaux: List[int], base_list: List[int], assoc: List[int],
+                    combinaisons: int, texte: str, extra_motif: Optional[str] = None) -> Dict[str, Any]:
+            eligible, stake, motif = self._product_eligibility(product, available)
+            if extra_motif:
+                eligible, motif = False, extra_motif
+            return {
+                "produit": product, "libelle": libelle,
+                "chevaux": chevaux, "bases": base_list, "associes": assoc,
+                "combinaisons": combinaisons, "mise_unitaire_eur": round(stake, 2),
+                "cout_total_eur": round(combinaisons * stake, 2) if eligible is not False else None,
+                "eligible": eligible, "motif_ineligibilite": motif,
+                "texte": texte,
+            }
+
         if is_no_bet:
-            ticket_securite = {
-                "pari": "⚠️ Course Loterie (NO_BET)",
-                "chevaux": [],
-                "formule": "Abstention conseillée pour préserver le capital.",
-                "mise_base_eur": 0.00
-            }
-        elif is_master_couple:
-            ticket_securite = {
-                "pari": "⭐ COUPLÉ MAÎTRE DU JOUR (Gagnant & Placé)",
-                "chevaux": bases,
-                "formule": f"Jeu Prioritaire sur le duo ({bases[0]} - {bases[1]})",
-                "mise_base_eur": 6.00
-            }
-        else:
-            ticket_securite = {
-                "pari": "Couplé Placé ou 2sur4",
-                "chevaux": bases,
-                "formule": f"Jeu sur les 2 bases ({bases[0]} - {bases[1]})",
-                "mise_base_eur": 3.00
-            }
+            return {"contract": 2, "no_bet": True, "tickets": [],
+                    "ticket_securite": None, "ticket_trio": None, "quinte_champ_reduit": None}
 
-        ticket_trio = {
-            "pari": "Couplé Gagnant / Trio",
-            "chevaux": bases + ([outsider_num] if outsider_num not in bases else associates[:1]),
-            "formule": f"Combinaison {bases[0]} - {bases[1]} - {outsider_num}",
-            "mise_base_eur": 3.00
-        }
+        if len(bases) == 2:
+            if is_master_couple:
+                sec_product, sec_label = "COUPLE_GAGNANT", "Couplé Maître du jour (Gagnant & Placé)"
+            else:
+                sec_product, sec_label = "COUPLE_PLACE", "Couplé Placé (ou 2sur4)"
+            tickets.append(_ticket(sec_product, sec_label, bases, bases, [], 1,
+                                   f"{bases[0]} - {bases[1]}"))
+            # Trio : trois chevaux DISTINCTS. L'outsider n'occupe jamais deux places.
+            third = None
+            if outsider_num is not None and _ok(outsider_num) and int(outsider_num) not in base_set:
+                third = int(outsider_num)
+            elif associates:
+                third = associates[0]
+            if third is not None:
+                trio = bases + [third]
+                tickets.append(_ticket("TRIO", "Trio (Couplé Gagnant)", trio, bases, [third], 1,
+                                       f"{trio[0]} - {trio[1]} - {trio[2]}"))
+            else:
+                tickets.append(_ticket("TRIO", "Trio (Couplé Gagnant)", [], bases, [], 0, "—",
+                                       extra_motif="MOINS_DE_3_CHEVAUX_DISTINCTS"))
+            # Quinté+ champ réduit : 2 bases fixes + 3 places parmi les associés.
+            places = 5 - len(bases)
+            combos = math.comb(len(associates), places) if len(associates) >= places else 0
+            extra = None
+            if combos == 0:
+                extra = "ASSOCIES_INSUFFISANTS"
+            elif active is not None and len(active) < 8:
+                extra = "MOINS_DE_8_PARTANTS"
+            tickets.append(_ticket("QUINTE_PLUS", "Quinté+ champ réduit", bases + associates, bases, associates, combos,
+                                   f"{bases[0]} - {bases[1]} - X - X - X / {', '.join(map(str, associates))}",
+                                   extra_motif=extra))
 
-        quinte_champ_reduit = {
-            "pari": "Quinté+ Champ Réduit",
-            "bases_fixes": bases,
-            "associes": associates,
-            "formule": f"{bases[0]} - {bases[1]} - X - X - X / {', '.join(map(str, associates))}",
-            "combinaisons": len(associates) * (len(associates) - 1) // 2,
-            "budget_conseille_eur": 12.00
-        }
-
+        # Compatibilité : anciennes clés dérivées des tickets structurés
+        by_product = {t["produit"]: t for t in tickets}
+        sec = by_product.get("COUPLE_PLACE") or by_product.get("COUPLE_GAGNANT")
+        trio = by_product.get("TRIO")
+        quinte = by_product.get("QUINTE_PLUS")
         return {
-            "ticket_securite": ticket_securite,
-            "ticket_trio": ticket_trio,
-            "quinte_champ_reduit": quinte_champ_reduit
+            "contract": 2,
+            "no_bet": False,
+            "tickets": tickets,
+            "ticket_securite": ({"pari": sec["libelle"], "chevaux": sec["chevaux"], "formule": sec["texte"],
+                                 "mise_base_eur": sec["mise_unitaire_eur"]} if sec else None),
+            "ticket_trio": ({"pari": trio["libelle"], "chevaux": trio["chevaux"], "formule": trio["texte"],
+                             "mise_base_eur": trio["mise_unitaire_eur"]} if trio and trio["chevaux"] else None),
+            "quinte_champ_reduit": ({"pari": quinte["libelle"], "bases_fixes": quinte["bases"], "associes": quinte["associes"],
+                                     "formule": quinte["texte"], "combinaisons": quinte["combinaisons"],
+                                     "budget_conseille_eur": quinte["cout_total_eur"]} if quinte else None),
         }
 
     def predict(self, race: Dict[str, Any], runners: List[Dict[str, Any]]) -> Dict[str, Any]:
@@ -163,7 +253,8 @@ class NewValueEngine:
                 "confidence_label": "N/A",
                 "is_no_bet": True,
                 "is_master_couple": False,
-                "smart_tickets": {},
+                "smart_tickets": {"contract": 2, "no_bet": True, "tickets": [],
+                                  "ticket_securite": None, "ticket_trio": None, "quinte_champ_reduit": None},
                 "probabilities": {},
                 "metadata": {}
             }
@@ -260,7 +351,8 @@ class NewValueEngine:
         stars, confidence_label, is_no_bet = self.calculate_race_confidence(p1, len(valid_runners), p1 - p2)
         is_master_couple, master_couple_label = self.detect_master_couple(p1, p2, p3, reg1, reg2)
 
-        smart_tickets = self.generate_smart_tickets(bases, selection_nums, outsider_num, is_master_couple, is_no_bet)
+        smart_tickets = self.generate_smart_tickets(bases, selection_nums, outsider_num, is_master_couple, is_no_bet,
+                                                   race=race, active_nums=[r["num"] for r in valid_runners])
 
         probabilities_dict = {str(r["num"]): r["estimated_prob"] for r in scored_runners}
         value_dict = {str(r["num"]): r["value_index"] for r in scored_runners}

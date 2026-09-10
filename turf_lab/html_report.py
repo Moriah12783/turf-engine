@@ -696,36 +696,10 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                 </div>
             </div>
 
-            <!-- Interactive Smart Ready-to-Bet Tickets with 1-Click Copy -->
+            <!-- Tickets structurés (contrat v2) : rendus depuis la base, jamais reconstruits -->
             <div style="margin-bottom:22px;">
-                <h3 style="font-size:1.1rem; color:#fff; margin-bottom:12px;">🎟️ Formules de Jeux Prêtes à Jouer (Cliquez pour copier)</h3>
-                
-                <div class="ticket-interactive-card gold" onclick="copyTicketText('ticket-1-text')">
-                    <div>
-                        <strong style="color:#fbbf24; font-size:0.95rem;">⭐ Ticket Sécurité (Couplé Placé / 2sur4)</strong>
-                        <div id="ticket-1-text" style="font-size:1.1rem; font-weight:800; color:#fff; font-family:monospace; margin-top:4px;">-</div>
-                        <small style="color:var(--text-muted);">Mise de base conseillée : 3 €</small>
-                    </div>
-                    <button class="copy-btn">📋 Copier</button>
-                </div>
-
-                <div class="ticket-interactive-card" onclick="copyTicketText('ticket-2-text')">
-                    <div>
-                        <strong style="color:#60a5fa; font-size:0.95rem;">🔥 Ticket Spéculatif (Trio / Couplé Gagnant)</strong>
-                        <div id="ticket-2-text" style="font-size:1.1rem; font-weight:800; color:#fff; font-family:monospace; margin-top:4px;">-</div>
-                        <small style="color:var(--text-muted);">Mise de base conseillée : 3 €</small>
-                    </div>
-                    <button class="copy-btn">📋 Copier</button>
-                </div>
-
-                <div class="ticket-interactive-card purple" onclick="copyTicketText('ticket-3-text')">
-                    <div>
-                        <strong style="color:#a78bfa; font-size:0.95rem;">👑 Quinté+ Champ Réduit Optimisé</strong>
-                        <div id="ticket-3-text" style="font-size:1.1rem; font-weight:800; color:#fff; font-family:monospace; margin-top:4px;">-</div>
-                        <small style="color:var(--text-muted);">6 combinaisons • Budget optimisé : 12 €</small>
-                    </div>
-                    <button class="copy-btn">📋 Copier</button>
-                </div>
+                <h3 style="font-size:1.1rem; color:#fff; margin-bottom:12px;">🎟️ Formules de jeu <span id="tickets-state" style="font-size:0.8rem; color:var(--text-muted); font-weight:500;"></span></h3>
+                <div id="tickets-container"></div>
             </div>
 
             <!-- Full Runners Table -->
@@ -826,9 +800,31 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
             "T_MATIN": {{ code: "T_MATIN", label: "📡 T-Matin", badgeClass: "couv-4", header: "Cote Réf. (Matin)", fullText: "📡 Édition Préparatoire (T-Matin)", info: "Pronostic initial établi le matin. L'Édition Abonnés est générée à T-90 min (1h30 avant) puis le Cockpit Live à T-30 et T-15 min." }}
         }};
 
+        // États de course (A08) : une course annulée ou partie n'est jamais « Live ».
+        function raceIsStarted(item) {{
+            if (item.is_finished || item.is_cancelled) return true;
+            if (item.is_started === true) return true;
+            if (item.start_time_utc) {{
+                const t = Date.parse(item.start_time_utc);
+                if (!isNaN(t)) return Date.now() >= t;
+            }}
+            return false;
+        }}
+        function raceStateBadge(item) {{
+            if (item.is_cancelled) return ' <span class="badge-nobet">🚫 ANNULÉE</span>';
+            if (!item.is_finished && raceIsStarted(item)) return ' <span class="badge-neutral">🏁 PARTIE</span>';
+            if (item.status === "ARRIVÉE PROVISOIRE") return ' <span class="badge-provisoire">🕓 ARRIVÉE PROVISOIRE</span>';
+            return '';
+        }}
         function getHorizonForRace(item) {{
+            if (item.is_cancelled) {{
+                return {{ code: "ANNULEE", label: "🚫 Annulée", badgeClass: "couv-1", header: "Cote", fullText: "🚫 Course annulée", info: "Course annulée par l'organisateur : aucune sélection active, aucun ticket. Archive consultable." }};
+            }}
             if (item.is_finished) {{
                 return {{ code: "FINI", label: "🏁 Clôturé", badgeClass: "couv-5", header: "Cote Finale" }};
+            }}
+            if (raceIsStarted(item)) {{
+                return {{ code: "PARTIE", label: "🏁 Partie", badgeClass: "couv-2", header: "Cote", fullText: "🏁 Course partie — arrivée en attente", info: "Départ donné : aucun ticket actif. L'arrivée officielle sera affichée dès sa publication." }};
             }}
             // Le badge reflète l'édition RÉELLEMENT verrouillée en base
             // (display_horizon), jamais une simple estimation par l'horloge.
@@ -960,10 +956,11 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                     // => aucune sélection, aucune base affichée.
                     const provisoire = (item.edition_provisoire === true);
                     const provCell = '<em style="color:#fbbf24; font-family:inherit;">— pas de sélection</em>';
+                    const stateBadge = raceStateBadge(item);
 
                     tr.innerHTML = `
                         <td style="text-align:left;">
-                            <strong style="color:#60a5fa;">🔍 ${{item.course}}</strong> <span class="badge-horizon-small">${{hObj.label}}</span>${{noCotes ? ' <span class="badge-nocotes">📵 Cotes PMU indispo.</span>' : ''}}${{provisoire ? ' <span class="badge-provisoire">🕓 ÉDITION PROVISOIRE</span>' : ''}}<br>
+                            <strong style="color:#60a5fa;">🔍 ${{item.course}}</strong> <span class="badge-horizon-small">${{hObj.label}}</span>${{stateBadge}}${{noCotes ? ' <span class="badge-nocotes">📵 Cotes PMU indispo.</span>' : ''}}${{provisoire ? ' <span class="badge-provisoire">🕓 ÉDITION PROVISOIRE</span>' : ''}}<br>
                             <small style="color:#38bdf8; font-weight:700;">⏰ ${{timeInfo}}</small> •
                             <small style="color:var(--text-muted); font-family:monospace;">${{item.date}}</small>
                         </td>
@@ -1007,7 +1004,7 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
 
             document.getElementById("modal-title").textContent = `${{item.course}} — ${{item.race_name}}`;
             document.getElementById("modal-subtitle").textContent = `⏰ Départ : ${{timeInfo}} • ${{item.date}} • ${{item.discipline}} • ${{item.distance}}m (Corde à ${{item.rope.toLowerCase()}})${{item.autostart ? ' • Autostart' : ''}} • Statut : ${{item.status}}`;
-            document.getElementById("modal-confidence").textContent = item.confidence_label || "⭐⭐⭐";
+            document.getElementById("modal-confidence").textContent = item.confidence_label || (item.contract_recorded ? "Confiance non calculée" : "Confiance non enregistrée (archive antérieure au contrat)");
 
             const noCotes = (item.market_odds_available === false);
             const provisoire = (item.edition_provisoire === true);
@@ -1035,12 +1032,16 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
             }}
 
             const badgeBox = document.getElementById("modal-badge-container");
-            if (item.is_master) {{
+            if (item.is_cancelled) {{
+                badgeBox.innerHTML = `<span class="badge-nobet">🚫 COURSE ANNULÉE</span>`;
+            }} else if (item.is_master === true) {{
                 badgeBox.innerHTML = `<span class="badge-master">⭐ COUPLE MAITRE DU JOUR</span>`;
-            }} else if (item.is_no_bet) {{
+            }} else if (item.is_no_bet === true) {{
                 badgeBox.innerHTML = `<span class="badge-nobet">⚠️ ABSTENTION / NO_BET</span>`;
-            }} else {{
+            }} else if (item.is_no_bet === false) {{
                 badgeBox.innerHTML = `<span class="badge-base">Course Régulière</span>`;
+            }} else {{
+                badgeBox.innerHTML = `<span class="badge-neutral">Décision non enregistrée (archive)</span>`;
             }}
             if (noCotes) {{
                 badgeBox.innerHTML += ` <span class="badge-nocotes">📵 Cotes PMU indisponibles — analyse sur capteurs hors marché uniquement</span>`;
@@ -1086,12 +1087,8 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
             else if (item.couv_moteur_count === 2) badgeClass = "couv-2";
             couvBox.innerHTML = `<span class="couv-tag ${{badgeClass}}">${{item.couverture_label}}</span>`;
 
-            // Expanded Smart tickets content
-            const bStr = provisoire ? "—" : item.bases.join(" - ");
-            const outNum = item.outsider_num || (item.sel_moteur_list.length > 2 ? item.sel_moteur_list[2] : "");
-            const trioStr = `${{bStr}} - ${{outNum}}`;
-            const associes = item.sel_moteur_list.filter(n => !item.bases.includes(n)).slice(0, 4).join(", ");
-            const quinteStr = `${{bStr}} - X - X - X / ${{associes}}`;
+            // Tickets structurés (contrat v2), jamais reconstruits côté client (A03/A05/A06/A07)
+            renderTickets(item, provisoire);
 
             // Tableau des éditions verrouillées (transparence totale)
             const edLabels = {{ "T_MATIN": "📡 Matin", "T90": "📢 T-90", "T30": "⚡ T-30", "T15": "🔒 T-15" }};
@@ -1122,9 +1119,6 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                 edTbody.appendChild(tr);
             }});
 
-            document.getElementById("ticket-1-text").textContent = `Bases : ${{bStr}}`;
-            document.getElementById("ticket-2-text").textContent = `Trio / Couplé : ${{trioStr}}`;
-            document.getElementById("ticket-3-text").textContent = `Formule : ${{quinteStr}}`;
 
             // Runners table
             const runnersTbody = document.getElementById("modal-runners-tbody");
@@ -1184,13 +1178,110 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
             }}
         }}
 
-        function copyTicketText(elementId) {{
-            const txt = document.getElementById(elementId).textContent;
-            navigator.clipboard.writeText(txt).then(() => {{
-                showToast(`✓ Copié : ${{txt}}`);
-            }}).catch(() => {{
-                showToast(`✓ Ticket copié !`);
+        const PRODUCT_LABELS = {{
+            "COUPLE_PLACE": "⭐ Ticket Sécurité — Couplé Placé (ou 2sur4)",
+            "COUPLE_GAGNANT": "⭐ Couplé Maître — Couplé Gagnant & Placé",
+            "TRIO": "🔥 Ticket Spéculatif — Trio",
+            "QUINTE_PLUS": "👑 Quinté+ Champ Réduit"
+        }};
+        const INELIGIBLE_LABELS = {{
+            "PARI_NON_OUVERT": "pari non ouvert sur cette course",
+            "DISPONIBILITE_NON_VERIFIEE": "disponibilité du pari non vérifiée",
+            "MOINS_DE_8_PARTANTS": "moins de 8 partants : Quinté+ non proposé",
+            "ASSOCIES_INSUFFISANTS": "associés insuffisants",
+            "MOINS_DE_3_CHEVAUX_DISTINCTS": "moins de trois chevaux distincts"
+        }};
+        function escapeHtml(t) {{
+            return String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }}
+        function renderTickets(item, provisoire) {{
+            const box = document.getElementById("tickets-container");
+            const state = document.getElementById("tickets-state");
+            box.innerHTML = "";
+            state.textContent = "";
+            const st = item.smart_tickets;
+            const archive = item.is_cancelled || raceIsStarted(item);
+            if (item.is_cancelled) {{
+                state.textContent = "course annulée — aucun ticket";
+                box.innerHTML = `<div class="banner-provisoire">🚫 Course annulée : aucun ticket actif. L'édition scellée reste consultable dans le tableau des éditions.</div>`;
+                return;
+            }}
+            if (provisoire) {{
+                state.textContent = "édition provisoire — aucun ticket";
+                box.innerHTML = `<div class="banner-provisoire">🕓 Cotes non ouvertes : aucun ticket tant qu'une édition n'est pas verrouillée sur des cotes réelles.</div>`;
+                return;
+            }}
+            if (!st || typeof st !== "object" || !Array.isArray(st.tickets)) {{
+                state.textContent = "non enregistrés";
+                box.innerHTML = `<div class="banner-provisoire">Tickets non enregistrés pour cette édition (archive antérieure au contrat de prédiction). Aucune formule n'est reconstruite a posteriori.</div>`;
+                return;
+            }}
+            if (st.no_bet === true || item.is_no_bet === true) {{
+                state.textContent = "abstention";
+                box.innerHTML = `<div class="banner-provisoire">⚠️ ABSTENTION CONSEILLÉE (NO_BET) : le moteur ne propose aucun ticket sur cette course. Préserver le capital.</div>`;
+                return;
+            }}
+            if (!st.tickets.length) {{
+                state.textContent = "aucun ticket";
+                box.innerHTML = `<div class="banner-provisoire">Aucun ticket proposé sur cette course.</div>`;
+                return;
+            }}
+            state.textContent = archive ? "archive — non jouable (course partie ou terminée)" : "prêtes à jouer";
+            const npSet = new Set((item.np_nums || []).map(Number));
+            st.tickets.forEach((t, idx) => {{
+                const cls = t.produit === "QUINTE_PLUS" ? "purple" : (t.produit === "TRIO" ? "" : "gold");
+                const npIn = (t.chevaux || []).filter(n => npSet.has(Number(n)));
+                let playable = !archive && t.eligible !== false && npIn.length === 0 && (t.chevaux || []).length > 0;
+                let note = "";
+                if (npIn.length) note = `⚠️ ticket invalide : n° ${{npIn.join(", ")}} non partant`;
+                else if (t.eligible === false) note = `⛔ ${{INELIGIBLE_LABELS[t.motif_ineligibilite] || t.motif_ineligibilite || "non éligible"}}`;
+                else if (t.eligible === null || t.eligible === undefined) note = `ℹ️ ${{INELIGIBLE_LABELS["DISPONIBILITE_NON_VERIFIEE"]}}`;
+                else if (archive) note = "🏁 archive : course partie ou terminée";
+                const cost = (t.cout_total_eur !== null && t.cout_total_eur !== undefined) ? `${{t.combinaisons}} combinaison${{t.combinaisons > 1 ? 's' : ''}} × ${{Number(t.mise_unitaire_eur).toFixed(2)}} € = ${{Number(t.cout_total_eur).toFixed(2)}} €` : "";
+                const txtId = `ticket-${{idx}}-text`;
+                const copyTxt = `${{item.course}} • ${{item.date}} • ${{hObjLabel(item)}} • ${{t.libelle}} : ${{t.texte}}${{cost ? ' (' + cost + ')' : ''}}`;
+                const div = document.createElement("div");
+                div.className = `ticket-interactive-card ${{cls}}`;
+                if (!playable) div.style.opacity = "0.55";
+                div.innerHTML = `
+                    <div>
+                        <strong style="font-size:0.95rem;">${{escapeHtml(PRODUCT_LABELS[t.produit] || t.libelle)}}</strong>
+                        <div id="${{txtId}}" style="font-size:1.1rem; font-weight:800; color:#fff; font-family:monospace; margin-top:4px;">${{escapeHtml(t.texte)}}</div>
+                        <small style="color:var(--text-muted);">${{escapeHtml(cost || ("mise unitaire " + Number(t.mise_unitaire_eur).toFixed(2) + " €"))}}${{note ? ' • ' + escapeHtml(note) : ''}}</small>
+                    </div>
+                    ${{playable ? '<button class="copy-btn">📋 Copier</button>' : ''}}
+                `;
+                if (playable) {{
+                    div.onclick = () => copyTicketText(copyTxt, txtId);
+                }} else {{
+                    div.style.cursor = "default";
+                }}
+                box.appendChild(div);
             }});
+        }}
+        function hObjLabel(item) {{
+            const h = getHorizonForRace(item);
+            return h.label || h.code || "";
+        }}
+
+        function copyTicketText(txt, elementId) {{
+            const done = () => showToast(`✓ Copié : ${{txt}}`);
+            const fail = () => {{
+                // Honnêteté (P2) : un échec de copie est annoncé, jamais maquillé en succès.
+                showToast("✗ Copie impossible — sélectionnez le texte manuellement");
+                try {{
+                    const el = document.getElementById(elementId);
+                    if (el && window.getSelection) {{
+                        const range = document.createRange();
+                        range.selectNodeContents(el);
+                        const sel = window.getSelection();
+                        sel.removeAllRanges();
+                        sel.addRange(range);
+                    }}
+                }} catch (e) {{}}
+            }};
+            if (!navigator.clipboard || !navigator.clipboard.writeText) {{ fail(); return; }}
+            navigator.clipboard.writeText(txt).then(done).catch(fail);
         }}
 
         function showToast(msg) {{

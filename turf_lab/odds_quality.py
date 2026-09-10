@@ -29,15 +29,62 @@ MIN_PRICED_RATIO: float = 0.90
 MIN_DISPLAY_RATIO: float = 0.50
 
 
+# Bornes de validité d'une cote PMU (A12) : une valeur hors de cet intervalle
+# (0, -1, NaN, infini) n'est JAMAIS une cote réelle, quelle que soit sa
+# distance à la sentinelle.
+MIN_VALID_ODDS: float = 1.01
+MAX_VALID_ODDS: float = 999.0
+# Ancienneté maximale d'une capture de cotes pour la DIFFUSION (minutes).
+MAX_ODDS_AGE_MINUTES: int = 90
+
+
+def is_valid_odds(value: Any) -> bool:
+    """Cote finie et dans [MIN_VALID_ODDS, MAX_VALID_ODDS]."""
+    try:
+        v = float(value)
+    except (TypeError, ValueError):
+        return False
+    if v != v or v in (float("inf"), float("-inf")):
+        return False
+    return MIN_VALID_ODDS <= v <= MAX_VALID_ODDS
+
+
 def all_default_odds(runner: Dict[str, Any]) -> bool:
-    """True si AUCUN champ de cote du partant ne porte une valeur réelle
-    (tous absents ou égaux à DEFAULT_ODDS). Sémantique historique du banc
-    de mesure conservée à l'identique."""
+    """True si AUCUN champ de cote du partant ne porte une valeur réelle.
+
+    Provenance d'abord (A12) : si le partant porte ``odds_is_real`` (écrit par
+    la synchronisation depuis le flux), c'est elle qui fait foi — une vraie
+    cote à 15 reste réelle, une sentinelle n'est jamais réelle. Sinon, repli
+    historique : une valeur VALIDE (finie, dans les bornes) et distincte de
+    DEFAULT_ODDS. Une cote 0 / -1 / NaN n'est pas « réelle »."""
+    flag = runner.get("odds_is_real")
+    if flag is not None:
+        return not bool(flag)
     for field in ODDS_FIELDS:
         v = runner.get(field)
-        if v is not None and abs(float(v) - DEFAULT_ODDS) > 1e-9:
+        if v is not None and is_valid_odds(v) and abs(float(v) - DEFAULT_ODDS) > 1e-9:
             return False
     return True
+
+
+def odds_age_minutes(runners: Iterable[Dict[str, Any]], now_utc=None) -> "float | None":
+    """Âge (minutes) de la capture de cotes la plus récente ; None si inconnu."""
+    from datetime import datetime
+    now_utc = now_utc or datetime.utcnow()
+    latest = None
+    for r in runners:
+        ts = r.get("odds_captured_at")
+        if not ts:
+            continue
+        try:
+            dt = datetime.fromisoformat(str(ts).replace("Z", ""))
+        except Exception:
+            continue
+        if latest is None or dt > latest:
+            latest = dt
+    if latest is None:
+        return None
+    return (now_utc - latest).total_seconds() / 60.0
 
 
 def active_runners(runners: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:

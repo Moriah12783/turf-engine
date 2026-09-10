@@ -15,6 +15,10 @@ Raisons possibles (stables, à ne pas renommer — utilisées par n8n/tests) :
     ODDS_DEFAULT       aucune cote réelle (édition posée avant l'ouverture du marché)
     PRICED_RATIO_LOW   moins de 90 % des partants actifs cotés
     NOT_LOCKED         l'horizon demandé n'est pas verrouillé pour cette course
+    RACE_CANCELLED     course annulée
+    START_UNKNOWN      heure de départ illisible : aucune diffusion sans départ connu (A12)
+    NO_LOCK_PROOF      verrou sans preuve de qualité (odds_real / lock_time_utc absents) (A12)
+    STALE_ODDS         cotes capturées depuis plus de MAX_ODDS_AGE_MINUTES (A12)
     OK                 diffusable
 
 Usage CLI (pour n8n / scripts) :
@@ -31,7 +35,7 @@ from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional, Tuple
 
 from turf_lab.database import TurfDatabase
-from turf_lab.odds_quality import MIN_PRICED_RATIO, priced_ratio
+from turf_lab.odds_quality import MAX_ODDS_AGE_MINUTES, MIN_PRICED_RATIO, odds_age_minutes, priced_ratio
 
 ENGINE_NAME = "NEW_VALUE_ENGINE"
 MORNING_FLOOR_HOUR = 6
@@ -44,6 +48,10 @@ REASON_LABELS = {
     "ODDS_DEFAULT": "cotes non ouvertes (valeurs par défaut)",
     "PRICED_RATIO_LOW": "moins de 90 % des partants cotés",
     "NOT_LOCKED": "horizon non verrouillé",
+    "RACE_CANCELLED": "course annulée",
+    "START_UNKNOWN": "heure de départ inconnue — aucune diffusion",
+    "NO_LOCK_PROOF": "verrou sans preuve de qualité — aucune diffusion",
+    "STALE_ODDS": "cotes périmées — aucune diffusion",
     "OK": "diffusable",
 }
 
@@ -66,6 +74,11 @@ def _parse_iso(value: Any) -> Optional[datetime]:
 
 
 def _minutes_to_start(race: Dict[str, Any], now_utc: datetime) -> Optional[float]:
+    # Heure de départ de SOURCE (heureDepart PMU) en priorité ; repli sur le
+    # libellé affiché. None si illisible => refus explicite (A12).
+    start_utc = _parse_iso(race.get("start_time_utc"))
+    if start_utc is not None:
+        return (start_utc - now_utc).total_seconds() / 60.0
     # Import local : évite tout cycle (daily_sync n'importe jamais ce module).
     from turf_lab.daily_sync import DailySyncManager
     return DailySyncManager.minutes_to_start(
@@ -106,7 +119,10 @@ def can_publish(db: TurfDatabase, race_id: str, horizon: str = "T_MATIN",
     if str(race.get("status", "")).upper() == "ANNULEE":
         return refuse("RACE_CANCELLED")
     mins = _minutes_to_start(race, now_utc)
-    if mins is not None and mins <= 0:
+    if mins is None:
+        # A12 : une preuve obligatoire absente produit un refus explicite.
+        return refuse("START_UNKNOWN")
+    if mins <= 0:
         return refuse("RACE_STARTED", minutes_to_start=round(mins, 1))
 
     floor_dt = _floor_datetime(str(race.get("date", "")))
@@ -127,15 +143,22 @@ def can_publish(db: TurfDatabase, race_id: str, horizon: str = "T_MATIN",
     pred = preds[0]
 
     odds_real = pred.get("odds_real")
-    if odds_real is not None and not bool(odds_real):
-        return refuse("ODDS_DEFAULT", priced_ratio=pred.get("priced_ratio"))
     locked_ratio = pred.get("priced_ratio")
-    if locked_ratio is not None and float(locked_ratio) < MIN_PRICED_RATIO:
+    lock_dt = _parse_iso(pred.get("lock_time_utc"))
+    # A12 : pour une NOUVELLE diffusion, la preuve de qualité du verrou est
+    # obligatoire (les archives sans preuve restent consultables, pas diffusables).
+    if odds_real is None or locked_ratio is None or lock_dt is None:
+        return refuse("NO_LOCK_PROOF")
+    if not bool(odds_real):
+        return refuse("ODDS_DEFAULT", priced_ratio=locked_ratio)
+    if float(locked_ratio) < MIN_PRICED_RATIO:
         return refuse("PRICED_RATIO_LOW", priced_ratio=round(float(locked_ratio), 3))
-
-    lock_dt = _parse_iso(pred.get("lock_time_utc")) or _parse_iso(pred.get("lock_time"))
-    if floor_dt is not None and lock_dt is not None and lock_dt < floor_dt:
+    if floor_dt is not None and lock_dt < floor_dt:
         return refuse("BEFORE_0630", lock_time_utc=lock_dt.isoformat())
+
+    age = odds_age_minutes(runners, now_utc=now_utc)
+    if age is not None and age > MAX_ODDS_AGE_MINUTES:
+        return refuse("STALE_ODDS", odds_age_minutes=round(age, 1))
 
     return True, "OK"
 

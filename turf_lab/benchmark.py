@@ -3,6 +3,7 @@ dual Top 8 comparisons (Moteur vs Marché), permanent historical race logs, and 
 """
 
 import json
+from datetime import datetime
 import math
 from typing import Any, Dict, List, Optional
 from turf_lab.database import TurfDatabase
@@ -418,19 +419,25 @@ class TurfBenchmarkLab:
             sel_moteur_str = "-".join(map(str, sel_moteur)) if sel_moteur else "-"
             bases = p_new.get("bases", []) if p_new else []
             outsider_num = p_new.get("outsider_num") if p_new else None
-            is_no_bet = p_new.get("is_no_bet", False) if p_new else False
-            is_master = p_new.get("is_master_couple", False) if p_new else False
-            confidence_stars = p_new.get("confidence_stars", 3) if p_new else 3
-            confidence_label = p_new.get("confidence_label", "⭐⭐⭐ (Course Ouverte)") if p_new else "⭐⭐⭐"
-            smart_tickets = p_new.get("smart_tickets", {}) if p_new else {}
+            # Contrat de prédiction persisté (A03) : les décisions viennent de la
+            # base, jamais d'une valeur favorable par défaut. Absentes (archive
+            # antérieure au contrat) => None, affiché « non enregistré ».
+            contract_recorded = bool(p_new and p_new.get("contract_recorded"))
+            is_no_bet = p_new.get("is_no_bet") if p_new else None
+            is_master = p_new.get("is_master_couple") if p_new else None
+            confidence_stars = p_new.get("confidence_stars") if p_new else None
+            confidence_label = p_new.get("confidence_label") if p_new else None
+            smart_tickets = p_new.get("smart_tickets") if p_new else None
             probabilities = p_new.get("probabilities", {}) if p_new else {}
             meta = p_new.get("metadata", {}) if p_new else {}
             value_indices = meta.get("value_indices", {})
             smart_signals = meta.get("smart_signals", {})
+            np_nums = sorted(int(r["num"]) for r in runners if r.get("is_non_partant", False))
 
-            # Regrets (9e et 10e chevaux)
+            # Regrets (9e et 10e chevaux) — sur les PARTANTS RÉELS (A07)
+            active_nums_now = [int(r["num"]) for r in runners if not r.get("is_non_partant", False)]
             regrets = p_new["selection"][8:10] if p_new and len(p_new.get("selection", [])) >= 10 else (
-                [n for n in range(1, len(runners) + 1) if n not in sel_moteur][:2]
+                [n for n in active_nums_now if n not in sel_moteur][:2]
             )
 
             # 2. Top 8 Marché (MARKET_BASELINE)
@@ -479,8 +486,17 @@ class TurfBenchmarkLab:
             else:
                 provisoire_reason = None
             edition_provisoire = provisoire_reason is not None
+            race_status = str(race.get("status") or "SCHEDULED").upper()
+            is_cancelled = race_status == "ANNULEE"
+            start_time_utc = race.get("start_time_utc")
+            is_started = False
+            if start_time_utc:
+                try:
+                    is_started = datetime.utcnow() >= datetime.fromisoformat(str(start_time_utc).replace("Z", ""))
+                except Exception:
+                    is_started = False
             top5_arrival = arrival[:5] if arrival else []
-            arrival_str = "-".join(map(str, top5_arrival)) if arrival else "En attente"
+            arrival_str = "-".join(map(str, top5_arrival)) if arrival else ("Course annulée" if is_cancelled else "En attente")
 
             # 5. Dual coverage (Moteur vs Marché)
             if is_finished:
@@ -497,7 +513,7 @@ class TurfBenchmarkLab:
             else:
                 c_moteur = 0
                 c_marche = 0
-                couverture_label = "Course à venir"
+                couverture_label = "Course annulée" if is_cancelled else ("Course partie" if is_started else "Course à venir")
 
             # 6. Bases performance note
             b_notes = []
@@ -511,15 +527,22 @@ class TurfBenchmarkLab:
                 else:
                     b_notes.append(str(b))
 
-            if is_no_bet:
+            if is_cancelled:
+                decision_text = "🚫 COURSE ANNULÉE"
+                decision_badge = "badge-neutral"
+            elif is_no_bet is True:
                 decision_text = "⚠️ NO_BET (Abstention)"
                 decision_badge = "badge-nobet"
-            elif is_master:
+            elif is_master is True:
                 decision_text = f"⭐ COUPLE MAITRE: {' - '.join(b_notes)}"
                 decision_badge = "badge-master"
-            elif bases:
+            elif bases and contract_recorded:
                 decision_text = f"Bases: {' - '.join(b_notes)}"
                 decision_badge = "badge-base"
+            elif bases:
+                # Archive antérieure au contrat : décision non enregistrée
+                decision_text = f"Bases: {' - '.join(b_notes)} (décision non enregistrée)"
+                decision_badge = "badge-neutral"
             else:
                 decision_text = "NO_QUALIFIED_BASE"
                 decision_badge = "badge-neutral"
@@ -575,11 +598,19 @@ class TurfBenchmarkLab:
                 "autostart": autostart,
                 "scheduled_start_time": scheduled_start_time,
                 "is_finished": is_finished,
-                "status": "TERMINÉE" if is_finished else "PROGRAMMÉE",
+                # États conservés (A08) : annulée / arrivée provisoire / terminée / partie / programmée
+                "status": ("ANNULÉE" if is_cancelled else "TERMINÉE" if is_finished
+                           else "ARRIVÉE PROVISOIRE" if race_status == "ARRIVEE_PROVISOIRE"
+                           else "PARTIE" if is_started else "PROGRAMMÉE"),
+                "is_cancelled": is_cancelled,
+                "is_started": is_started,
+                "start_time_utc": start_time_utc,
+                "contract_recorded": contract_recorded,
                 "confidence_stars": confidence_stars,
                 "confidence_label": confidence_label,
                 "is_no_bet": is_no_bet,
                 "is_master": is_master,
+                "np_nums": np_nums,
                 "sel_moteur": sel_moteur_str,
                 "sel_moteur_list": sel_moteur,
                 "bases": bases,

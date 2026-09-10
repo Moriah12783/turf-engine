@@ -574,6 +574,11 @@ class DailySyncManager:
                     "start_time_utc": start_iso,
                     "pmu_statut": str(c.get("statut") or "") or None,
                     "declared_runners": c.get("nombreDeclaresPartants"),
+                    # Paris ouverts (flux `paris[]`) : éligibilité réelle des produits (A06)
+                    "bets": [{"code": str(b.get("codePari") or b.get("typePari") or "").upper(),
+                              "mise_base_eur": (float(b["miseBase"]) / 100.0) if b.get("miseBase") is not None else None,
+                              "en_vente": b.get("enVente")}
+                             for b in (c.get("paris") or []) if isinstance(b, dict)] if c.get("paris") is not None else None,
                 }
 
                 # 0. Course déjà clôturée en base => archive GELÉE.
@@ -645,6 +650,10 @@ class DailySyncManager:
                     live_obj = p.get("dernierRapportDirect") or {}
                     live_odds = float(live_obj.get("rapport", 0.0) or 0.0)
                     m_odds = float(ref_obj.get("rapport", 0.0) or 0.0)
+                    # Provenance (A12) : une cote est RÉELLE si le flux l'a fournie
+                    # (> 1.0), indépendamment de sa valeur — une vraie cote à 15
+                    # reste réelle, une sentinelle n'est jamais « réelle ».
+                    odds_is_real = (live_odds > 1.0) or (m_odds > 1.0)
                     if m_odds <= 0:
                         m_odds = live_odds if live_odds > 0 else 15.0
                     if live_odds <= 0:
@@ -696,7 +705,9 @@ class DailySyncManager:
                         "music": music,
                         "earnings": earnings_eur,
                         "record_chrono": record_chrono,
-                        "official_rating": official_rating
+                        "official_rating": official_rating,
+                        "odds_is_real": odds_is_real,
+                        "odds_captured_at": now_utc.isoformat(),
                     })
 
                 if not runners:

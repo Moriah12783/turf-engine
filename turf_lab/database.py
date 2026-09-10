@@ -186,11 +186,50 @@ class TurfDatabase:
                 "ALTER TABLE race_results ADD COLUMN finalite TEXT",
                 "ALTER TABLE race_results ADD COLUMN verified_at TEXT",
                 "ALTER TABLE race_results ADD COLUMN legacy_recorded_at TEXT",
+                # Lot 1 (audit du 10/09) — contrat de prédiction persisté (A03/A04) :
+                # les décisions du moteur (confiance, abstention, couple maître,
+                # tickets structurés) sont écrites AVEC le verrou, jamais
+                # reconstituées ; empreinte et version de contrat.
+                "ALTER TABLE predictions ADD COLUMN confidence_stars INTEGER",
+                "ALTER TABLE predictions ADD COLUMN confidence_label TEXT",
+                "ALTER TABLE predictions ADD COLUMN is_no_bet BOOLEAN",
+                "ALTER TABLE predictions ADD COLUMN is_master_couple BOOLEAN",
+                "ALTER TABLE predictions ADD COLUMN smart_tickets_json TEXT",
+                "ALTER TABLE predictions ADD COLUMN contract_version INTEGER",
+                "ALTER TABLE predictions ADD COLUMN prediction_hash TEXT",
+                # Paris ouverts sur la course (flux PMU `paris[]`) : éligibilité des produits (A06)
+                "ALTER TABLE races ADD COLUMN bets_json TEXT",
+                # Provenance et fraîcheur des cotes (A12)
+                "ALTER TABLE runners ADD COLUMN odds_is_real BOOLEAN",
+                "ALTER TABLE runners ADD COLUMN odds_captured_at TEXT",
             ):
                 try:
                     cursor.execute(ddl)
                 except Exception:
                     pass
+
+            # Corrections VOLONTAIRES de prédiction (A04) : append-only, jamais
+            # évaluées comme la prévision initiale, jamais réécrites.
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS predictions_corrections (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                prediction_id TEXT NOT NULL,
+                race_id TEXT NOT NULL,
+                engine_name TEXT NOT NULL,
+                horizon TEXT NOT NULL,
+                recorded_at TEXT NOT NULL,
+                reason TEXT NOT NULL,
+                previous_hash TEXT,
+                new_hash TEXT NOT NULL,
+                selection_json TEXT NOT NULL,
+                bases_json TEXT,
+                outsider_num INTEGER,
+                probabilities_json TEXT,
+                metadata_json TEXT,
+                smart_tickets_json TEXT
+            )
+            """)
+            cursor.execute("CREATE INDEX IF NOT EXISTS idx_pred_corr_pred ON predictions_corrections (prediction_id)")
 
             # Journal APPEND-ONLY des versions successives d'une arrivée.
             cursor.execute("""
@@ -381,8 +420,8 @@ class TurfDatabase:
                 race_id, date, meeting_number, race_number, name,
                 hippodrome, discipline, distance, track_type,
                 track_condition, rope, autostart, scheduled_start_time, status,
-                start_time_utc, pmu_statut, declared_runners
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                start_time_utc, pmu_statut, declared_runners, bets_json
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 race_data["race_id"],
                 race_data.get("date", datetime.utcnow().strftime("%Y-%m-%d")),
@@ -401,6 +440,7 @@ class TurfDatabase:
                 race_data.get("start_time_utc"),
                 race_data.get("pmu_statut"),
                 race_data.get("declared_runners"),
+                json.dumps(race_data["bets"]) if race_data.get("bets") is not None else None,
             ))
 
     def update_race_identity(self, race_id: str, start_time_utc: Optional[str] = None,
@@ -445,8 +485,9 @@ class TurfDatabase:
                     driver_jockey, trainer, weight, draw, shoeing,
                     blinkers, morning_odds, odds_t15, final_odds,
                     is_non_partant, press_citation_count,
-                    music, earnings, record_chrono, official_rating
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    music, earnings, record_chrono, official_rating,
+                    odds_is_real, odds_captured_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """, (
                     runner_id,
                     race_id,
@@ -468,21 +509,60 @@ class TurfDatabase:
                     r.get("music", "1a2a3a"),
                     r.get("earnings", 50000.0),
                     r.get("record_chrono", 74.5),
-                    r.get("official_rating", 35.0)
+                    r.get("official_rating", 35.0),
+                    (None if r.get("odds_is_real") is None else int(bool(r.get("odds_is_real")))),
+                    r.get("odds_captured_at"),
                 ))
 
-    def save_prediction(self, prediction_data: Dict[str, Any]):
+    # ------------------------------------------------------------------
+    # Contrat de prédiction persisté (Lot 1 — A03 / A04)
+    # ------------------------------------------------------------------
+    PREDICTION_CONTRACT_VERSION = 2
+
+    @staticmethod
+    def prediction_hash(prediction_data: Dict[str, Any]) -> str:
+        """Empreinte SHA-256 du contenu décisionnel d'un verrou (sélection,
+        bases, outsider, probabilités, horizon, moteur)."""
+        import hashlib
+        payload = {
+            "engine": prediction_data.get("engine_name"),
+            "horizon": prediction_data.get("horizon", "T15"),
+            "selection": list(prediction_data.get("selection", []) or []),
+            "bases": list(prediction_data.get("bases", []) or []),
+            "outsider": prediction_data.get("outsider_num"),
+            "probabilities": prediction_data.get("probabilities", {}) or {},
+        }
+        return hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
+
+    def save_prediction(self, prediction_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Écrit un verrou UNE SEULE FOIS. Un verrou existant pour
+        (course, moteur, horizon) n'est JAMAIS remplacé : l'écriture est
+        refusée (``REFUSED_EXISTING``) et journalisée. Une correction volontaire
+        passe par ``save_prediction_correction`` (table à part, non évaluée)."""
         horizon = prediction_data.get("horizon", "T15")
         pred_id = f"{prediction_data['race_id']}_{prediction_data['engine_name']}_{horizon}"
+        new_hash = self.prediction_hash(prediction_data)
         with self.transaction() as conn:
             cursor = conn.cursor()
+            cursor.execute("SELECT prediction_hash FROM predictions WHERE prediction_id = ?", (pred_id,))
+            row = cursor.fetchone()
+            if row is not None:
+                existing_hash = row["prediction_hash"]
+                print("PREDICTION_WRITE_REFUSED " + json.dumps({
+                    "prediction_id": pred_id, "existing_hash": existing_hash, "attempted_hash": new_hash,
+                    "identical": existing_hash == new_hash, "now_utc": datetime.utcnow().isoformat()}))
+                return {"action": "REFUSED_EXISTING", "prediction_id": pred_id, "hash": existing_hash,
+                        "identical": existing_hash == new_hash}
+            smart_tickets = prediction_data.get("smart_tickets")
             cursor.execute("""
-            INSERT OR REPLACE INTO predictions (
+            INSERT INTO predictions (
                 prediction_id, race_id, engine_name, horizon, created_at,
                 lock_time, selection_json, bases_json, outsider_num,
                 probabilities_json, metadata_json,
-                odds_real, priced_ratio, lock_time_utc
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                odds_real, priced_ratio, lock_time_utc,
+                confidence_stars, confidence_label, is_no_bet, is_master_couple,
+                smart_tickets_json, contract_version, prediction_hash
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 pred_id,
                 prediction_data["race_id"],
@@ -497,8 +577,40 @@ class TurfDatabase:
                 json.dumps(prediction_data.get("metadata", {})),
                 (None if prediction_data.get("odds_real") is None else int(bool(prediction_data.get("odds_real")))),
                 prediction_data.get("priced_ratio"),
-                prediction_data.get("lock_time_utc")
+                prediction_data.get("lock_time_utc"),
+                prediction_data.get("confidence_stars"),
+                prediction_data.get("confidence_label"),
+                (None if prediction_data.get("is_no_bet") is None else int(bool(prediction_data.get("is_no_bet")))),
+                (None if prediction_data.get("is_master_couple") is None else int(bool(prediction_data.get("is_master_couple")))),
+                json.dumps(smart_tickets) if smart_tickets is not None else None,
+                self.PREDICTION_CONTRACT_VERSION,
+                new_hash,
             ))
+            return {"action": "INSERTED", "prediction_id": pred_id, "hash": new_hash}
+
+    def save_prediction_correction(self, prediction_data: Dict[str, Any], reason: str) -> Dict[str, Any]:
+        """Correction VOLONTAIRE d'un verrou : version distincte, tracée,
+        jamais évaluée comme la prévision initiale (qui reste intacte)."""
+        horizon = prediction_data.get("horizon", "T15")
+        pred_id = f"{prediction_data['race_id']}_{prediction_data['engine_name']}_{horizon}"
+        new_hash = self.prediction_hash(prediction_data)
+        with self.transaction() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT prediction_hash FROM predictions WHERE prediction_id = ?", (pred_id,))
+            row = cursor.fetchone()
+            previous_hash = row["prediction_hash"] if row else None
+            smart_tickets = prediction_data.get("smart_tickets")
+            cursor.execute("""
+            INSERT INTO predictions_corrections (prediction_id, race_id, engine_name, horizon, recorded_at, reason,
+                previous_hash, new_hash, selection_json, bases_json, outsider_num, probabilities_json, metadata_json, smart_tickets_json)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (pred_id, prediction_data["race_id"], prediction_data["engine_name"], horizon,
+                  datetime.utcnow().isoformat(), reason, previous_hash, new_hash,
+                  json.dumps(prediction_data.get("selection", [])), json.dumps(prediction_data.get("bases", [])),
+                  prediction_data.get("outsider_num"), json.dumps(prediction_data.get("probabilities", {})),
+                  json.dumps(prediction_data.get("metadata", {})),
+                  json.dumps(smart_tickets) if smart_tickets is not None else None))
+            return {"action": "CORRECTION_RECORDED", "prediction_id": pred_id, "previous_hash": previous_hash, "hash": new_hash}
 
     # ------------------------------------------------------------------
     # Transparence éditoriale (« aucun chiffre retouché »)
@@ -959,6 +1071,15 @@ class TurfDatabase:
                 p["bases"] = json.loads(p["bases_json"]) if p["bases_json"] else []
                 p["probabilities"] = json.loads(p["probabilities_json"]) if p["probabilities_json"] else {}
                 p["metadata"] = json.loads(p["metadata_json"]) if p["metadata_json"] else {}
+                # Contrat v2 : champs absents => None (« non enregistré »),
+                # jamais une valeur favorable par défaut (A03).
+                p["is_no_bet"] = None if p.get("is_no_bet") is None else bool(p["is_no_bet"])
+                p["is_master_couple"] = None if p.get("is_master_couple") is None else bool(p["is_master_couple"])
+                try:
+                    p["smart_tickets"] = json.loads(p["smart_tickets_json"]) if p.get("smart_tickets_json") else None
+                except Exception:
+                    p["smart_tickets"] = None
+                p["contract_recorded"] = p.get("contract_version") is not None
                 preds.append(p)
             return preds
 
