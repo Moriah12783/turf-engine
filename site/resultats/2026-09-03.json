@@ -3,12 +3,12 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "42add54511c5b3a1e1aef516687e64178ec148ff",
-  "run_id": "34488464315",
+  "commit": "04bf8cd7e6a4bdb27cda3449856f7594add5900e",
+  "run_id": "34488764512",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-03",
- "genere_le_utc": "2026-09-10T14:21:31Z",
+ "genere_le_utc": "2026-09-10T14:24:46Z",
  "nb_courses": 33,
  "compte_par_statut": {
   "EN_ATTENTE": 0,
@@ -16,7 +16,7 @@
   "DEFINITIVE": 33,
   "ANNULEE": 0
  },
- "empreinte_sha256": "e0d0c0dd6b7ef660564a19029e0eede640ba66a945cafa82fc9eaa3e732e8c67",
+ "empreinte_sha256": "4ca75b3ada98b9a3e805f7bb6df642377bfffd5d0f0de5c67a1c29e4d96d527f",
  "courses": [
   {
    "course_id": "R1C1_03092026_ParisLongchamp",
@@ -29,10 +29,10 @@
     "libelle": "PRIX DE LONGCHAMP",
     "discipline": "PLAT",
     "distance_m": 2000,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T11:55:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "11:55 GMT (13:55 Paris)",
-    "partants_declares": null,
+    "partants_declares": 16,
     "partants_actifs": 16
    },
    "statut": {
@@ -291,7 +291,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:38Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T12:01:06Z",
     "derniere_modification_utc": "2026-09-10T12:12:38Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
     "version": 2,
@@ -350,18 +350,18 @@
     "libelle": "PRIX DE FONTENOY",
     "discipline": "PLAT",
     "distance_m": 1600,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T12:30:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "12:30 GMT (14:30 Paris)",
-    "partants_declares": null,
+    "partants_declares": 9,
     "partants_actifs": 9
    },
    "statut": {
     "code": "DEFINITIVE",
     "definitive": true,
-    "finalite": "LEGACY_NON_VERIFIEE",
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": null
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -479,19 +479,19 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": "PMU_LEGACY",
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/03092026"
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-09-03T12:46:10Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-09-10T14:23:59Z",
+    "verifiee_le_utc": "2026-09-10T14:23:59Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T12:46:10Z",
-    "derniere_modification_utc": "2026-09-03T12:46:10Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_modification_utc": "2026-09-10T14:23:59Z",
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -500,6 +500,24 @@
       "raison": "MIGRATION_LEGACY",
       "horodatage_utc": "2026-09-03T12:46:10Z",
       "source": "PMU_LEGACY",
+      "classement": [
+       8,
+       6,
+       9,
+       3,
+       7,
+       1,
+       2,
+       4,
+       5
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "CONFIRMATION_DEFINITIVE",
+      "horodatage_utc": "2026-09-10T14:23:59Z",
+      "source": "PMU_PROGRAMME",
       "classement": [
        8,
        6,
@@ -526,10 +544,10 @@
     "libelle": "PRIX DE LA CASCADE",
     "discipline": "PLAT",
     "distance_m": 1600,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T13:05:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "13:05 GMT (15:05 Paris)",
-    "partants_declares": null,
+    "partants_declares": 10,
     "partants_actifs": 9
    },
    "statut": {
@@ -739,7 +757,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:38Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T13:16:07Z",
     "derniere_modification_utc": "2026-09-10T12:12:38Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
     "version": 2,
@@ -790,10 +808,10 @@
     "libelle": "PRIX D'ARENBERG",
     "discipline": "PLAT",
     "distance_m": 1000,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T13:40:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "13:40 GMT (15:40 Paris)",
-    "partants_declares": null,
+    "partants_declares": 5,
     "partants_actifs": 5
    },
    "statut": {
@@ -884,7 +902,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:38Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T13:46:09Z",
     "derniere_modification_utc": "2026-09-10T12:12:38Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
     "version": 2,
@@ -931,18 +949,18 @@
     "libelle": "PRIX DE LIANCOURT",
     "discipline": "PLAT",
     "distance_m": 2100,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T14:15:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "14:15 GMT (16:15 Paris)",
-    "partants_declares": null,
+    "partants_declares": 14,
     "partants_actifs": 13
    },
    "statut": {
     "code": "DEFINITIVE",
     "definitive": true,
-    "finalite": "LEGACY_NON_VERIFIEE",
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": null
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -1123,19 +1141,19 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": "PMU_LEGACY",
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/03092026"
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-09-03T14:31:02Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-09-10T14:23:59Z",
+    "verifiee_le_utc": "2026-09-10T14:23:59Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T14:31:02Z",
-    "derniere_modification_utc": "2026-09-03T14:31:02Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_modification_utc": "2026-09-10T14:23:59Z",
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -1144,6 +1162,28 @@
       "raison": "MIGRATION_LEGACY",
       "horodatage_utc": "2026-09-03T14:31:02Z",
       "source": "PMU_LEGACY",
+      "classement": [
+       9,
+       11,
+       13,
+       4,
+       8,
+       7,
+       3,
+       6,
+       1,
+       10,
+       5,
+       14,
+       12
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "CONFIRMATION_DEFINITIVE",
+      "horodatage_utc": "2026-09-10T14:23:59Z",
+      "source": "PMU_PROGRAMME",
       "classement": [
        9,
        11,
@@ -1174,10 +1214,10 @@
     "libelle": "PRIX JOUBERT",
     "discipline": "PLAT",
     "distance_m": 2800,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T14:50:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "14:50 GMT (16:50 Paris)",
-    "partants_declares": null,
+    "partants_declares": 11,
     "partants_actifs": 11
    },
    "statut": {
@@ -1356,7 +1396,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:38Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T15:01:06Z",
     "derniere_modification_utc": "2026-09-10T12:12:38Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
     "version": 2,
@@ -1409,10 +1449,10 @@
     "libelle": "PRIX DE LA COCHERE",
     "discipline": "PLAT",
     "distance_m": 1600,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T15:25:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "15:25 GMT (17:25 Paris)",
-    "partants_declares": null,
+    "partants_declares": 13,
     "partants_actifs": 13
    },
    "statut": {
@@ -1610,7 +1650,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:38Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T15:31:03Z",
     "derniere_modification_utc": "2026-09-10T12:12:38Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
     "version": 2,
@@ -1666,18 +1706,18 @@
     "libelle": "PRIX GERALD DE GEOFFRE",
     "discipline": "PLAT",
     "distance_m": 3000,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T16:00:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "16:00 GMT (18:00 Paris)",
-    "partants_declares": null,
+    "partants_declares": 8,
     "partants_actifs": 8
    },
    "statut": {
     "code": "DEFINITIVE",
     "definitive": true,
-    "finalite": "LEGACY_NON_VERIFIEE",
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": null
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -1788,19 +1828,19 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": "PMU_LEGACY",
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/03092026"
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-09-03T16:16:02Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-09-10T14:23:59Z",
+    "verifiee_le_utc": "2026-09-10T14:23:59Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T16:16:02Z",
-    "derniere_modification_utc": "2026-09-03T16:16:02Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_modification_utc": "2026-09-10T14:23:59Z",
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -1809,6 +1849,23 @@
       "raison": "MIGRATION_LEGACY",
       "horodatage_utc": "2026-09-03T16:16:02Z",
       "source": "PMU_LEGACY",
+      "classement": [
+       7,
+       1,
+       2,
+       6,
+       4,
+       5,
+       8,
+       3
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "CONFIRMATION_DEFINITIVE",
+      "horodatage_utc": "2026-09-10T14:23:59Z",
+      "source": "PMU_PROGRAMME",
       "classement": [
        7,
        1,
@@ -1834,10 +1891,10 @@
     "libelle": "PRIX DE NEUILLY",
     "discipline": "PLAT",
     "distance_m": 2000,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T16:35:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "16:35 GMT (18:35 Paris)",
-    "partants_declares": null,
+    "partants_declares": 16,
     "partants_actifs": 15
    },
    "statut": {
@@ -2054,7 +2111,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:38Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T16:46:04Z",
     "derniere_modification_utc": "2026-09-10T12:12:38Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
     "version": 2,
@@ -2112,10 +2169,10 @@
     "libelle": "PRIX REMUS DE LA TOUR",
     "discipline": "PLAT",
     "distance_m": 2400,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T09:05:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "09:05 GMT (11:05 Paris)",
-    "partants_declares": null,
+    "partants_declares": 9,
     "partants_actifs": 9
    },
    "statut": {
@@ -2250,7 +2307,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:38Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T09:16:13Z",
     "derniere_modification_utc": "2026-09-10T12:12:38Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
     "version": 2,
@@ -2301,10 +2358,10 @@
     "libelle": "PRIX DE GRAVESON",
     "discipline": "PLAT",
     "distance_m": 2000,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T09:35:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "09:35 GMT (11:35 Paris)",
-    "partants_declares": null,
+    "partants_declares": 13,
     "partants_actifs": 13
    },
    "statut": {
@@ -2507,7 +2564,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:38Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T09:46:05Z",
     "derniere_modification_utc": "2026-09-10T12:12:38Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
     "version": 2,
@@ -2562,10 +2619,10 @@
     "libelle": "PRIX MIREILLE",
     "discipline": "PLAT",
     "distance_m": 1600,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T10:07:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "10:07 GMT (12:07 Paris)",
-    "partants_declares": null,
+    "partants_declares": 11,
     "partants_actifs": 11
    },
    "statut": {
@@ -2744,7 +2801,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:38Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T10:16:05Z",
     "derniere_modification_utc": "2026-09-10T12:12:38Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
     "version": 2,
@@ -2797,10 +2854,10 @@
     "libelle": "PRIX DES NEFLIERS",
     "discipline": "PLAT",
     "distance_m": 1600,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T10:45:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "10:45 GMT (12:45 Paris)",
-    "partants_declares": null,
+    "partants_declares": 13,
     "partants_actifs": 13
    },
    "statut": {
@@ -2808,7 +2865,7 @@
     "definitive": true,
     "finalite": "LEGACY_NON_VERIFIEE",
     "annulee": false,
-    "pmu_statut": null
+    "pmu_statut": "FIN_COURSE"
    },
    "classement": [
     {
@@ -2993,7 +3050,7 @@
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": "2026-09-03T11:01:05Z",
     "derniere_modification_utc": "2026-09-03T11:01:05Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
     "version": 1,
@@ -3035,18 +3092,18 @@
     "libelle": "PRIX ANDRE GREGORI",
     "discipline": "PLAT",
     "distance_m": 1600,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T11:13:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "11:13 GMT (13:13 Paris)",
-    "partants_declares": null,
+    "partants_declares": 14,
     "partants_actifs": 14
    },
    "statut": {
     "code": "DEFINITIVE",
     "definitive": true,
-    "finalite": "LEGACY_NON_VERIFIEE",
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": null
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -3229,19 +3286,19 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": "PMU_LEGACY",
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/03092026"
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-09-03T11:31:08Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-09-10T14:23:59Z",
+    "verifiee_le_utc": "2026-09-10T14:23:59Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T11:31:08Z",
-    "derniere_modification_utc": "2026-09-03T11:31:08Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_modification_utc": "2026-09-10T14:23:59Z",
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -3250,6 +3307,29 @@
       "raison": "MIGRATION_LEGACY",
       "horodatage_utc": "2026-09-03T11:31:08Z",
       "source": "PMU_LEGACY",
+      "classement": [
+       13,
+       10,
+       6,
+       1,
+       4,
+       9,
+       14,
+       2,
+       8,
+       11,
+       12,
+       3,
+       7,
+       5
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "CONFIRMATION_DEFINITIVE",
+      "horodatage_utc": "2026-09-10T14:23:59Z",
+      "source": "PMU_PROGRAMME",
       "classement": [
        13,
        10,
@@ -3281,18 +3361,18 @@
     "libelle": "PRIX VINCENT",
     "discipline": "PLAT",
     "distance_m": 1600,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T11:43:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "11:43 GMT (13:43 Paris)",
-    "partants_declares": null,
+    "partants_declares": 8,
     "partants_actifs": 7
    },
    "statut": {
     "code": "DEFINITIVE",
     "definitive": true,
-    "finalite": "LEGACY_NON_VERIFIEE",
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": null
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -3431,19 +3511,19 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": "PMU_LEGACY",
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/03092026"
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-09-03T12:01:12Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-09-10T14:23:59Z",
+    "verifiee_le_utc": "2026-09-10T14:23:59Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T12:01:12Z",
-    "derniere_modification_utc": "2026-09-03T12:01:12Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_modification_utc": "2026-09-10T14:23:59Z",
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -3452,6 +3532,22 @@
       "raison": "MIGRATION_LEGACY",
       "horodatage_utc": "2026-09-03T12:01:12Z",
       "source": "PMU_LEGACY",
+      "classement": [
+       4,
+       8,
+       2,
+       7,
+       1,
+       6,
+       5
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "CONFIRMATION_DEFINITIVE",
+      "horodatage_utc": "2026-09-10T14:23:59Z",
+      "source": "PMU_PROGRAMME",
       "classement": [
        4,
        8,
@@ -3476,18 +3572,18 @@
     "libelle": "PRIX DU PILON DU ROI",
     "discipline": "PLAT",
     "distance_m": 1000,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T12:15:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "12:15 GMT (14:15 Paris)",
-    "partants_declares": null,
+    "partants_declares": 10,
     "partants_actifs": 9
    },
    "statut": {
     "code": "DEFINITIVE",
     "definitive": true,
-    "finalite": "LEGACY_NON_VERIFIEE",
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": null
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -3675,19 +3771,19 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": "PMU_LEGACY",
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/03092026"
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-09-03T12:31:04Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-09-10T14:23:59Z",
+    "verifiee_le_utc": "2026-09-10T14:23:59Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T12:31:04Z",
-    "derniere_modification_utc": "2026-09-03T12:31:04Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_modification_utc": "2026-09-10T14:23:59Z",
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -3696,6 +3792,24 @@
       "raison": "MIGRATION_LEGACY",
       "horodatage_utc": "2026-09-03T12:31:04Z",
       "source": "PMU_LEGACY",
+      "classement": [
+       10,
+       2,
+       5,
+       8,
+       9,
+       6,
+       3,
+       4,
+       7
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "CONFIRMATION_DEFINITIVE",
+      "horodatage_utc": "2026-09-10T14:23:59Z",
+      "source": "PMU_PROGRAMME",
       "classement": [
        10,
        2,
@@ -3722,10 +3836,10 @@
     "libelle": "PRIX DU SYNDICAT DES PROPRIETAIRES DU SUD-EST",
     "discipline": "PLAT",
     "distance_m": 1000,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T12:47:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "12:47 GMT (14:47 Paris)",
-    "partants_declares": null,
+    "partants_declares": 9,
     "partants_actifs": 9
    },
    "statut": {
@@ -3860,7 +3974,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:38Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T12:56:05Z",
     "derniere_modification_utc": "2026-09-10T12:12:38Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
     "version": 2,
@@ -3911,10 +4025,10 @@
     "libelle": "PRIX DORIA DESBOIS",
     "discipline": "TROT_ATTELE",
     "distance_m": 2400,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T09:51:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "09:51 GMT (11:51 Paris)",
-    "partants_declares": null,
+    "partants_declares": 15,
     "partants_actifs": 15
    },
    "statut": {
@@ -4118,7 +4232,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:38Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T10:01:30Z",
     "derniere_modification_utc": "2026-09-10T12:12:38Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
     "version": 2,
@@ -4174,10 +4288,10 @@
     "libelle": "PRIX FAN IDOLE",
     "discipline": "TROT_ATTELE",
     "distance_m": 2550,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T10:25:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "10:25 GMT (12:25 Paris)",
-    "partants_declares": null,
+    "partants_declares": 13,
     "partants_actifs": 13
    },
    "statut": {
@@ -4365,7 +4479,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:38Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T10:46:16Z",
     "derniere_modification_utc": "2026-09-10T12:12:38Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
     "version": 2,
@@ -4423,10 +4537,10 @@
     "libelle": "PRIX ESPERANZA IDOLE",
     "discipline": "TROT_MONTE",
     "distance_m": 2550,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T10:58:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "10:58 GMT (12:58 Paris)",
-    "partants_declares": null,
+    "partants_declares": 16,
     "partants_actifs": 15
    },
    "statut": {
@@ -4637,7 +4751,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:38Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T11:16:13Z",
     "derniere_modification_utc": "2026-09-10T12:12:38Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
     "version": 2,
@@ -4703,10 +4817,10 @@
     "libelle": "PRIX JOUMBA DE GUEZ",
     "discipline": "TROT_ATTELE",
     "distance_m": 2400,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T11:28:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "11:28 GMT (13:28 Paris)",
-    "partants_declares": null,
+    "partants_declares": 10,
     "partants_actifs": 10
    },
    "statut": {
@@ -4875,7 +4989,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:38Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T11:46:16Z",
     "derniere_modification_utc": "2026-09-10T12:12:38Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
     "version": 2,
@@ -4929,10 +5043,10 @@
     "libelle": "PRIX GO ON BOY",
     "discipline": "TROT_ATTELE",
     "distance_m": 2550,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T12:12:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "12:12 GMT (14:12 Paris)",
-    "partants_declares": null,
+    "partants_declares": 14,
     "partants_actifs": 14
    },
    "statut": {
@@ -5125,7 +5239,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:38Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T12:31:05Z",
     "derniere_modification_utc": "2026-09-10T12:12:38Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
     "version": 2,
@@ -5183,10 +5297,10 @@
     "libelle": "PRIX SOAL RACING",
     "discipline": "TROT_ATTELE",
     "distance_m": 2550,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T12:47:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "12:47 GMT (14:47 Paris)",
-    "partants_declares": null,
+    "partants_declares": 17,
     "partants_actifs": 17
    },
    "statut": {
@@ -5406,7 +5520,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:38Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T12:56:06Z",
     "derniere_modification_utc": "2026-09-10T12:12:38Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
     "version": 2,
@@ -5465,10 +5579,10 @@
     "libelle": "GRAND PRIX DE BEAUMONT DE LOMAGNE",
     "discipline": "TROT_ATTELE",
     "distance_m": 2550,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T13:22:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "13:22 GMT (15:22 Paris)",
-    "partants_declares": null,
+    "partants_declares": 11,
     "partants_actifs": 11
    },
    "statut": {
@@ -5656,7 +5770,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:38Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T13:29:57Z",
     "derniere_modification_utc": "2026-09-10T12:12:38Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
     "version": 2,
@@ -5708,18 +5822,18 @@
     "libelle": "PRIX IDAO DE TILLARD",
     "discipline": "TROT_ATTELE",
     "distance_m": 2400,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T13:57:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "13:57 GMT (15:57 Paris)",
-    "partants_declares": null,
+    "partants_declares": 9,
     "partants_actifs": 9
    },
    "statut": {
     "code": "DEFINITIVE",
     "definitive": true,
-    "finalite": "LEGACY_NON_VERIFIEE",
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": null
+    "pmu_statut": "FIN_COURSE"
    },
    "classement": [
     {
@@ -5837,19 +5951,19 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": "PMU_LEGACY",
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/03092026"
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-09-03T14:16:05Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-09-10T14:23:59Z",
+    "verifiee_le_utc": "2026-09-10T14:23:59Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T14:16:05Z",
-    "derniere_modification_utc": "2026-09-03T14:16:05Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_modification_utc": "2026-09-10T14:23:59Z",
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -5858,6 +5972,24 @@
       "raison": "MIGRATION_LEGACY",
       "horodatage_utc": "2026-09-03T14:16:05Z",
       "source": "PMU_LEGACY",
+      "classement": [
+       1,
+       7,
+       9,
+       5,
+       2,
+       8,
+       6,
+       3,
+       4
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "CONFIRMATION_DEFINITIVE",
+      "horodatage_utc": "2026-09-10T14:23:59Z",
+      "source": "PMU_PROGRAMME",
       "classement": [
        1,
        7,
@@ -5884,10 +6016,10 @@
     "libelle": "PRIX DE NANTES",
     "discipline": "TROT_ATTELE",
     "distance_m": 2750,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T14:32:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "14:32 GMT (16:32 Paris)",
-    "partants_declares": null,
+    "partants_declares": 13,
     "partants_actifs": 13
    },
    "statut": {
@@ -6071,7 +6203,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:38Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T14:46:07Z",
     "derniere_modification_utc": "2026-09-10T12:12:38Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
     "version": 2,
@@ -6125,10 +6257,10 @@
     "libelle": "PRIX DE VERTOU",
     "discipline": "TROT_ATTELE",
     "distance_m": 2650,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T15:07:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "15:07 GMT (17:07 Paris)",
-    "partants_declares": null,
+    "partants_declares": 12,
     "partants_actifs": 12
    },
    "statut": {
@@ -6309,7 +6441,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:38Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T15:16:12Z",
     "derniere_modification_utc": "2026-09-10T12:12:38Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
     "version": 2,
@@ -6360,10 +6492,10 @@
     "libelle": "PRIX DE MACHECOUL",
     "discipline": "TROT_ATTELE",
     "distance_m": 2650,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T15:42:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "15:42 GMT (17:42 Paris)",
-    "partants_declares": null,
+    "partants_declares": 16,
     "partants_actifs": 16
    },
    "statut": {
@@ -6576,7 +6708,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:38Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T16:01:09Z",
     "derniere_modification_utc": "2026-09-10T12:12:38Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
     "version": 2,
@@ -6644,10 +6776,10 @@
     "libelle": "PRIX DE NORT SUR ERDRE",
     "discipline": "TROT_ATTELE",
     "distance_m": 2650,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T16:17:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "16:17 GMT (18:17 Paris)",
-    "partants_declares": null,
+    "partants_declares": 11,
     "partants_actifs": 11
    },
    "statut": {
@@ -6825,7 +6957,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:38Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T16:31:11Z",
     "derniere_modification_utc": "2026-09-10T12:12:38Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
     "version": 2,
@@ -6877,10 +7009,10 @@
     "libelle": "PRIX DE CORDEMAIS",
     "discipline": "TROT_ATTELE",
     "distance_m": 2650,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T16:52:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "16:52 GMT (18:52 Paris)",
-    "partants_declares": null,
+    "partants_declares": 13,
     "partants_actifs": 13
    },
    "statut": {
@@ -7068,7 +7200,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:38Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T17:01:03Z",
     "derniere_modification_utc": "2026-09-10T12:12:38Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
     "version": 2,
@@ -7120,10 +7252,10 @@
     "libelle": "PRIX DE PONTCHATEAU",
     "discipline": "TROT_MONTE",
     "distance_m": 2775,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T17:26:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "17:26 GMT (19:26 Paris)",
-    "partants_declares": null,
+    "partants_declares": 15,
     "partants_actifs": 15
    },
    "statut": {
@@ -7317,7 +7449,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:38Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T17:46:03Z",
     "derniere_modification_utc": "2026-09-10T12:12:38Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
     "version": 2,
@@ -7371,10 +7503,10 @@
     "libelle": "PRIX DE PORNICHET",
     "discipline": "TROT_ATTELE",
     "distance_m": 2650,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T17:59:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "17:59 GMT (19:59 Paris)",
-    "partants_declares": null,
+    "partants_declares": 14,
     "partants_actifs": 13
    },
    "statut": {
@@ -7610,7 +7742,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:38Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T18:16:01Z",
     "derniere_modification_utc": "2026-09-10T12:12:38Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
     "version": 2,
@@ -7666,10 +7798,10 @@
     "libelle": "PRIX DE SAVENAY",
     "discipline": "TROT_MONTE",
     "distance_m": 2775,
-    "heure_depart_utc": null,
-    "heure_depart_source": null,
+    "heure_depart_utc": "2026-09-03T18:33:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "18:33 GMT (20:33 Paris)",
-    "partants_declares": null,
+    "partants_declares": 11,
     "partants_actifs": 11
    },
    "statut": {
@@ -7791,7 +7923,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:38Z",
     "enregistree_ancien_systeme_utc": "2026-09-03T18:38:21Z",
     "derniere_modification_utc": "2026-09-10T12:12:38Z",
-    "derniere_verification_utc": "2026-09-10T12:12:38Z"
+    "derniere_verification_utc": "2026-09-10T14:23:59Z"
    },
    "correction": {
     "version": 2,
