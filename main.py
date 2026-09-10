@@ -186,8 +186,9 @@ def main():
 
     # 2bis. Export JSON des resultats (livrable partenaire) : site/resultats/
     try:
-        exp = export_results_json(db, site_dir, days=8)
-        print(f"[+] Export resultats : {len(exp['jours_ecrits'])} journee(s) ecrite(s), {exp['jours_indexes']} indexee(s) (site/resultats/).")
+        exp = export_results_json(db, site_dir)
+        print(f"[+] Export resultats : {len(exp['jours_ecrits'])} journee(s) ecrite(s), {exp['jours_indexes']} indexee(s), "
+              f"{exp['nb_corrections']} correction(s) inventoriee(s) (site/resultats/).")
     except Exception as exc:
         print(f"[!] Export resultats impossible : {exc}")
 

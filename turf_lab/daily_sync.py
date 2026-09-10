@@ -166,6 +166,22 @@ class DailySyncManager:
         ph = (gh + off) % 24
         return f"{gh:02d}:{gm:02d} GMT ({ph:02d}:{gm:02d} Paris)", f"{date_str_db}T{gh:02d}:{gm:02d}:00Z"
 
+    @classmethod
+    def pmu_start_time_utc(cls, course_obj: Dict[str, Any], date_str_db: str) -> Optional[str]:
+        """Heure de départ UTC (ISO-8601, suffixe Z) UNIQUEMENT si le flux PMU la
+        fournit (``heureDepart`` en ms, ou libellé ``heure`` explicite). Le
+        repli horaire « standard » de parse_pmu_time sert à l'affichage, jamais
+        à l'identité exportée : aucune heure inventée (retour partenaire, point 2)."""
+        h_dep = course_obj.get("heureDepart")
+        if isinstance(h_dep, (int, float)) and not isinstance(h_dep, bool) and h_dep > 0:
+            dt_utc = datetime.utcfromtimestamp(h_dep / 1000.0 if h_dep > 1e11 else h_dep)
+            return dt_utc.replace(microsecond=0).isoformat() + "Z"
+        h_str = course_obj.get("heure") or course_obj.get("heureTexte") or course_obj.get("heureDepartString")
+        if isinstance(h_str, str) and h_str.strip():
+            _display, iso = cls.parse_pmu_time(course_obj, date_str_db, 0)
+            return iso if iso.endswith("Z") else iso + "Z"
+        return None
+
     # ------------------------------------------------------------------
     # Fenêtres de verrouillage par horizon (en minutes avant le départ).
     # Une petite tolérance absorbe la latence des crons GitHub Actions
@@ -461,6 +477,13 @@ class DailySyncManager:
                 race = self.db.get_race(race_id)
                 if not race:
                     continue
+                # Identité horaire depuis la source PMU (heureDepart), statut brut,
+                # partants déclarés — sans toucher aux pronostics ni aux cotes.
+                start_iso = self.pmu_start_time_utc(c, race.get("date") or target_date.strftime("%Y-%m-%d"))
+                if self.db.update_race_identity(race_id, start_time_utc=start_iso,
+                                                pmu_statut=str(c.get("statut") or "") or None,
+                                                declared_runners=c.get("nombreDeclaresPartants")):
+                    stats["identites_completees"] = stats.get("identites_completees", 0) + 1
                 active = [x["num"] for x in self.db.get_runners(race_id) if not x.get("is_non_partant")]
                 reading = read_arrival(c, None, active or None, source=SOURCE_PROGRAMME)
                 stats["results_checked"] += 1
@@ -529,9 +552,8 @@ class DailySyncManager:
                 rope = "DROITE" if "DROITE" in corde else "GAUCHE"
                 autostart = "AUTOSTART" in c.get("specialite", "")
 
-                time_display, start_iso = self.parse_pmu_time(c, date_str_db, c_num)
-                if start_iso and not start_iso.endswith("Z") and "+" not in start_iso:
-                    start_iso = start_iso + "Z"
+                time_display, _start_iso = self.parse_pmu_time(c, date_str_db, c_num)
+                start_iso = self.pmu_start_time_utc(c, date_str_db)  # None si le flux ne donne pas l'heure
 
                 race_data = {
                     "race_id": race_id,
@@ -565,6 +587,12 @@ class DailySyncManager:
                     # plus — est relu à chaque passe : complément de classement,
                     # correction après réclamation, annulation. Chaque changement
                     # crée une version, l'ancienne reste dans l'historique.
+                    # Identité horaire (retour partenaire, point 2) : une course
+                    # gelée avant l'ajout de start_time_utc reçoit son heure de
+                    # départ UTC depuis heureDepart du flux — jamais depuis l'affichage.
+                    if start_iso and (not existing_race.get("start_time_utc") or existing_race.get("declared_runners") is None):
+                        self.db.update_race_identity(race_id, start_time_utc=start_iso,
+                                                     pmu_statut=race_data["pmu_statut"], declared_runners=race_data["declared_runners"])
                     active_prev = [x["num"] for x in self.db.get_runners(race_id) if not x.get("is_non_partant")]
                     reading_prev = read_arrival(c, None, active_prev or None, source=SOURCE_PROGRAMME)
                     has_reading = reading_prev.statut in (STATUT_PROVISOIRE, STATUT_DEFINITIVE) and bool(reading_prev.ranking)

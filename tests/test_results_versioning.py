@@ -139,6 +139,8 @@ def test_migration_legacy_idempotente():
     assert cur["ranking"] == [{"rang": 1, "num": 5, "dead_heat": False}, {"rang": 2, "num": 3, "dead_heat": False},
                               {"rang": 3, "num": 9, "dead_heat": False}]
     assert cur["arrival_order"] == [5, 3, 9] and cur["first_seen_at"] == "2026-09-01T14:00:00"
+    # Finalité NON vérifiée : jamais antidatée (definitive_at NULL), horodatage ancien conservé à part
+    assert cur["finalite"] == "LEGACY_NON_VERIFIEE" and cur["definitive_at"] is None and cur["legacy_recorded_at"] == "2026-09-01T14:00:00"
     assert db.get_finished_races() == ["R1C1_01092026_X"]
     hist = db.get_result_history("R1C1_01092026_X")
     assert len(hist) == 1 and hist[0]["reason"] == "MIGRATION_LEGACY"
@@ -234,6 +236,15 @@ def test_sync_cycle_complet():
     assert s["races_frozen"] == 1 and s["results_resolved"] == 0, s
     assert mgr.fetcher.calls["participants"] == before_calls["participants"]
     assert db.get_result(RID)["version"] == 2
+
+    # Passe D bis : identité horaire d'une course gelée SANS heure UTC (héritée) complétée depuis heureDepart
+    with db.transaction() as conn:
+        conn.execute("UPDATE races SET start_time_utc = NULL, declared_runners = NULL WHERE race_id = ?", (RID,))
+    assert db.get_race(RID)["start_time_utc"] is None
+    mgr.sync_date(NOW)
+    race = db.get_race(RID)
+    assert race["start_time_utc"] and race["start_time_utc"].endswith("Z") and race["declared_runners"] == 8, race
+    assert db.get_result(RID)["version"] == 2  # aucune version parasite
 
     # Passe E : CORRECTION publiée sur une course gelée (réclamation) => version 3, sans dégeler les pronostics
     mgr.fetcher.course_state["ordreArrivee"] = [[2], [4], [7], [1, 8], [3]]

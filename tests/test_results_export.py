@@ -61,9 +61,11 @@ def test_structure_du_fichier_journalier():
     assert c1["course_id"] == "R1C1_09092026_ANGERS"
     assert c1["identite"] == {"date": DAY, "reunion": 1, "course": 1, "code": "R1C1", "hippodrome": "ANGERS", "libelle": "Prix 1",
                               "discipline": "TROT_ATTELE", "distance_m": 2850, "heure_depart_utc": "2026-09-09T11:55:00Z",
+                              "heure_depart_source": "PMU_HEUREDEPART",
                               "heure_depart_affichee": "11:55 GMT (13:55 Paris)", "partants_declares": 5, "partants_actifs": 4}
     # Statut + classement structuré (ex æquo) + non classés + non partants
-    assert c1["statut"] == {"code": "DEFINITIVE", "definitive": True, "annulee": False, "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"}
+    assert c1["statut"] == {"code": "DEFINITIVE", "definitive": True, "finalite": "VERIFIEE_PMU", "annulee": False,
+                            "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"}
     assert c1["classement"] == [{"rang": 1, "num": 4, "nom": "H4", "dead_heat": False},
                                 {"rang": 2, "num": 1, "nom": "H1", "dead_heat": True},
                                 {"rang": 2, "num": 2, "nom": "H2", "dead_heat": True}]
@@ -74,6 +76,7 @@ def test_structure_du_fichier_journalier():
     assert c1["rapports"]["disponibles"] and c1["rapports"]["simple_gagnant"] == {"4": 7.2} and c1["rapports"]["simple_place"] == {"4": 2.1}
     assert c1["source"]["canal"] == "PMU_PROGRAMME" and c1["source"]["url_origine"].startswith("https://")
     assert c1["horodatages"] == {"premiere_lecture_utc": "2026-09-09T12:00:00Z", "definitive_depuis_utc": "2026-09-09T12:09:00Z",
+                                 "verifiee_le_utc": "2026-09-09T12:09:00Z", "enregistree_ancien_systeme_utc": None,
                                  "derniere_modification_utc": "2026-09-09T12:09:00Z", "derniere_verification_utc": "2026-09-09T12:09:00Z"}
     # Le 2e rang publié (2 seul) est devenu « 1 et 2 ex æquo » : un rang déjà
     # publié a changé => comptée comme correction, et passage en définitive.
@@ -82,7 +85,8 @@ def test_structure_du_fichier_journalier():
         (1, "PROVISOIRE", "INITIAL", [4, 2]), (2, "DEFINITIVE", "CORRECTION_CLASSEMENT", [4, 1, 2])]
 
     # Provisoire : exposée comme telle, jamais « définitive »
-    assert c2["statut"]["code"] == "PROVISOIRE" and c2["statut"]["definitive"] is False and c2["arrivee"] == [1, 2, 3]
+    assert c2["statut"]["code"] == "PROVISOIRE" and c2["statut"]["definitive"] is False and c2["statut"]["finalite"] is None and c2["arrivee"] == [1, 2, 3]
+    assert payload["version_code"]["depot"] == "Moriah12783/turf-engine" and "commit" in payload["version_code"]
     assert c2["horodatages"]["definitive_depuis_utc"] is None and c2["rapports"]["disponibles"] is False
     # En attente : structure présente, classement vide, version 0
     assert c3["statut"]["code"] == "EN_ATTENTE" and c3["classement"] == [] and c3["correction"]["version"] == 0
@@ -112,6 +116,21 @@ def test_empreinte_et_fichiers():
     with open(os.path.join(site, "resultats", "index.json"), encoding="utf-8") as f:
         index = json.load(f)
     assert list(index["journees"]) == [DAY, "2026-08-01"]
+    assert index["nb_journees"] == 2 and index["inventaire_corrections"]["fichier"] == "resultats/corrections.json"
+    # Inventaire des corrections : l'événement CORRECTION_CLASSEMENT de C1, avec avant/après
+    with open(os.path.join(site, "resultats", "corrections.json"), encoding="utf-8") as f:
+        inv = json.load(f)
+    assert inv["nb_corrections"] == 1 == index["inventaire_corrections"]["nb_corrections"]
+    ev = inv["corrections"][0]
+    assert ev["course_id"] == "R1C1_09092026_ANGERS" and ev["raison"] == "CORRECTION_CLASSEMENT"
+    assert (ev["version_avant"], ev["version_apres"]) == (1, 2) and (ev["statut_avant"], ev["statut_apres"]) == ("PROVISOIRE", "DEFINITIVE")
+    assert ev["classement_avant"] == [4, 2] and ev["classement_apres"] == [4, 1, 2] and ev["incidents_apres"][0]["num"] == 3
+    assert inv["compte_par_raison"] == {"CORRECTION_CLASSEMENT": 1, "INITIAL": 2}
+    canon = json.dumps(inv["corrections"], ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    assert hashlib.sha256(canon).hexdigest() == index["inventaire_corrections"]["empreinte_sha256"]
+    # Sans limite de jours : toutes les journées présentes en base sont écrites
+    site2 = tempfile.mkdtemp()
+    assert export_results_json(db, site2, today=datetime(2026, 10, 30, 9, 0))["jours_ecrits"] == [DAY]
     print("  [OK] test_empreinte_et_fichiers")
 
 

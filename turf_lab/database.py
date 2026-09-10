@@ -177,6 +177,15 @@ class TurfDatabase:
                 "ALTER TABLE race_results ADD COLUMN definitive_at TEXT",
                 "ALTER TABLE race_results ADD COLUMN updated_at TEXT",
                 "ALTER TABLE race_results ADD COLUMN last_checked_at TEXT",
+                # Retour partenaire du 10/09 : distinguer « définitif selon l'ancien
+                # système » et « finalité vérifiée par le nouveau lecteur ».
+                #   finalite          : VERIFIEE_PMU | LEGACY_NON_VERIFIEE | PROVISOIRE | ANNULEE
+                #   verified_at       : première lecture DEFINITIVE portée par le drapeau PMU
+                #   legacy_recorded_at: horodatage de l'ancien système (jamais présenté
+                #                       comme une validation nouvelle)
+                "ALTER TABLE race_results ADD COLUMN finalite TEXT",
+                "ALTER TABLE race_results ADD COLUMN verified_at TEXT",
+                "ALTER TABLE race_results ADD COLUMN legacy_recorded_at TEXT",
             ):
                 try:
                     cursor.execute(ddl)
@@ -221,10 +230,13 @@ class TurfDatabase:
                     dq = []
                 incidents = [{"num": int(n), "type": "DISQUALIFIE"} for n in dq]
                 rec = row["recorded_at"]
+                # definitive_at reste NULL : l'ancien système n'a jamais vérifié la
+                # finalité PMU. L'horodatage ancien est conservé à part.
                 cursor.execute("""
                     UPDATE race_results SET statut = 'DEFINITIVE', version = 1, nb_corrections = 0,
                         source = 'PMU_LEGACY', ranking_json = ?, incidents_json = ?, non_partants_json = '[]',
-                        first_seen_at = ?, definitive_at = ?, updated_at = ?, last_checked_at = ?
+                        first_seen_at = ?, definitive_at = NULL, updated_at = ?, last_checked_at = ?,
+                        finalite = 'LEGACY_NON_VERIFIEE', verified_at = NULL, legacy_recorded_at = ?
                     WHERE race_id = ?
                 """, (json.dumps(ranking), json.dumps(incidents), rec, rec, rec, rec, row["race_id"]))
                 cursor.execute("""
@@ -232,6 +244,35 @@ class TurfDatabase:
                         incidents_json, non_partants_json, source, reason, recorded_at)
                     VALUES (?, 1, 'DEFINITIVE', NULL, ?, ?, '[]', 'PMU_LEGACY', 'MIGRATION_LEGACY', ?)
                 """, (row["race_id"], json.dumps(ranking), json.dumps(incidents), rec))
+
+            # Réparation idempotente des lignes déjà versionnées avant l'ajout de
+            # `finalite` (production du 10/09) : on recalcule la finalité depuis
+            # l'historique, sans toucher au classement ni aux versions.
+            cursor.execute("SELECT race_id, statut, source, version, recorded_at, definitive_at FROM race_results WHERE finalite IS NULL")
+            for row in cursor.fetchall():
+                race_id = row["race_id"]
+                cursor.execute("""SELECT version, statut, source, reason, recorded_at FROM race_results_history
+                                  WHERE race_id = ? ORDER BY version ASC""", (race_id,))
+                hist = [dict(h) for h in cursor.fetchall()]
+                legacy_rows = [h for h in hist if h["reason"] == "MIGRATION_LEGACY"]
+                legacy_at = legacy_rows[0]["recorded_at"] if legacy_rows else None
+                verified = next((h for h in hist if h["statut"] == "DEFINITIVE" and h["source"] != "PMU_LEGACY"
+                                 and h["reason"] != "MIGRATION_LEGACY"), None)
+                if row["statut"] == "ANNULEE":
+                    finalite, verified_at, definitive_at = "ANNULEE", None, None
+                elif row["statut"] == "PROVISOIRE":
+                    finalite, verified_at, definitive_at = "PROVISOIRE", None, None
+                elif verified is not None:
+                    finalite, verified_at, definitive_at = "VERIFIEE_PMU", verified["recorded_at"], verified["recorded_at"]
+                elif legacy_at is not None:
+                    finalite, verified_at, definitive_at = "LEGACY_NON_VERIFIEE", None, None
+                else:
+                    # Ligne écrite par le nouveau lecteur sans historique lisible :
+                    # on garde definitive_at tel quel comme preuve.
+                    finalite, verified_at, definitive_at = "VERIFIEE_PMU", row["definitive_at"] or row["recorded_at"], row["definitive_at"] or row["recorded_at"]
+                cursor.execute("""UPDATE race_results SET finalite = ?, verified_at = ?, definitive_at = ?,
+                                  legacy_recorded_at = COALESCE(legacy_recorded_at, ?) WHERE race_id = ?""",
+                               (finalite, verified_at, definitive_at, legacy_at, race_id))
 
     def save_race(self, race_data: Dict[str, Any]):
         with self.transaction() as conn:
@@ -262,6 +303,29 @@ class TurfDatabase:
                 race_data.get("pmu_statut"),
                 race_data.get("declared_runners"),
             ))
+
+    def update_race_identity(self, race_id: str, start_time_utc: Optional[str] = None,
+                             pmu_statut: Optional[str] = None, declared_runners: Optional[int] = None) -> bool:
+        """Complète l'identité d'une course (heure de départ UTC, statut PMU brut,
+        partants déclarés) depuis la source PMU, SANS toucher aux partants, aux
+        cotes ni aux pronostics. Utilisé pour les courses gelées et la
+        re-vérification. Retourne True si quelque chose a changé."""
+        race = self.get_race(race_id)
+        if not race:
+            return False
+        sets, vals = [], []
+        if start_time_utc and race.get("start_time_utc") != start_time_utc:
+            sets.append("start_time_utc = ?"); vals.append(start_time_utc)
+        if pmu_statut and race.get("pmu_statut") != pmu_statut:
+            sets.append("pmu_statut = ?"); vals.append(pmu_statut)
+        if declared_runners is not None and race.get("declared_runners") != declared_runners:
+            sets.append("declared_runners = ?"); vals.append(int(declared_runners))
+        if not sets:
+            return False
+        vals.append(race_id)
+        with self.transaction() as conn:
+            conn.cursor().execute(f"UPDATE races SET {', '.join(sets)} WHERE race_id = ?", vals)
+        return True
 
     def update_race_status(self, race_id: str, status: str, pmu_statut: Optional[str] = None):
         with self.transaction() as conn:
@@ -520,6 +584,9 @@ class TurfDatabase:
         d["version"] = int(d.get("version") or 1)
         d["nb_corrections"] = int(d.get("nb_corrections") or 0)
         d["source"] = d.get("source") or "PMU_LEGACY"
+        if not d.get("finalite"):
+            d["finalite"] = {"PROVISOIRE": "PROVISOIRE", "ANNULEE": "ANNULEE"}.get(
+                d["statut"], "VERIFIEE_PMU" if d.get("verified_at") else "LEGACY_NON_VERIFIEE")
         return d
 
     def get_result_history(self, race_id: str) -> List[Dict[str, Any]]:
@@ -568,7 +635,8 @@ class TurfDatabase:
                 if current and current["statut"] != STATUT_ANNULEE:
                     version = current["version"] + 1
                     cursor.execute("""UPDATE race_results SET statut = 'ANNULEE', version = ?, pmu_statut = ?,
-                                      updated_at = ?, last_checked_at = ?, source = ?, source_url = COALESCE(?, source_url)
+                                      updated_at = ?, last_checked_at = ?, source = ?, source_url = COALESCE(?, source_url),
+                                      finalite = 'ANNULEE'
                                       WHERE race_id = ?""",
                                    (version, reading.pmu_statut, now, now, reading.source or current["source"], source_url, race_id))
                     cursor.execute("""INSERT INTO race_results_history (race_id, version, statut, pmu_statut, ranking_json,
@@ -590,6 +658,9 @@ class TurfDatabase:
         flat_json = json.dumps(reading.flat_arrival())
         dq_json = json.dumps(reading.disqualified())
         race_status = "FINISHED" if reading.statut == STATUT_DEFINITIVE else "ARRIVEE_PROVISOIRE"
+        # Finalité : une lecture DEFINITIVE portée par le drapeau PMU est la
+        # preuve de vérification ; une lecture PROVISOIRE ne prouve rien.
+        reading_verified = reading.statut == STATUT_DEFINITIVE and (reading.source or "") != "PMU_LEGACY"
 
         with self.transaction() as conn:
             cursor = conn.cursor()
@@ -597,11 +668,14 @@ class TurfDatabase:
                 cursor.execute("""
                 INSERT INTO race_results (race_id, arrival_order_json, disqualified_json, recorded_at,
                     statut, version, nb_corrections, source, source_url, pmu_statut, ranking_json, incidents_json,
-                    non_partants_json, first_seen_at, definitive_at, updated_at, last_checked_at)
-                VALUES (?, ?, ?, ?, ?, 1, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    non_partants_json, first_seen_at, definitive_at, updated_at, last_checked_at,
+                    finalite, verified_at, legacy_recorded_at)
+                VALUES (?, ?, ?, ?, ?, 1, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL)
                 """, (race_id, flat_json, dq_json, now, reading.statut, reading.source, source_url, reading.pmu_statut,
                       ranking_json, incidents_json, np_json, now,
-                      now if reading.statut == STATUT_DEFINITIVE else None, now, now))
+                      now if reading_verified else None, now, now,
+                      "VERIFIEE_PMU" if reading_verified else "PROVISOIRE",
+                      now if reading_verified else None))
                 cursor.execute("""INSERT INTO race_results_history (race_id, version, statut, pmu_statut, ranking_json,
                                   incidents_json, non_partants_json, source, reason, recorded_at)
                                   VALUES (?, 1, ?, ?, ?, ?, ?, ?, 'INITIAL', ?)""",
@@ -612,32 +686,58 @@ class TurfDatabase:
                 self._save_rapports(cursor, race_id, rapports)
                 return {"action": "INITIAL", "version": 1, "reason": "INITIAL", "statut": reading.statut}
 
+            cmp = compare_rankings(current["ranking"], reading.ranking, current["incidents"], reading.incidents,
+                                   current["non_partants"], reading.non_partants)
+
             # Une arrivée DEFINITIVE ne redevient jamais PROVISOIRE.
             if current["statut"] == STATUT_DEFINITIVE and reading.statut == STATUT_PROVISOIRE:
-                cmp_only = compare_rankings(current["ranking"], reading.ranking, current["incidents"], reading.incidents)
-                if cmp_only in (CMP_IDENTIQUE, CMP_REGRESSION):
-                    cursor.execute("UPDATE race_results SET last_checked_at = ? WHERE race_id = ?", (now, race_id))
+                cursor.execute("UPDATE race_results SET last_checked_at = ? WHERE race_id = ?", (now, race_id))
+                if cmp in (CMP_IDENTIQUE, CMP_REGRESSION):
                     self._save_rapports(cursor, race_id, rapports)
                     return {"action": "UNCHANGED", "version": current["version"], "reason": None, "statut": current["statut"]}
                 # Classement différent mais source non définitive : on ne touche
                 # pas à la version définitive, on signale seulement.
-                cursor.execute("UPDATE race_results SET last_checked_at = ? WHERE race_id = ?", (now, race_id))
-                return {"action": "DIVERGENCE_PROVISOIRE", "version": current["version"], "reason": cmp_only, "statut": current["statut"]}
+                return {"action": "DIVERGENCE_PROVISOIRE", "version": current["version"], "reason": cmp, "statut": current["statut"]}
 
-            cmp = compare_rankings(current["ranking"], reading.ranking, current["incidents"], reading.incidents)
             statut_up = current["statut"] == STATUT_PROVISOIRE and reading.statut == STATUT_DEFINITIVE
+            already_verified = bool(current.get("verified_at"))
 
             if cmp == CMP_REGRESSION and not statut_up:
+                # Retrait INEXPLIQUÉ d'un cheval classé (aucun incident, aucune
+                # non-partance) sur un préfixe strict : source partielle ou
+                # périmée, ignorée. (Un retrait expliqué est une CORRECTION.)
                 cursor.execute("UPDATE race_results SET last_checked_at = ? WHERE race_id = ?", (now, race_id))
                 return {"action": "IGNORED_REGRESSION", "version": current["version"], "reason": cmp, "statut": current["statut"]}
+
             if cmp == CMP_IDENTIQUE and not statut_up:
+                if reading_verified and not already_verified:
+                    # PREUVE DE REVALIDATION : classement identique, mais c'est la
+                    # première fois que le nouveau lecteur voit la finalité PMU
+                    # (ligne héritée de l'ancien système). Version dédiée,
+                    # ancienne version conservée, source/URL/statut PMU enregistrés.
+                    version = current["version"] + 1
+                    cursor.execute("""
+                    UPDATE race_results SET version = ?, source = ?, source_url = COALESCE(?, source_url), pmu_statut = ?,
+                        finalite = 'VERIFIEE_PMU', verified_at = ?, definitive_at = ?, updated_at = ?, last_checked_at = ?
+                    WHERE race_id = ?
+                    """, (version, reading.source, source_url, reading.pmu_statut, now, now, now, now, race_id))
+                    cursor.execute("""INSERT INTO race_results_history (race_id, version, statut, pmu_statut, ranking_json,
+                                      incidents_json, non_partants_json, source, reason, recorded_at)
+                                      VALUES (?, ?, 'DEFINITIVE', ?, ?, ?, ?, ?, 'CONFIRMATION_DEFINITIVE', ?)""",
+                                   (race_id, version, reading.pmu_statut, ranking_json, incidents_json, np_json,
+                                    reading.source, now))
+                    cursor.execute("UPDATE races SET status = 'FINISHED', pmu_statut = ? WHERE race_id = ?",
+                                   (reading.pmu_statut or None, race_id))
+                    self._save_rapports(cursor, race_id, rapports)
+                    return {"action": "VERSION", "version": version, "reason": "CONFIRMATION_DEFINITIVE", "statut": STATUT_DEFINITIVE}
                 cursor.execute("UPDATE race_results SET last_checked_at = ? WHERE race_id = ?", (now, race_id))
                 self._save_rapports(cursor, race_id, rapports)
                 return {"action": "UNCHANGED", "version": current["version"], "reason": None, "statut": current["statut"]}
 
             if cmp == CMP_REGRESSION and statut_up:
-                # Le flux confirme « définitive » sur une source moins complète :
-                # on garde le classement le plus riche déjà en base.
+                # Le flux confirme « définitive » sur une source moins complète
+                # (retrait inexpliqué) : on garde le classement le plus riche déjà
+                # en base ; la finalité est acquise, le complément viendra.
                 ranking_json = json.dumps(current["ranking"])
                 incidents_json = json.dumps(current["incidents"])
                 np_json = json.dumps(current["non_partants"])
@@ -654,15 +754,24 @@ class TurfDatabase:
             version = current["version"] + 1
             nb_corr = current["nb_corrections"] + (1 if cmp == CMP_CORRECTION else 0)
             new_statut = STATUT_DEFINITIVE if (statut_up or current["statut"] == STATUT_DEFINITIVE) else reading.statut
-            definitive_at = current.get("definitive_at") or (now if new_statut == STATUT_DEFINITIVE else None)
+            if new_statut == STATUT_DEFINITIVE and reading_verified:
+                verified_at = current.get("verified_at") or now
+                finalite = "VERIFIEE_PMU"
+            elif new_statut == STATUT_DEFINITIVE:
+                verified_at = current.get("verified_at")
+                finalite = "VERIFIEE_PMU" if verified_at else "LEGACY_NON_VERIFIEE"
+            else:
+                verified_at, finalite = None, "PROVISOIRE"
+            definitive_at = verified_at  # la finalité ne date que d'une lecture vérifiée
 
             cursor.execute("""
             UPDATE race_results SET arrival_order_json = ?, disqualified_json = ?, statut = ?, version = ?,
                 nb_corrections = ?, source = ?, source_url = COALESCE(?, source_url), pmu_statut = ?, ranking_json = ?,
-                incidents_json = ?, non_partants_json = ?, definitive_at = ?, updated_at = ?, last_checked_at = ?
+                incidents_json = ?, non_partants_json = ?, definitive_at = ?, updated_at = ?, last_checked_at = ?,
+                finalite = ?, verified_at = ?
             WHERE race_id = ?
             """, (flat_json, dq_json, new_statut, version, nb_corr, reading.source, source_url, reading.pmu_statut,
-                  ranking_json, incidents_json, np_json, definitive_at, now, now, race_id))
+                  ranking_json, incidents_json, np_json, definitive_at, now, now, finalite, verified_at, race_id))
             cursor.execute("""INSERT INTO race_results_history (race_id, version, statut, pmu_statut, ranking_json,
                               incidents_json, non_partants_json, source, reason, recorded_at)
                               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",

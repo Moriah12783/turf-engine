@@ -296,7 +296,16 @@ CMP_REGRESSION = "REGRESSION"     # le nouveau contient MOINS d'information (sou
 
 
 def compare_rankings(old_ranking: Sequence[Dict[str, Any]], new_ranking: Sequence[Dict[str, Any]],
-                     old_incidents: Sequence[Dict[str, Any]], new_incidents: Sequence[Dict[str, Any]]) -> str:
+                     old_incidents: Sequence[Dict[str, Any]], new_incidents: Sequence[Dict[str, Any]],
+                     old_non_partants: Sequence[int] = (), new_non_partants: Sequence[int] = ()) -> str:
+    """Qualifie le passage de l'ancienne lecture à la nouvelle.
+
+    Un classement PLUS COURT n'est une régression (source partielle ou
+    périmée) que si les chevaux disparus ne sont PAS expliqués par la nouvelle
+    lecture. Si chaque cheval retiré figure désormais dans les incidents
+    (disqualification, arrêt…) ou parmi les non-partants, c'est une CORRECTION
+    finale cohérente : le cheval est retiré, l'incident conservé, une version
+    créée. La longueur seule ne décide jamais (retour partenaire du 10/09)."""
     old_rk = [(int(r["rang"]), int(r["num"])) for r in old_ranking]
     new_rk = [(int(r["rang"]), int(r["num"])) for r in new_ranking]
     old_inc = {int(i["num"]): str(i["type"]) for i in old_incidents}
@@ -314,6 +323,22 @@ def compare_rankings(old_ranking: Sequence[Dict[str, Any]], new_ranking: Sequenc
         return CMP_COMPLETION if inc_added else CMP_IDENTIQUE
     if len(new_rk) > len(old_rk) and new_rk[:len(old_rk)] == old_rk:
         return CMP_CORRECTION if (inc_changed or inc_removed) else CMP_COMPLETION
-    if len(new_rk) < len(old_rk) and old_rk[:len(new_rk)] == new_rk:
-        return CMP_REGRESSION
+
+    removed = {n for _, n in old_rk} - {n for _, n in new_rk}
+    if removed:
+        explained = {int(n) for n in new_inc} | {int(n) for n in new_non_partants}
+        if removed <= explained:
+            return CMP_CORRECTION  # retrait expliqué (ex. disqualification finale)
+        if len(new_rk) < len(old_rk) and old_rk[:len(new_rk)] == new_rk:
+            return CMP_REGRESSION  # préfixe strict, retrait inexpliqué : source partielle/périmée
     return CMP_CORRECTION
+
+
+def removed_unexplained(old_ranking: Sequence[Dict[str, Any]], new_ranking: Sequence[Dict[str, Any]],
+                        new_incidents: Sequence[Dict[str, Any]], new_non_partants: Sequence[int] = ()) -> List[int]:
+    """Chevaux classés dans l'ancienne lecture, absents de la nouvelle, sans
+    incident ni non-partance qui l'explique (diagnostic pour les journaux)."""
+    old_nums = {int(r["num"]) for r in old_ranking}
+    new_nums = {int(r["num"]) for r in new_ranking}
+    explained = {int(i["num"]) for i in new_incidents} | {int(n) for n in new_non_partants}
+    return sorted(old_nums - new_nums - explained)

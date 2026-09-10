@@ -21,9 +21,20 @@ import os
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
-SCHEMA_VERSION = "1.0"
+SCHEMA_VERSION = "1.1"
 FOURNISSEUR = "Elite Turf — prono.elite-turf.fr"
 ORIGINE = "PMU (flux public turfinfo, lecture HTTPS vérifiée)"
+
+
+def version_code() -> Dict[str, Optional[str]]:
+    """Identité du code qui a produit l'export (retour partenaire : le manifeste
+    doit permettre de certifier la version déployée). Renseigné par GitHub
+    Actions ; null en exécution locale."""
+    return {
+        "commit": os.environ.get("GITHUB_SHA") or None,
+        "run_id": os.environ.get("GITHUB_RUN_ID") or None,
+        "depot": "Moriah12783/turf-engine",
+    }
 
 
 def _z(ts: Optional[str]) -> Optional[str]:
@@ -83,6 +94,11 @@ def build_course_entry(race: Dict[str, Any], runners: List[Dict[str, Any]],
         code = "ANNULEE"
     else:
         code = "EN_ATTENTE"
+    finalite = (result or {}).get("finalite") if result else None
+    if code == "DEFINITIVE" and finalite not in ("VERIFIEE_PMU", "LEGACY_NON_VERIFIEE"):
+        finalite = "VERIFIEE_PMU" if (result or {}).get("verified_at") else "LEGACY_NON_VERIFIEE"
+    if code != "DEFINITIVE":
+        finalite = None
 
     classement = []
     if result and code in ("PROVISOIRE", "DEFINITIVE"):
@@ -117,7 +133,10 @@ def build_course_entry(race: Dict[str, Any], runners: List[Dict[str, Any]],
             "libelle": race.get("name"),
             "discipline": race.get("discipline"),
             "distance_m": race.get("distance"),
+            # Nullable : renseignée UNIQUEMENT depuis heureDepart du flux PMU ;
+            # jamais dérivée de l'affichage ni d'un horaire standard.
             "heure_depart_utc": _z(race.get("start_time_utc")) if race.get("start_time_utc") else None,
+            "heure_depart_source": "PMU_HEUREDEPART" if race.get("start_time_utc") else None,
             "heure_depart_affichee": race.get("scheduled_start_time"),
             "partants_declares": race.get("declared_runners"),
             "partants_actifs": len([r for r in runners if not r.get("is_non_partant")]) if runners else None,
@@ -125,6 +144,10 @@ def build_course_entry(race: Dict[str, Any], runners: List[Dict[str, Any]],
         "statut": {
             "code": code,
             "definitive": code == "DEFINITIVE",
+            # VERIFIEE_PMU : finalité vue par le nouveau lecteur (drapeau PMU) ;
+            # LEGACY_NON_VERIFIEE : arrivée tenue pour définitive par l'ancien
+            # système, jamais re-vérifiée — à exclure de toute preuve prospective.
+            "finalite": finalite,
             "annulee": code == "ANNULEE",
             "pmu_statut": (result or {}).get("pmu_statut") or race.get("pmu_statut"),
         },
@@ -141,7 +164,11 @@ def build_course_entry(race: Dict[str, Any], runners: List[Dict[str, Any]],
         },
         "horodatages": {
             "premiere_lecture_utc": _z((result or {}).get("first_seen_at")),
-            "definitive_depuis_utc": _z((result or {}).get("definitive_at")),
+            # Finalité datée UNIQUEMENT par une lecture vérifiée (null pour une
+            # ligne héritée non re-vérifiée) — jamais antidatée.
+            "definitive_depuis_utc": _z((result or {}).get("verified_at")),
+            "verifiee_le_utc": _z((result or {}).get("verified_at")),
+            "enregistree_ancien_systeme_utc": _z((result or {}).get("legacy_recorded_at")),
             "derniere_modification_utc": _z((result or {}).get("updated_at")),
             "derniere_verification_utc": _z((result or {}).get("last_checked_at")),
         },
@@ -176,6 +203,7 @@ def build_day_export(db, date_db: str, generated_at: Optional[datetime] = None) 
         "schema_version": SCHEMA_VERSION,
         "fournisseur": FOURNISSEUR,
         "origine": ORIGINE,
+        "version_code": version_code(),
         "date_course": date_db,
         "genere_le_utc": generated_at.replace(microsecond=0).isoformat() + "Z",
         "nb_courses": len(courses),
@@ -185,22 +213,83 @@ def build_day_export(db, date_db: str, generated_at: Optional[datetime] = None) 
     }
 
 
-def export_results_json(db, site_dir: str, days: int = 8, today: Optional[datetime] = None) -> Dict[str, Any]:
-    """Écrit ``site/resultats/AAAA-MM-JJ.json`` pour les ``days`` derniers
-    jours ayant des courses en base, puis ``site/resultats/index.json``
-    (manifeste de TOUS les fichiers présents, y compris les plus anciens)."""
+CORRECTION_REASONS = ("CORRECTION_CLASSEMENT", "ANNULATION")
+
+
+def build_corrections_inventory(db, generated_at: Optional[datetime] = None) -> Dict[str, Any]:
+    """Inventaire vérifiable de TOUTES les corrections (retour partenaire,
+    point 4) : pour chaque événement CORRECTION_CLASSEMENT / ANNULATION,
+    la course, les versions avant/après, les classements et incidents
+    avant/après, la raison et l'horodatage. Le décompte par raison couvre
+    l'ensemble des versions de l'historique."""
+    generated_at = generated_at or datetime.utcnow()
+    with db.transaction() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""SELECT h.*, r.date FROM race_results_history h JOIN races r ON r.race_id = h.race_id
+                          ORDER BY r.date, h.race_id, h.version""")
+        rows = [dict(x) for x in cursor.fetchall()]
+    by_race: Dict[str, List[Dict[str, Any]]] = {}
+    for row in rows:
+        by_race.setdefault(row["race_id"], []).append(row)
+    compte: Dict[str, int] = {}
+    events: List[Dict[str, Any]] = []
+    for race_id, hist in by_race.items():
+        for i, h in enumerate(hist):
+            compte[h["reason"]] = compte.get(h["reason"], 0) + 1
+            if h["reason"] not in CORRECTION_REASONS or i == 0:
+                continue
+            prev = hist[i - 1]
+
+            def _rk(x):
+                try:
+                    return [int(r["num"]) for r in json.loads(x or "[]")]
+                except Exception:
+                    return []
+
+            def _inc(x):
+                try:
+                    return json.loads(x or "[]")
+                except Exception:
+                    return []
+            events.append({
+                "course_id": race_id, "date": h["date"], "raison": h["reason"],
+                "version_avant": int(prev["version"]), "version_apres": int(h["version"]),
+                "statut_avant": prev["statut"], "statut_apres": h["statut"],
+                "classement_avant": _rk(prev["ranking_json"]), "classement_apres": _rk(h["ranking_json"]),
+                "incidents_avant": _inc(prev["incidents_json"]), "incidents_apres": _inc(h["incidents_json"]),
+                "source_avant": prev.get("source"), "source_apres": h.get("source"),
+                "horodatage_utc": _z(h["recorded_at"]),
+            })
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "fournisseur": FOURNISSEUR,
+        "version_code": version_code(),
+        "genere_le_utc": generated_at.replace(microsecond=0).isoformat() + "Z",
+        "nb_corrections": len(events),
+        "compte_par_raison": dict(sorted(compte.items())),
+        "corrections": events,
+    }
+
+
+def export_results_json(db, site_dir: str, days: Optional[int] = None, today: Optional[datetime] = None) -> Dict[str, Any]:
+    """Écrit ``site/resultats/AAAA-MM-JJ.json`` pour TOUTES les journées
+    présentes en base (``days`` limite la fenêtre si précisé), puis
+    ``site/resultats/corrections.json`` (inventaire) et
+    ``site/resultats/index.json`` (manifeste de tous les fichiers présents)."""
     today = today or datetime.utcnow()
     out_dir = os.path.join(site_dir, "resultats")
     os.makedirs(out_dir, exist_ok=True)
 
+    with db.transaction() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT DISTINCT date FROM races WHERE date IS NOT NULL ORDER BY date DESC")
+        dates = [row["date"] for row in cursor.fetchall()]
+    if days is not None:
+        cutoff = (today - timedelta(days=days - 1)).strftime("%Y-%m-%d")
+        dates = [d for d in dates if d >= cutoff]
+
     written: Dict[str, Dict[str, Any]] = {}
-    for i in range(days):
-        d = (today - timedelta(days=i)).strftime("%Y-%m-%d")
-        with db.transaction() as conn:
-            cursor = conn.cursor()
-            cursor.execute("SELECT COUNT(*) AS n FROM races WHERE date = ?", (d,))
-            if int(cursor.fetchone()["n"]) == 0:
-                continue
+    for d in dates:
         payload = build_day_export(db, d, generated_at=today)
         path = os.path.join(out_dir, f"{d}.json")
         with open(path, "w", encoding="utf-8") as f:
@@ -226,13 +315,22 @@ def export_results_json(db, site_dir: str, days: int = 8, today: Optional[dateti
         except Exception:
             continue
 
+    inventaire = build_corrections_inventory(db, generated_at=today)
+    with open(os.path.join(out_dir, "corrections.json"), "w", encoding="utf-8") as f:
+        json.dump(inventaire, f, ensure_ascii=False, indent=1)
+
     index = {
         "schema_version": SCHEMA_VERSION,
         "fournisseur": FOURNISSEUR,
+        "version_code": version_code(),
         "genere_le_utc": today.replace(microsecond=0).isoformat() + "Z",
         "url_base": "https://prono.elite-turf.fr/",
+        "nb_journees": len(journees),
+        "inventaire_corrections": {"fichier": "resultats/corrections.json", "nb_corrections": inventaire["nb_corrections"],
+                                   "empreinte_sha256": _sha256(inventaire["corrections"])},
         "journees": dict(sorted(journees.items(), reverse=True)),
     }
     with open(os.path.join(out_dir, "index.json"), "w", encoding="utf-8") as f:
         json.dump(index, f, ensure_ascii=False, indent=1)
-    return {"jours_ecrits": sorted(written), "jours_indexes": len(journees), "dossier": out_dir}
+    return {"jours_ecrits": sorted(written), "jours_indexes": len(journees), "dossier": out_dir,
+            "nb_corrections": inventaire["nb_corrections"]}
