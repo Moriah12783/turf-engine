@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "6e850f62d17601c752fc03988f573f6f2b3f8566",
-  "run_id": "34495051441",
+  "commit": "37b145634a9a1369789d766d08ab81f83c4c9872",
+  "run_id": "34496051452",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-10",
- "genere_le_utc": "2026-09-10T15:21:28Z",
+ "genere_le_utc": "2026-09-10T15:30:36Z",
  "nb_courses": 25,
  "compte_par_statut": {
-  "EN_ATTENTE": 9,
+  "EN_ATTENTE": 8,
   "PROVISOIRE": 1,
-  "DEFINITIVE": 15,
+  "DEFINITIVE": 16,
   "ANNULEE": 0
  },
- "empreinte_sha256": "009b2407bc1f1265f78458083937dc50d17b52c81383a70a3831fc49b3f5c35b",
+ "empreinte_sha256": "c3f41d37ba3e1f8125348384fb6c23278c29697b22e9241e5b29cfe26a64805d",
  "courses": [
   {
    "course_id": "R1C1_10092026_ParisLongchamp",
@@ -244,7 +244,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:42Z",
     "enregistree_ancien_systeme_utc": "2026-09-10T12:00:22Z",
     "derniere_modification_utc": "2026-09-10T12:12:42Z",
-    "derniere_verification_utc": "2026-09-10T15:21:09Z"
+    "derniere_verification_utc": "2026-09-10T15:30:20Z"
    },
    "correction": {
     "version": 2,
@@ -410,7 +410,7 @@
     "verifiee_le_utc": "2026-09-10T12:45:17Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-10T12:45:17Z",
-    "derniere_verification_utc": "2026-09-10T15:21:09Z"
+    "derniere_verification_utc": "2026-09-10T15:30:20Z"
    },
    "correction": {
     "version": 2,
@@ -590,7 +590,7 @@
     "verifiee_le_utc": "2026-09-10T13:21:10Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-10T13:21:10Z",
-    "derniere_verification_utc": "2026-09-10T15:21:09Z"
+    "derniere_verification_utc": "2026-09-10T15:30:20Z"
    },
    "correction": {
     "version": 2,
@@ -771,7 +771,7 @@
     "verifiee_le_utc": "2026-09-10T14:00:22Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-10T14:00:22Z",
-    "derniere_verification_utc": "2026-09-10T15:21:09Z"
+    "derniere_verification_utc": "2026-09-10T15:30:20Z"
    },
    "correction": {
     "version": 2,
@@ -1029,7 +1029,7 @@
     "verifiee_le_utc": "2026-09-10T14:30:19Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-10T14:30:19Z",
-    "derniere_verification_utc": "2026-09-10T15:21:09Z"
+    "derniere_verification_utc": "2026-09-10T15:30:20Z"
    },
    "correction": {
     "version": 2,
@@ -1255,7 +1255,7 @@
     "verifiee_le_utc": "2026-09-10T15:06:09Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-10T15:06:09Z",
-    "derniere_verification_utc": "2026-09-10T15:21:09Z"
+    "derniere_verification_utc": "2026-09-10T15:30:20Z"
    },
    "correction": {
     "version": 2,
@@ -1314,14 +1314,51 @@
     "partants_actifs": 15
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
+    "pmu_statut": "ARRIVEE_PROVISOIRE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 15,
+     "nom": "MON BLACK DU LIVET",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 14,
+     "nom": "AVERSA",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 6,
+     "nom": "NOFIX",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 2,
+     "nom": "QUARTZ DU HOULEY",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 4,
+     "nom": "SONO IO",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    15,
+    14,
+    6,
+    2,
+    4
+   ],
    "non_classes": [],
    "non_partants": [
     {
@@ -1339,21 +1376,36 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/10092026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-09-10T15:30:20Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-09-10T15:30:20Z",
+    "derniere_verification_utc": "2026-09-10T15:30:20Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-09-10T15:30:20Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       15,
+       14,
+       6,
+       2,
+       4
+      ]
+     }
+    ]
    }
   },
   {
@@ -1722,7 +1774,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:42Z",
     "enregistree_ancien_systeme_utc": "2026-09-10T10:00:27Z",
     "derniere_modification_utc": "2026-09-10T14:37:54Z",
-    "derniere_verification_utc": "2026-09-10T15:21:09Z"
+    "derniere_verification_utc": "2026-09-10T15:30:20Z"
    },
    "correction": {
     "version": 3,
@@ -1992,7 +2044,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:42Z",
     "enregistree_ancien_systeme_utc": "2026-09-10T10:30:33Z",
     "derniere_modification_utc": "2026-09-10T14:37:54Z",
-    "derniere_verification_utc": "2026-09-10T15:21:09Z"
+    "derniere_verification_utc": "2026-09-10T15:30:20Z"
    },
    "correction": {
     "version": 3,
@@ -2274,7 +2326,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:42Z",
     "enregistree_ancien_systeme_utc": "2026-09-10T11:06:12Z",
     "derniere_modification_utc": "2026-09-10T14:37:54Z",
-    "derniere_verification_utc": "2026-09-10T15:21:09Z"
+    "derniere_verification_utc": "2026-09-10T15:30:20Z"
    },
    "correction": {
     "version": 3,
@@ -2548,7 +2600,7 @@
     "verifiee_le_utc": "2026-09-10T12:12:42Z",
     "enregistree_ancien_systeme_utc": "2026-09-10T11:45:33Z",
     "derniere_modification_utc": "2026-09-10T14:37:54Z",
-    "derniere_verification_utc": "2026-09-10T15:21:09Z"
+    "derniere_verification_utc": "2026-09-10T15:30:20Z"
    },
    "correction": {
     "version": 3,
@@ -2851,7 +2903,7 @@
     "verifiee_le_utc": "2026-09-10T12:30:19Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-10T14:37:54Z",
-    "derniere_verification_utc": "2026-09-10T15:21:09Z"
+    "derniere_verification_utc": "2026-09-10T15:30:20Z"
    },
    "correction": {
     "version": 3,
@@ -3141,7 +3193,7 @@
     "verifiee_le_utc": "2026-09-10T13:06:07Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-10T14:37:54Z",
-    "derniere_verification_utc": "2026-09-10T15:21:09Z"
+    "derniere_verification_utc": "2026-09-10T15:30:20Z"
    },
    "correction": {
     "version": 3,
@@ -3433,7 +3485,7 @@
     "verifiee_le_utc": "2026-09-10T13:36:07Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-10T14:37:54Z",
-    "derniere_verification_utc": "2026-09-10T15:21:09Z"
+    "derniere_verification_utc": "2026-09-10T15:30:20Z"
    },
    "correction": {
     "version": 3,
@@ -3705,7 +3757,7 @@
     "verifiee_le_utc": "2026-09-10T14:15:18Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-10T14:15:18Z",
-    "derniere_verification_utc": "2026-09-10T15:21:09Z"
+    "derniere_verification_utc": "2026-09-10T15:30:20Z"
    },
    "correction": {
     "version": 2,
@@ -3972,7 +4024,7 @@
     "verifiee_le_utc": "2026-09-10T14:51:08Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-10T14:51:08Z",
-    "derniere_verification_utc": "2026-09-10T15:21:09Z"
+    "derniere_verification_utc": "2026-09-10T15:30:20Z"
    },
    "correction": {
     "version": 2,
@@ -4037,11 +4089,11 @@
     "partants_actifs": 11
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "FIN_COURSE"
    },
    "classement": [
     {
@@ -4067,13 +4119,55 @@
      "num": 4,
      "nom": "JOKER DE MARZY",
      "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 6,
+     "nom": "JOSELITO DU VIVIER",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 1,
+     "nom": "JUSQUIAME",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 11,
+     "nom": "JUBLA VIKING",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 9,
+     "nom": "IMOKO JIBELAU",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 5,
+     "nom": "IZAAC D'HAVAROCHE",
+     "dead_heat": false
+    },
+    {
+     "rang": 10,
+     "num": 10,
+     "nom": "HOUARNEAU",
+     "dead_heat": false
     }
    ],
    "arrivee": [
     12,
     3,
     7,
-    4
+    4,
+    6,
+    1,
+    11,
+    9,
+    5,
+    10
    ],
    "non_classes": [
     {
@@ -4089,11 +4183,123 @@
     }
    ],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "12": 7.8
+    },
+    "simple_place": {
+     "12": 1.6,
+     "3": 1.6,
+     "7": 1.3
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "12-3",
+      "dividende_pour_1_eur": 11.6
+     },
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "12-NP",
+      "dividende_pour_1_eur": 3.5
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "12-3",
+      "dividende_pour_1_eur": 3.1
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "12-7",
+      "dividende_pour_1_eur": 3.1
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "3-7",
+      "dividende_pour_1_eur": 2.7
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "12-NP",
+      "dividende_pour_1_eur": 1.5
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "3-NP",
+      "dividende_pour_1_eur": 1.4
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "7-NP",
+      "dividende_pour_1_eur": 1.4
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "12-3",
+      "dividende_pour_1_eur": 1.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "12-7",
+      "dividende_pour_1_eur": 1.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "12-4",
+      "dividende_pour_1_eur": 1.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "3-7",
+      "dividende_pour_1_eur": 1.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "3-4",
+      "dividende_pour_1_eur": 1.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "7-4",
+      "dividende_pour_1_eur": 1.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "12-NP",
+      "dividende_pour_1_eur": 1.2
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "3-NP",
+      "dividende_pour_1_eur": 1.2
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "7-NP",
+      "dividende_pour_1_eur": 1.2
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "4-NP",
+      "dividende_pour_1_eur": 1.2
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "12-3-7",
+      "dividende_pour_1_eur": 7.5
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "12-3-NP",
+      "dividende_pour_1_eur": 7.5
+     },
+     {
+      "type_pari": "MINI_MULTI",
+      "combinaison": "12-3-7-4",
+      "dividende_pour_1_eur": 1.4
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -4103,14 +4309,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-09-10T15:15:19Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-09-10T15:30:20Z",
+    "verifiee_le_utc": "2026-09-10T15:30:20Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-09-10T15:15:19Z",
-    "derniere_verification_utc": "2026-09-10T15:21:09Z"
+    "derniere_modification_utc": "2026-09-10T15:30:20Z",
+    "derniere_verification_utc": "2026-09-10T15:30:20Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -4124,6 +4330,25 @@
        3,
        7,
        4
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-09-10T15:30:20Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       12,
+       3,
+       7,
+       4,
+       6,
+       1,
+       11,
+       9,
+       5,
+       10
       ]
      }
     ]
@@ -4151,7 +4376,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
