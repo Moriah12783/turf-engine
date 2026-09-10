@@ -51,7 +51,7 @@ class HumanStatsBook:
         try:
             with self.db.transaction() as conn:
                 cursor = conn.cursor()
-                cursor.execute("SELECT race_id, arrival_order_json FROM race_results")
+                cursor.execute("SELECT race_id, arrival_order_json FROM race_results WHERE COALESCE(statut, 'DEFINITIVE') = 'DEFINITIVE'")
                 results = {row["race_id"]: row["arrival_order_json"] for row in cursor.fetchall()}
                 cursor.execute(
                     "SELECT race_id, num, horse_name, driver_jockey, trainer, is_non_partant FROM runners"

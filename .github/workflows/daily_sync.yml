@@ -12,6 +12,11 @@ on:
     # Soir : 21h30 GMT — Consolidation des arrivées & Bilans (fenêtre 7 jours)
     - cron: '30 21 * * *'
   workflow_dispatch: # Déclenchement manuel 1-clic depuis smartphone ou PC
+    inputs:
+      verify_days:
+        description: "Re-vérification des arrivées PMU sur N jours (vide = passe normale). 1 requête par jour, aucun pronostic touché."
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -57,6 +62,14 @@ jobs:
             DAYS=1
           fi
           echo "[*] Fenêtre de synchronisation : $DAYS jour(s)"
+          # Suivi des corrections (livrable partenaire) : lancement manuel avec
+          # l'entrée verify_days => relecture des arrivées (provisoire ->
+          # définitive, compléments, corrections, annulations) à raison d'une
+          # requête par jour, puis passe normale du jour.
+          if [ -n "${{ github.event.inputs.verify_days }}" ]; then
+            echo "[*] Re-vérification des arrivées sur ${{ github.event.inputs.verify_days }} jour(s)"
+            python main.py --action verify --days "${{ github.event.inputs.verify_days }}"
+          fi
           python main.py --action sync --days $DAYS
 
       - name: Commit & Push Updated Database (Persistance définitive de l'historique)

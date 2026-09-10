@@ -35,7 +35,7 @@ class FakeFetcher:
             start = NOW + timedelta(minutes=mins)
             # timestamp UTC en ms (utcfromtimestamp doit redonner l'heure voulue)
             epoch = calendar.timegm(start.timetuple())
-            courses.append({
+            course = {
                 "numOrdre": c_num,
                 "discipline": "TROT_ATTELE",
                 "distance": 2700,
@@ -43,7 +43,22 @@ class FakeFetcher:
                 "corde": "CORDE_A_GAUCHE",
                 "specialite": "",
                 "heureDepart": epoch * 1000,
-            })
+                "statut": "PROGRAMMEE",
+                "categorieStatut": "A_PARTIR",
+                "arriveeDefinitive": False,
+            }
+            if c_num in self.finished:
+                # Forme réelle du flux PMU : arrivée DÉFINITIVE signalée par la
+                # course elle-même (drapeau + ordreArrivee en listes de listes).
+                course.update({
+                    "statut": "ARRIVEE_DEFINITIVE_COMPLETE",
+                    "categorieStatut": "ARRIVEE",
+                    "arriveeDefinitive": True,
+                    "isArriveeDefinitive": True,
+                    "ordreArrivee": [[n] for n in range(1, 9)],
+                    "incidents": [],
+                })
+            courses.append(course)
         return {"programme": {"reunions": [{
             "numOfficiel": 1,
             "hippodrome": {"libelleCourt": "TESTVILLE"},

@@ -12,6 +12,7 @@ from turf_lab.simulator import RaceSimulator
 from turf_lab.html_report import generate_html_dashboard, export_site_archives
 from turf_lab.daily_sync import DailySyncManager
 from turf_lab.cloudflare_deploy import CloudflarePagesDeployer
+from turf_lab.results_export import export_results_json
 
 
 def format_markdown_table(report: dict) -> str:
@@ -91,8 +92,8 @@ def main():
     default_config = os.path.join(script_dir, "config.json")
 
     parser = argparse.ArgumentParser(description="Turf Prediction Engine & Benchmarking Lab")
-    parser.add_argument("--action", type=str, default=None, choices=["sync", "simulate", "evaluate"],
-                        help="Action to perform: sync (fetch real PMU feeds), simulate (run benchmark), evaluate (generate reports)")
+    parser.add_argument("--action", type=str, default=None, choices=["sync", "simulate", "evaluate", "verify"],
+                        help="Action to perform: sync (fetch real PMU feeds), simulate (run benchmark), evaluate (generate reports), verify (re-verification des arrivees sur N jours, 1 requete/jour)")
     parser.add_argument("--db", type=str, default=default_db, help="Path to SQLite database")
     parser.add_argument("--simulate", type=int, default=None, help="Number of simulated races to run (for --action simulate)")
     parser.add_argument("--days", type=int, default=7, help="Number of past days to sync for live data (defaults to 7 days)")
@@ -140,10 +141,29 @@ def main():
             print(f"    - Pronostics verrouilles : {stats['predictions_locked']}")
             print(f"    - Verrous refuses (cotes non ouvertes, GATE_REFUSED) : {stats.get('gate_refused', 0)}")
             print(f"    - Radar v4 (pont) : {stats.get('radar_locked', 0)} verrous, {stats.get('radar_absent', 0)} absents, {stats.get('gate_refused_radar', 0)} refuses")
-            print(f"    - Resultats resolus : {stats['results_resolved']}")
+            print(f"    - Resultats resolus : {stats['results_resolved']} "
+                  f"(provisoires {stats.get('results_provisoires', 0)}, definitifs {stats.get('results_definitifs', 0)}, "
+                  f"mises a jour {stats.get('results_updated', 0)}, corrections {stats.get('results_corrections', 0)}, "
+                  f"rejets {stats.get('results_rejected', 0)})")
+            if stats.get("tls_errors"):
+                print(f"    - [ALERTE] Erreurs TLS (certificat non valide, aucune donnee ingeree) : {stats['tls_errors']}")
 
         # (Transparence) Plus aucune injection de reunions de reference :
         # seules les courses reelles du flux PMU alimentent la base.
+
+    elif action == "verify":
+        # Re-verification des arrivees (suivi des corrections) : une seule
+        # requete par jour (le programme), aucun pronostic ni cote touche.
+        print(f"[*] Re-verification des arrivees PMU (fenetre de {args.days} jours)...")
+        manager = DailySyncManager(db)
+        now = datetime.now()
+        for i in range(max(1, args.days) - 1, -1, -1):
+            d = now - timedelta(days=i)
+            stats = manager.verify_results(d)
+            print(f"    - {d.strftime('%Y-%m-%d')} : {stats.get('results_checked', 0)} courses relues, "
+                  f"{stats.get('results_resolved', 0)} versions ecrites "
+                  f"(corrections {stats.get('results_corrections', 0)}, rejets {stats.get('results_rejected', 0)}, "
+                  f"erreurs TLS {stats.get('tls_errors', 0)})")
 
     print("[*] Calcul des metriques d'evaluation sur le banc de mesure...")
     lab = TurfBenchmarkLab(db)
@@ -163,6 +183,13 @@ def main():
     if archive_manifest:
         total_archived = sum(archive_manifest.values())
         print(f"[+] Archives mensuelles ecrites : {len(archive_manifest)} mois, {total_archived} courses (site/archive/).")
+
+    # 2bis. Export JSON des resultats (livrable partenaire) : site/resultats/
+    try:
+        exp = export_results_json(db, site_dir, days=8)
+        print(f"[+] Export resultats : {len(exp['jours_ecrits'])} journee(s) ecrite(s), {exp['jours_indexes']} indexee(s) (site/resultats/).")
+    except Exception as exc:
+        print(f"[!] Export resultats impossible : {exc}")
 
     report_for_html = dict(report)
     report_for_html["historical_logs"] = recent_logs if recent_logs else report.get("historical_logs", [])

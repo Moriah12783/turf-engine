@@ -101,8 +101,10 @@ def can_publish(db: TurfDatabase, race_id: str, horizon: str = "T_MATIN",
     if not race:
         return refuse("RACE_UNKNOWN")
 
-    if str(race.get("status", "")).upper() == "FINISHED":
+    if str(race.get("status", "")).upper() in ("FINISHED", "ARRIVEE_PROVISOIRE"):
         return refuse("RACE_STARTED")
+    if str(race.get("status", "")).upper() == "ANNULEE":
+        return refuse("RACE_CANCELLED")
     mins = _minutes_to_start(race, now_utc)
     if mins is not None and mins <= 0:
         return refuse("RACE_STARTED", minutes_to_start=round(mins, 1))

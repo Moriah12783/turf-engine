@@ -10,6 +10,8 @@ import urllib.request
 import urllib.error
 from typing import Any, Dict, Optional
 
+from turf_lab.secure_http import build_ssl_context
+
 
 class CloudflarePagesDeployer:
     """Deploys static site assets directly to Cloudflare Pages."""
@@ -58,9 +60,8 @@ class CloudflarePagesDeployer:
             }
 
         # 1. Try via Cloudflare Pages Direct Upload API
-        ctx = ssl.create_default_context()
-        ctx.check_hostname = False
-        ctx.verify_mode = ssl.CERT_NONE
+        # Validation HTTPS stricte (certificat + nom d'hôte), jamais CERT_NONE.
+        ctx = build_ssl_context()
 
         content_types = {
             ".html": "text/html",

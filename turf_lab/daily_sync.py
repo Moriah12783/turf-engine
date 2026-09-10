@@ -3,13 +3,9 @@ extracts official finish orders and payouts, generates complete 4-horizon predic
 ensures historical archive persistence, and resolves results.
 """
 
-import gzip
 import json
 import os
 import re
-import ssl
-import urllib.request
-import urllib.error
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional, Tuple
 from turf_lab.database import TurfDatabase
@@ -18,44 +14,38 @@ from turf_lab.baselines import ETPEEngineProxy, MarketOddsEngine
 from turf_lab.human_stats import HumanStatsBook
 from turf_lab.odds_quality import MIN_PRICED_RATIO, priced_ratio
 from turf_lab.radar_bridge import ENGINE_NAME as RADAR_ENGINE, RadarV4Engine
+from turf_lab import secure_http
+from turf_lab.results_reader import (
+    SOURCE_COURSE, SOURCE_PROGRAMME, STATUT_ANNULEE, STATUT_DEFINITIVE, STATUT_PROVISOIRE,
+    ArrivalReading, read_arrival,
+)
 
 
 class PMUDataFetcher:
-    """Client for public PMU open JSON endpoints."""
+    """Client for public PMU open JSON endpoints.
+
+    Point 1 du correctif partenaire : toutes les requêtes passent par
+    ``secure_http.get_json`` — HTTPS obligatoire, certificat et nom d'hôte
+    vérifiés, échec TLS journalisé (``TLS_ERROR``) et jamais contourné."""
 
     BASE_URL = "https://online.turfinfo.api.pmu.fr/rest/client/7/programme"
 
     @staticmethod
     def get_json(url: str, timeout: int = 10) -> Optional[Any]:
-        ctx = ssl.create_default_context()
-        ctx.check_hostname = False
-        ctx.verify_mode = ssl.CERT_NONE
+        return secure_http.get_json(url, timeout=timeout)
 
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-            "Accept": "application/json, text/plain, */*",
-            "Accept-Language": "fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7",
-        }
-        req = urllib.request.Request(url, headers=headers)
-        try:
-            with urllib.request.urlopen(req, context=ctx, timeout=timeout) as response:
-                if response.status == 200:
-                    data = response.read()
-                    if response.info().get("Content-Encoding") == "gzip":
-                        data = gzip.decompress(data)
-                    return json.loads(data.decode("utf-8"))
-        except Exception:
-            return None
-        return None
+    def url_programme(self, date_str: str) -> str:
+        return f"{self.BASE_URL}/{date_str}"
+
+    def url_course(self, date_str: str, r_num: int, c_num: int) -> str:
+        return f"{self.BASE_URL}/{date_str}/R{r_num}/C{c_num}"
 
     def fetch_programme(self, date_str: str) -> Optional[Dict[str, Any]]:
         """date_str format: DDMMYYYY (e.g. '31082026')"""
-        url = f"{self.BASE_URL}/{date_str}"
-        return self.get_json(url)
+        return self.get_json(self.url_programme(date_str))
 
     def fetch_course_info(self, date_str: str, r_num: int, c_num: int) -> Optional[Dict[str, Any]]:
-        url = f"{self.BASE_URL}/{date_str}/R{r_num}/C{c_num}"
-        return self.get_json(url)
+        return self.get_json(self.url_course(date_str, r_num, c_num))
 
     def fetch_participants(self, date_str: str, r_num: int, c_num: int) -> Optional[Dict[str, Any]]:
         url = f"{self.BASE_URL}/{date_str}/R{r_num}/C{c_num}/participants"
@@ -390,6 +380,95 @@ class DailySyncManager:
                     rapports.append({"bet_type": t, "combination": comb, "dividend": div})
         return rapports
 
+    # ------------------------------------------------------------------
+    # Résultats : lecture qualifiée + versionnage (points 2, 3, 4)
+    # ------------------------------------------------------------------
+
+    def _url_programme(self, date_str_api: str) -> str:
+        fn = getattr(self.fetcher, "url_programme", None)
+        return fn(date_str_api) if callable(fn) else f"{PMUDataFetcher.BASE_URL}/{date_str_api}"
+
+    def _url_course(self, date_str_api: str, r_num: int, c_num: int) -> str:
+        fn = getattr(self.fetcher, "url_course", None)
+        return fn(date_str_api, r_num, c_num) if callable(fn) else f"{PMUDataFetcher.BASE_URL}/{date_str_api}/R{r_num}/C{c_num}"
+
+    def _track_result(self, race_id: str, reading: ArrivalReading, source_url: str,
+                      stats: Dict[str, int], rapports: Optional[List[Dict[str, Any]]] = None,
+                      now_utc: Optional[datetime] = None) -> Dict[str, Any]:
+        """Enregistre une lecture d'arrivée avec versionnage et journalise
+        chaque changement d'état (``RESULT_*``). Ne lève jamais."""
+        now_utc = now_utc or datetime.utcnow()
+        if reading.errors:
+            stats["results_rejected"] = stats.get("results_rejected", 0) + 1
+            print("RESULT_REJECTED " + json.dumps({
+                "race_id": race_id, "statut": reading.statut, "errors": reading.errors,
+                "now_utc": now_utc.isoformat()}, ensure_ascii=False))
+            return {"action": "REJECTED"}
+        res = self.db.record_result(race_id, reading, source_url=source_url, rapports=rapports, now_utc=now_utc)
+        action = res.get("action")
+        if action == "INITIAL":
+            stats["results_resolved"] += 1
+            key = "results_definitifs" if res["statut"] == STATUT_DEFINITIVE else "results_provisoires"
+            stats[key] = stats.get(key, 0) + 1
+            print("RESULT_RECORDED " + json.dumps({
+                "race_id": race_id, "statut": res["statut"], "version": 1, "source": reading.source,
+                "pmu_statut": reading.pmu_statut, "classes": len(reading.ranking),
+                "incidents": len(reading.incidents), "now_utc": now_utc.isoformat()}))
+        elif action == "VERSION":
+            stats["results_resolved"] += 1
+            if res["reason"] == "CORRECTION_CLASSEMENT":
+                stats["results_corrections"] = stats.get("results_corrections", 0) + 1
+                print("RESULT_CORRECTED " + json.dumps({
+                    "race_id": race_id, "version": res["version"], "statut": res["statut"],
+                    "source": reading.source, "pmu_statut": reading.pmu_statut, "now_utc": now_utc.isoformat()}))
+            else:
+                stats["results_updated"] = stats.get("results_updated", 0) + 1
+                print("RESULT_UPDATED " + json.dumps({
+                    "race_id": race_id, "version": res["version"], "statut": res["statut"], "reason": res["reason"],
+                    "source": reading.source, "pmu_statut": reading.pmu_statut, "now_utc": now_utc.isoformat()}))
+        elif action == "ANNULATION":
+            stats["results_annulations"] = stats.get("results_annulations", 0) + 1
+            print("RESULT_CANCELLED " + json.dumps({"race_id": race_id, "version": res["version"],
+                                                    "pmu_statut": reading.pmu_statut, "now_utc": now_utc.isoformat()}))
+        elif action == "DIVERGENCE_PROVISOIRE":
+            print("RESULT_DIVERGENCE " + json.dumps({
+                "race_id": race_id, "version": res["version"], "detail": res.get("reason"),
+                "source": reading.source, "now_utc": now_utc.isoformat()}))
+        return res
+
+    def verify_results(self, target_date: Optional[datetime] = None) -> Dict[str, int]:
+        """Re-vérification des arrivées d'une date à partir du SEUL programme
+        du jour (une requête) : passage provisoire → définitive, compléments
+        de classement, corrections, annulations. Aucun pronostic, aucune cote
+        n'est touché. Utilisé par ``--action verify`` et par les ancres 08h30 /
+        21h30 via sync_date (les courses gelées y passent aussi par ici)."""
+        if target_date is None:
+            target_date = datetime.now()
+        date_str_api = target_date.strftime("%d%m%Y")
+        stats = {"results_checked": 0, "results_resolved": 0}
+        secure_http.STATS.reset()
+        programme = self.fetcher.fetch_programme(date_str_api)
+        if not programme or not isinstance(programme, dict) or "programme" not in programme:
+            stats.update(secure_http.STATS.as_dict())
+            return stats
+        src_url = self._url_programme(date_str_api)
+        for r in programme.get("programme", {}).get("reunions", []):
+            r_num = r.get("numOfficiel", 1)
+            hippo = r.get("hippodrome", {}).get("libelleCourt", "HIPPO")
+            for c in r.get("courses", []):
+                c_num = c.get("numOrdre", 1)
+                race_id = f"R{r_num}C{c_num}_{date_str_api}_{hippo}"
+                race = self.db.get_race(race_id)
+                if not race:
+                    continue
+                active = [x["num"] for x in self.db.get_runners(race_id) if not x.get("is_non_partant")]
+                reading = read_arrival(c, None, active or None, source=SOURCE_PROGRAMME)
+                stats["results_checked"] += 1
+                if reading.statut in (STATUT_PROVISOIRE, STATUT_DEFINITIVE, STATUT_ANNULEE):
+                    self._track_result(race_id, reading, src_url, stats)
+        stats.update(secure_http.STATS.as_dict())
+        return stats
+
     def sync_date(self, target_date: Optional[datetime] = None) -> Dict[str, int]:
         if target_date is None:
             target_date = datetime.now()
@@ -399,16 +478,21 @@ class DailySyncManager:
         now_utc = datetime.utcnow()
 
         stats = {"races_added": 0, "predictions_locked": 0, "results_resolved": 0, "np_detected": 0, "races_frozen": 0, "gate_refused": 0,
-                 "radar_locked": 0, "radar_absent": 0, "gate_refused_radar": 0}
+                 "radar_locked": 0, "radar_absent": 0, "gate_refused_radar": 0,
+                 "results_provisoires": 0, "results_definitifs": 0, "results_updated": 0, "results_corrections": 0,
+                 "results_rejected": 0, "tls_errors": 0}
         self.gate_refused = 0
         self.gate_refused_radar = 0
         self.radar_absent = 0
+        secure_http.STATS.reset()
         # Une requête Radar par date et par passe (cache vidé à chaque passe).
         self.radar_engine.client.clear_cache()
 
         programme = self.fetcher.fetch_programme(date_str_api)
         if not programme or not isinstance(programme, dict) or "programme" not in programme:
+            stats["tls_errors"] = secure_http.STATS.tls_errors
             return stats
+        programme_url = self._url_programme(date_str_api)
 
         reunions = programme.get("programme", {}).get("reunions", [])
 
@@ -446,6 +530,8 @@ class DailySyncManager:
                 autostart = "AUTOSTART" in c.get("specialite", "")
 
                 time_display, start_iso = self.parse_pmu_time(c, date_str_db, c_num)
+                if start_iso and not start_iso.endswith("Z") and "+" not in start_iso:
+                    start_iso = start_iso + "Z"
 
                 race_data = {
                     "race_id": race_id,
@@ -461,16 +547,30 @@ class DailySyncManager:
                     "rope": rope,
                     "autostart": autostart,
                     "scheduled_start_time": time_display,
-                    "status": "SCHEDULED"
+                    "status": "SCHEDULED",
+                    # Identité de course enrichie (export résultats)
+                    "start_time_utc": start_iso,
+                    "pmu_statut": str(c.get("statut") or "") or None,
+                    "declared_runners": c.get("nombreDeclaresPartants"),
                 }
 
                 # 0. Course déjà clôturée en base => archive GELÉE.
                 # On ne retouche plus jamais ni les partants, ni les cotes,
                 # ni les pronostics d'une course terminée (persistance définitive).
                 existing_race = self.db.get_race(race_id)
-                if existing_race and existing_race.get("status") == "FINISHED":
+                if existing_race and existing_race.get("status") in ("FINISHED", "ANNULEE"):
                     stats["races_frozen"] += 1
-                    # Seule exception au gel : compléter les dividendes OFFICIELS
+                    # Exception 1 au gel : SUIVI DES CORRECTIONS (point 3). L'objet
+                    # course du programme — déjà téléchargé, aucune requête de
+                    # plus — est relu à chaque passe : complément de classement,
+                    # correction après réclamation, annulation. Chaque changement
+                    # crée une version, l'ancienne reste dans l'historique.
+                    active_prev = [x["num"] for x in self.db.get_runners(race_id) if not x.get("is_non_partant")]
+                    reading_prev = read_arrival(c, None, active_prev or None, source=SOURCE_PROGRAMME)
+                    has_reading = reading_prev.statut in (STATUT_PROVISOIRE, STATUT_DEFINITIVE) and bool(reading_prev.ranking)
+                    if has_reading or reading_prev.statut == STATUT_ANNULEE:
+                        self._track_result(race_id, reading_prev, programme_url, stats, now_utc=now_utc)
+                    # Exception 2 au gel : compléter les dividendes OFFICIELS
                     # s'ils manquent encore (publiés en léger différé par le PMU).
                     # PLAFONNÉ à 8 tentatives par passe : certaines courses
                     # étrangères n'ont jamais de dividendes, et des dizaines
@@ -493,8 +593,6 @@ class DailySyncManager:
                     continue
 
                 runners = []
-                placed_participants = []
-                disqualified_list = []
 
                 for p in part_data["participants"]:
                     p_num = p.get("numPmu", 1)
@@ -502,18 +600,14 @@ class DailySyncManager:
                     music = p.get("musique", "")
                     driver = p.get("driver", "")
                     trainer = p.get("entraineur", "")
-                    
+
                     statut = str(p.get("statut", "")).upper()
                     is_np = statut in ("NON_PARTANT", "NP", "FORFAIT") or bool(p.get("nonPartant", False))
                     if is_np:
                         stats["np_detected"] += 1
-
-                    if statut in ("DISQUALIFIE", "DAI", "DISQUALIFIE_ALLURE_IRREGULIERE"):
-                        disqualified_list.append(p_num)
-
-                    pos = p.get("ordreArrivee")
-                    if pos is not None and isinstance(pos, int) and pos > 0:
-                        placed_participants.append((pos, p_num))
+                    # NB : le ``statut`` d'un partant vaut PARTANT/NON_PARTANT ; les
+                    # disqualifications sont lues dans ``incidents`` (course) et
+                    # ``incident`` (partant) par results_reader — point 4.
 
                     # Cote de référence OFFICIELLE du flux PMU (le champ réel est
                     # 'dernierRapportReference' — l'ancien 'rapportReference'
@@ -616,28 +710,36 @@ class DailySyncManager:
                 stats["gate_refused_radar"] = self.gate_refused_radar
                 stats["radar_absent"] = self.radar_absent
 
-                # 3. Check for official finish results and dividends
-                arrival_order = []
-                if placed_participants:
-                    placed_participants.sort(key=lambda x: x[0])
-                    arrival_order = [p_num for pos, p_num in placed_participants]
-                else:
+                # 3. Arrivée officielle (points 2 et 4) : lecture QUALIFIÉE.
+                # Source primaire : l'objet course du programme (statut,
+                # drapeau arriveeDefinitive, ordreArrivee en listes de listes,
+                # incidents). Repli : l'endpoint course, puis l'ordreArrivee des
+                # partants (=> PROVISOIRE au mieux). Une arrivée n'est
+                # DEFINITIVE que si le flux le dit ; la course n'est gelée
+                # (FINISHED) qu'à ce moment-là. Tout changement ultérieur est
+                # versionné (point 3).
+                active_nums = [x["num"] for x in runners if not x.get("is_non_partant")]
+                reading = read_arrival(c, part_data["participants"], active_nums, source=SOURCE_PROGRAMME)
+                source_url = programme_url
+                if reading.statut in (STATUT_PROVISOIRE, STATUT_DEFINITIVE) and (not reading.ranking or reading.errors):
+                    # Programme incomplet ou périmé (cache) : une requête ciblée.
                     course_info = self.fetcher.fetch_course_info(date_str_api, r_num, c_num)
                     if course_info and isinstance(course_info, dict):
-                        arr_raw = course_info.get("arriveeDefinitive", [])
-                        for item in arr_raw:
-                            if isinstance(item, list):
-                                arrival_order.extend(item)
-                            elif isinstance(item, int):
-                                arrival_order.append(item)
+                        reading2 = read_arrival(course_info, part_data["participants"], active_nums, source=SOURCE_COURSE)
+                        if reading2.ranking and not reading2.errors:
+                            reading, source_url = reading2, self._url_course(date_str_api, r_num, c_num)
 
-                if arrival_order:
+                if reading.statut == STATUT_ANNULEE:
+                    self._track_result(race_id, reading, source_url, stats, now_utc=now_utc)
+                elif reading.statut in (STATUT_PROVISOIRE, STATUT_DEFINITIVE) and reading.ranking:
                     # UNIQUEMENT les dividendes OFFICIELS PMU. Aucun dividende
                     # n'est estimé/inventé : sans rapports officiels, la course
                     # reste dans l'historique et les taux de réussite mais est
                     # exclue du calcul de ROI (transparence éditoriale).
-                    rapports = self._fetch_official_rapports(date_str_api, r_num, c_num)
-                    self.db.save_results(race_id, arrival_order, disqualified=disqualified_list, rapports=rapports)
-                    stats["results_resolved"] += 1
+                    rapports = None
+                    if reading.statut == STATUT_DEFINITIVE or not self.db.get_result(race_id):
+                        rapports = self._fetch_official_rapports(date_str_api, r_num, c_num)
+                    self._track_result(race_id, reading, source_url, stats, rapports=rapports, now_utc=now_utc)
 
+        stats["tls_errors"] = secure_http.STATS.tls_errors
         return stats

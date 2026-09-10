@@ -156,11 +156,82 @@ class TurfDatabase:
                 "ALTER TABLE predictions ADD COLUMN odds_real BOOLEAN",
                 "ALTER TABLE predictions ADD COLUMN priced_ratio REAL",
                 "ALTER TABLE predictions ADD COLUMN lock_time_utc TEXT",
+                # Correctif partenaire (résultats) : identité et horodatage
+                # de course enrichis, statut PMU brut conservé.
+                "ALTER TABLE races ADD COLUMN start_time_utc TEXT",
+                "ALTER TABLE races ADD COLUMN pmu_statut TEXT",
+                "ALTER TABLE races ADD COLUMN declared_runners INTEGER",
+                # Résultats versionnés : statut (PROVISOIRE/DEFINITIVE/ANNULEE),
+                # classement structuré (dead-heats), incidents, source,
+                # horodatages, version et nombre de corrections.
+                "ALTER TABLE race_results ADD COLUMN statut TEXT DEFAULT 'DEFINITIVE'",
+                "ALTER TABLE race_results ADD COLUMN version INTEGER DEFAULT 1",
+                "ALTER TABLE race_results ADD COLUMN nb_corrections INTEGER DEFAULT 0",
+                "ALTER TABLE race_results ADD COLUMN source TEXT DEFAULT 'PMU_LEGACY'",
+                "ALTER TABLE race_results ADD COLUMN source_url TEXT",
+                "ALTER TABLE race_results ADD COLUMN pmu_statut TEXT",
+                "ALTER TABLE race_results ADD COLUMN ranking_json TEXT",
+                "ALTER TABLE race_results ADD COLUMN incidents_json TEXT",
+                "ALTER TABLE race_results ADD COLUMN non_partants_json TEXT",
+                "ALTER TABLE race_results ADD COLUMN first_seen_at TEXT",
+                "ALTER TABLE race_results ADD COLUMN definitive_at TEXT",
+                "ALTER TABLE race_results ADD COLUMN updated_at TEXT",
+                "ALTER TABLE race_results ADD COLUMN last_checked_at TEXT",
             ):
                 try:
                     cursor.execute(ddl)
                 except Exception:
                     pass
+
+            # Journal APPEND-ONLY des versions successives d'une arrivée.
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS race_results_history (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                race_id TEXT NOT NULL,
+                version INTEGER NOT NULL,
+                statut TEXT NOT NULL,
+                pmu_statut TEXT,
+                ranking_json TEXT NOT NULL,
+                incidents_json TEXT,
+                non_partants_json TEXT,
+                source TEXT,
+                reason TEXT NOT NULL,
+                recorded_at TEXT NOT NULL,
+                UNIQUE(race_id, version)
+            )
+            """)
+            cursor.execute("CREATE INDEX IF NOT EXISTS idx_results_history_race ON race_results_history (race_id)")
+
+            # Reprise idempotente des lignes antérieures au versionnage : le
+            # classement plat devient un classement structuré (rangs 1..n, sans
+            # dead-heat connu), statut DEFINITIVE (c'est ainsi que le banc les a
+            # toujours jugées), source PMU_LEGACY, version 1. Rien n'est
+            # supprimé ni réordonné : arrival_order_json reste tel quel.
+            cursor.execute("SELECT race_id, arrival_order_json, disqualified_json, recorded_at FROM race_results WHERE ranking_json IS NULL")
+            legacy_rows = cursor.fetchall()
+            for row in legacy_rows:
+                try:
+                    flat = json.loads(row["arrival_order_json"] or "[]")
+                except Exception:
+                    flat = []
+                ranking = [{"rang": i + 1, "num": int(n), "dead_heat": False} for i, n in enumerate(flat)]
+                try:
+                    dq = json.loads(row["disqualified_json"] or "[]")
+                except Exception:
+                    dq = []
+                incidents = [{"num": int(n), "type": "DISQUALIFIE"} for n in dq]
+                rec = row["recorded_at"]
+                cursor.execute("""
+                    UPDATE race_results SET statut = 'DEFINITIVE', version = 1, nb_corrections = 0,
+                        source = 'PMU_LEGACY', ranking_json = ?, incidents_json = ?, non_partants_json = '[]',
+                        first_seen_at = ?, definitive_at = ?, updated_at = ?, last_checked_at = ?
+                    WHERE race_id = ?
+                """, (json.dumps(ranking), json.dumps(incidents), rec, rec, rec, rec, row["race_id"]))
+                cursor.execute("""
+                    INSERT OR IGNORE INTO race_results_history (race_id, version, statut, pmu_statut, ranking_json,
+                        incidents_json, non_partants_json, source, reason, recorded_at)
+                    VALUES (?, 1, 'DEFINITIVE', NULL, ?, ?, '[]', 'PMU_LEGACY', 'MIGRATION_LEGACY', ?)
+                """, (row["race_id"], json.dumps(ranking), json.dumps(incidents), rec))
 
     def save_race(self, race_data: Dict[str, Any]):
         with self.transaction() as conn:
@@ -169,8 +240,9 @@ class TurfDatabase:
             INSERT OR REPLACE INTO races (
                 race_id, date, meeting_number, race_number, name,
                 hippodrome, discipline, distance, track_type,
-                track_condition, rope, autostart, scheduled_start_time, status
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                track_condition, rope, autostart, scheduled_start_time, status,
+                start_time_utc, pmu_statut, declared_runners
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 race_data["race_id"],
                 race_data.get("date", datetime.utcnow().strftime("%Y-%m-%d")),
@@ -185,8 +257,19 @@ class TurfDatabase:
                 race_data.get("rope", "GAUCHE"),
                 race_data.get("autostart", False),
                 race_data.get("scheduled_start_time", datetime.utcnow().isoformat()),
-                race_data.get("status", "SCHEDULED")
+                race_data.get("status", "SCHEDULED"),
+                race_data.get("start_time_utc"),
+                race_data.get("pmu_statut"),
+                race_data.get("declared_runners"),
             ))
+
+    def update_race_status(self, race_id: str, status: str, pmu_statut: Optional[str] = None):
+        with self.transaction() as conn:
+            cursor = conn.cursor()
+            if pmu_statut is None:
+                cursor.execute("UPDATE races SET status = ? WHERE race_id = ?", (status, race_id))
+            else:
+                cursor.execute("UPDATE races SET status = ?, pmu_statut = ? WHERE race_id = ?", (status, pmu_statut, race_id))
 
     def save_runners(self, race_id: str, runners_list: List[Dict[str, Any]]):
         with self.transaction() as conn:
@@ -394,36 +477,238 @@ class TurfDatabase:
             )
             return [row["horizon"] for row in cursor.fetchall()]
 
-    def save_results(self, race_id: str, arrival_order: List[int], disqualified: Optional[List[int]] = None, rapports: Optional[List[Dict[str, Any]]] = None):
+    # ──────────────────────────────────────────────────────────────────
+    # Résultats versionnés (correctif partenaire, points 2-3-4)
+    # ──────────────────────────────────────────────────────────────────
+    #
+    # `race_results` porte TOUJOURS la version courante (une ligne par course) ;
+    # `race_results_history` conserve chaque version (append-only). Le banc,
+    # les stats humaines et le site ne jugent que les lignes DEFINITIVE.
+    #
+    # Raisons de version :
+    #   INITIAL                    première lecture (provisoire ou définitive)
+    #   PROVISOIRE_VERS_DEFINITIVE le flux confirme, classement identique/complété
+    #   COMPLETION                 rangs supplémentaires publiés (aucun rang modifié)
+    #   CORRECTION_CLASSEMENT      un rang déjà publié change (réclamation, déclassement…)
+    #   ANNULATION                 course annulée après publication d'un résultat
+    #   MIGRATION_LEGACY           ligne antérieure au versionnage
+
+    def get_result(self, race_id: str) -> Optional[Dict[str, Any]]:
         with self.transaction() as conn:
             cursor = conn.cursor()
+            cursor.execute("SELECT * FROM race_results WHERE race_id = ?", (race_id,))
+            row = cursor.fetchone()
+        return self._result_row_to_dict(row) if row else None
+
+    @staticmethod
+    def _result_row_to_dict(row) -> Dict[str, Any]:
+        d = dict(row)
+
+        def _load(key, default):
+            try:
+                return json.loads(d.get(key) or "") if d.get(key) else default
+            except Exception:
+                return default
+
+        d["arrival_order"] = _load("arrival_order_json", [])
+        d["disqualified"] = _load("disqualified_json", [])
+        d["ranking"] = _load("ranking_json", [{"rang": i + 1, "num": n, "dead_heat": False}
+                                              for i, n in enumerate(d["arrival_order"])])
+        d["incidents"] = _load("incidents_json", [])
+        d["non_partants"] = _load("non_partants_json", [])
+        d["statut"] = d.get("statut") or "DEFINITIVE"
+        d["version"] = int(d.get("version") or 1)
+        d["nb_corrections"] = int(d.get("nb_corrections") or 0)
+        d["source"] = d.get("source") or "PMU_LEGACY"
+        return d
+
+    def get_result_history(self, race_id: str) -> List[Dict[str, Any]]:
+        with self.transaction() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM race_results_history WHERE race_id = ? ORDER BY version ASC", (race_id,))
+            rows = cursor.fetchall()
+        out = []
+        for row in rows:
+            d = dict(row)
+            for key, dst in (("ranking_json", "ranking"), ("incidents_json", "incidents"), ("non_partants_json", "non_partants")):
+                try:
+                    d[dst] = json.loads(d.get(key) or "[]")
+                except Exception:
+                    d[dst] = []
+            out.append(d)
+        return out
+
+    def record_result(self, race_id: str, reading, source_url: Optional[str] = None,
+                      rapports: Optional[List[Dict[str, Any]]] = None,
+                      now_utc: Optional[datetime] = None) -> Dict[str, Any]:
+        """Enregistre une lecture d'arrivée (``results_reader.ArrivalReading``)
+        avec versionnage. Retourne ``{"action", "version", "reason", "statut"}``.
+
+        - Lecture invalide ou sans classement : rien n'est écrit (``REJECTED``).
+        - Première lecture : version 1 (``INITIAL``).
+        - Lecture identique : seul ``last_checked_at`` avance (``UNCHANGED``).
+        - Régression (moins d'information qu'en base, source périmée) : ignorée.
+        - Complément / passage en définitive / correction : nouvelle version,
+          ancienne version conservée dans l'historique.
+        La course passe en ``FINISHED`` (archive gelée) uniquement sur une
+        arrivée DEFINITIVE ; une arrivée provisoire la met en ``ARRIVEE_PROVISOIRE``."""
+        from turf_lab.results_reader import (
+            CMP_COMPLETION, CMP_CORRECTION, CMP_IDENTIQUE, CMP_REGRESSION,
+            STATUT_ANNULEE, STATUT_DEFINITIVE, STATUT_PROVISOIRE, compare_rankings,
+        )
+        now = (now_utc or datetime.utcnow()).isoformat()
+        current = self.get_result(race_id)
+
+        # ── Annulation ───────────────────────────────────────────────
+        if reading.statut == STATUT_ANNULEE:
+            with self.transaction() as conn:
+                cursor = conn.cursor()
+                cursor.execute("UPDATE races SET status = 'ANNULEE', pmu_statut = ? WHERE race_id = ?",
+                               (reading.pmu_statut or None, race_id))
+                if current and current["statut"] != STATUT_ANNULEE:
+                    version = current["version"] + 1
+                    cursor.execute("""UPDATE race_results SET statut = 'ANNULEE', version = ?, pmu_statut = ?,
+                                      updated_at = ?, last_checked_at = ?, source = ?, source_url = COALESCE(?, source_url)
+                                      WHERE race_id = ?""",
+                                   (version, reading.pmu_statut, now, now, reading.source or current["source"], source_url, race_id))
+                    cursor.execute("""INSERT INTO race_results_history (race_id, version, statut, pmu_statut, ranking_json,
+                                      incidents_json, non_partants_json, source, reason, recorded_at)
+                                      VALUES (?, ?, 'ANNULEE', ?, ?, ?, ?, ?, 'ANNULATION', ?)""",
+                                   (race_id, version, reading.pmu_statut, json.dumps(current["ranking"]),
+                                    json.dumps(current["incidents"]), json.dumps(current["non_partants"]),
+                                    reading.source or current["source"], now))
+                    return {"action": "ANNULATION", "version": version, "reason": "ANNULATION", "statut": STATUT_ANNULEE}
+            return {"action": "ANNULEE", "version": current["version"] if current else 0, "reason": None, "statut": STATUT_ANNULEE}
+
+        if reading.statut not in (STATUT_PROVISOIRE, STATUT_DEFINITIVE) or not reading.ranking or reading.errors:
+            return {"action": "REJECTED", "version": current["version"] if current else 0,
+                    "reason": ",".join(reading.errors) or "SANS_CLASSEMENT", "statut": reading.statut}
+
+        ranking_json = json.dumps(reading.ranking)
+        incidents_json = json.dumps(reading.incidents)
+        np_json = json.dumps(reading.non_partants)
+        flat_json = json.dumps(reading.flat_arrival())
+        dq_json = json.dumps(reading.disqualified())
+        race_status = "FINISHED" if reading.statut == STATUT_DEFINITIVE else "ARRIVEE_PROVISOIRE"
+
+        with self.transaction() as conn:
+            cursor = conn.cursor()
+            if current is None:
+                cursor.execute("""
+                INSERT INTO race_results (race_id, arrival_order_json, disqualified_json, recorded_at,
+                    statut, version, nb_corrections, source, source_url, pmu_statut, ranking_json, incidents_json,
+                    non_partants_json, first_seen_at, definitive_at, updated_at, last_checked_at)
+                VALUES (?, ?, ?, ?, ?, 1, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """, (race_id, flat_json, dq_json, now, reading.statut, reading.source, source_url, reading.pmu_statut,
+                      ranking_json, incidents_json, np_json, now,
+                      now if reading.statut == STATUT_DEFINITIVE else None, now, now))
+                cursor.execute("""INSERT INTO race_results_history (race_id, version, statut, pmu_statut, ranking_json,
+                                  incidents_json, non_partants_json, source, reason, recorded_at)
+                                  VALUES (?, 1, ?, ?, ?, ?, ?, ?, 'INITIAL', ?)""",
+                               (race_id, reading.statut, reading.pmu_statut, ranking_json, incidents_json, np_json,
+                                reading.source, now))
+                cursor.execute("UPDATE races SET status = ?, pmu_statut = ? WHERE race_id = ?",
+                               (race_status, reading.pmu_statut or None, race_id))
+                self._save_rapports(cursor, race_id, rapports)
+                return {"action": "INITIAL", "version": 1, "reason": "INITIAL", "statut": reading.statut}
+
+            # Une arrivée DEFINITIVE ne redevient jamais PROVISOIRE.
+            if current["statut"] == STATUT_DEFINITIVE and reading.statut == STATUT_PROVISOIRE:
+                cmp_only = compare_rankings(current["ranking"], reading.ranking, current["incidents"], reading.incidents)
+                if cmp_only in (CMP_IDENTIQUE, CMP_REGRESSION):
+                    cursor.execute("UPDATE race_results SET last_checked_at = ? WHERE race_id = ?", (now, race_id))
+                    self._save_rapports(cursor, race_id, rapports)
+                    return {"action": "UNCHANGED", "version": current["version"], "reason": None, "statut": current["statut"]}
+                # Classement différent mais source non définitive : on ne touche
+                # pas à la version définitive, on signale seulement.
+                cursor.execute("UPDATE race_results SET last_checked_at = ? WHERE race_id = ?", (now, race_id))
+                return {"action": "DIVERGENCE_PROVISOIRE", "version": current["version"], "reason": cmp_only, "statut": current["statut"]}
+
+            cmp = compare_rankings(current["ranking"], reading.ranking, current["incidents"], reading.incidents)
+            statut_up = current["statut"] == STATUT_PROVISOIRE and reading.statut == STATUT_DEFINITIVE
+
+            if cmp == CMP_REGRESSION and not statut_up:
+                cursor.execute("UPDATE race_results SET last_checked_at = ? WHERE race_id = ?", (now, race_id))
+                return {"action": "IGNORED_REGRESSION", "version": current["version"], "reason": cmp, "statut": current["statut"]}
+            if cmp == CMP_IDENTIQUE and not statut_up:
+                cursor.execute("UPDATE race_results SET last_checked_at = ? WHERE race_id = ?", (now, race_id))
+                self._save_rapports(cursor, race_id, rapports)
+                return {"action": "UNCHANGED", "version": current["version"], "reason": None, "statut": current["statut"]}
+
+            if cmp == CMP_REGRESSION and statut_up:
+                # Le flux confirme « définitive » sur une source moins complète :
+                # on garde le classement le plus riche déjà en base.
+                ranking_json = json.dumps(current["ranking"])
+                incidents_json = json.dumps(current["incidents"])
+                np_json = json.dumps(current["non_partants"])
+                flat_json = json.dumps(current["arrival_order"])
+                dq_json = json.dumps(current["disqualified"])
+                cmp = CMP_IDENTIQUE
+
+            if cmp == CMP_CORRECTION:
+                reason = "CORRECTION_CLASSEMENT"
+            elif cmp == CMP_COMPLETION:
+                reason = "PROVISOIRE_VERS_DEFINITIVE" if statut_up else "COMPLETION"
+            else:
+                reason = "PROVISOIRE_VERS_DEFINITIVE"
+            version = current["version"] + 1
+            nb_corr = current["nb_corrections"] + (1 if cmp == CMP_CORRECTION else 0)
+            new_statut = STATUT_DEFINITIVE if (statut_up or current["statut"] == STATUT_DEFINITIVE) else reading.statut
+            definitive_at = current.get("definitive_at") or (now if new_statut == STATUT_DEFINITIVE else None)
+
             cursor.execute("""
-            INSERT OR REPLACE INTO race_results (
-                race_id, arrival_order_json, disqualified_json, recorded_at
-            ) VALUES (?, ?, ?, ?)
-            """, (
-                race_id,
-                json.dumps(arrival_order),
-                json.dumps(disqualified or []),
-                datetime.utcnow().isoformat()
-            ))
+            UPDATE race_results SET arrival_order_json = ?, disqualified_json = ?, statut = ?, version = ?,
+                nb_corrections = ?, source = ?, source_url = COALESCE(?, source_url), pmu_statut = ?, ranking_json = ?,
+                incidents_json = ?, non_partants_json = ?, definitive_at = ?, updated_at = ?, last_checked_at = ?
+            WHERE race_id = ?
+            """, (flat_json, dq_json, new_statut, version, nb_corr, reading.source, source_url, reading.pmu_statut,
+                  ranking_json, incidents_json, np_json, definitive_at, now, now, race_id))
+            cursor.execute("""INSERT INTO race_results_history (race_id, version, statut, pmu_statut, ranking_json,
+                              incidents_json, non_partants_json, source, reason, recorded_at)
+                              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                           (race_id, version, new_statut, reading.pmu_statut, ranking_json, incidents_json, np_json,
+                            reading.source, reason, now))
+            cursor.execute("UPDATE races SET status = ?, pmu_statut = ? WHERE race_id = ?",
+                           ("FINISHED" if new_statut == STATUT_DEFINITIVE else "ARRIVEE_PROVISOIRE",
+                            reading.pmu_statut or None, race_id))
+            self._save_rapports(cursor, race_id, rapports)
+            return {"action": "VERSION", "version": version, "reason": reason, "statut": new_statut}
 
-            cursor.execute("UPDATE races SET status = 'FINISHED' WHERE race_id = ?", (race_id,))
+    @staticmethod
+    def _save_rapports(cursor, race_id: str, rapports: Optional[List[Dict[str, Any]]]):
+        if not rapports:
+            return
+        for rap in rapports:
+            rap_id = f"{race_id}_{rap['bet_type']}_{rap['combination']}"
+            cursor.execute("""
+            INSERT OR REPLACE INTO rapports (
+                rapport_id, race_id, bet_type, combination, dividend
+            ) VALUES (?, ?, ?, ?, ?)
+            """, (rap_id, race_id, rap["bet_type"], str(rap["combination"]), float(rap["dividend"])))
 
-            if rapports:
-                for rap in rapports:
-                    rap_id = f"{race_id}_{rap['bet_type']}_{rap['combination']}"
-                    cursor.execute("""
-                    INSERT OR REPLACE INTO rapports (
-                        rapport_id, race_id, bet_type, combination, dividend
-                    ) VALUES (?, ?, ?, ?, ?)
-                    """, (
-                        rap_id,
-                        race_id,
-                        rap["bet_type"],
-                        str(rap["combination"]),
-                        float(rap["dividend"])
-                    ))
+    def save_results(self, race_id: str, arrival_order: List[int], disqualified: Optional[List[int]] = None,
+                     rapports: Optional[List[Dict[str, Any]]] = None, source: str = "PMU_LEGACY"):
+        """Compatibilité (simulateur, archives) : enregistre un classement plat
+        comme arrivée DEFINITIVE via le versionnage."""
+        from turf_lab.results_reader import ArrivalReading, STATUT_DEFINITIVE, ranking_from_groups
+        reading = ArrivalReading(statut=STATUT_DEFINITIVE, definitive_flag=True, source=source)
+        reading.ranking = ranking_from_groups([[int(n)] for n in arrival_order])
+        reading.incidents = [{"num": int(n), "type": "DISQUALIFIE"} for n in (disqualified or [])]
+        return self.record_result(race_id, reading, rapports=rapports)
+
+    def get_results_for_date(self, date_db: str) -> List[Dict[str, Any]]:
+        """Toutes les courses d'une date avec leur résultat courant (ou None)."""
+        with self.transaction() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM races WHERE date = ? ORDER BY meeting_number, race_number", (date_db,))
+            races = [dict(r) for r in cursor.fetchall()]
+            out = []
+            for race in races:
+                cursor.execute("SELECT * FROM race_results WHERE race_id = ?", (race["race_id"],))
+                row = cursor.fetchone()
+                race["result"] = self._result_row_to_dict(row) if row else None
+                out.append(race)
+        return out
 
     def get_race(self, race_id: str) -> Optional[Dict[str, Any]]:
         with self.transaction() as conn:
@@ -457,7 +742,8 @@ class TurfDatabase:
     def get_finished_races(self) -> List[str]:
         with self.transaction() as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT race_id FROM race_results ORDER BY recorded_at ASC")
+            # Seules les arrivées DEFINITIVES sont jugées (banc, stats, site).
+            cursor.execute("SELECT race_id FROM race_results WHERE COALESCE(statut, 'DEFINITIVE') = 'DEFINITIVE' ORDER BY recorded_at ASC")
             return [row["race_id"] for row in cursor.fetchall()]
 
     def get_race_evaluation_data(self, race_id: str) -> Optional[Dict[str, Any]]:
@@ -469,15 +755,11 @@ class TurfDatabase:
         
         with self.transaction() as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM race_results WHERE race_id = ?", (race_id,))
+            cursor.execute("SELECT * FROM race_results WHERE race_id = ? AND COALESCE(statut, 'DEFINITIVE') = 'DEFINITIVE'", (race_id,))
             res_row = cursor.fetchone()
             if not res_row:
                 return None
-            results = {
-                "arrival_order": json.loads(res_row["arrival_order_json"]),
-                "disqualified": json.loads(res_row["disqualified_json"]) if res_row["disqualified_json"] else [],
-                "recorded_at": res_row["recorded_at"]
-            }
+            results = self._result_row_to_dict(res_row)
 
             cursor.execute("SELECT * FROM rapports WHERE race_id = ?", (race_id,))
             rapports = [dict(r) for r in cursor.fetchall()]

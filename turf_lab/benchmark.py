@@ -446,7 +446,7 @@ class TurfBenchmarkLab:
             # 4. Official arrival (if finished)
             with self.db.transaction() as conn:
                 cursor = conn.cursor()
-                cursor.execute("SELECT arrival_order_json FROM race_results WHERE race_id = ?", (r_id,))
+                cursor.execute("SELECT arrival_order_json FROM race_results WHERE race_id = ? AND COALESCE(statut, 'DEFINITIVE') = 'DEFINITIVE'", (r_id,))
                 res_row = cursor.fetchone()
 
             is_finished = bool(res_row)
