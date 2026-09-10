@@ -1,17 +1,22 @@
 {
- "schema_version": "1.0",
+ "schema_version": "1.1",
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
+ "version_code": {
+  "commit": "42add54511c5b3a1e1aef516687e64178ec148ff",
+  "run_id": "34488464315",
+  "depot": "Moriah12783/turf-engine"
+ },
  "date_course": "2026-09-10",
- "genere_le_utc": "2026-09-10T14:15:37Z",
+ "genere_le_utc": "2026-09-10T14:21:31Z",
  "nb_courses": 25,
  "compte_par_statut": {
-  "EN_ATTENTE": 13,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 12,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 12,
   "ANNULEE": 0
  },
- "empreinte_sha256": "8ac6a38f09c0257765f1d692daca213d3ee21d3094430eac2ab5d202aa637446",
+ "empreinte_sha256": "fb7ae20a57fd64c7f870e438748f2599ed8e99c161d97c6d588fae7a21513fe0",
  "courses": [
   {
    "course_id": "R1C1_10092026_ParisLongchamp",
@@ -24,14 +29,16 @@
     "libelle": "PRIX CARRUS",
     "discipline": "PLAT",
     "distance_m": 1400,
-    "heure_depart_utc": null,
+    "heure_depart_utc": "2026-09-10T11:55:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "11:55 GMT (13:55 Paris)",
-    "partants_declares": null,
+    "partants_declares": 16,
     "partants_actifs": 15
    },
    "statut": {
     "code": "DEFINITIVE",
     "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
     "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
@@ -233,9 +240,11 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-09-10T12:00:22Z",
-    "definitive_depuis_utc": "2026-09-10T12:00:22Z",
+    "definitive_depuis_utc": "2026-09-10T12:12:42Z",
+    "verifiee_le_utc": "2026-09-10T12:12:42Z",
+    "enregistree_ancien_systeme_utc": "2026-09-10T12:00:22Z",
     "derniere_modification_utc": "2026-09-10T12:12:42Z",
-    "derniere_verification_utc": "2026-09-10T14:15:18Z"
+    "derniere_verification_utc": "2026-09-10T14:21:08Z"
    },
    "correction": {
     "version": 2,
@@ -294,6 +303,7 @@
     "discipline": "PLAT",
     "distance_m": 1600,
     "heure_depart_utc": "2026-09-10T12:30:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "12:30 GMT (14:30 Paris)",
     "partants_declares": 7,
     "partants_actifs": 7
@@ -301,6 +311,7 @@
    "statut": {
     "code": "DEFINITIVE",
     "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
     "pmu_statut": "FIN_COURSE"
    },
@@ -396,8 +407,10 @@
    "horodatages": {
     "premiere_lecture_utc": "2026-09-10T12:36:08Z",
     "definitive_depuis_utc": "2026-09-10T12:45:17Z",
+    "verifiee_le_utc": "2026-09-10T12:45:17Z",
+    "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-10T12:45:17Z",
-    "derniere_verification_utc": "2026-09-10T14:15:18Z"
+    "derniere_verification_utc": "2026-09-10T14:21:08Z"
    },
    "correction": {
     "version": 2,
@@ -447,6 +460,7 @@
     "discipline": "PLAT",
     "distance_m": 2000,
     "heure_depart_utc": "2026-09-10T13:05:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "13:05 GMT (15:05 Paris)",
     "partants_declares": 8,
     "partants_actifs": 8
@@ -454,6 +468,7 @@
    "statut": {
     "code": "DEFINITIVE",
     "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
     "pmu_statut": "FIN_COURSE"
    },
@@ -572,8 +587,10 @@
    "horodatages": {
     "premiere_lecture_utc": "2026-09-10T13:15:17Z",
     "definitive_depuis_utc": "2026-09-10T13:21:10Z",
+    "verifiee_le_utc": "2026-09-10T13:21:10Z",
+    "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-10T13:21:10Z",
-    "derniere_verification_utc": "2026-09-10T14:15:18Z"
+    "derniere_verification_utc": "2026-09-10T14:21:08Z"
    },
    "correction": {
     "version": 2,
@@ -624,6 +641,7 @@
     "discipline": "PLAT",
     "distance_m": 3100,
     "heure_depart_utc": "2026-09-10T13:40:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "13:40 GMT (15:40 Paris)",
     "partants_declares": 8,
     "partants_actifs": 8
@@ -631,6 +649,7 @@
    "statut": {
     "code": "DEFINITIVE",
     "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
     "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
@@ -749,8 +768,10 @@
    "horodatages": {
     "premiere_lecture_utc": "2026-09-10T13:45:16Z",
     "definitive_depuis_utc": "2026-09-10T14:00:22Z",
+    "verifiee_le_utc": "2026-09-10T14:00:22Z",
+    "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-10T14:00:22Z",
-    "derniere_verification_utc": "2026-09-10T14:15:18Z"
+    "derniere_verification_utc": "2026-09-10T14:21:08Z"
    },
    "correction": {
     "version": 2,
@@ -801,18 +822,50 @@
     "discipline": "PLAT",
     "distance_m": 2400,
     "heure_depart_utc": "2026-09-10T14:15:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "14:15 GMT (16:15 Paris)",
     "partants_declares": 10,
     "partants_actifs": 9
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
+    "finalite": null,
     "annulee": false,
-    "pmu_statut": "CHEVAUX_SOUS_ORDRES"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 2,
+     "nom": "LOUISA BANBOU",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 3,
+     "nom": "LILI STAR",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 6,
+     "nom": "MAHAURI SEA",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 8,
+     "nom": "MABRISKA",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    2,
+    3,
+    6,
+    8
+   ],
    "non_classes": [],
    "non_partants": [
     {
@@ -830,19 +883,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/10092026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-09-10T14:21:08Z",
     "definitive_depuis_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "verifiee_le_utc": null,
+    "enregistree_ancien_systeme_utc": null,
+    "derniere_modification_utc": "2026-09-10T14:21:08Z",
+    "derniere_verification_utc": "2026-09-10T14:21:08Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-09-10T14:21:08Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       2,
+       3,
+       6,
+       8
+      ]
+     }
+    ]
    }
   },
   {
@@ -857,6 +926,7 @@
     "discipline": "PLAT",
     "distance_m": 2400,
     "heure_depart_utc": "2026-09-10T14:50:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "14:50 GMT (16:50 Paris)",
     "partants_declares": 10,
     "partants_actifs": 10
@@ -864,6 +934,7 @@
    "statut": {
     "code": "EN_ATTENTE",
     "definitive": false,
+    "finalite": null,
     "annulee": false,
     "pmu_statut": "PROGRAMMEE"
    },
@@ -887,6 +958,8 @@
    "horodatages": {
     "premiere_lecture_utc": null,
     "definitive_depuis_utc": null,
+    "verifiee_le_utc": null,
+    "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": null,
     "derniere_verification_utc": null
    },
@@ -908,6 +981,7 @@
     "discipline": "PLAT",
     "distance_m": 1400,
     "heure_depart_utc": "2026-09-10T15:25:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "15:25 GMT (17:25 Paris)",
     "partants_declares": 16,
     "partants_actifs": 15
@@ -915,6 +989,7 @@
    "statut": {
     "code": "EN_ATTENTE",
     "definitive": false,
+    "finalite": null,
     "annulee": false,
     "pmu_statut": "PROGRAMMEE"
    },
@@ -943,6 +1018,8 @@
    "horodatages": {
     "premiere_lecture_utc": null,
     "definitive_depuis_utc": null,
+    "verifiee_le_utc": null,
+    "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": null,
     "derniere_verification_utc": null
    },
@@ -964,6 +1041,7 @@
     "discipline": "PLAT",
     "distance_m": 1400,
     "heure_depart_utc": "2026-09-10T16:00:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "16:00 GMT (18:00 Paris)",
     "partants_declares": 16,
     "partants_actifs": 15
@@ -971,6 +1049,7 @@
    "statut": {
     "code": "EN_ATTENTE",
     "definitive": false,
+    "finalite": null,
     "annulee": false,
     "pmu_statut": "PROGRAMMEE"
    },
@@ -999,6 +1078,8 @@
    "horodatages": {
     "premiere_lecture_utc": null,
     "definitive_depuis_utc": null,
+    "verifiee_le_utc": null,
+    "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": null,
     "derniere_verification_utc": null
    },
@@ -1020,6 +1101,7 @@
     "discipline": "PLAT",
     "distance_m": 1400,
     "heure_depart_utc": "2026-09-10T16:33:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "16:33 GMT (18:33 Paris)",
     "partants_declares": 16,
     "partants_actifs": 16
@@ -1027,6 +1109,7 @@
    "statut": {
     "code": "EN_ATTENTE",
     "definitive": false,
+    "finalite": null,
     "annulee": false,
     "pmu_statut": "PROGRAMMEE"
    },
@@ -1050,6 +1133,8 @@
    "horodatages": {
     "premiere_lecture_utc": null,
     "definitive_depuis_utc": null,
+    "verifiee_le_utc": null,
+    "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": null,
     "derniere_verification_utc": null
    },
@@ -1070,14 +1155,16 @@
     "libelle": "PRIX ICI PICARDIE",
     "discipline": "TROT_ATTELE",
     "distance_m": 2150,
-    "heure_depart_utc": null,
+    "heure_depart_utc": "2026-09-10T09:51:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "09:51 GMT (11:51 Paris)",
-    "partants_declares": null,
+    "partants_declares": 14,
     "partants_actifs": 12
    },
    "statut": {
     "code": "DEFINITIVE",
     "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
     "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
@@ -1155,7 +1242,18 @@
     5,
     3
    ],
-   "non_classes": [],
+   "non_classes": [
+    {
+     "num": 9,
+     "nom": "IMZARA VALIERE",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 11,
+     "nom": "ITOU DES GENIEVRES",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [
     {
      "num": 7,
@@ -1293,12 +1391,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-09-10T10:00:27Z",
-    "definitive_depuis_utc": "2026-09-10T10:00:27Z",
-    "derniere_modification_utc": "2026-09-10T14:15:18Z",
-    "derniere_verification_utc": "2026-09-10T14:15:18Z"
+    "definitive_depuis_utc": "2026-09-10T12:12:42Z",
+    "verifiee_le_utc": "2026-09-10T12:12:42Z",
+    "enregistree_ancien_systeme_utc": "2026-09-10T10:00:27Z",
+    "derniere_modification_utc": "2026-09-10T14:21:08Z",
+    "derniere_verification_utc": "2026-09-10T14:21:08Z"
    },
    "correction": {
-    "version": 15,
+    "version": 16,
     "nb_corrections": 7,
     "historique": [
      {
@@ -1580,6 +1680,25 @@
        5,
        3
       ]
+     },
+     {
+      "version": 16,
+      "statut": "DEFINITIVE",
+      "raison": "COMPLETION",
+      "horodatage_utc": "2026-09-10T14:21:08Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       2,
+       8,
+       13,
+       6,
+       1,
+       10,
+       4,
+       12,
+       5,
+       3
+      ]
      }
     ]
    }
@@ -1595,14 +1714,16 @@
     "libelle": "PRIX DU STAND PMU",
     "discipline": "TROT_MONTE",
     "distance_m": 2850,
-    "heure_depart_utc": null,
+    "heure_depart_utc": "2026-09-10T10:23:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "10:23 GMT (12:23 Paris)",
-    "partants_declares": null,
+    "partants_declares": 14,
     "partants_actifs": 14
    },
    "statut": {
     "code": "DEFINITIVE",
     "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
     "pmu_statut": "FIN_COURSE"
    },
@@ -1687,7 +1808,23 @@
     2,
     5
    ],
-   "non_classes": [],
+   "non_classes": [
+    {
+     "num": 1,
+     "nom": "MIGHTY KYDE",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 4,
+     "nom": "MISSILE DU GOUTIER",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 7,
+     "nom": "MADONETTE",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": true,
@@ -1771,12 +1908,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-09-10T10:30:33Z",
-    "definitive_depuis_utc": "2026-09-10T10:30:33Z",
-    "derniere_modification_utc": "2026-09-10T14:15:18Z",
-    "derniere_verification_utc": "2026-09-10T14:15:18Z"
+    "definitive_depuis_utc": "2026-09-10T12:12:42Z",
+    "verifiee_le_utc": "2026-09-10T12:12:42Z",
+    "enregistree_ancien_systeme_utc": "2026-09-10T10:30:33Z",
+    "derniere_modification_utc": "2026-09-10T14:21:08Z",
+    "derniere_verification_utc": "2026-09-10T14:21:08Z"
    },
    "correction": {
-    "version": 15,
+    "version": 16,
     "nb_corrections": 7,
     "historique": [
      {
@@ -2072,6 +2211,26 @@
        2,
        5
       ]
+     },
+     {
+      "version": 16,
+      "statut": "DEFINITIVE",
+      "raison": "COMPLETION",
+      "horodatage_utc": "2026-09-10T14:21:08Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       9,
+       10,
+       3,
+       6,
+       8,
+       13,
+       11,
+       14,
+       12,
+       2,
+       5
+      ]
      }
     ]
    }
@@ -2087,14 +2246,16 @@
     "libelle": "PRIX DU PAYS DE BRAY",
     "discipline": "TROT_ATTELE",
     "distance_m": 2850,
-    "heure_depart_utc": null,
+    "heure_depart_utc": "2026-09-10T10:55:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "10:55 GMT (12:55 Paris)",
-    "partants_declares": null,
+    "partants_declares": 16,
     "partants_actifs": 16
    },
    "statut": {
     "code": "DEFINITIVE",
     "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
     "pmu_statut": "FIN_COURSE"
    },
@@ -2179,7 +2340,33 @@
     1,
     9
    ],
-   "non_classes": [],
+   "non_classes": [
+    {
+     "num": 3,
+     "nom": "MONACO DU LIVET",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 4,
+     "nom": "MORRIS DE REUX",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 5,
+     "nom": "MAYA DU BELLAY",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 7,
+     "nom": "MAESTRO DE CORDAY",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 11,
+     "nom": "MARVIN D'ALGOT",
+     "incident": "ARRETE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": true,
@@ -2263,12 +2450,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-09-10T11:06:12Z",
-    "definitive_depuis_utc": "2026-09-10T11:06:12Z",
-    "derniere_modification_utc": "2026-09-10T14:15:18Z",
-    "derniere_verification_utc": "2026-09-10T14:15:18Z"
+    "definitive_depuis_utc": "2026-09-10T12:12:42Z",
+    "verifiee_le_utc": "2026-09-10T12:12:42Z",
+    "enregistree_ancien_systeme_utc": "2026-09-10T11:06:12Z",
+    "derniere_modification_utc": "2026-09-10T14:21:08Z",
+    "derniere_verification_utc": "2026-09-10T14:21:08Z"
    },
    "correction": {
-    "version": 15,
+    "version": 16,
     "nb_corrections": 7,
     "historique": [
      {
@@ -2564,6 +2753,26 @@
        1,
        9
       ]
+     },
+     {
+      "version": 16,
+      "statut": "DEFINITIVE",
+      "raison": "COMPLETION",
+      "horodatage_utc": "2026-09-10T14:21:08Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       16,
+       14,
+       12,
+       6,
+       8,
+       15,
+       10,
+       2,
+       13,
+       1,
+       9
+      ]
      }
     ]
    }
@@ -2579,14 +2788,16 @@
     "libelle": "PRIX DE NORMANDIE",
     "discipline": "TROT_ATTELE",
     "distance_m": 2150,
-    "heure_depart_utc": null,
+    "heure_depart_utc": "2026-09-10T11:29:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "11:29 GMT (13:29 Paris)",
-    "partants_declares": null,
+    "partants_declares": 14,
     "partants_actifs": 14
    },
    "statut": {
     "code": "DEFINITIVE",
     "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
     "pmu_statut": "FIN_COURSE"
    },
@@ -2678,7 +2889,18 @@
     7,
     11
    ],
-   "non_classes": [],
+   "non_classes": [
+    {
+     "num": 2,
+     "nom": "NEBULO",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 13,
+     "nom": "NORTH OF GOLD",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": true,
@@ -2762,12 +2984,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-09-10T11:45:33Z",
-    "definitive_depuis_utc": "2026-09-10T11:45:33Z",
-    "derniere_modification_utc": "2026-09-10T14:15:18Z",
-    "derniere_verification_utc": "2026-09-10T14:15:18Z"
+    "definitive_depuis_utc": "2026-09-10T12:12:42Z",
+    "verifiee_le_utc": "2026-09-10T12:12:42Z",
+    "enregistree_ancien_systeme_utc": "2026-09-10T11:45:33Z",
+    "derniere_modification_utc": "2026-09-10T14:21:08Z",
+    "derniere_verification_utc": "2026-09-10T14:21:08Z"
    },
    "correction": {
-    "version": 15,
+    "version": 16,
     "nb_corrections": 7,
     "historique": [
      {
@@ -3084,6 +3308,27 @@
        7,
        11
       ]
+     },
+     {
+      "version": 16,
+      "statut": "DEFINITIVE",
+      "raison": "COMPLETION",
+      "horodatage_utc": "2026-09-10T14:21:08Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       5,
+       3,
+       6,
+       12,
+       14,
+       1,
+       10,
+       8,
+       4,
+       9,
+       7,
+       11
+      ]
      }
     ]
    }
@@ -3100,6 +3345,7 @@
     "discipline": "TROT_ATTELE",
     "distance_m": 2850,
     "heure_depart_utc": "2026-09-10T12:12:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "12:12 GMT (14:12 Paris)",
     "partants_declares": 18,
     "partants_actifs": 18
@@ -3107,6 +3353,7 @@
    "statut": {
     "code": "DEFINITIVE",
     "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
     "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
@@ -3198,7 +3445,38 @@
     13,
     2
    ],
-   "non_classes": [],
+   "non_classes": [
+    {
+     "num": 1,
+     "nom": "LUCKY DE POMMERAY",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 3,
+     "nom": "LOVER DES BROUSSES",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 5,
+     "nom": "LALBER",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 10,
+     "nom": "LEXIA",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 14,
+     "nom": "LEVIOSA",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 18,
+     "nom": "LA TRINITE NEMO",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": true,
@@ -3283,11 +3561,13 @@
    "horodatages": {
     "premiere_lecture_utc": "2026-09-10T12:21:08Z",
     "definitive_depuis_utc": "2026-09-10T12:30:19Z",
-    "derniere_modification_utc": "2026-09-10T14:15:18Z",
-    "derniere_verification_utc": "2026-09-10T14:15:18Z"
+    "verifiee_le_utc": "2026-09-10T12:30:19Z",
+    "enregistree_ancien_systeme_utc": null,
+    "derniere_modification_utc": "2026-09-10T14:21:08Z",
+    "derniere_verification_utc": "2026-09-10T14:21:08Z"
    },
    "correction": {
-    "version": 13,
+    "version": 14,
     "nb_corrections": 6,
     "historique": [
      {
@@ -3555,6 +3835,27 @@
        13,
        2
       ]
+     },
+     {
+      "version": 14,
+      "statut": "DEFINITIVE",
+      "raison": "COMPLETION",
+      "horodatage_utc": "2026-09-10T14:21:08Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       7,
+       15,
+       16,
+       4,
+       12,
+       9,
+       8,
+       17,
+       6,
+       11,
+       13,
+       2
+      ]
      }
     ]
    }
@@ -3571,6 +3872,7 @@
     "discipline": "TROT_ATTELE",
     "distance_m": 2150,
     "heure_depart_utc": "2026-09-10T12:47:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "12:47 GMT (14:47 Paris)",
     "partants_declares": 16,
     "partants_actifs": 16
@@ -3578,6 +3880,7 @@
    "statut": {
     "code": "DEFINITIVE",
     "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
     "pmu_statut": "FIN_COURSE"
    },
@@ -3683,7 +3986,18 @@
     2,
     8
    ],
-   "non_classes": [],
+   "non_classes": [
+    {
+     "num": 13,
+     "nom": "JUPILLE DE GODREL",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 15,
+     "nom": "KASTA DU RIB",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": true,
@@ -3768,11 +4082,13 @@
    "horodatages": {
     "premiere_lecture_utc": "2026-09-10T13:00:07Z",
     "definitive_depuis_utc": "2026-09-10T13:06:07Z",
-    "derniere_modification_utc": "2026-09-10T14:15:18Z",
-    "derniere_verification_utc": "2026-09-10T14:15:18Z"
+    "verifiee_le_utc": "2026-09-10T13:06:07Z",
+    "enregistree_ancien_systeme_utc": null,
+    "derniere_modification_utc": "2026-09-10T14:21:08Z",
+    "derniere_verification_utc": "2026-09-10T14:21:08Z"
    },
    "correction": {
-    "version": 9,
+    "version": 10,
     "nb_corrections": 4,
     "historique": [
      {
@@ -3972,6 +4288,29 @@
        2,
        8
       ]
+     },
+     {
+      "version": 10,
+      "statut": "DEFINITIVE",
+      "raison": "COMPLETION",
+      "horodatage_utc": "2026-09-10T14:21:08Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       12,
+       3,
+       16,
+       4,
+       14,
+       10,
+       11,
+       6,
+       7,
+       1,
+       9,
+       5,
+       2,
+       8
+      ]
      }
     ]
    }
@@ -3988,6 +4327,7 @@
     "discipline": "TROT_MONTE",
     "distance_m": 2850,
     "heure_depart_utc": "2026-09-10T13:22:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "13:22 GMT (15:22 Paris)",
     "partants_declares": 16,
     "partants_actifs": 16
@@ -3995,6 +4335,7 @@
    "statut": {
     "code": "DEFINITIVE",
     "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
     "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
@@ -4093,7 +4434,23 @@
     5,
     7
    ],
-   "non_classes": [],
+   "non_classes": [
+    {
+     "num": 1,
+     "nom": "JULIANO DE GLANE",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 8,
+     "nom": "KRACKSMAN",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 15,
+     "nom": "IGLOO DE BEAULIEU",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": true,
@@ -4178,11 +4535,13 @@
    "horodatages": {
     "premiere_lecture_utc": "2026-09-10T13:30:01Z",
     "definitive_depuis_utc": "2026-09-10T13:36:07Z",
-    "derniere_modification_utc": "2026-09-10T14:15:18Z",
-    "derniere_verification_utc": "2026-09-10T14:15:18Z"
+    "verifiee_le_utc": "2026-09-10T13:36:07Z",
+    "enregistree_ancien_systeme_utc": null,
+    "derniere_modification_utc": "2026-09-10T14:21:08Z",
+    "derniere_verification_utc": "2026-09-10T14:21:08Z"
    },
    "correction": {
-    "version": 5,
+    "version": 6,
     "nb_corrections": 2,
     "historique": [
      {
@@ -4286,6 +4645,28 @@
        5,
        7
       ]
+     },
+     {
+      "version": 6,
+      "statut": "DEFINITIVE",
+      "raison": "COMPLETION",
+      "horodatage_utc": "2026-09-10T14:21:08Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       13,
+       16,
+       9,
+       12,
+       11,
+       3,
+       4,
+       10,
+       6,
+       14,
+       2,
+       5,
+       7
+      ]
      }
     ]
    }
@@ -4302,6 +4683,7 @@
     "discipline": "TROT_ATTELE",
     "distance_m": 2150,
     "heure_depart_utc": "2026-09-10T13:57:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "13:57 GMT (15:57 Paris)",
     "partants_declares": 11,
     "partants_actifs": 10
@@ -4309,6 +4691,7 @@
    "statut": {
     "code": "DEFINITIVE",
     "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
     "pmu_statut": "FIN_COURSE"
    },
@@ -4490,8 +4873,10 @@
    "horodatages": {
     "premiere_lecture_utc": "2026-09-10T14:06:09Z",
     "definitive_depuis_utc": "2026-09-10T14:15:18Z",
+    "verifiee_le_utc": "2026-09-10T14:15:18Z",
+    "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-10T14:15:18Z",
-    "derniere_verification_utc": "2026-09-10T14:15:18Z"
+    "derniere_verification_utc": "2026-09-10T14:21:08Z"
    },
    "correction": {
     "version": 2,
@@ -4543,6 +4928,7 @@
     "discipline": "TROT_ATTELE",
     "distance_m": 2850,
     "heure_depart_utc": "2026-09-10T14:32:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "14:32 GMT (16:32 Paris)",
     "partants_declares": 16,
     "partants_actifs": 16
@@ -4550,6 +4936,7 @@
    "statut": {
     "code": "EN_ATTENTE",
     "definitive": false,
+    "finalite": null,
     "annulee": false,
     "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
@@ -4573,6 +4960,8 @@
    "horodatages": {
     "premiere_lecture_utc": null,
     "definitive_depuis_utc": null,
+    "verifiee_le_utc": null,
+    "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": null,
     "derniere_verification_utc": null
    },
@@ -4594,6 +4983,7 @@
     "discipline": "TROT_MONTE",
     "distance_m": 2850,
     "heure_depart_utc": "2026-09-10T15:07:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "15:07 GMT (17:07 Paris)",
     "partants_declares": 12,
     "partants_actifs": 12
@@ -4601,6 +4991,7 @@
    "statut": {
     "code": "EN_ATTENTE",
     "definitive": false,
+    "finalite": null,
     "annulee": false,
     "pmu_statut": "PROGRAMMEE"
    },
@@ -4624,6 +5015,8 @@
    "horodatages": {
     "premiere_lecture_utc": null,
     "definitive_depuis_utc": null,
+    "verifiee_le_utc": null,
+    "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": null,
     "derniere_verification_utc": null
    },
@@ -4645,6 +5038,7 @@
     "discipline": "TROT_ATTELE",
     "distance_m": 2850,
     "heure_depart_utc": "2026-09-10T15:42:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "15:42 GMT (17:42 Paris)",
     "partants_declares": 14,
     "partants_actifs": 14
@@ -4652,6 +5046,7 @@
    "statut": {
     "code": "EN_ATTENTE",
     "definitive": false,
+    "finalite": null,
     "annulee": false,
     "pmu_statut": "PROGRAMMEE"
    },
@@ -4675,6 +5070,8 @@
    "horodatages": {
     "premiere_lecture_utc": null,
     "definitive_depuis_utc": null,
+    "verifiee_le_utc": null,
+    "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": null,
     "derniere_verification_utc": null
    },
@@ -4696,6 +5093,7 @@
     "discipline": "TROT_ATTELE",
     "distance_m": 2850,
     "heure_depart_utc": "2026-09-10T16:17:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "16:17 GMT (18:17 Paris)",
     "partants_declares": 15,
     "partants_actifs": 15
@@ -4703,6 +5101,7 @@
    "statut": {
     "code": "EN_ATTENTE",
     "definitive": false,
+    "finalite": null,
     "annulee": false,
     "pmu_statut": "PROGRAMMEE"
    },
@@ -4726,6 +5125,8 @@
    "horodatages": {
     "premiere_lecture_utc": null,
     "definitive_depuis_utc": null,
+    "verifiee_le_utc": null,
+    "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": null,
     "derniere_verification_utc": null
    },
@@ -4747,6 +5148,7 @@
     "discipline": "TROT_ATTELE",
     "distance_m": 2850,
     "heure_depart_utc": "2026-09-10T16:50:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "16:50 GMT (18:50 Paris)",
     "partants_declares": 16,
     "partants_actifs": 16
@@ -4754,6 +5156,7 @@
    "statut": {
     "code": "EN_ATTENTE",
     "definitive": false,
+    "finalite": null,
     "annulee": false,
     "pmu_statut": "PROGRAMMEE"
    },
@@ -4777,6 +5180,8 @@
    "horodatages": {
     "premiere_lecture_utc": null,
     "definitive_depuis_utc": null,
+    "verifiee_le_utc": null,
+    "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": null,
     "derniere_verification_utc": null
    },
@@ -4798,6 +5203,7 @@
     "discipline": "TROT_MONTE",
     "distance_m": 2850,
     "heure_depart_utc": "2026-09-10T17:20:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "17:20 GMT (19:20 Paris)",
     "partants_declares": 16,
     "partants_actifs": 16
@@ -4805,6 +5211,7 @@
    "statut": {
     "code": "EN_ATTENTE",
     "definitive": false,
+    "finalite": null,
     "annulee": false,
     "pmu_statut": "PROGRAMMEE"
    },
@@ -4828,6 +5235,8 @@
    "horodatages": {
     "premiere_lecture_utc": null,
     "definitive_depuis_utc": null,
+    "verifiee_le_utc": null,
+    "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": null,
     "derniere_verification_utc": null
    },
@@ -4849,6 +5258,7 @@
     "discipline": "TROT_ATTELE",
     "distance_m": 2850,
     "heure_depart_utc": "2026-09-10T17:50:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "17:50 GMT (19:50 Paris)",
     "partants_declares": 14,
     "partants_actifs": 14
@@ -4856,6 +5266,7 @@
    "statut": {
     "code": "EN_ATTENTE",
     "definitive": false,
+    "finalite": null,
     "annulee": false,
     "pmu_statut": "PROGRAMMEE"
    },
@@ -4879,6 +5290,8 @@
    "horodatages": {
     "premiere_lecture_utc": null,
     "definitive_depuis_utc": null,
+    "verifiee_le_utc": null,
+    "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": null,
     "derniere_verification_utc": null
    },
@@ -4900,6 +5313,7 @@
     "discipline": "TROT_ATTELE",
     "distance_m": 2850,
     "heure_depart_utc": "2026-09-10T18:20:00Z",
+    "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "18:20 GMT (20:20 Paris)",
     "partants_declares": 12,
     "partants_actifs": 12
@@ -4907,6 +5321,7 @@
    "statut": {
     "code": "EN_ATTENTE",
     "definitive": false,
+    "finalite": null,
     "annulee": false,
     "pmu_statut": "PROGRAMMEE"
    },
@@ -4930,6 +5345,8 @@
    "horodatages": {
     "premiere_lecture_utc": null,
     "definitive_depuis_utc": null,
+    "verifiee_le_utc": null,
+    "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": null,
     "derniere_verification_utc": null
    },
