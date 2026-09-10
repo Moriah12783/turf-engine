@@ -318,8 +318,13 @@ def compare_rankings(old_ranking: Sequence[Dict[str, Any]], new_ranking: Sequenc
     inc_added = any(n not in old_inc for n in new_inc)
 
     if new_rk == old_rk:
-        if inc_changed or inc_removed:
+        if inc_changed:
             return CMP_CORRECTION
+        if inc_removed:
+            # Classement identique mais incidents disparus : perte d'information
+            # sans qu'aucun cheval ne réapparaisse au classement = variante de
+            # source appauvrie (cache), jamais une correction.
+            return CMP_REGRESSION
         return CMP_COMPLETION if inc_added else CMP_IDENTIQUE
     if len(new_rk) > len(old_rk) and new_rk[:len(old_rk)] == old_rk:
         return CMP_CORRECTION if (inc_changed or inc_removed) else CMP_COMPLETION
@@ -332,6 +337,35 @@ def compare_rankings(old_ranking: Sequence[Dict[str, Any]], new_ranking: Sequenc
         if len(new_rk) < len(old_rk) and old_rk[:len(new_rk)] == new_rk:
             return CMP_REGRESSION  # préfixe strict, retrait inexpliqué : source partielle/périmée
     return CMP_CORRECTION
+
+
+def preserve_known_incidents(old_ranking: Sequence[Dict[str, Any]], old_incidents: Sequence[Dict[str, Any]],
+                             old_non_partants: Sequence[int], new_ranking: Sequence[Dict[str, Any]],
+                             new_incidents: Sequence[Dict[str, Any]], new_non_partants: Sequence[int]
+                             ) -> Tuple[List[Dict[str, Any]], List[int], List[int]]:
+    """Information monotone : un incident ou une non-partance déjà connus ne
+    disparaissent que si le cheval RÉAPPARAÎT au classement (annulation d'une
+    disqualification, par exemple). Sinon ils sont conservés — une variante de
+    source sans le bloc ``incidents`` (cache) ne doit jamais les effacer.
+    Retourne (incidents, non_partants, numéros préservés)."""
+    new_placed = {int(r["num"]) for r in new_ranking}
+    inc_map = {int(i["num"]): str(i["type"]) for i in new_incidents}
+    np_set = {int(n) for n in new_non_partants}
+    preserved: List[int] = []
+    for i in old_incidents:
+        n = int(i["num"])
+        if n in new_placed or n in inc_map or n in np_set:
+            continue
+        inc_map[n] = str(i["type"])
+        preserved.append(n)
+    for n in old_non_partants:
+        n = int(n)
+        if n in new_placed or n in inc_map or n in np_set:
+            continue
+        np_set.add(n)
+        preserved.append(n)
+    incidents = [{"num": n, "type": inc_map[n]} for n in sorted(inc_map)]
+    return incidents, sorted(np_set), sorted(preserved)
 
 
 def removed_unexplained(old_ranking: Sequence[Dict[str, Any]], new_ranking: Sequence[Dict[str, Any]],

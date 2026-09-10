@@ -245,6 +245,16 @@ class TurfDatabase:
                     VALUES (?, 1, 'DEFINITIVE', NULL, ?, ?, '[]', 'PMU_LEGACY', 'MIGRATION_LEGACY', ?)
                 """, (row["race_id"], json.dumps(ranking), json.dumps(incidents), rec))
 
+            # Réparation des OSCILLATIONS d'incidents (défaut constaté le 10/09
+            # entre 12h15 et 14h21 sur 7 courses de Mauquenchy) : des versions
+            # consécutives au classement IDENTIQUE dont seuls les incidents
+            # disparaissaient puis réapparaissaient (variante de cache du
+            # programme PMU sans le bloc incidents). Ces versions techniques ne
+            # sont pas des corrections : elles sont retirées, les versions
+            # restantes renumérotées, et la réparation est elle-même tracée par
+            # une version REPARATION_OSCILLATION_INCIDENTS. Idempotent.
+            self._repair_incident_oscillations(cursor)
+
             # Réparation idempotente des lignes déjà versionnées avant l'ajout de
             # `finalite` (production du 10/09) : on recalcule la finalité depuis
             # l'historique, sans toucher au classement ni aux versions.
@@ -273,6 +283,95 @@ class TurfDatabase:
                 cursor.execute("""UPDATE race_results SET finalite = ?, verified_at = ?, definitive_at = ?,
                                   legacy_recorded_at = COALESCE(legacy_recorded_at, ?) WHERE race_id = ?""",
                                (finalite, verified_at, definitive_at, legacy_at, race_id))
+
+    @staticmethod
+    def _repair_incident_oscillations(cursor) -> int:
+        """Retire les paires de versions « perte d'incidents / retour des mêmes
+        incidents » à classement identique (aucune correction réelle), renumérote
+        et trace la réparation. Retourne le nombre de courses réparées."""
+        cursor.execute("SELECT DISTINCT race_id FROM race_results_history")
+        race_ids = [r["race_id"] for r in cursor.fetchall()]
+        repaired = 0
+        now = datetime.utcnow().isoformat()
+        for race_id in race_ids:
+            cursor.execute("""SELECT id, version, statut, pmu_statut, ranking_json, incidents_json, non_partants_json,
+                              source, reason, recorded_at FROM race_results_history WHERE race_id = ? ORDER BY version""",
+                           (race_id,))
+            hist = [dict(h) for h in cursor.fetchall()]
+            if len(hist) < 3 or any(h["reason"] == "REPARATION_OSCILLATION_INCIDENTS" for h in hist):
+                continue
+
+            def _rk(h):
+                try:
+                    return [(int(x["rang"]), int(x["num"])) for x in json.loads(h["ranking_json"] or "[]")]
+                except Exception:
+                    return []
+
+            def _inc(h):
+                try:
+                    return sorted((int(i["num"]), str(i["type"])) for i in json.loads(h["incidents_json"] or "[]"))
+                except Exception:
+                    return []
+
+            def _np(h):
+                try:
+                    return sorted(int(n) for n in json.loads(h["non_partants_json"] or "[]"))
+                except Exception:
+                    return []
+
+            spurious: List[int] = []
+            i = 1
+            while i < len(hist):
+                prev, cur = hist[i - 1], hist[i]
+                loss = (_rk(cur) == _rk(prev) and cur["statut"] == prev["statut"]
+                        and (set(_inc(cur)) < set(_inc(prev)) or (set(_inc(cur)) <= set(_inc(prev)) and set(_np(cur)) < set(_np(prev))))
+                        and cur["reason"] in ("CORRECTION_CLASSEMENT", "COMPLETION"))
+                if loss:
+                    spurious.append(cur["id"])
+                    # la version suivante qui restaure exactement l'état d'avant la perte est technique aussi
+                    if i + 1 < len(hist):
+                        nxt = hist[i + 1]
+                        if _rk(nxt) == _rk(prev) and _inc(nxt) == _inc(prev) and _np(nxt) == _np(prev) \
+                                and nxt["reason"] in ("COMPLETION", "CORRECTION_CLASSEMENT"):
+                            spurious.append(nxt["id"])
+                            i += 2
+                            continue
+                i += 1
+            if not spurious:
+                continue
+
+            kept = [h for h in hist if h["id"] not in spurious]
+            cursor.execute(f"DELETE FROM race_results_history WHERE id IN ({','.join('?' * len(spurious))})", spurious)
+            # Renumérotation contiguë des versions restantes
+            for new_version, h in enumerate(kept, start=1):
+                if h["version"] != new_version:
+                    cursor.execute("UPDATE race_results_history SET version = ? WHERE id = ?", (-new_version, h["id"]))
+            cursor.execute("UPDATE race_results_history SET version = -version WHERE race_id = ? AND version < 0", (race_id,))
+            last = kept[-1]
+            final_version = len(kept) + 1
+            nb_corr = sum(1 for h in kept if h["reason"] == "CORRECTION_CLASSEMENT")
+            try:
+                ranking = json.loads(last["ranking_json"] or "[]")
+            except Exception:
+                ranking = []
+            flat = json.dumps([int(x["num"]) for x in ranking])
+            try:
+                dq = sorted({int(i["num"]) for i in json.loads(last["incidents_json"] or "[]") if "DISQUALIF" in str(i["type"]).upper()})
+            except Exception:
+                dq = []
+            cursor.execute("""INSERT INTO race_results_history (race_id, version, statut, pmu_statut, ranking_json, incidents_json,
+                              non_partants_json, source, reason, recorded_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'REPARATION_OSCILLATION_INCIDENTS', ?)""",
+                           (race_id, final_version, last["statut"], last["pmu_statut"], last["ranking_json"], last["incidents_json"],
+                            last["non_partants_json"], last["source"], now))
+            cursor.execute("""UPDATE race_results SET version = ?, nb_corrections = ?, arrival_order_json = ?, disqualified_json = ?,
+                              ranking_json = ?, incidents_json = ?, non_partants_json = ?, statut = ?, pmu_statut = ?, source = ?,
+                              updated_at = ? WHERE race_id = ?""",
+                           (final_version, nb_corr, flat, json.dumps(dq), last["ranking_json"], last["incidents_json"],
+                            last["non_partants_json"], last["statut"], last["pmu_statut"], last["source"], now, race_id))
+            print("RESULT_OSCILLATION_REPAIRED " + json.dumps({"race_id": race_id, "versions_retirees": len(spurious),
+                                                              "version_finale": final_version, "now_utc": now}))
+            repaired += 1
+        return repaired
 
     def save_race(self, race_data: Dict[str, Any]):
         with self.transaction() as conn:
@@ -621,10 +720,25 @@ class TurfDatabase:
         arrivée DEFINITIVE ; une arrivée provisoire la met en ``ARRIVEE_PROVISOIRE``."""
         from turf_lab.results_reader import (
             CMP_COMPLETION, CMP_CORRECTION, CMP_IDENTIQUE, CMP_REGRESSION,
-            STATUT_ANNULEE, STATUT_DEFINITIVE, STATUT_PROVISOIRE, compare_rankings,
+            STATUT_ANNULEE, STATUT_DEFINITIVE, STATUT_PROVISOIRE, compare_rankings, preserve_known_incidents,
         )
         now = (now_utc or datetime.utcnow()).isoformat()
         current = self.get_result(race_id)
+
+        # Information monotone (défaut d'oscillation constaté le 10/09) : les
+        # incidents / non-partants déjà connus sont conservés tant que le cheval
+        # ne réapparaît pas au classement. La lecture est copiée, jamais mutée.
+        if current is not None and reading.statut in (STATUT_PROVISOIRE, STATUT_DEFINITIVE) and reading.ranking:
+            merged_inc, merged_np, preserved = preserve_known_incidents(
+                current["ranking"], current["incidents"], current["non_partants"],
+                reading.ranking, reading.incidents, reading.non_partants)
+            if preserved:
+                import copy as _copy
+                reading = _copy.copy(reading)
+                reading.incidents, reading.non_partants = merged_inc, merged_np
+                reading.errors = list(reading.errors)
+                print("RESULT_INCIDENTS_PRESERVED " + json.dumps({"race_id": race_id, "preserved": preserved,
+                                                                  "source": reading.source, "now_utc": now}))
 
         # ── Annulation ───────────────────────────────────────────────
         if reading.statut == STATUT_ANNULEE:

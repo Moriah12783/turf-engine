@@ -4,6 +4,7 @@ et des exigences de traçabilité associées.
 Exécutable en script (python tests/test_partenaire_disqualification.py) ou via
 pytest. Véritable stockage SQLite, fixtures du dépôt, aucune donnée réelle.
 """
+import json
 import os
 import sqlite3
 import sys
@@ -198,13 +199,80 @@ def test_reparation_des_lignes_versionnees_avant_finalite():
     print("  [OK] test_reparation_des_lignes_versionnees_avant_finalite")
 
 
+# ── Oscillation d'incidents (défaut constaté en production le 10/09) ─────
+
+def test_variante_sans_incidents_ne_cree_aucune_version():
+    """Le programme PMU servi depuis un cache peut arriver SANS le bloc incidents
+    (classement identique). Cette perte d'information ne doit ni retirer les
+    incidents connus, ni créer de version, ni compter une correction."""
+    db = _db(); _seed(db)
+    t0 = datetime(2026, 9, 10, 12, 12)
+    full = _reading([[2], [8], [13], [6]], STATUT_DEFINITIVE, incidents=[{"num": 1, "type": DQ}, {"num": 3, "type": DQ}])
+    full.non_partants = [7]
+    assert db.record_result(RID, full, now_utc=t0)["action"] == "INITIAL"
+    for k in range(1, 9):   # 8 passes alternées : sans incidents / avec incidents
+        bare = _reading([[2], [8], [13], [6]], STATUT_DEFINITIVE)
+        res = db.record_result(RID, bare, now_utc=t0 + timedelta(minutes=6 * k))
+        assert res["action"] == "UNCHANGED", (k, res)
+        res = db.record_result(RID, _reading([[2], [8], [13], [6]], STATUT_DEFINITIVE,
+                                             incidents=[{"num": 1, "type": DQ}, {"num": 3, "type": DQ}]), now_utc=t0 + timedelta(minutes=6 * k + 3))
+        assert res["action"] == "UNCHANGED", (k, res)
+    cur = db.get_result(RID)
+    assert cur["version"] == 1 and cur["nb_corrections"] == 0
+    assert cur["incidents"] == [{"num": 1, "type": DQ}, {"num": 3, "type": DQ}] and cur["non_partants"] == [7]
+    # Un incident ne disparaît que si le cheval RÉAPPARAÎT au classement (disqualification annulée)
+    back = _reading([[2], [8], [1], [13], [6]], STATUT_DEFINITIVE, incidents=[{"num": 3, "type": DQ}])
+    res = db.record_result(RID, back, now_utc=t0 + timedelta(hours=2))
+    assert res["action"] == "VERSION" and res["reason"] == "CORRECTION_CLASSEMENT", res
+    cur = db.get_result(RID)
+    assert cur["arrival_order"] == [2, 8, 1, 13, 6] and cur["incidents"] == [{"num": 3, "type": DQ}] and cur["non_partants"] == [7]
+    print("  [OK] test_variante_sans_incidents_ne_cree_aucune_version")
+
+
+def test_reparation_des_oscillations_en_base():
+    """Base polluée par l'ancien comportement (paires perte/retour) : les
+    versions techniques sont retirées, la réparation est tracée, les vraies
+    corrections restent."""
+    db = _db(); _seed(db)
+    t0 = datetime(2026, 9, 10, 12, 12)
+    full = _reading([[2], [8], [13], [6]], STATUT_DEFINITIVE, incidents=[{"num": 1, "type": DQ}]); full.non_partants = [7]
+    db.record_result(RID, full, now_utc=t0)
+    # Injection directe de 6 versions techniques (3 pertes + 3 retours) puis d'une vraie correction
+    conn = sqlite3.connect(db.db_path)
+    rk = json.dumps(ranking_from_groups([[2], [8], [13], [6]]))
+    inc_full, inc_none = json.dumps([{"num": 1, "type": DQ}]), "[]"
+    v = 1
+    for k in range(3):
+        v += 1; conn.execute("INSERT INTO race_results_history (race_id, version, statut, ranking_json, incidents_json, non_partants_json, source, reason, recorded_at) VALUES (?,?,?,?,?,?,?,?,?)",
+                             (RID, v, "DEFINITIVE", rk, inc_none, "[]", "PMU_PROGRAMME", "CORRECTION_CLASSEMENT", (t0 + timedelta(minutes=10 * v)).isoformat()))
+        v += 1; conn.execute("INSERT INTO race_results_history (race_id, version, statut, ranking_json, incidents_json, non_partants_json, source, reason, recorded_at) VALUES (?,?,?,?,?,?,?,?,?)",
+                             (RID, v, "DEFINITIVE", rk, inc_full, "[7]", "PMU_PROGRAMME", "COMPLETION", (t0 + timedelta(minutes=10 * v)).isoformat()))
+    v += 1
+    rk_corr = json.dumps(ranking_from_groups([[8], [2], [13], [6]]))
+    conn.execute("INSERT INTO race_results_history (race_id, version, statut, ranking_json, incidents_json, non_partants_json, source, reason, recorded_at) VALUES (?,?,?,?,?,?,?,?,?)",
+                 (RID, v, "DEFINITIVE", rk_corr, inc_full, "[7]", "PMU_PROGRAMME", "CORRECTION_CLASSEMENT", (t0 + timedelta(minutes=10 * v)).isoformat()))
+    conn.execute("UPDATE race_results SET version = ?, nb_corrections = 4, ranking_json = ?, arrival_order_json = '[8,2,13,6]' WHERE race_id = ?", (v, rk_corr, RID))
+    conn.commit(); conn.close()
+    db = TurfDatabase(db.db_path)  # réparation à l'ouverture
+    hist = db.get_result_history(RID)
+    assert [(h["version"], h["reason"]) for h in hist] == [(1, "INITIAL"), (2, "CORRECTION_CLASSEMENT"), (3, "REPARATION_OSCILLATION_INCIDENTS")], hist
+    cur = db.get_result(RID)
+    assert cur["version"] == 3 and cur["nb_corrections"] == 1 and cur["arrival_order"] == [8, 2, 13, 6]
+    assert cur["incidents"] == [{"num": 1, "type": DQ}] and cur["non_partants"] == [7]
+    db = TurfDatabase(db.db_path)  # idempotent
+    assert [h["version"] for h in db.get_result_history(RID)] == [1, 2, 3]
+    print("  [OK] test_reparation_des_oscillations_en_base")
+
+
 def main():
     test_disqualification_finale_apres_definitive()
     test_disqualification_finale_depuis_provisoire()
     test_retrait_inexplique_reste_une_regression()
     test_legacy_non_verifiee_puis_confirmation()
     test_reparation_des_lignes_versionnees_avant_finalite()
-    print("\n=== 5 TESTS RETOUR PARTENAIRE (DISQUALIFICATION FINALE / TRAÇABILITÉ) PASSENT ===")
+    test_variante_sans_incidents_ne_cree_aucune_version()
+    test_reparation_des_oscillations_en_base()
+    print("\n=== 7 TESTS RETOUR PARTENAIRE (DISQUALIFICATION FINALE / TRAÇABILITÉ / OSCILLATION) PASSENT ===")
 
 
 if __name__ == "__main__":

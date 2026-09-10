@@ -139,7 +139,7 @@ def test_comparaison_des_lectures():
     assert compare_rankings(b, c, [], []) == CMP_CORRECTION
     inc9 = [{"num": 9, "type": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"}]
     assert compare_rankings(b, b, [], inc9) == CMP_COMPLETION       # incident ajouté
-    assert compare_rankings(b, b, inc9, []) == CMP_CORRECTION       # incident retiré
+    assert compare_rankings(b, b, inc9, []) == CMP_REGRESSION       # incident disparu, cheval non reclassé : perte d'information
     assert compare_rankings(b, b, inc9, [{"num": 9, "type": "ARRETE"}]) == CMP_CORRECTION
     print("  [OK] test_comparaison_des_lectures")
 
