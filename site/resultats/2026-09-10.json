@@ -3,15 +3,15 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "date_course": "2026-09-10",
- "genere_le_utc": "2026-09-10T12:30:40Z",
+ "genere_le_utc": "2026-09-10T12:36:30Z",
  "nb_courses": 25,
  "compte_par_statut": {
-  "EN_ATTENTE": 19,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 18,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 6,
   "ANNULEE": 0
  },
- "empreinte_sha256": "9b19356063f0a94bede43fa9fd00600ef67dda61ec2326d1f5015d3b6ea29e99",
+ "empreinte_sha256": "78884a31e8de72d4305da014c3efbc5f61dc8285a3e7b28be73c3fbd007bbf4c",
  "courses": [
   {
    "course_id": "R1C1_10092026_ParisLongchamp",
@@ -235,7 +235,7 @@
     "premiere_lecture_utc": "2026-09-10T12:00:22Z",
     "definitive_depuis_utc": "2026-09-10T12:00:22Z",
     "derniere_modification_utc": "2026-09-10T12:12:42Z",
-    "derniere_verification_utc": "2026-09-10T12:30:19Z"
+    "derniere_verification_utc": "2026-09-10T12:36:08Z"
    },
    "correction": {
     "version": 2,
@@ -299,13 +299,43 @@
     "partants_actifs": 7
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "annulee": false,
-    "pmu_statut": "CHEVAUX_SOUS_ORDRES"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 1,
+     "nom": "TAXXI",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 3,
+     "nom": "APOPHENIE",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 5,
+     "nom": "FIRE BULLET",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 4,
+     "nom": "GOLDEN RUN",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    1,
+    3,
+    5,
+    4
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
@@ -318,19 +348,33 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/10092026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-09-10T12:36:08Z",
     "definitive_depuis_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-09-10T12:36:08Z",
+    "derniere_verification_utc": "2026-09-10T12:36:08Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-09-10T12:36:08Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       1,
+       3,
+       5,
+       4
+      ]
+     }
+    ]
    }
   },
   {
@@ -952,7 +996,7 @@
     "premiere_lecture_utc": "2026-09-10T10:00:27Z",
     "definitive_depuis_utc": "2026-09-10T10:00:27Z",
     "derniere_modification_utc": "2026-09-10T12:21:08Z",
-    "derniere_verification_utc": "2026-09-10T12:30:19Z"
+    "derniere_verification_utc": "2026-09-10T12:36:08Z"
    },
    "correction": {
     "version": 4,
@@ -1237,7 +1281,7 @@
     "premiere_lecture_utc": "2026-09-10T10:30:33Z",
     "definitive_depuis_utc": "2026-09-10T10:30:33Z",
     "derniere_modification_utc": "2026-09-10T12:21:08Z",
-    "derniere_verification_utc": "2026-09-10T12:30:19Z"
+    "derniere_verification_utc": "2026-09-10T12:36:08Z"
    },
    "correction": {
     "version": 4,
@@ -1535,7 +1579,7 @@
     "premiere_lecture_utc": "2026-09-10T11:06:12Z",
     "definitive_depuis_utc": "2026-09-10T11:06:12Z",
     "derniere_modification_utc": "2026-09-10T12:21:08Z",
-    "derniere_verification_utc": "2026-09-10T12:30:19Z"
+    "derniere_verification_utc": "2026-09-10T12:36:08Z"
    },
    "correction": {
     "version": 4,
@@ -1825,7 +1869,7 @@
     "premiere_lecture_utc": "2026-09-10T11:45:33Z",
     "definitive_depuis_utc": "2026-09-10T11:45:33Z",
     "derniere_modification_utc": "2026-09-10T12:21:08Z",
-    "derniere_verification_utc": "2026-09-10T12:30:19Z"
+    "derniere_verification_utc": "2026-09-10T12:36:08Z"
    },
    "correction": {
     "version": 4,
@@ -2145,7 +2189,7 @@
     "premiere_lecture_utc": "2026-09-10T12:21:08Z",
     "definitive_depuis_utc": "2026-09-10T12:30:19Z",
     "derniere_modification_utc": "2026-09-10T12:30:19Z",
-    "derniere_verification_utc": "2026-09-10T12:30:19Z"
+    "derniere_verification_utc": "2026-09-10T12:36:08Z"
    },
    "correction": {
     "version": 2,
