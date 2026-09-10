@@ -3,15 +3,15 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "date_course": "2026-09-10",
- "genere_le_utc": "2026-09-10T12:36:30Z",
+ "genere_le_utc": "2026-09-10T12:45:40Z",
  "nb_courses": 25,
  "compte_par_statut": {
   "EN_ATTENTE": 18,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 6,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 7,
   "ANNULEE": 0
  },
- "empreinte_sha256": "78884a31e8de72d4305da014c3efbc5f61dc8285a3e7b28be73c3fbd007bbf4c",
+ "empreinte_sha256": "ceb95cedc85c25c08c162f842c045da8f4ecfd39da126ddb09aa0867dc43c987",
  "courses": [
   {
    "course_id": "R1C1_10092026_ParisLongchamp",
@@ -235,7 +235,7 @@
     "premiere_lecture_utc": "2026-09-10T12:00:22Z",
     "definitive_depuis_utc": "2026-09-10T12:00:22Z",
     "derniere_modification_utc": "2026-09-10T12:12:42Z",
-    "derniere_verification_utc": "2026-09-10T12:36:08Z"
+    "derniere_verification_utc": "2026-09-10T12:45:17Z"
    },
    "correction": {
     "version": 2,
@@ -299,10 +299,10 @@
     "partants_actifs": 7
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
+    "code": "DEFINITIVE",
+    "definitive": true,
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "FIN_COURSE"
    },
    "classement": [
     {
@@ -328,22 +328,64 @@
      "num": 4,
      "nom": "GOLDEN RUN",
      "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 2,
+     "nom": "ASIMA",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 6,
+     "nom": "GOOD BOY",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 7,
+     "nom": "CALIDORA",
+     "dead_heat": false
     }
    ],
    "arrivee": [
     1,
     3,
     5,
-    4
+    4,
+    2,
+    6,
+    7
    ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "1": 3.5
+    },
+    "simple_place": {
+     "1": 1.8,
+     "3": 1.9
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_ORDRE",
+      "combinaison": "1-3",
+      "dividende_pour_1_eur": 8.1
+     },
+     {
+      "type_pari": "TRIO_ORDRE",
+      "combinaison": "1-3-5",
+      "dividende_pour_1_eur": 22.7
+     },
+     {
+      "type_pari": "SUPER_QUATRE",
+      "combinaison": "1-3-5-4",
+      "dividende_pour_1_eur": 81.7
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -353,12 +395,12 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-09-10T12:36:08Z",
-    "definitive_depuis_utc": null,
-    "derniere_modification_utc": "2026-09-10T12:36:08Z",
-    "derniere_verification_utc": "2026-09-10T12:36:08Z"
+    "definitive_depuis_utc": "2026-09-10T12:45:17Z",
+    "derniere_modification_utc": "2026-09-10T12:45:17Z",
+    "derniere_verification_utc": "2026-09-10T12:45:17Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -372,6 +414,22 @@
        3,
        5,
        4
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-09-10T12:45:17Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       1,
+       3,
+       5,
+       4,
+       2,
+       6,
+       7
       ]
      }
     ]
@@ -397,7 +455,7 @@
     "code": "EN_ATTENTE",
     "definitive": false,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -845,18 +903,7 @@
     5,
     3
    ],
-   "non_classes": [
-    {
-     "num": 9,
-     "nom": "IMZARA VALIERE",
-     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
-    },
-    {
-     "num": 11,
-     "nom": "ITOU DES GENIEVRES",
-     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
-    }
-   ],
+   "non_classes": [],
    "non_partants": [
     {
      "num": 7,
@@ -995,12 +1042,12 @@
    "horodatages": {
     "premiere_lecture_utc": "2026-09-10T10:00:27Z",
     "definitive_depuis_utc": "2026-09-10T10:00:27Z",
-    "derniere_modification_utc": "2026-09-10T12:21:08Z",
-    "derniere_verification_utc": "2026-09-10T12:36:08Z"
+    "derniere_modification_utc": "2026-09-10T12:45:17Z",
+    "derniere_verification_utc": "2026-09-10T12:45:17Z"
    },
    "correction": {
-    "version": 4,
-    "nb_corrections": 1,
+    "version": 5,
+    "nb_corrections": 2,
     "historique": [
      {
       "version": 1,
@@ -1059,6 +1106,25 @@
       "statut": "DEFINITIVE",
       "raison": "COMPLETION",
       "horodatage_utc": "2026-09-10T12:21:08Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       2,
+       8,
+       13,
+       6,
+       1,
+       10,
+       4,
+       12,
+       5,
+       3
+      ]
+     },
+     {
+      "version": 5,
+      "statut": "DEFINITIVE",
+      "raison": "CORRECTION_CLASSEMENT",
+      "horodatage_utc": "2026-09-10T12:45:17Z",
       "source": "PMU_PROGRAMME",
       "classement": [
        2,
@@ -1179,23 +1245,7 @@
     2,
     5
    ],
-   "non_classes": [
-    {
-     "num": 1,
-     "nom": "MIGHTY KYDE",
-     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
-    },
-    {
-     "num": 4,
-     "nom": "MISSILE DU GOUTIER",
-     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
-    },
-    {
-     "num": 7,
-     "nom": "MADONETTE",
-     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
-    }
-   ],
+   "non_classes": [],
    "non_partants": [],
    "rapports": {
     "disponibles": true,
@@ -1280,12 +1330,12 @@
    "horodatages": {
     "premiere_lecture_utc": "2026-09-10T10:30:33Z",
     "definitive_depuis_utc": "2026-09-10T10:30:33Z",
-    "derniere_modification_utc": "2026-09-10T12:21:08Z",
-    "derniere_verification_utc": "2026-09-10T12:36:08Z"
+    "derniere_modification_utc": "2026-09-10T12:45:17Z",
+    "derniere_verification_utc": "2026-09-10T12:45:17Z"
    },
    "correction": {
-    "version": 4,
-    "nb_corrections": 1,
+    "version": 5,
+    "nb_corrections": 2,
     "historique": [
      {
       "version": 1,
@@ -1346,6 +1396,26 @@
       "statut": "DEFINITIVE",
       "raison": "COMPLETION",
       "horodatage_utc": "2026-09-10T12:21:08Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       9,
+       10,
+       3,
+       6,
+       8,
+       13,
+       11,
+       14,
+       12,
+       2,
+       5
+      ]
+     },
+     {
+      "version": 5,
+      "statut": "DEFINITIVE",
+      "raison": "CORRECTION_CLASSEMENT",
+      "horodatage_utc": "2026-09-10T12:45:17Z",
       "source": "PMU_PROGRAMME",
       "classement": [
        9,
@@ -1467,33 +1537,7 @@
     1,
     9
    ],
-   "non_classes": [
-    {
-     "num": 3,
-     "nom": "MONACO DU LIVET",
-     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
-    },
-    {
-     "num": 4,
-     "nom": "MORRIS DE REUX",
-     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
-    },
-    {
-     "num": 5,
-     "nom": "MAYA DU BELLAY",
-     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
-    },
-    {
-     "num": 7,
-     "nom": "MAESTRO DE CORDAY",
-     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
-    },
-    {
-     "num": 11,
-     "nom": "MARVIN D'ALGOT",
-     "incident": "ARRETE"
-    }
-   ],
+   "non_classes": [],
    "non_partants": [],
    "rapports": {
     "disponibles": true,
@@ -1578,12 +1622,12 @@
    "horodatages": {
     "premiere_lecture_utc": "2026-09-10T11:06:12Z",
     "definitive_depuis_utc": "2026-09-10T11:06:12Z",
-    "derniere_modification_utc": "2026-09-10T12:21:08Z",
-    "derniere_verification_utc": "2026-09-10T12:36:08Z"
+    "derniere_modification_utc": "2026-09-10T12:45:17Z",
+    "derniere_verification_utc": "2026-09-10T12:45:17Z"
    },
    "correction": {
-    "version": 4,
-    "nb_corrections": 1,
+    "version": 5,
+    "nb_corrections": 2,
     "historique": [
      {
       "version": 1,
@@ -1644,6 +1688,26 @@
       "statut": "DEFINITIVE",
       "raison": "COMPLETION",
       "horodatage_utc": "2026-09-10T12:21:08Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       16,
+       14,
+       12,
+       6,
+       8,
+       15,
+       10,
+       2,
+       13,
+       1,
+       9
+      ]
+     },
+     {
+      "version": 5,
+      "statut": "DEFINITIVE",
+      "raison": "CORRECTION_CLASSEMENT",
+      "horodatage_utc": "2026-09-10T12:45:17Z",
       "source": "PMU_PROGRAMME",
       "classement": [
        16,
@@ -1772,18 +1836,7 @@
     7,
     11
    ],
-   "non_classes": [
-    {
-     "num": 2,
-     "nom": "NEBULO",
-     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
-    },
-    {
-     "num": 13,
-     "nom": "NORTH OF GOLD",
-     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
-    }
-   ],
+   "non_classes": [],
    "non_partants": [],
    "rapports": {
     "disponibles": true,
@@ -1868,12 +1921,12 @@
    "horodatages": {
     "premiere_lecture_utc": "2026-09-10T11:45:33Z",
     "definitive_depuis_utc": "2026-09-10T11:45:33Z",
-    "derniere_modification_utc": "2026-09-10T12:21:08Z",
-    "derniere_verification_utc": "2026-09-10T12:36:08Z"
+    "derniere_modification_utc": "2026-09-10T12:45:17Z",
+    "derniere_verification_utc": "2026-09-10T12:45:17Z"
    },
    "correction": {
-    "version": 4,
-    "nb_corrections": 1,
+    "version": 5,
+    "nb_corrections": 2,
     "historique": [
      {
       "version": 1,
@@ -1943,6 +1996,27 @@
       "statut": "DEFINITIVE",
       "raison": "COMPLETION",
       "horodatage_utc": "2026-09-10T12:21:08Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       5,
+       3,
+       6,
+       12,
+       14,
+       1,
+       10,
+       8,
+       4,
+       9,
+       7,
+       11
+      ]
+     },
+     {
+      "version": 5,
+      "statut": "DEFINITIVE",
+      "raison": "CORRECTION_CLASSEMENT",
+      "horodatage_utc": "2026-09-10T12:45:17Z",
       "source": "PMU_PROGRAMME",
       "classement": [
        5,
@@ -2072,38 +2146,7 @@
     13,
     2
    ],
-   "non_classes": [
-    {
-     "num": 1,
-     "nom": "LUCKY DE POMMERAY",
-     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
-    },
-    {
-     "num": 3,
-     "nom": "LOVER DES BROUSSES",
-     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
-    },
-    {
-     "num": 5,
-     "nom": "LALBER",
-     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
-    },
-    {
-     "num": 10,
-     "nom": "LEXIA",
-     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
-    },
-    {
-     "num": 14,
-     "nom": "LEVIOSA",
-     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
-    },
-    {
-     "num": 18,
-     "nom": "LA TRINITE NEMO",
-     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
-    }
-   ],
+   "non_classes": [],
    "non_partants": [],
    "rapports": {
     "disponibles": true,
@@ -2188,12 +2231,12 @@
    "horodatages": {
     "premiere_lecture_utc": "2026-09-10T12:21:08Z",
     "definitive_depuis_utc": "2026-09-10T12:30:19Z",
-    "derniere_modification_utc": "2026-09-10T12:30:19Z",
-    "derniere_verification_utc": "2026-09-10T12:36:08Z"
+    "derniere_modification_utc": "2026-09-10T12:45:17Z",
+    "derniere_verification_utc": "2026-09-10T12:45:17Z"
    },
    "correction": {
-    "version": 2,
-    "nb_corrections": 0,
+    "version": 3,
+    "nb_corrections": 1,
     "historique": [
      {
       "version": 1,
@@ -2214,6 +2257,27 @@
       "statut": "DEFINITIVE",
       "raison": "PROVISOIRE_VERS_DEFINITIVE",
       "horodatage_utc": "2026-09-10T12:30:19Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       7,
+       15,
+       16,
+       4,
+       12,
+       9,
+       8,
+       17,
+       6,
+       11,
+       13,
+       2
+      ]
+     },
+     {
+      "version": 3,
+      "statut": "DEFINITIVE",
+      "raison": "CORRECTION_CLASSEMENT",
+      "horodatage_utc": "2026-09-10T12:45:17Z",
       "source": "PMU_PROGRAMME",
       "classement": [
        7,
@@ -2253,7 +2317,7 @@
     "code": "EN_ATTENTE",
     "definitive": false,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "DEPART_DANS_TROIS_MINUTES"
    },
    "classement": [],
    "arrivee": [],
