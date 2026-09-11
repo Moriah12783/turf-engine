@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "f9c6931f63884a20464e0f955ab2f916d82aefa1",
-  "run_id": "34596007058",
+  "commit": "a80c6e4b46c914b4abc093d5e548a67b335d1296",
+  "run_id": "34596736864",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-11",
- "genere_le_utc": "2026-09-11T11:51:33Z",
+ "genere_le_utc": "2026-09-11T12:00:57Z",
  "nb_courses": 40,
  "compte_par_statut": {
   "EN_ATTENTE": 34,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 5,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 6,
   "ANNULEE": 0
  },
- "empreinte_sha256": "969fa6a314d124d31b6ab6c641f5a09157a015e66c052124cc8762e928c22259",
+ "empreinte_sha256": "274a5023ffcc4aed96a2f2c1ff8b59854d2ae96c0fb84e8e810e6b6c1efe39fd",
  "courses": [
   {
    "course_id": "R1C1_11092026_VINCENNES",
@@ -653,7 +653,7 @@
     "verifiee_le_utc": "2026-09-11T10:00:32Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-11T10:00:32Z",
-    "derniere_verification_utc": "2026-09-11T11:51:08Z"
+    "derniere_verification_utc": "2026-09-11T12:00:29Z"
    },
    "correction": {
     "version": 2,
@@ -916,7 +916,7 @@
     "verifiee_le_utc": "2026-09-11T10:45:19Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-11T10:45:19Z",
-    "derniere_verification_utc": "2026-09-11T11:51:08Z"
+    "derniere_verification_utc": "2026-09-11T12:00:29Z"
    },
    "correction": {
     "version": 2,
@@ -1158,7 +1158,7 @@
     "verifiee_le_utc": "2026-09-11T11:15:23Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-11T11:15:23Z",
-    "derniere_verification_utc": "2026-09-11T11:51:08Z"
+    "derniere_verification_utc": "2026-09-11T12:00:29Z"
    },
    "correction": {
     "version": 2,
@@ -1436,7 +1436,7 @@
     "verifiee_le_utc": "2026-09-11T11:45:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-11T11:45:24Z",
-    "derniere_verification_utc": "2026-09-11T11:51:08Z"
+    "derniere_verification_utc": "2026-09-11T12:00:29Z"
    },
    "correction": {
     "version": 2,
@@ -1499,7 +1499,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "DEPART_DANS_TROIS_MINUTES"
    },
    "classement": [],
    "arrivee": [],
@@ -1819,7 +1819,7 @@
     "verifiee_le_utc": "2026-09-11T11:21:08Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-11T11:21:08Z",
-    "derniere_verification_utc": "2026-09-11T11:51:08Z"
+    "derniere_verification_utc": "2026-09-11T12:00:29Z"
    },
    "correction": {
     "version": 2,
@@ -1875,11 +1875,11 @@
     "partants_actifs": 8
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "FIN_COURSE"
    },
    "classement": [
     {
@@ -1905,22 +1905,87 @@
      "num": 5,
      "nom": "CARLA VELOSSO",
      "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 4,
+     "nom": "ROYALLY",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 8,
+     "nom": "SELINUNTE",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 7,
+     "nom": "ALAIN ROSE",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 1,
+     "nom": "ALGARADE",
+     "dead_heat": false
     }
    ],
    "arrivee": [
     3,
     6,
     2,
-    5
+    5,
+    4,
+    8,
+    7,
+    1
    ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "3": 2.4
+    },
+    "simple_place": {
+     "3": 1.1,
+     "6": 1.2,
+     "2": 1.5
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "3-6",
+      "dividende_pour_1_eur": 2.5
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "3-6",
+      "dividende_pour_1_eur": 1.5
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "3-2",
+      "dividende_pour_1_eur": 2.3
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "6-2",
+      "dividende_pour_1_eur": 2.5
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "3-6-2",
+      "dividende_pour_1_eur": 5.4
+     },
+     {
+      "type_pari": "SUPER_QUATRE",
+      "combinaison": "3-6-2-5",
+      "dividende_pour_1_eur": 99.2
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -1930,14 +1995,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-09-11T11:51:08Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-09-11T12:00:29Z",
+    "verifiee_le_utc": "2026-09-11T12:00:29Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-09-11T11:51:08Z",
-    "derniere_verification_utc": "2026-09-11T11:51:08Z"
+    "derniere_modification_utc": "2026-09-11T12:00:29Z",
+    "derniere_verification_utc": "2026-09-11T12:00:29Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -1951,6 +2016,23 @@
        6,
        2,
        5
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-09-11T12:00:29Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       3,
+       6,
+       2,
+       5,
+       4,
+       8,
+       7,
+       1
       ]
      }
     ]
@@ -1978,7 +2060,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
