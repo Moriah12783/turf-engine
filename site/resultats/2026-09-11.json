@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "6e454922907cc48606074864f9e23294682bd929",
-  "run_id": "34591197498",
+  "commit": "833839f93276d8be29f504810dedd7f795db4b82",
+  "run_id": "34591933408",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-11",
- "genere_le_utc": "2026-09-11T10:51:41Z",
+ "genere_le_utc": "2026-09-11T11:01:09Z",
  "nb_courses": 40,
  "compte_par_statut": {
-  "EN_ATTENTE": 38,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 37,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "ac841e17f593b4f0c889cd459cb82533f3728203d9e743d60a96f2d669f2fc8b",
+ "empreinte_sha256": "2bc76f142026d082483e53ff03aec439f71ea32d3024d3b44e938676819e6893",
  "courses": [
   {
    "course_id": "R1C1_11092026_VINCENNES",
@@ -653,7 +653,7 @@
     "verifiee_le_utc": "2026-09-11T10:00:32Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-11T10:00:32Z",
-    "derniere_verification_utc": "2026-09-11T10:51:08Z"
+    "derniere_verification_utc": "2026-09-11T11:00:40Z"
    },
    "correction": {
     "version": 2,
@@ -916,7 +916,7 @@
     "verifiee_le_utc": "2026-09-11T10:45:19Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-11T10:45:19Z",
-    "derniere_verification_utc": "2026-09-11T10:51:08Z"
+    "derniere_verification_utc": "2026-09-11T11:00:40Z"
    },
    "correction": {
     "version": 2,
@@ -979,15 +979,56 @@
     "partants_actifs": 12
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_DANS_TROIS_MINUTES"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 8,
+     "nom": "NOBEL DU CHOQUEL",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 12,
+     "nom": "NEVER ALONE",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 5,
+     "nom": "NOIRAUD DES GLENAN",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 1,
+     "nom": "NIRVANA D'EURVAD",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    8,
+    12,
+    5,
+    1
+   ],
+   "non_classes": [
+    {
+     "num": 2,
+     "nom": "NO LIMIT JIEL",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 11,
+     "nom": "NARUTO CASH",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": false,
@@ -999,21 +1040,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/11092026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-09-11T11:00:40Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-09-11T11:00:40Z",
+    "derniere_verification_utc": "2026-09-11T11:00:40Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-09-11T11:00:40Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       8,
+       12,
+       5,
+       1
+      ]
+     }
+    ]
    }
   },
   {
@@ -1331,7 +1386,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
