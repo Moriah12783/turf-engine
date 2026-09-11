@@ -1464,7 +1464,7 @@
       "provisoire_reason": null,
       "publishable": true,
       "publication_reason": "OK",
-      "display_horizon": "T90",
+      "display_horizon": "T30",
       "editions_moteur": {
         "T_MATIN": {
           "sel": "5-3-10-7-8-9-6-1",
@@ -1475,6 +1475,12 @@
         "T90": {
           "sel": "5-9-7-3-6-1-8-12",
           "lock": "14:45",
+          "priced_ratio": 1.0,
+          "odds_real": true
+        },
+        "T30": {
+          "sel": "5-7-9-3-6-1-8-12",
+          "lock": "15:51",
           "priced_ratio": 1.0,
           "odds_real": true
         }
@@ -1489,6 +1495,12 @@
         "T90": {
           "sel": "7-3-5-9-6-1-10-12",
           "lock": "14:45",
+          "priced_ratio": 1.0,
+          "odds_real": true
+        },
+        "T30": {
+          "sel": "7-5-9-3-6-1-10-12",
+          "lock": "15:51",
           "priced_ratio": 1.0,
           "odds_real": true
         }
@@ -1514,11 +1526,11 @@
       "np_nums": [
         17
       ],
-      "sel_moteur": "5-9-7-3-6-1-8-12",
+      "sel_moteur": "5-7-9-3-6-1-8-12",
       "sel_moteur_list": [
         5,
-        9,
         7,
+        9,
         3,
         6,
         1,
@@ -1527,12 +1539,12 @@
       ],
       "bases": [
         5,
-        9
+        7
       ],
       "outsider_num": 15,
       "regrets": [
-        10,
-        4
+        16,
+        10
       ],
       "smart_tickets": {
         "contract": 2,
@@ -1543,11 +1555,11 @@
             "libelle": "Couplé Placé (ou 2sur4)",
             "chevaux": [
               5,
-              9
+              7
             ],
             "bases": [
               5,
-              9
+              7
             ],
             "associes": [],
             "combinaisons": 1,
@@ -1555,19 +1567,19 @@
             "cout_total_eur": 2.0,
             "eligible": true,
             "motif_ineligibilite": null,
-            "texte": "5 - 9"
+            "texte": "5 - 7"
           },
           {
             "produit": "TRIO",
             "libelle": "Trio (Couplé Gagnant)",
             "chevaux": [
               5,
-              9,
+              7,
               15
             ],
             "bases": [
               5,
-              9
+              7
             ],
             "associes": [
               15
@@ -1577,25 +1589,25 @@
             "cout_total_eur": 2.0,
             "eligible": true,
             "motif_ineligibilite": null,
-            "texte": "5 - 9 - 15"
+            "texte": "5 - 7 - 15"
           },
           {
             "produit": "QUINTE_PLUS",
             "libelle": "Quinté+ champ réduit",
             "chevaux": [
               5,
-              9,
               7,
+              9,
               3,
               6,
               1
             ],
             "bases": [
               5,
-              9
+              7
             ],
             "associes": [
-              7,
+              9,
               3,
               6,
               1
@@ -1605,51 +1617,51 @@
             "cout_total_eur": null,
             "eligible": false,
             "motif_ineligibilite": "PARI_NON_OUVERT",
-            "texte": "5 - 9 - X - X - X / 7, 3, 6, 1"
+            "texte": "5 - 7 - X - X - X / 9, 3, 6, 1"
           }
         ],
         "ticket_securite": {
           "pari": "Couplé Placé (ou 2sur4)",
           "chevaux": [
             5,
-            9
+            7
           ],
-          "formule": "5 - 9",
+          "formule": "5 - 7",
           "mise_base_eur": 2.0
         },
         "ticket_trio": {
           "pari": "Trio (Couplé Gagnant)",
           "chevaux": [
             5,
-            9,
+            7,
             15
           ],
-          "formule": "5 - 9 - 15",
+          "formule": "5 - 7 - 15",
           "mise_base_eur": 2.0
         },
         "quinte_champ_reduit": {
           "pari": "Quinté+ champ réduit",
           "bases_fixes": [
             5,
-            9
+            7
           ],
           "associes": [
-            7,
+            9,
             3,
             6,
             1
           ],
-          "formule": "5 - 9 - X - X - X / 7, 3, 6, 1",
+          "formule": "5 - 7 - X - X - X / 9, 3, 6, 1",
           "combinaisons": 4,
           "budget_conseille_eur": null
         }
       },
-      "sel_marche": "7-3-5-9-6-1-10-12",
+      "sel_marche": "7-5-9-3-6-1-10-12",
       "sel_marche_list": [
         7,
-        3,
         5,
         9,
+        3,
         6,
         1,
         10,
@@ -1665,7 +1677,7 @@
       "couv_marche": "0/5",
       "couv_marche_count": 0,
       "couverture_label": "Course à venir",
-      "decision": "Bases: 5 - 9",
+      "decision": "Bases: 5 - 7",
       "decision_badge": "badge-base",
       "runners": [
         {
@@ -1678,28 +1690,10 @@
           "morning_odds": 7.3,
           "live_odds": 6.6,
           "o_t90": 6.6,
-          "o_t30": null,
+          "o_t30": 6.6,
           "o_t15": null,
           "prob_pct": 13.2,
           "value_index": 0.87,
-          "smart_signal": "STABLE",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 9,
-          "name": "JEEK D'ACADIE",
-          "driver": "E. RAFFIN",
-          "shoeing": "D4",
-          "draw": 9,
-          "music": "1a1aDa4a0a5aDmDa4a5a",
-          "morning_odds": 5.8,
-          "live_odds": 6.9,
-          "o_t90": 6.8,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 11.3,
-          "value_index": 0.77,
           "smart_signal": "STABLE",
           "is_np": false,
           "odds_real": true
@@ -1714,11 +1708,29 @@
           "morning_odds": 5.8,
           "live_odds": 4.7,
           "o_t90": 5.5,
-          "o_t30": null,
+          "o_t30": 4.7,
           "o_t15": null,
-          "prob_pct": 11.1,
-          "value_index": 0.61,
-          "smart_signal": "STABLE",
+          "prob_pct": 13.1,
+          "value_index": 0.62,
+          "smart_signal": "BAISSE_CONFIRMEE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 9,
+          "name": "JEEK D'ACADIE",
+          "driver": "E. RAFFIN",
+          "shoeing": "D4",
+          "draw": 9,
+          "music": "1a1aDa4a0a5aDmDa4a5a",
+          "morning_odds": 5.8,
+          "live_odds": 6.9,
+          "o_t90": 6.8,
+          "o_t30": 6.9,
+          "o_t15": null,
+          "prob_pct": 10.6,
+          "value_index": 0.73,
+          "smart_signal": "LEGERE_HAUSSE",
           "is_np": false,
           "odds_real": true
         },
@@ -1732,10 +1744,10 @@
           "morning_odds": 1.4,
           "live_odds": 7.2,
           "o_t90": 6.5,
-          "o_t30": null,
+          "o_t30": 7.2,
           "o_t15": null,
-          "prob_pct": 10.8,
-          "value_index": 0.7,
+          "prob_pct": 9.9,
+          "value_index": 0.71,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -1750,7 +1762,7 @@
           "morning_odds": 128.0,
           "live_odds": 11.0,
           "o_t90": 11.0,
-          "o_t30": null,
+          "o_t30": 11.0,
           "o_t15": null,
           "prob_pct": 8.6,
           "value_index": 0.95,
@@ -1768,10 +1780,10 @@
           "morning_odds": 64.0,
           "live_odds": 14.0,
           "o_t90": 13.0,
-          "o_t30": null,
+          "o_t30": 14.0,
           "o_t15": null,
-          "prob_pct": 7.6,
-          "value_index": 0.99,
+          "prob_pct": 7.3,
+          "value_index": 1.02,
           "smart_signal": "FORTE_BAISSE_INSIDER",
           "is_np": false,
           "odds_real": true
@@ -1786,10 +1798,10 @@
           "morning_odds": 12.0,
           "live_odds": 15.0,
           "o_t90": 15.0,
-          "o_t30": null,
+          "o_t30": 15.0,
           "o_t15": null,
           "prob_pct": 6.9,
-          "value_index": 1.04,
+          "value_index": 1.03,
           "smart_signal": "LEGERE_HAUSSE",
           "is_np": false,
           "odds_real": true
@@ -1804,11 +1816,11 @@
           "morning_odds": 9.0,
           "live_odds": 14.0,
           "o_t90": 13.0,
-          "o_t30": null,
+          "o_t30": 14.0,
           "o_t15": null,
-          "prob_pct": 6.5,
-          "value_index": 0.85,
-          "smart_signal": "LEGERE_HAUSSE",
+          "prob_pct": 5.8,
+          "value_index": 0.8,
+          "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
         },
@@ -1822,28 +1834,10 @@
           "morning_odds": 12.0,
           "live_odds": 14.0,
           "o_t90": 13.0,
-          "o_t30": null,
+          "o_t30": 14.0,
           "o_t15": null,
-          "prob_pct": 5.6,
-          "value_index": 0.73,
-          "smart_signal": "STABLE",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 4,
-          "name": "JIQUEL",
-          "driver": "P.PH. PLOQUIN",
-          "shoeing": "D4",
-          "draw": 4,
-          "music": "6a8a3m3a2mDa0a6a5a6a",
-          "morning_odds": 27.0,
-          "live_odds": 23.0,
-          "o_t90": 25.0,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 4.2,
-          "value_index": 1.04,
+          "prob_pct": 5.3,
+          "value_index": 0.74,
           "smart_signal": "STABLE",
           "is_np": false,
           "odds_real": true
@@ -1858,29 +1852,29 @@
           "morning_odds": 64.0,
           "live_odds": 53.0,
           "o_t90": 65.0,
-          "o_t30": null,
+          "o_t30": 53.0,
           "o_t15": null,
-          "prob_pct": 3.9,
-          "value_index": 2.54,
-          "smart_signal": "STABLE",
+          "prob_pct": 5.3,
+          "value_index": 2.83,
+          "smart_signal": "BAISSE_CONFIRMEE",
           "is_np": false,
           "odds_real": true
         },
         {
-          "num": 2,
-          "name": "JOGGER KILY",
-          "driver": "F. NIVARD",
+          "num": 4,
+          "name": "JIQUEL",
+          "driver": "P.PH. PLOQUIN",
           "shoeing": "D4",
-          "draw": 2,
-          "music": "Da6a4a9a3a1a2a6a6a7a",
-          "morning_odds": 8.4,
-          "live_odds": 44.0,
-          "o_t90": 37.0,
-          "o_t30": null,
+          "draw": 4,
+          "music": "6a8a3m3a2mDa0a6a5a6a",
+          "morning_odds": 27.0,
+          "live_odds": 23.0,
+          "o_t90": 25.0,
+          "o_t30": 23.0,
           "o_t15": null,
-          "prob_pct": 2.3,
-          "value_index": 0.85,
-          "smart_signal": "FORTE_HAUSSE_DELAISSE",
+          "prob_pct": 4.3,
+          "value_index": 1.0,
+          "smart_signal": "STABLE",
           "is_np": false,
           "odds_real": true
         },
@@ -1894,10 +1888,10 @@
           "morning_odds": 318.0,
           "live_odds": 179.0,
           "o_t90": 190.0,
-          "o_t30": null,
+          "o_t30": 179.0,
           "o_t15": null,
           "prob_pct": 2.3,
-          "value_index": 4.41,
+          "value_index": 4.12,
           "smart_signal": "FORTE_BAISSE_INSIDER",
           "is_np": false,
           "odds_real": true
@@ -1912,11 +1906,29 @@
           "morning_odds": 35.0,
           "live_odds": 35.0,
           "o_t90": 39.0,
-          "o_t30": null,
+          "o_t30": 35.0,
           "o_t15": null,
-          "prob_pct": 2.1,
-          "value_index": 0.81,
+          "prob_pct": 2.2,
+          "value_index": 0.78,
           "smart_signal": "STABLE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 2,
+          "name": "JOGGER KILY",
+          "driver": "F. NIVARD",
+          "shoeing": "D4",
+          "draw": 2,
+          "music": "Da6a4a9a3a1a2a6a6a7a",
+          "morning_odds": 8.4,
+          "live_odds": 44.0,
+          "o_t90": 37.0,
+          "o_t30": 44.0,
+          "o_t15": null,
+          "prob_pct": 2.0,
+          "value_index": 0.9,
+          "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
         },
@@ -1930,10 +1942,10 @@
           "morning_odds": 27.0,
           "live_odds": 38.0,
           "o_t90": 32.0,
-          "o_t30": null,
+          "o_t30": 38.0,
           "o_t15": null,
-          "prob_pct": 2.1,
-          "value_index": 0.66,
+          "prob_pct": 1.8,
+          "value_index": 0.67,
           "smart_signal": "LEGERE_HAUSSE",
           "is_np": false,
           "odds_real": true
@@ -1948,10 +1960,10 @@
           "morning_odds": 64.0,
           "live_odds": 66.0,
           "o_t90": 61.0,
-          "o_t30": null,
+          "o_t30": 66.0,
           "o_t15": null,
-          "prob_pct": 1.5,
-          "value_index": 0.89,
+          "prob_pct": 1.4,
+          "value_index": 0.91,
           "smart_signal": "STABLE",
           "is_np": false,
           "odds_real": true
@@ -1966,7 +1978,7 @@
           "morning_odds": 15.0,
           "live_odds": 15.0,
           "o_t90": 15.0,
-          "o_t30": null,
+          "o_t30": 15.0,
           "o_t15": null,
           "prob_pct": 0.0,
           "value_index": 1.0,
@@ -12307,8 +12319,8 @@
       "priced_ratio": 1.0,
       "edition_provisoire": false,
       "provisoire_reason": null,
-      "publishable": true,
-      "publication_reason": "OK",
+      "publishable": false,
+      "publication_reason": "RACE_STARTED",
       "display_horizon": "T15",
       "editions_moteur": {
         "T_MATIN": {
@@ -12371,9 +12383,9 @@
       "autostart": false,
       "scheduled_start_time": "15:48 GMT (17:48 Paris)",
       "is_finished": false,
-      "status": "PROGRAMMÉE",
+      "status": "PARTIE",
       "is_cancelled": false,
-      "is_started": false,
+      "is_started": true,
       "start_time_utc": "2026-09-11T15:48:00Z",
       "contract_recorded": true,
       "confidence_stars": 3,
@@ -12531,7 +12543,7 @@
       "couv_moteur_count": 0,
       "couv_marche": "0/5",
       "couv_marche_count": 0,
-      "couverture_label": "Course à venir",
+      "couverture_label": "Course partie",
       "decision": "⭐ COUPLE MAITRE: 2 - 11",
       "decision_badge": "badge-master",
       "runners": [
@@ -14279,7 +14291,7 @@
       "provisoire_reason": null,
       "publishable": true,
       "publication_reason": "OK",
-      "display_horizon": "T30",
+      "display_horizon": "T15",
       "editions_moteur": {
         "T_MATIN": {
           "sel": "2-3-7-4-1-5-6",
@@ -14296,6 +14308,12 @@
         "T30": {
           "sel": "2-3-4-1-7-6-5",
           "lock": "15:30",
+          "priced_ratio": 1.0,
+          "odds_real": true
+        },
+        "T15": {
+          "sel": "2-3-4-1-7-6-5",
+          "lock": "15:51",
           "priced_ratio": 1.0,
           "odds_real": true
         }
@@ -14316,6 +14334,12 @@
         "T30": {
           "sel": "2-3-1-4-7-6-5",
           "lock": "15:30",
+          "priced_ratio": 1.0,
+          "odds_real": true
+        },
+        "T15": {
+          "sel": "2-3-4-1-7-6-5",
+          "lock": "15:51",
           "priced_ratio": 1.0,
           "odds_real": true
         }
@@ -14465,12 +14489,12 @@
           "budget_conseille_eur": null
         }
       },
-      "sel_marche": "2-3-1-4-7-6-5",
+      "sel_marche": "2-3-4-1-7-6-5",
       "sel_marche_list": [
         2,
         3,
-        1,
         4,
+        1,
         7,
         6,
         5
@@ -14496,12 +14520,12 @@
           "draw": 1,
           "music": "4p3p2p6p(25)1p",
           "morning_odds": 1.1,
-          "live_odds": 1.1,
+          "live_odds": 1.2,
           "o_t90": 1.5,
           "o_t30": 1.2,
-          "o_t15": null,
-          "prob_pct": 54.9,
-          "value_index": 0.66,
+          "o_t15": 1.2,
+          "prob_pct": 54.5,
+          "value_index": 0.65,
           "smart_signal": "STABLE",
           "is_np": false,
           "odds_real": true
@@ -14514,12 +14538,12 @@
           "draw": 3,
           "music": "5p1p2p4p",
           "morning_odds": 33.0,
-          "live_odds": 12.0,
+          "live_odds": 11.0,
           "o_t90": 8.7,
           "o_t30": 11.0,
-          "o_t15": null,
+          "o_t15": 11.0,
           "prob_pct": 13.2,
-          "value_index": 1.46,
+          "value_index": 1.45,
           "smart_signal": "FORTE_BAISSE_INSIDER",
           "is_np": false,
           "odds_real": true
@@ -14535,9 +14559,9 @@
           "live_odds": 13.0,
           "o_t90": 10.0,
           "o_t30": 16.0,
-          "o_t15": null,
-          "prob_pct": 8.1,
-          "value_index": 1.3,
+          "o_t15": 13.0,
+          "prob_pct": 8.9,
+          "value_index": 1.16,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -14553,9 +14577,9 @@
           "live_odds": 14.0,
           "o_t90": 7.6,
           "o_t30": 13.0,
-          "o_t15": null,
-          "prob_pct": 7.8,
-          "value_index": 1.02,
+          "o_t15": 14.0,
+          "prob_pct": 7.5,
+          "value_index": 1.05,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -14568,12 +14592,12 @@
           "draw": 2,
           "music": "1p",
           "morning_odds": 4.7,
-          "live_odds": 23.0,
+          "live_odds": 20.0,
           "o_t90": 13.0,
           "o_t30": 21.0,
-          "o_t15": null,
-          "prob_pct": 7.3,
-          "value_index": 1.53,
+          "o_t15": 20.0,
+          "prob_pct": 7.4,
+          "value_index": 1.48,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -14586,12 +14610,12 @@
           "draw": 7,
           "music": "1p2p",
           "morning_odds": 7.3,
-          "live_odds": 27.0,
+          "live_odds": 24.0,
           "o_t90": 20.0,
           "o_t30": 25.0,
-          "o_t15": null,
+          "o_t15": 24.0,
           "prob_pct": 5.5,
-          "value_index": 1.37,
+          "value_index": 1.33,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -14604,12 +14628,12 @@
           "draw": 6,
           "music": "6p1p",
           "morning_odds": 14.0,
-          "live_odds": 55.0,
+          "live_odds": 45.0,
           "o_t90": 20.0,
           "o_t30": 39.0,
-          "o_t15": null,
-          "prob_pct": 3.2,
-          "value_index": 1.24,
+          "o_t15": 45.0,
+          "prob_pct": 3.0,
+          "value_index": 1.34,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -16623,7 +16647,7 @@
     {
       "race_id": "R6C4_11092026_CHOLET",
       "market_odds_available": true,
-      "priced_ratio": 0.867,
+      "priced_ratio": 0.857,
       "edition_provisoire": true,
       "provisoire_reason": "NOT_LOCKED",
       "publishable": false,
@@ -16650,6 +16674,7 @@
       "is_no_bet": null,
       "is_master": null,
       "np_nums": [
+        5,
         7
       ],
       "sel_moteur": "-",
@@ -16702,7 +16727,7 @@
           "draw": 2,
           "music": "5a",
           "morning_odds": 16.0,
-          "live_odds": 28.0,
+          "live_odds": 18.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16720,7 +16745,7 @@
           "draw": 3,
           "music": "8a7a7aDa7aDa6a6a8a",
           "morning_odds": 69.0,
-          "live_odds": 37.0,
+          "live_odds": 35.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16738,7 +16763,7 @@
           "draw": 4,
           "music": "8a8aDa3a6a6a",
           "morning_odds": 173.0,
-          "live_odds": 84.0,
+          "live_odds": 80.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16763,7 +16788,7 @@
           "prob_pct": 0.0,
           "value_index": 1.0,
           "smart_signal": "STABLE",
-          "is_np": false,
+          "is_np": true,
           "odds_real": true
         },
         {
@@ -16774,7 +16799,7 @@
           "draw": 6,
           "music": "7a7m3aDm8a5m0a8a7a",
           "morning_odds": 169.0,
-          "live_odds": 169.0,
+          "live_odds": 160.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16828,7 +16853,7 @@
           "draw": 9,
           "music": "Da4aDa4a2a9aDa(25)DaDa",
           "morning_odds": 67.0,
-          "live_odds": 24.0,
+          "live_odds": 18.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16846,7 +16871,7 @@
           "draw": 10,
           "music": "6a7aDa9aDa0aDa9aDa(25)",
           "morning_odds": 10.0,
-          "live_odds": 8.7,
+          "live_odds": 8.2,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16864,7 +16889,7 @@
           "draw": 11,
           "music": "Da0a2a6aDa3a4a7a9a7a",
           "morning_odds": 173.0,
-          "live_odds": 84.0,
+          "live_odds": 80.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16882,7 +16907,7 @@
           "draw": 12,
           "music": "2aDa1aDa",
           "morning_odds": 33.0,
-          "live_odds": 3.4,
+          "live_odds": 3.2,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16900,7 +16925,7 @@
           "draw": 13,
           "music": "2a1a5aDa(25)3a7a8a",
           "morning_odds": 11.0,
-          "live_odds": 2.5,
+          "live_odds": 2.3,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16918,7 +16943,7 @@
           "draw": 14,
           "music": "DaDaDa8a1a(25)1aDaDaDa",
           "morning_odds": 67.0,
-          "live_odds": 14.0,
+          "live_odds": 13.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16936,7 +16961,7 @@
           "draw": 15,
           "music": "DaDaDa4a7a0a6a6a4a1a",
           "morning_odds": 44.0,
-          "live_odds": 67.0,
+          "live_odds": 64.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16954,7 +16979,7 @@
           "draw": 16,
           "music": "0a1a4aDaDa(25)Da1a(24)Da",
           "morning_odds": 16.0,
-          "live_odds": 17.0,
+          "live_odds": 16.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
