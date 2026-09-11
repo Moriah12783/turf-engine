@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "b2ae7945f7ed64ef205ae49569103e65d7f7b386",
-  "run_id": "34586274910",
+  "commit": "3ad63d27250a6689033d0ec2a2d2df9da36c81c3",
+  "run_id": "34587040665",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-11",
- "genere_le_utc": "2026-09-11T09:51:44Z",
+ "genere_le_utc": "2026-09-11T10:01:01Z",
  "nb_courses": 40,
  "compte_par_statut": {
   "EN_ATTENTE": 39,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 0,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 1,
   "ANNULEE": 0
  },
- "empreinte_sha256": "3957004fad16b55a9cd7232e742d14b545e77731fcd522d8fb229f2be0189625",
+ "empreinte_sha256": "f8bc95aa8b4c230c42c46268baa41e3eaf7c8ef39838b0d8ca2239c66357cdaa",
  "courses": [
   {
    "course_id": "R1C1_11092026_VINCENNES",
@@ -486,11 +486,11 @@
     "partants_actifs": 10
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE"
+    "pmu_statut": "FIN_COURSE"
    },
    "classement": [
     {
@@ -516,13 +516,48 @@
      "num": 4,
      "nom": "KEPI DES MONTS",
      "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 5,
+     "nom": "KADABRA",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 3,
+     "nom": "KILANTA PASMARICK",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 6,
+     "nom": "JOUVENCE D'AMOUR",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 8,
+     "nom": "JOE LE VEINARD",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 2,
+     "nom": "JOGGER STAR",
+     "dead_heat": false
     }
    ],
    "arrivee": [
     7,
     1,
     9,
-    4
+    4,
+    5,
+    3,
+    6,
+    8,
+    2
    ],
    "non_classes": [
     {
@@ -547,14 +582,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-09-11T09:51:10Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-09-11T10:00:32Z",
+    "verifiee_le_utc": "2026-09-11T10:00:32Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-09-11T09:51:10Z",
-    "derniere_verification_utc": "2026-09-11T09:51:10Z"
+    "derniere_modification_utc": "2026-09-11T10:00:32Z",
+    "derniere_verification_utc": "2026-09-11T10:00:32Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -568,6 +603,24 @@
        1,
        9,
        4
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-09-11T10:00:32Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       7,
+       1,
+       9,
+       4,
+       5,
+       3,
+       6,
+       8,
+       2
       ]
      }
     ]
@@ -595,7 +648,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
