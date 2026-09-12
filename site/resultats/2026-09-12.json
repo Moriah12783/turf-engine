@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "1359cc48d8439b5d67ab15f131d6da1ba99f47e8",
-  "run_id": "34688211500",
+  "commit": "4f932ae6c951f9367829606a4effa51bb0d05d60",
+  "run_id": "34688615614",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-12",
- "genere_le_utc": "2026-09-12T10:21:45Z",
+ "genere_le_utc": "2026-09-12T10:31:02Z",
  "nb_courses": 49,
  "compte_par_statut": {
-  "EN_ATTENTE": 47,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 46,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "2d0a04c0d2636bd3eb84f85856ec98f202ff2fefb278a3f1f3d2bc5275e36b42",
+ "empreinte_sha256": "f366af2f52028aee69172efa6e107c93a6d8bfd7a9c6770d16811d5be4a8ab62",
  "courses": [
   {
    "course_id": "R1C1_12092026_VINCENNES",
@@ -739,7 +739,7 @@
     "verifiee_le_utc": "2026-09-12T09:30:25Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-12T09:30:25Z",
-    "derniere_verification_utc": "2026-09-12T10:21:11Z"
+    "derniere_verification_utc": "2026-09-12T10:30:27Z"
    },
    "correction": {
     "version": 2,
@@ -1008,7 +1008,7 @@
     "verifiee_le_utc": "2026-09-12T10:00:17Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-12T10:00:17Z",
-    "derniere_verification_utc": "2026-09-12T10:21:11Z"
+    "derniere_verification_utc": "2026-09-12T10:30:27Z"
    },
    "correction": {
     "version": 2,
@@ -1067,15 +1067,51 @@
     "partants_actifs": 9
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_CONFIRME"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 7,
+     "nom": "ROYAL SAGA",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 3,
+     "nom": "JEUNE COKO",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 8,
+     "nom": "HIM MALAYA",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 4,
+     "nom": "DENTOR DES OBEAUX",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    7,
+    3,
+    8,
+    4
+   ],
+   "non_classes": [
+    {
+     "num": 1,
+     "nom": "LA MARCHE BLEUE",
+     "incident": "TOMBE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": false,
@@ -1087,21 +1123,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/12092026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-09-12T10:30:27Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-09-12T10:30:27Z",
+    "derniere_verification_utc": "2026-09-12T10:30:27Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-09-12T10:30:27Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       7,
+       3,
+       8,
+       4
+      ]
+     }
+    ]
    }
   },
   {
