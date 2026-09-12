@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "0da782d29c264d3930b15bfc51c023e40b1b58b0",
-  "run_id": "34690156583",
+  "commit": "c2e897e53e91598ff776a0f0da532d7577b39435",
+  "run_id": "34690560193",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-12",
- "genere_le_utc": "2026-09-12T11:06:46Z",
+ "genere_le_utc": "2026-09-12T11:15:47Z",
  "nb_courses": 49,
  "compte_par_statut": {
   "EN_ATTENTE": 45,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 3,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 4,
   "ANNULEE": 0
  },
- "empreinte_sha256": "14b29da64d4e89247eba62cb9a8e14b0af450effa1cb15e29436cea32e97a526",
+ "empreinte_sha256": "b11c542da6391cd82301f26ed00126e14a19dfd15a9507bc993e899e503470b8",
  "courses": [
   {
    "course_id": "R1C1_12092026_VINCENNES",
@@ -40,7 +40,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "DEPART_CONFIRME"
    },
    "classement": [],
    "arrivee": [],
@@ -739,7 +739,7 @@
     "verifiee_le_utc": "2026-09-12T09:30:25Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-12T09:30:25Z",
-    "derniere_verification_utc": "2026-09-12T11:06:11Z"
+    "derniere_verification_utc": "2026-09-12T11:15:18Z"
    },
    "correction": {
     "version": 2,
@@ -1008,7 +1008,7 @@
     "verifiee_le_utc": "2026-09-12T10:00:17Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-12T10:00:17Z",
-    "derniere_verification_utc": "2026-09-12T11:06:11Z"
+    "derniere_verification_utc": "2026-09-12T11:15:18Z"
    },
    "correction": {
     "version": 2,
@@ -1197,7 +1197,7 @@
     "verifiee_le_utc": "2026-09-12T10:36:10Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-12T10:36:10Z",
-    "derniere_verification_utc": "2026-09-12T11:06:11Z"
+    "derniere_verification_utc": "2026-09-12T11:15:18Z"
    },
    "correction": {
     "version": 2,
@@ -1254,11 +1254,11 @@
     "partants_actifs": 11
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "FIN_COURSE"
    },
    "classement": [
     {
@@ -1284,13 +1284,48 @@
      "num": 11,
      "nom": "RAMONA",
      "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 1,
+     "nom": "FLEUR DE VIE",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 3,
+     "nom": "NIRI",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 6,
+     "nom": "CREDO",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 10,
+     "nom": "SOLESSENCE",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 4,
+     "nom": "EVA DE ROCHE",
+     "dead_heat": false
     }
    ],
    "arrivee": [
     7,
     2,
     8,
-    11
+    11,
+    1,
+    3,
+    6,
+    10,
+    4
    ],
    "non_classes": [
     {
@@ -1306,11 +1341,78 @@
    ],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "7": 14.1
+    },
+    "simple_place": {
+     "7": 4.4,
+     "2": 2.0,
+     "8": 8.5
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "7-2",
+      "dividende_pour_1_eur": 23.5
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "7-2",
+      "dividende_pour_1_eur": 12.1
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "7-8",
+      "dividende_pour_1_eur": 61.3
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "2-8",
+      "dividende_pour_1_eur": 32.3
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "7-2",
+      "dividende_pour_1_eur": 12.1
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "7-8",
+      "dividende_pour_1_eur": 12.1
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "7-11",
+      "dividende_pour_1_eur": 12.1
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "2-8",
+      "dividende_pour_1_eur": 12.1
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "2-11",
+      "dividende_pour_1_eur": 12.1
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "8-11",
+      "dividende_pour_1_eur": 12.1
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "7-2-8",
+      "dividende_pour_1_eur": 248.2
+     },
+     {
+      "type_pari": "MINI_MULTI",
+      "combinaison": "7-2-8-11",
+      "dividende_pour_1_eur": 38.0
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -1320,14 +1422,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-09-12T11:00:32Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-09-12T11:15:18Z",
+    "verifiee_le_utc": "2026-09-12T11:15:18Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-09-12T11:00:32Z",
-    "derniere_verification_utc": "2026-09-12T11:06:11Z"
+    "derniere_modification_utc": "2026-09-12T11:15:18Z",
+    "derniere_verification_utc": "2026-09-12T11:15:18Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -1341,6 +1443,24 @@
        2,
        8,
        11
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-09-12T11:15:18Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       7,
+       2,
+       8,
+       11,
+       1,
+       3,
+       6,
+       10,
+       4
       ]
      }
     ]
@@ -1357,9 +1477,9 @@
     "libelle": "PRIX ACHILLE-FOULD",
     "discipline": "OBSTACLE_HAIE",
     "distance_m": 3600,
-    "heure_depart_utc": "2026-09-12T11:27:00Z",
+    "heure_depart_utc": "2026-09-12T11:28:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "11:27 GMT (13:27 Paris)",
+    "heure_depart_affichee": "11:28 GMT (13:28 Paris)",
     "partants_declares": 14,
     "partants_actifs": 14
    },
@@ -1368,7 +1488,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
