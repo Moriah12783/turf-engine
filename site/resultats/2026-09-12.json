@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "994d62809818437bd62827516e29ed1b411abc81",
-  "run_id": "34684956862",
+  "commit": "34e0f033ca67a9016d109625b6276337088ec007",
+  "run_id": "34685354563",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-12",
- "genere_le_utc": "2026-09-12T09:06:44Z",
+ "genere_le_utc": "2026-09-12T09:15:52Z",
  "nb_courses": 49,
  "compte_par_statut": {
-  "EN_ATTENTE": 49,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 48,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 0,
   "ANNULEE": 0
  },
- "empreinte_sha256": "100f987f3e7e0ac8bad996f5a3c6ba8c6b224972e3442f396dcc42743a2b6793",
+ "empreinte_sha256": "d19c8f9fa210f70a1a6ca30323337107a306174a83e5c368524a0ead1255c328",
  "courses": [
   {
    "course_id": "R1C1_12092026_VINCENNES",
@@ -531,15 +531,68 @@
     "partants_actifs": 15
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "CHEVAUX_SOUS_ORDRES"
+    "pmu_statut": "ARRIVEE_PROVISOIRE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 9,
+     "nom": "STALKY",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 13,
+     "nom": "NARVICK SWEEN",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 16,
+     "nom": "MILORD DU BERLAIS",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 4,
+     "nom": "CLOVIS D'ANJOU",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 12,
+     "nom": "HOLD ME CHARLY",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    9,
+    13,
+    16,
+    4,
+    12
+   ],
+   "non_classes": [
+    {
+     "num": 7,
+     "nom": "NEVERLAND",
+     "incident": "ARRETE"
+    },
+    {
+     "num": 10,
+     "nom": "PERFECT SONG",
+     "incident": "ARRETE"
+    },
+    {
+     "num": 11,
+     "nom": "TELMORION",
+     "incident": "ARRETE"
+    }
+   ],
    "non_partants": [
     {
      "num": 2,
@@ -556,21 +609,36 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/12092026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-09-12T09:15:22Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-09-12T09:15:22Z",
+    "derniere_verification_utc": "2026-09-12T09:15:22Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-09-12T09:15:22Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       9,
+       13,
+       16,
+       4,
+       12
+      ]
+     }
+    ]
    }
   },
   {
