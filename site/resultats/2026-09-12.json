@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "c2e897e53e91598ff776a0f0da532d7577b39435",
-  "run_id": "34690560193",
+  "commit": "21010be622f501905f00869503d3bd98d51d9a9b",
+  "run_id": "34690820819",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-12",
- "genere_le_utc": "2026-09-12T11:15:47Z",
+ "genere_le_utc": "2026-09-12T11:21:41Z",
  "nb_courses": 49,
  "compte_par_statut": {
-  "EN_ATTENTE": 45,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 44,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 4,
   "ANNULEE": 0
  },
- "empreinte_sha256": "b11c542da6391cd82301f26ed00126e14a19dfd15a9507bc993e899e503470b8",
+ "empreinte_sha256": "8c6a9bab812e8eae432962997eb1c228470e3f8d2db1d918196598ce2a7dd224",
  "courses": [
   {
    "course_id": "R1C1_12092026_VINCENNES",
@@ -36,15 +36,66 @@
     "partants_actifs": 10
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_CONFIRME"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 5,
+     "nom": "KOALA",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 10,
+     "nom": "IBIS DE CHAHAINS",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 4,
+     "nom": "KAPUSHA MIP",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 8,
+     "nom": "KALMIA QUICK",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    5,
+    10,
+    4,
+    8
+   ],
+   "non_classes": [
+    {
+     "num": 1,
+     "nom": "KRISTAL DE JANZE",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 3,
+     "nom": "KADO SHINING",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 6,
+     "nom": "KENYAN BLUES",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 9,
+     "nom": "JOKER DU HAMEL",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": false,
@@ -56,21 +107,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/12092026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-09-12T11:21:09Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-09-12T11:21:09Z",
+    "derniere_verification_utc": "2026-09-12T11:21:09Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-09-12T11:21:09Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       5,
+       10,
+       4,
+       8
+      ]
+     }
+    ]
    }
   },
   {
@@ -95,7 +160,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -739,7 +804,7 @@
     "verifiee_le_utc": "2026-09-12T09:30:25Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-12T09:30:25Z",
-    "derniere_verification_utc": "2026-09-12T11:15:18Z"
+    "derniere_verification_utc": "2026-09-12T11:21:09Z"
    },
    "correction": {
     "version": 2,
@@ -1008,7 +1073,7 @@
     "verifiee_le_utc": "2026-09-12T10:00:17Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-12T10:00:17Z",
-    "derniere_verification_utc": "2026-09-12T11:15:18Z"
+    "derniere_verification_utc": "2026-09-12T11:21:09Z"
    },
    "correction": {
     "version": 2,
@@ -1197,7 +1262,7 @@
     "verifiee_le_utc": "2026-09-12T10:36:10Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-12T10:36:10Z",
-    "derniere_verification_utc": "2026-09-12T11:15:18Z"
+    "derniere_verification_utc": "2026-09-12T11:21:09Z"
    },
    "correction": {
     "version": 2,
@@ -1426,7 +1491,7 @@
     "verifiee_le_utc": "2026-09-12T11:15:18Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-12T11:15:18Z",
-    "derniere_verification_utc": "2026-09-12T11:15:18Z"
+    "derniere_verification_utc": "2026-09-12T11:21:09Z"
    },
    "correction": {
     "version": 2,
@@ -2608,7 +2673,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
