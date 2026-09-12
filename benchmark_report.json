@@ -15513,7 +15513,7 @@
       "provisoire_reason": null,
       "publishable": true,
       "publication_reason": "OK",
-      "display_horizon": "T90",
+      "display_horizon": "T30",
       "editions_moteur": {
         "T_MATIN": {
           "sel": "9-11-4-6-2-10-13-12",
@@ -15524,6 +15524,12 @@
         "T90": {
           "sel": "11-9-6-12-2-3-13-7",
           "lock": "18:00",
+          "priced_ratio": 1.0,
+          "odds_real": true
+        },
+        "T30": {
+          "sel": "11-6-9-12-2-13-3-7",
+          "lock": "19:06",
           "priced_ratio": 1.0,
           "odds_real": true
         }
@@ -15538,6 +15544,12 @@
         "T90": {
           "sel": "9-6-12-11-2-3-10-7",
           "lock": "18:00",
+          "priced_ratio": 1.0,
+          "odds_real": true
+        },
+        "T30": {
+          "sel": "6-9-11-12-2-3-10-7",
+          "lock": "19:06",
           "priced_ratio": 1.0,
           "odds_real": true
         }
@@ -15561,20 +15573,20 @@
       "is_no_bet": false,
       "is_master": false,
       "np_nums": [],
-      "sel_moteur": "11-9-6-12-2-3-13-7",
+      "sel_moteur": "11-6-9-12-2-13-3-7",
       "sel_moteur_list": [
         11,
-        9,
         6,
+        9,
         12,
         2,
-        3,
         13,
+        3,
         7
       ],
       "bases": [
         11,
-        9
+        6
       ],
       "outsider_num": 4,
       "regrets": [
@@ -15590,11 +15602,11 @@
             "libelle": "Couplé Placé (ou 2sur4)",
             "chevaux": [
               11,
-              9
+              6
             ],
             "bases": [
               11,
-              9
+              6
             ],
             "associes": [],
             "combinaisons": 1,
@@ -15602,19 +15614,19 @@
             "cout_total_eur": 2.0,
             "eligible": true,
             "motif_ineligibilite": null,
-            "texte": "11 - 9"
+            "texte": "11 - 6"
           },
           {
             "produit": "TRIO",
             "libelle": "Trio (Couplé Gagnant)",
             "chevaux": [
               11,
-              9,
+              6,
               4
             ],
             "bases": [
               11,
-              9
+              6
             ],
             "associes": [
               4
@@ -15624,79 +15636,79 @@
             "cout_total_eur": 2.0,
             "eligible": true,
             "motif_ineligibilite": null,
-            "texte": "11 - 9 - 4"
+            "texte": "11 - 6 - 4"
           },
           {
             "produit": "QUINTE_PLUS",
             "libelle": "Quinté+ champ réduit",
             "chevaux": [
               11,
-              9,
               6,
+              9,
               12,
               2,
-              3
+              13
             ],
             "bases": [
               11,
-              9
+              6
             ],
             "associes": [
-              6,
+              9,
               12,
               2,
-              3
+              13
             ],
             "combinaisons": 4,
             "mise_unitaire_eur": 2.0,
             "cout_total_eur": null,
             "eligible": false,
             "motif_ineligibilite": "PARI_NON_OUVERT",
-            "texte": "11 - 9 - X - X - X / 6, 12, 2, 3"
+            "texte": "11 - 6 - X - X - X / 9, 12, 2, 13"
           }
         ],
         "ticket_securite": {
           "pari": "Couplé Placé (ou 2sur4)",
           "chevaux": [
             11,
-            9
+            6
           ],
-          "formule": "11 - 9",
+          "formule": "11 - 6",
           "mise_base_eur": 2.0
         },
         "ticket_trio": {
           "pari": "Trio (Couplé Gagnant)",
           "chevaux": [
             11,
-            9,
+            6,
             4
           ],
-          "formule": "11 - 9 - 4",
+          "formule": "11 - 6 - 4",
           "mise_base_eur": 2.0
         },
         "quinte_champ_reduit": {
           "pari": "Quinté+ champ réduit",
           "bases_fixes": [
             11,
-            9
+            6
           ],
           "associes": [
-            6,
+            9,
             12,
             2,
-            3
+            13
           ],
-          "formule": "11 - 9 - X - X - X / 6, 12, 2, 3",
+          "formule": "11 - 6 - X - X - X / 9, 12, 2, 13",
           "combinaisons": 4,
           "budget_conseille_eur": null
         }
       },
-      "sel_marche": "9-6-12-11-2-3-10-7",
+      "sel_marche": "6-9-11-12-2-3-10-7",
       "sel_marche_list": [
-        9,
         6,
-        12,
+        9,
         11,
+        12,
         2,
         3,
         10,
@@ -15704,7 +15716,7 @@
       ],
       "common_count": 7,
       "fav_presse": "-",
-      "fav_marche": 9,
+      "fav_marche": 6,
       "arrivee": "En attente",
       "arrival_list": [],
       "couv_moteur": "0/5",
@@ -15712,7 +15724,7 @@
       "couv_marche": "0/5",
       "couv_marche_count": 0,
       "couverture_label": "Course à venir",
-      "decision": "Bases: 11 - 9",
+      "decision": "Bases: 11 - 6",
       "decision_badge": "badge-base",
       "runners": [
         {
@@ -15725,29 +15737,11 @@
           "morning_odds": 14.0,
           "live_odds": 5.5,
           "o_t90": 7.0,
-          "o_t30": null,
+          "o_t30": 5.5,
           "o_t15": null,
-          "prob_pct": 21.2,
-          "value_index": 1.48,
+          "prob_pct": 23.4,
+          "value_index": 1.29,
           "smart_signal": "FORTE_BAISSE_INSIDER",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 9,
-          "name": "MOJITO D'AXEL",
-          "driver": "A. TINTILLIER",
-          "shoeing": "D4",
-          "draw": 9,
-          "music": "9a9aDaDa6a2a8a9a2a6a",
-          "morning_odds": 1.8,
-          "live_odds": 5.1,
-          "o_t90": 4.6,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 13.7,
-          "value_index": 0.63,
-          "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
         },
@@ -15761,11 +15755,29 @@
           "morning_odds": 5.5,
           "live_odds": 5.0,
           "o_t90": 5.8,
-          "o_t30": null,
+          "o_t30": 5.0,
           "o_t15": null,
-          "prob_pct": 12.1,
-          "value_index": 0.7,
+          "prob_pct": 13.8,
+          "value_index": 0.69,
           "smart_signal": "STABLE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 9,
+          "name": "MOJITO D'AXEL",
+          "driver": "A. TINTILLIER",
+          "shoeing": "D4",
+          "draw": 9,
+          "music": "9a9aDaDa6a2a8a9a2a6a",
+          "morning_odds": 1.8,
+          "live_odds": 5.1,
+          "o_t90": 4.6,
+          "o_t30": 5.1,
+          "o_t15": null,
+          "prob_pct": 12.5,
+          "value_index": 0.64,
+          "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
         },
@@ -15779,10 +15791,10 @@
           "morning_odds": 2.5,
           "live_odds": 6.6,
           "o_t90": 5.9,
-          "o_t30": null,
+          "o_t30": 6.6,
           "o_t15": null,
-          "prob_pct": 10.9,
-          "value_index": 0.64,
+          "prob_pct": 9.8,
+          "value_index": 0.65,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -15797,10 +15809,28 @@
           "morning_odds": 2.5,
           "live_odds": 7.3,
           "o_t90": 8.2,
-          "o_t30": null,
+          "o_t30": 7.3,
           "o_t15": null,
-          "prob_pct": 8.5,
-          "value_index": 0.7,
+          "prob_pct": 9.4,
+          "value_index": 0.69,
+          "smart_signal": "FORTE_HAUSSE_DELAISSE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 13,
+          "name": "MOODLY DE L'ISOP",
+          "driver": "R. GONCET",
+          "shoeing": "D4",
+          "draw": 13,
+          "music": "1a2a2aDa0a4aDa(25)0aDa",
+          "morning_odds": 3.4,
+          "live_odds": 23.0,
+          "o_t90": 22.0,
+          "o_t30": 23.0,
+          "o_t15": null,
+          "prob_pct": 5.8,
+          "value_index": 1.34,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -15815,29 +15845,11 @@
           "morning_odds": 41.0,
           "live_odds": 17.0,
           "o_t90": 13.0,
-          "o_t30": null,
+          "o_t30": 17.0,
           "o_t15": null,
-          "prob_pct": 6.2,
-          "value_index": 0.8,
+          "prob_pct": 5.2,
+          "value_index": 0.88,
           "smart_signal": "FORTE_BAISSE_INSIDER",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 13,
-          "name": "MOODLY DE L'ISOP",
-          "driver": "R. GONCET",
-          "shoeing": "D4",
-          "draw": 13,
-          "music": "1a2a2aDa0a4aDa(25)0aDa",
-          "morning_odds": 3.4,
-          "live_odds": 23.0,
-          "o_t90": 22.0,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 5.9,
-          "value_index": 1.29,
-          "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
         },
@@ -15851,11 +15863,11 @@
           "morning_odds": 33.0,
           "live_odds": 23.0,
           "o_t90": 18.0,
-          "o_t30": null,
+          "o_t30": 23.0,
           "o_t15": null,
-          "prob_pct": 5.5,
-          "value_index": 0.98,
-          "smart_signal": "FORTE_BAISSE_INSIDER",
+          "prob_pct": 4.4,
+          "value_index": 1.01,
+          "smart_signal": "BAISSE_CONFIRMEE",
           "is_np": false,
           "odds_real": true
         },
@@ -15869,10 +15881,10 @@
           "morning_odds": 4.6,
           "live_odds": 18.0,
           "o_t90": 17.0,
-          "o_t30": null,
+          "o_t30": 18.0,
           "o_t15": null,
-          "prob_pct": 4.3,
-          "value_index": 0.73,
+          "prob_pct": 4.1,
+          "value_index": 0.75,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -15887,28 +15899,10 @@
           "morning_odds": 44.0,
           "live_odds": 40.0,
           "o_t90": 40.0,
-          "o_t30": null,
+          "o_t30": 40.0,
           "o_t15": null,
           "prob_pct": 3.8,
-          "value_index": 1.5,
-          "smart_signal": "STABLE",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 1,
-          "name": "MARTIN SOMOLLI",
-          "driver": "A. FAVRIS",
-          "shoeing": "D4",
-          "draw": 1,
-          "music": "Da(25)5a7aDaDa",
-          "morning_odds": 23.0,
-          "live_odds": 29.0,
-          "o_t90": 25.0,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 3.2,
-          "value_index": 0.81,
+          "value_index": 1.52,
           "smart_signal": "STABLE",
           "is_np": false,
           "odds_real": true
@@ -15923,11 +15917,29 @@
           "morning_odds": 2.5,
           "live_odds": 34.0,
           "o_t90": 35.0,
-          "o_t30": null,
+          "o_t30": 34.0,
           "o_t15": null,
-          "prob_pct": 3.1,
-          "value_index": 1.08,
+          "prob_pct": 3.2,
+          "value_index": 1.09,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 1,
+          "name": "MARTIN SOMOLLI",
+          "driver": "A. FAVRIS",
+          "shoeing": "D4",
+          "draw": 1,
+          "music": "Da(25)5a7aDaDa",
+          "morning_odds": 23.0,
+          "live_odds": 29.0,
+          "o_t90": 25.0,
+          "o_t30": 29.0,
+          "o_t15": null,
+          "prob_pct": 2.8,
+          "value_index": 0.81,
+          "smart_signal": "LEGERE_HAUSSE",
           "is_np": false,
           "odds_real": true
         },
@@ -15941,10 +15953,10 @@
           "morning_odds": 5.5,
           "live_odds": 50.0,
           "o_t90": 47.0,
-          "o_t30": null,
+          "o_t30": 50.0,
           "o_t15": null,
-          "prob_pct": 1.7,
-          "value_index": 0.81,
+          "prob_pct": 1.6,
+          "value_index": 0.82,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -22156,8 +22168,8 @@
       "priced_ratio": 1.0,
       "edition_provisoire": false,
       "provisoire_reason": null,
-      "publishable": true,
-      "publication_reason": "OK",
+      "publishable": false,
+      "publication_reason": "RACE_STARTED",
       "display_horizon": "T15",
       "editions_moteur": {
         "T_MATIN": {
@@ -22220,9 +22232,9 @@
       "autostart": false,
       "scheduled_start_time": "19:06 GMT (21:06 Paris)",
       "is_finished": false,
-      "status": "PROGRAMMÉE",
+      "status": "PARTIE",
       "is_cancelled": false,
-      "is_started": false,
+      "is_started": true,
       "start_time_utc": "2026-09-12T19:06:00Z",
       "contract_recorded": true,
       "confidence_stars": 2,
@@ -22380,7 +22392,7 @@
       "couv_moteur_count": 0,
       "couv_marche": "0/5",
       "couv_marche_count": 0,
-      "couverture_label": "Course à venir",
+      "couverture_label": "Course partie",
       "decision": "Bases: 1 - 14",
       "decision_badge": "badge-base",
       "runners": [
