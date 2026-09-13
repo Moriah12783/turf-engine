@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "e2151e75123c5b685ad9320fe26c18b15312e2d6",
-  "run_id": "34750716865",
+  "commit": "5468a56a01fb439fa3e8117be30642187a876f4b",
+  "run_id": "34750976217",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-13",
- "genere_le_utc": "2026-09-13T10:00:58Z",
+ "genere_le_utc": "2026-09-13T10:06:45Z",
  "nb_courses": 34,
  "compte_par_statut": {
-  "EN_ATTENTE": 31,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 30,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 3,
   "ANNULEE": 0
  },
- "empreinte_sha256": "947b7245f95532297dc45b94a65d2a6f038677e67058974834f8cb1719915efb",
+ "empreinte_sha256": "f1e87cbf165f402199508cbb1f9094fc937b00313246ed59207f553ba0faedb7",
  "courses": [
   {
    "course_id": "R1C1_13092026_ParisLongchamp",
@@ -703,7 +703,7 @@
     "verifiee_le_utc": "2026-09-13T09:30:23Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-13T09:30:23Z",
-    "derniere_verification_utc": "2026-09-13T10:00:25Z"
+    "derniere_verification_utc": "2026-09-13T10:06:09Z"
    },
    "correction": {
     "version": 2,
@@ -939,7 +939,7 @@
     "verifiee_le_utc": "2026-09-13T10:00:25Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-13T10:00:25Z",
-    "derniere_verification_utc": "2026-09-13T10:00:25Z"
+    "derniere_verification_utc": "2026-09-13T10:06:09Z"
    },
    "correction": {
     "version": 2,
@@ -1373,7 +1373,7 @@
     "verifiee_le_utc": "2026-09-13T09:36:13Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-13T09:36:13Z",
-    "derniere_verification_utc": "2026-09-13T10:00:25Z"
+    "derniere_verification_utc": "2026-09-13T10:06:09Z"
    },
    "correction": {
     "version": 2,
@@ -1428,14 +1428,44 @@
     "partants_actifs": 4
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_CONFIRME"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 1,
+     "nom": "NICAR DEL AVIGNON",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 5,
+     "nom": "PARAY",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 3,
+     "nom": "HERMINE ALLEN",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 2,
+     "nom": "JOLIVENT",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    1,
+    5,
+    3,
+    2
+   ],
    "non_classes": [],
    "non_partants": [
     {
@@ -1453,21 +1483,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/13092026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-09-13T10:06:09Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-09-13T10:06:09Z",
+    "derniere_verification_utc": "2026-09-13T10:06:09Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-09-13T10:06:09Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       1,
+       5,
+       3,
+       2
+      ]
+     }
+    ]
    }
   },
   {
