@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "41def11b8856331bd9a5baa1453eee574fcc94f7",
-  "run_id": "34839850559",
+  "commit": "b8e81be4d9d771613c91434b087127b9dd8a9c8a",
+  "run_id": "34841126220",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-14",
- "genere_le_utc": "2026-09-14T11:46:23Z",
+ "genere_le_utc": "2026-09-14T12:01:39Z",
  "nb_courses": 39,
  "compte_par_statut": {
-  "EN_ATTENTE": 34,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 33,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 5,
   "ANNULEE": 0
  },
- "empreinte_sha256": "732001e3e21d02fd7258b9a64123a71ee5324cafe6c9ad2a35ab592f1ca5de8e",
+ "empreinte_sha256": "bd26a1bb54eae661ba96dd49b0356ad57a7f85627d40caad0f206f920ab4457e",
  "courses": [
   {
    "course_id": "R1C1_14092026_BEAUMONT DE LOMAGNE",
@@ -36,15 +36,63 @@
     "partants_actifs": 13
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "DEPART_CONFIRME"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 6,
+     "nom": "JUGEMENT D'AVE",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 10,
+     "nom": "KLASSE DE BRUZEAU",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 9,
+     "nom": "JAZZ PAT",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 13,
+     "nom": "COOL KRONOS",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 14,
+     "nom": "JAPPELOUP TURGOT",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    6,
+    10,
+    9,
+    13,
+    14
+   ],
+   "non_classes": [
+    {
+     "num": 4,
+     "nom": "IROCKO STRYCK",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 8,
+     "nom": "INCREDIBLE GO",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [
     {
      "num": 2,
@@ -61,21 +109,36 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PARTICIPANTS",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/14092026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-09-14T12:01:06Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-09-14T12:01:06Z",
+    "derniere_verification_utc": "2026-09-14T12:01:06Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-09-14T12:01:06Z",
+      "source": "PMU_PARTICIPANTS",
+      "classement": [
+       6,
+       10,
+       9,
+       13,
+       14
+      ]
+     }
+    ]
    }
   },
   {
@@ -100,7 +163,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -675,7 +738,7 @@
     "verifiee_le_utc": "2026-09-14T09:36:11Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-14T09:36:11Z",
-    "derniere_verification_utc": "2026-09-14T11:45:54Z"
+    "derniere_verification_utc": "2026-09-14T12:01:06Z"
    },
    "correction": {
     "version": 2,
@@ -912,7 +975,7 @@
     "verifiee_le_utc": "2026-09-14T10:06:12Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-14T10:06:12Z",
-    "derniere_verification_utc": "2026-09-14T11:45:54Z"
+    "derniere_verification_utc": "2026-09-14T12:01:06Z"
    },
    "correction": {
     "version": 2,
@@ -1140,7 +1203,7 @@
     "verifiee_le_utc": "2026-09-14T10:45:55Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-14T10:45:55Z",
-    "derniere_verification_utc": "2026-09-14T11:45:54Z"
+    "derniere_verification_utc": "2026-09-14T12:01:06Z"
    },
    "correction": {
     "version": 2,
@@ -1398,7 +1461,7 @@
     "verifiee_le_utc": "2026-09-14T11:15:57Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-14T11:15:57Z",
-    "derniere_verification_utc": "2026-09-14T11:45:54Z"
+    "derniere_verification_utc": "2026-09-14T12:01:06Z"
    },
    "correction": {
     "version": 2,
@@ -1591,7 +1654,7 @@
     "verifiee_le_utc": "2026-09-14T11:45:54Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-14T11:45:54Z",
-    "derniere_verification_utc": "2026-09-14T11:45:54Z"
+    "derniere_verification_utc": "2026-09-14T12:01:06Z"
    },
    "correction": {
     "version": 1,
@@ -2660,7 +2723,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
