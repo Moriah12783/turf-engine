@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "dfb786e9fda2dcf7c9c2cef583dd96ee2917e1c5",
-  "run_id": "34859383470",
+  "commit": "f776af436ada9b6dd5bcbadd017166f92ccbb9cf",
+  "run_id": "34859604338",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-14",
- "genere_le_utc": "2026-09-14T15:01:49Z",
+ "genere_le_utc": "2026-09-14T15:04:00Z",
  "nb_courses": 39,
  "compte_par_statut": {
-  "EN_ATTENTE": 19,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 18,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 20,
   "ANNULEE": 0
  },
- "empreinte_sha256": "ae0fcb8c30900769598ddfba60c769691af39f1b3e2c7c8925a32976c5267c74",
+ "empreinte_sha256": "dbea234f9961172f80c15b7b7a49d8dfc2c5dda6218bb584e6540855f0d3d9a4",
  "courses": [
   {
    "course_id": "R1C1_14092026_BEAUMONT DE LOMAGNE",
@@ -317,7 +317,7 @@
     "verifiee_le_utc": "2026-09-14T12:15:57Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-14T12:15:57Z",
-    "derniere_verification_utc": "2026-09-14T15:01:16Z"
+    "derniere_verification_utc": "2026-09-14T15:03:20Z"
    },
    "correction": {
     "version": 2,
@@ -557,7 +557,7 @@
     "verifiee_le_utc": "2026-09-14T12:45:57Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-14T12:45:57Z",
-    "derniere_verification_utc": "2026-09-14T15:01:16Z"
+    "derniere_verification_utc": "2026-09-14T15:03:20Z"
    },
    "correction": {
     "version": 2,
@@ -753,7 +753,7 @@
     "verifiee_le_utc": "2026-09-14T13:30:59Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-14T13:30:59Z",
-    "derniere_verification_utc": "2026-09-14T15:01:16Z"
+    "derniere_verification_utc": "2026-09-14T15:03:20Z"
    },
    "correction": {
     "version": 2,
@@ -1013,7 +1013,7 @@
     "verifiee_le_utc": "2026-09-14T14:01:22Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-14T14:01:22Z",
-    "derniere_verification_utc": "2026-09-14T15:01:16Z"
+    "derniere_verification_utc": "2026-09-14T15:03:20Z"
    },
    "correction": {
     "version": 1,
@@ -1221,7 +1221,7 @@
     "verifiee_le_utc": "2026-09-14T14:30:58Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-14T14:30:58Z",
-    "derniere_verification_utc": "2026-09-14T15:01:16Z"
+    "derniere_verification_utc": "2026-09-14T15:03:20Z"
    },
    "correction": {
     "version": 1,
@@ -1264,15 +1264,73 @@
     "partants_actifs": 17
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_CONFIRME"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 17,
+     "nom": "LEOPARD WIT",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 11,
+     "nom": "LAMIE QUICK",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 14,
+     "nom": "LILI",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 3,
+     "nom": "LILOU",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 12,
+     "nom": "LITTLE CROWN",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    17,
+    11,
+    14,
+    3,
+    12
+   ],
+   "non_classes": [
+    {
+     "num": 8,
+     "nom": "LYSANDRA",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 10,
+     "nom": "LE TITIEN",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 13,
+     "nom": "LADIVA DE VILLABON",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 16,
+     "nom": "LUKE SKYWALKER",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": false,
@@ -1284,21 +1342,36 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/14092026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-09-14T15:03:20Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-09-14T15:03:20Z",
+    "derniere_verification_utc": "2026-09-14T15:03:20Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-09-14T15:03:20Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       17,
+       11,
+       14,
+       3,
+       12
+      ]
+     }
+    ]
    }
   },
   {
@@ -1618,7 +1691,7 @@
     "verifiee_le_utc": "2026-09-14T09:36:11Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-14T09:36:11Z",
-    "derniere_verification_utc": "2026-09-14T15:01:16Z"
+    "derniere_verification_utc": "2026-09-14T15:03:20Z"
    },
    "correction": {
     "version": 2,
@@ -1855,7 +1928,7 @@
     "verifiee_le_utc": "2026-09-14T10:06:12Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-14T10:06:12Z",
-    "derniere_verification_utc": "2026-09-14T15:01:16Z"
+    "derniere_verification_utc": "2026-09-14T15:03:20Z"
    },
    "correction": {
     "version": 2,
@@ -2083,7 +2156,7 @@
     "verifiee_le_utc": "2026-09-14T10:45:55Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-14T10:45:55Z",
-    "derniere_verification_utc": "2026-09-14T15:01:16Z"
+    "derniere_verification_utc": "2026-09-14T15:03:20Z"
    },
    "correction": {
     "version": 2,
@@ -2341,7 +2414,7 @@
     "verifiee_le_utc": "2026-09-14T11:15:57Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-14T11:15:57Z",
-    "derniere_verification_utc": "2026-09-14T15:01:16Z"
+    "derniere_verification_utc": "2026-09-14T15:03:20Z"
    },
    "correction": {
     "version": 2,
@@ -2534,7 +2607,7 @@
     "verifiee_le_utc": "2026-09-14T11:45:54Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-14T11:45:54Z",
-    "derniere_verification_utc": "2026-09-14T15:01:16Z"
+    "derniere_verification_utc": "2026-09-14T15:03:20Z"
    },
    "correction": {
     "version": 1,
@@ -2768,7 +2841,7 @@
     "verifiee_le_utc": "2026-09-14T12:31:05Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-14T12:31:05Z",
-    "derniere_verification_utc": "2026-09-14T15:01:16Z"
+    "derniere_verification_utc": "2026-09-14T15:03:20Z"
    },
    "correction": {
     "version": 2,
@@ -2974,7 +3047,7 @@
     "verifiee_le_utc": "2026-09-14T13:15:57Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-14T13:15:57Z",
-    "derniere_verification_utc": "2026-09-14T15:01:16Z"
+    "derniere_verification_utc": "2026-09-14T15:03:20Z"
    },
    "correction": {
     "version": 2,
@@ -3132,7 +3205,7 @@
     "verifiee_le_utc": "2026-09-14T13:45:56Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-14T13:45:56Z",
-    "derniere_verification_utc": "2026-09-14T15:01:16Z"
+    "derniere_verification_utc": "2026-09-14T15:03:20Z"
    },
    "correction": {
     "version": 2,
@@ -3377,7 +3450,7 @@
     "verifiee_le_utc": "2026-09-14T14:16:00Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-14T14:16:00Z",
-    "derniere_verification_utc": "2026-09-14T15:01:16Z"
+    "derniere_verification_utc": "2026-09-14T15:03:20Z"
    },
    "correction": {
     "version": 2,
@@ -3670,7 +3743,7 @@
     "verifiee_le_utc": "2026-09-14T15:01:16Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-14T15:01:16Z",
-    "derniere_verification_utc": "2026-09-14T15:01:16Z"
+    "derniere_verification_utc": "2026-09-14T15:03:20Z"
    },
    "correction": {
     "version": 2,
@@ -4612,7 +4685,7 @@
     "verifiee_le_utc": "2026-09-14T12:45:57Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-14T12:45:57Z",
-    "derniere_verification_utc": "2026-09-14T15:01:16Z"
+    "derniere_verification_utc": "2026-09-14T15:03:20Z"
    },
    "correction": {
     "version": 2,
@@ -4807,7 +4880,7 @@
     "verifiee_le_utc": "2026-09-14T13:15:57Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-14T13:15:57Z",
-    "derniere_verification_utc": "2026-09-14T15:01:16Z"
+    "derniere_verification_utc": "2026-09-14T15:03:20Z"
    },
    "correction": {
     "version": 1,
@@ -4966,7 +5039,7 @@
     "verifiee_le_utc": "2026-09-14T14:01:22Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-14T14:01:22Z",
-    "derniere_verification_utc": "2026-09-14T15:01:16Z"
+    "derniere_verification_utc": "2026-09-14T15:03:20Z"
    },
    "correction": {
     "version": 2,
@@ -5166,7 +5239,7 @@
     "verifiee_le_utc": "2026-09-14T14:16:00Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-14T14:16:00Z",
-    "derniere_verification_utc": "2026-09-14T15:01:16Z"
+    "derniere_verification_utc": "2026-09-14T15:03:20Z"
    },
    "correction": {
     "version": 1,
@@ -5373,7 +5446,7 @@
     "verifiee_le_utc": "2026-09-14T14:45:57Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-14T14:45:57Z",
-    "derniere_verification_utc": "2026-09-14T15:01:16Z"
+    "derniere_verification_utc": "2026-09-14T15:03:20Z"
    },
    "correction": {
     "version": 1,
@@ -5422,7 +5495,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_DANS_TROIS_MINUTES"
+    "pmu_statut": "FAUX_DEPART"
    },
    "classement": [],
    "arrivee": [],
