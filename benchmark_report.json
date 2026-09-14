@@ -4992,8 +4992,8 @@
       "priced_ratio": 1.0,
       "edition_provisoire": false,
       "provisoire_reason": null,
-      "publishable": true,
-      "publication_reason": "OK",
+      "publishable": false,
+      "publication_reason": "RACE_STARTED",
       "display_horizon": "T15",
       "editions_moteur": {
         "T_MATIN": {
@@ -5056,9 +5056,9 @@
       "autostart": false,
       "scheduled_start_time": "09:20 GMT (11:20 Paris)",
       "is_finished": false,
-      "status": "PROGRAMMÉE",
+      "status": "PARTIE",
       "is_cancelled": false,
-      "is_started": false,
+      "is_started": true,
       "start_time_utc": "2026-09-14T09:20:00Z",
       "contract_recorded": true,
       "confidence_stars": 3,
@@ -5216,7 +5216,7 @@
       "couv_moteur_count": 0,
       "couv_marche": "0/5",
       "couv_marche_count": 0,
-      "couverture_label": "Course à venir",
+      "couverture_label": "Course partie",
       "decision": "⭐ COUPLE MAITRE: 2 - 10",
       "decision_badge": "badge-master",
       "runners": [
@@ -5464,7 +5464,7 @@
       "provisoire_reason": null,
       "publishable": true,
       "publication_reason": "OK",
-      "display_horizon": "T90",
+      "display_horizon": "T30",
       "editions_moteur": {
         "T_MATIN": {
           "sel": "5-1-4-6-2-9-11-7",
@@ -5475,6 +5475,12 @@
         "T90": {
           "sel": "1-5-6-2-4-9-3-7",
           "lock": "08:15",
+          "priced_ratio": 1.0,
+          "odds_real": true
+        },
+        "T30": {
+          "sel": "1-6-5-2-9-4-3-8",
+          "lock": "09:21",
           "priced_ratio": 1.0,
           "odds_real": true
         }
@@ -5489,6 +5495,12 @@
         "T90": {
           "sel": "1-5-4-2-6-9-7-11",
           "lock": "08:15",
+          "priced_ratio": 1.0,
+          "odds_real": true
+        },
+        "T30": {
+          "sel": "1-6-5-4-2-9-8-11",
+          "lock": "09:21",
           "priced_ratio": 1.0,
           "odds_real": true
         }
@@ -5512,25 +5524,25 @@
       "is_no_bet": false,
       "is_master": true,
       "np_nums": [],
-      "sel_moteur": "1-5-6-2-4-9-3-7",
+      "sel_moteur": "1-6-5-2-9-4-3-8",
       "sel_moteur_list": [
         1,
-        5,
         6,
+        5,
         2,
-        4,
         9,
+        4,
         3,
-        7
+        8
       ],
       "bases": [
         1,
-        5
+        6
       ],
       "outsider_num": 10,
       "regrets": [
         11,
-        8
+        7
       ],
       "smart_tickets": {
         "contract": 2,
@@ -5541,11 +5553,11 @@
             "libelle": "Couplé Maître du jour (Gagnant & Placé)",
             "chevaux": [
               1,
-              5
+              6
             ],
             "bases": [
               1,
-              5
+              6
             ],
             "associes": [],
             "combinaisons": 1,
@@ -5553,19 +5565,19 @@
             "cout_total_eur": 2.0,
             "eligible": true,
             "motif_ineligibilite": null,
-            "texte": "1 - 5"
+            "texte": "1 - 6"
           },
           {
             "produit": "TRIO",
             "libelle": "Trio (Couplé Gagnant)",
             "chevaux": [
               1,
-              5,
+              6,
               10
             ],
             "bases": [
               1,
-              5
+              6
             ],
             "associes": [
               10
@@ -5575,82 +5587,82 @@
             "cout_total_eur": 2.0,
             "eligible": true,
             "motif_ineligibilite": null,
-            "texte": "1 - 5 - 10"
+            "texte": "1 - 6 - 10"
           },
           {
             "produit": "QUINTE_PLUS",
             "libelle": "Quinté+ champ réduit",
             "chevaux": [
               1,
-              5,
               6,
+              5,
               2,
-              4,
-              9
+              9,
+              4
             ],
             "bases": [
               1,
-              5
+              6
             ],
             "associes": [
-              6,
+              5,
               2,
-              4,
-              9
+              9,
+              4
             ],
             "combinaisons": 4,
             "mise_unitaire_eur": 2.0,
             "cout_total_eur": null,
             "eligible": false,
             "motif_ineligibilite": "PARI_NON_OUVERT",
-            "texte": "1 - 5 - X - X - X / 6, 2, 4, 9"
+            "texte": "1 - 6 - X - X - X / 5, 2, 9, 4"
           }
         ],
         "ticket_securite": {
           "pari": "Couplé Maître du jour (Gagnant & Placé)",
           "chevaux": [
             1,
-            5
+            6
           ],
-          "formule": "1 - 5",
+          "formule": "1 - 6",
           "mise_base_eur": 2.0
         },
         "ticket_trio": {
           "pari": "Trio (Couplé Gagnant)",
           "chevaux": [
             1,
-            5,
+            6,
             10
           ],
-          "formule": "1 - 5 - 10",
+          "formule": "1 - 6 - 10",
           "mise_base_eur": 2.0
         },
         "quinte_champ_reduit": {
           "pari": "Quinté+ champ réduit",
           "bases_fixes": [
             1,
-            5
+            6
           ],
           "associes": [
-            6,
+            5,
             2,
-            4,
-            9
+            9,
+            4
           ],
-          "formule": "1 - 5 - X - X - X / 6, 2, 4, 9",
+          "formule": "1 - 6 - X - X - X / 5, 2, 9, 4",
           "combinaisons": 4,
           "budget_conseille_eur": null
         }
       },
-      "sel_marche": "1-5-4-2-6-9-7-11",
+      "sel_marche": "1-6-5-4-2-9-8-11",
       "sel_marche_list": [
         1,
+        6,
         5,
         4,
         2,
-        6,
         9,
-        7,
+        8,
         11
       ],
       "common_count": 7,
@@ -5663,7 +5675,7 @@
       "couv_marche": "0/5",
       "couv_marche_count": 0,
       "couverture_label": "Course à venir",
-      "decision": "⭐ COUPLE MAITRE: 1 - 5",
+      "decision": "⭐ COUPLE MAITRE: 1 - 6",
       "decision_badge": "badge-master",
       "runners": [
         {
@@ -5676,29 +5688,11 @@
           "morning_odds": 4.0,
           "live_odds": 2.9,
           "o_t90": 2.8,
-          "o_t30": null,
+          "o_t30": 2.9,
           "o_t15": null,
-          "prob_pct": 29.4,
-          "value_index": 0.82,
+          "prob_pct": 28.7,
+          "value_index": 0.83,
           "smart_signal": "BAISSE_CONFIRMEE",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 5,
-          "name": "DIVO TWO TIMES",
-          "driver": "V.DUPONT",
-          "shoeing": "FERRE",
-          "draw": 5,
-          "music": "7p2p",
-          "morning_odds": 5.7,
-          "live_odds": 6.8,
-          "o_t90": 5.4,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 14.8,
-          "value_index": 0.8,
-          "smart_signal": "STABLE",
           "is_np": false,
           "odds_real": true
         },
@@ -5712,11 +5706,29 @@
           "morning_odds": 9.1,
           "live_odds": 6.1,
           "o_t90": 9.7,
-          "o_t30": null,
+          "o_t30": 6.1,
           "o_t15": null,
-          "prob_pct": 9.2,
-          "value_index": 0.89,
-          "smart_signal": "STABLE",
+          "prob_pct": 14.8,
+          "value_index": 0.9,
+          "smart_signal": "FORTE_BAISSE_INSIDER",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 5,
+          "name": "DIVO TWO TIMES",
+          "driver": "V.DUPONT",
+          "shoeing": "FERRE",
+          "draw": 5,
+          "music": "7p2p",
+          "morning_odds": 5.7,
+          "live_odds": 6.8,
+          "o_t90": 5.4,
+          "o_t30": 6.8,
+          "o_t15": null,
+          "prob_pct": 11.7,
+          "value_index": 0.8,
+          "smart_signal": "LEGERE_HAUSSE",
           "is_np": false,
           "odds_real": true
         },
@@ -5730,11 +5742,11 @@
           "morning_odds": 11.0,
           "live_odds": 9.5,
           "o_t90": 8.9,
-          "o_t30": null,
+          "o_t30": 9.5,
           "o_t15": null,
-          "prob_pct": 8.9,
-          "value_index": 0.8,
-          "smart_signal": "BAISSE_CONFIRMEE",
+          "prob_pct": 7.9,
+          "value_index": 0.75,
+          "smart_signal": "STABLE",
           "is_np": false,
           "odds_real": true
         },
@@ -5748,9 +5760,9 @@
           "morning_odds": 4.0,
           "live_odds": 9.0,
           "o_t90": 8.5,
-          "o_t30": null,
+          "o_t30": 9.0,
           "o_t15": null,
-          "prob_pct": 8.0,
+          "prob_pct": 7.6,
           "value_index": 0.68,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
@@ -5766,10 +5778,10 @@
           "morning_odds": 4.0,
           "live_odds": 10.0,
           "o_t90": 12.0,
-          "o_t30": null,
+          "o_t30": 10.0,
           "o_t15": null,
-          "prob_pct": 6.6,
-          "value_index": 0.79,
+          "prob_pct": 7.6,
+          "value_index": 0.76,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -5784,47 +5796,11 @@
           "morning_odds": 47.0,
           "live_odds": 23.0,
           "o_t90": 23.0,
-          "o_t30": null,
+          "o_t30": 23.0,
           "o_t15": null,
           "prob_pct": 5.7,
-          "value_index": 1.31,
+          "value_index": 1.32,
           "smart_signal": "FORTE_BAISSE_INSIDER",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 7,
-          "name": "PERLE DE LUNE",
-          "driver": "T.PICCONE",
-          "shoeing": "FERRE",
-          "draw": 11,
-          "music": "9p0p",
-          "morning_odds": 11.0,
-          "live_odds": 21.0,
-          "o_t90": 16.0,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 4.8,
-          "value_index": 0.77,
-          "smart_signal": "LEGERE_HAUSSE",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 11,
-          "name": "SEAVELY",
-          "driver": "M.WALDHAUSER",
-          "shoeing": "FERRE",
-          "draw": 6,
-          "music": "9p0p",
-          "morning_odds": 4.0,
-          "live_odds": 20.0,
-          "o_t90": 17.0,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 4.8,
-          "value_index": 0.82,
-          "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
         },
@@ -5838,10 +5814,46 @@
           "morning_odds": 9.1,
           "live_odds": 19.0,
           "o_t90": 24.0,
-          "o_t30": null,
+          "o_t30": 19.0,
           "o_t15": null,
-          "prob_pct": 4.1,
-          "value_index": 0.99,
+          "prob_pct": 4.8,
+          "value_index": 0.91,
+          "smart_signal": "FORTE_HAUSSE_DELAISSE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 11,
+          "name": "SEAVELY",
+          "driver": "M.WALDHAUSER",
+          "shoeing": "FERRE",
+          "draw": 6,
+          "music": "9p0p",
+          "morning_odds": 4.0,
+          "live_odds": 20.0,
+          "o_t90": 17.0,
+          "o_t30": 20.0,
+          "o_t15": null,
+          "prob_pct": 4.3,
+          "value_index": 0.85,
+          "smart_signal": "FORTE_HAUSSE_DELAISSE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 7,
+          "name": "PERLE DE LUNE",
+          "driver": "T.PICCONE",
+          "shoeing": "FERRE",
+          "draw": 11,
+          "music": "9p0p",
+          "morning_odds": 11.0,
+          "live_odds": 21.0,
+          "o_t90": 16.0,
+          "o_t30": 21.0,
+          "o_t15": null,
+          "prob_pct": 3.7,
+          "value_index": 0.78,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -5856,11 +5868,11 @@
           "morning_odds": 98.0,
           "live_odds": 70.0,
           "o_t90": 57.0,
-          "o_t30": null,
+          "o_t30": 70.0,
           "o_t15": null,
-          "prob_pct": 3.7,
-          "value_index": 2.09,
-          "smart_signal": "FORTE_BAISSE_INSIDER",
+          "prob_pct": 3.1,
+          "value_index": 2.14,
+          "smart_signal": "BAISSE_CONFIRMEE",
           "is_np": false,
           "odds_real": true
         }
