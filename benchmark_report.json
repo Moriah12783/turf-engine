@@ -2022,7 +2022,7 @@
       "autostart": false,
       "scheduled_start_time": "12:30 GMT (14:30 Paris)",
       "is_finished": false,
-      "status": "PARTIE",
+      "status": "ARRIVÉE PROVISOIRE",
       "is_cancelled": false,
       "is_started": true,
       "start_time_utc": "2026-09-14T12:30:00Z",
@@ -2634,7 +2634,7 @@
           "draw": 4,
           "music": "1a3a1aDa",
           "morning_odds": 9.8,
-          "live_odds": 2.4,
+          "live_odds": 2.5,
           "o_t90": 2.9,
           "o_t30": 2.4,
           "o_t15": null,
@@ -2724,7 +2724,7 @@
           "draw": 11,
           "music": "3a3aDaDa4a1a6a",
           "morning_odds": 18.0,
-          "live_odds": 21.0,
+          "live_odds": 20.0,
           "o_t90": 20.0,
           "o_t30": 21.0,
           "o_t15": null,
@@ -2760,7 +2760,7 @@
           "draw": 3,
           "music": "1aDa5aDaDa1aDa3a(25)Da",
           "morning_odds": 25.0,
-          "live_odds": 31.0,
+          "live_odds": 32.0,
           "o_t90": 21.0,
           "o_t30": 31.0,
           "o_t15": null,
@@ -2778,7 +2778,7 @@
           "draw": 7,
           "music": "5a4a5a3a2a1a",
           "morning_odds": 45.0,
-          "live_odds": 73.0,
+          "live_odds": 70.0,
           "o_t90": 47.0,
           "o_t30": 73.0,
           "o_t15": null,
@@ -2796,7 +2796,7 @@
           "draw": 12,
           "music": "Da2a1a2a",
           "morning_odds": 25.0,
-          "live_odds": 41.0,
+          "live_odds": 37.0,
           "o_t90": 32.0,
           "o_t30": 41.0,
           "o_t15": null,
@@ -3372,11 +3372,17 @@
       "provisoire_reason": null,
       "publishable": true,
       "publication_reason": "OK",
-      "display_horizon": "T_MATIN",
+      "display_horizon": "T90",
       "editions_moteur": {
         "T_MATIN": {
           "sel": "7-2-6-8-9-4-1-10",
           "lock": "06:30",
+          "priced_ratio": 1.0,
+          "odds_real": true
+        },
+        "T90": {
+          "sel": "7-6-2-8-5-4-3-10",
+          "lock": "12:36",
           "priced_ratio": 1.0,
           "odds_real": true
         }
@@ -3385,6 +3391,12 @@
         "T_MATIN": {
           "sel": "7-2-6-8-4-1-9-10",
           "lock": "06:30",
+          "priced_ratio": 1.0,
+          "odds_real": true
+        },
+        "T90": {
+          "sel": "7-6-2-8-4-3-5-10",
+          "lock": "12:36",
           "priced_ratio": 1.0,
           "odds_real": true
         }
@@ -3403,45 +3415,45 @@
       "is_started": false,
       "start_time_utc": "2026-09-14T14:15:00Z",
       "contract_recorded": true,
-      "confidence_stars": 5,
-      "confidence_label": "⭐⭐⭐⭐⭐ (Course Très Fiable - Bases Ultra-Solides)",
+      "confidence_stars": 3,
+      "confidence_label": "⭐⭐⭐ (Course Ouverte - Équilibre Favoris / Outsiders)",
       "is_no_bet": false,
-      "is_master": false,
+      "is_master": true,
       "np_nums": [],
-      "sel_moteur": "7-2-6-8-9-4-1-10",
+      "sel_moteur": "7-6-2-8-5-4-3-10",
       "sel_moteur_list": [
         7,
-        2,
         6,
+        2,
         8,
-        9,
+        5,
         4,
-        1,
+        3,
         10
       ],
       "bases": [
         7,
-        2
+        6
       ],
       "outsider_num": 5,
       "regrets": [
-        5,
-        3
+        1,
+        9
       ],
       "smart_tickets": {
         "contract": 2,
         "no_bet": false,
         "tickets": [
           {
-            "produit": "COUPLE_PLACE",
-            "libelle": "Couplé Placé (ou 2sur4)",
+            "produit": "COUPLE_GAGNANT",
+            "libelle": "Couplé Maître du jour (Gagnant & Placé)",
             "chevaux": [
               7,
-              2
+              6
             ],
             "bases": [
               7,
-              2
+              6
             ],
             "associes": [],
             "combinaisons": 1,
@@ -3449,19 +3461,19 @@
             "cout_total_eur": 2.0,
             "eligible": true,
             "motif_ineligibilite": null,
-            "texte": "7 - 2"
+            "texte": "7 - 6"
           },
           {
             "produit": "TRIO",
             "libelle": "Trio (Couplé Gagnant)",
             "chevaux": [
               7,
-              2,
+              6,
               5
             ],
             "bases": [
               7,
-              2
+              6
             ],
             "associes": [
               5
@@ -3471,27 +3483,27 @@
             "cout_total_eur": 2.0,
             "eligible": true,
             "motif_ineligibilite": null,
-            "texte": "7 - 2 - 5"
+            "texte": "7 - 6 - 5"
           },
           {
             "produit": "QUINTE_PLUS",
             "libelle": "Quinté+ champ réduit",
             "chevaux": [
               7,
-              2,
               6,
+              2,
               8,
-              9,
+              5,
               4
             ],
             "bases": [
               7,
-              2
+              6
             ],
             "associes": [
-              6,
+              2,
               8,
-              9,
+              5,
               4
             ],
             "combinaisons": 4,
@@ -3499,54 +3511,54 @@
             "cout_total_eur": null,
             "eligible": false,
             "motif_ineligibilite": "PARI_NON_OUVERT",
-            "texte": "7 - 2 - X - X - X / 6, 8, 9, 4"
+            "texte": "7 - 6 - X - X - X / 2, 8, 5, 4"
           }
         ],
         "ticket_securite": {
-          "pari": "Couplé Placé (ou 2sur4)",
+          "pari": "Couplé Maître du jour (Gagnant & Placé)",
           "chevaux": [
             7,
-            2
+            6
           ],
-          "formule": "7 - 2",
+          "formule": "7 - 6",
           "mise_base_eur": 2.0
         },
         "ticket_trio": {
           "pari": "Trio (Couplé Gagnant)",
           "chevaux": [
             7,
-            2,
+            6,
             5
           ],
-          "formule": "7 - 2 - 5",
+          "formule": "7 - 6 - 5",
           "mise_base_eur": 2.0
         },
         "quinte_champ_reduit": {
           "pari": "Quinté+ champ réduit",
           "bases_fixes": [
             7,
-            2
+            6
           ],
           "associes": [
-            6,
+            2,
             8,
-            9,
+            5,
             4
           ],
-          "formule": "7 - 2 - X - X - X / 6, 8, 9, 4",
+          "formule": "7 - 6 - X - X - X / 2, 8, 5, 4",
           "combinaisons": 4,
           "budget_conseille_eur": null
         }
       },
-      "sel_marche": "7-2-6-8-4-1-9-10",
+      "sel_marche": "7-6-2-8-4-3-5-10",
       "sel_marche_list": [
         7,
-        2,
         6,
+        2,
         8,
         4,
-        1,
-        9,
+        3,
+        5,
         10
       ],
       "common_count": 8,
@@ -3559,8 +3571,8 @@
       "couv_marche": "0/5",
       "couv_marche_count": 0,
       "couverture_label": "Course à venir",
-      "decision": "Bases: 7 - 2",
-      "decision_badge": "badge-base",
+      "decision": "⭐ COUPLE MAITRE: 7 - 6",
+      "decision_badge": "badge-master",
       "runners": [
         {
           "num": 7,
@@ -3571,30 +3583,12 @@
           "music": "Da1a1a4a6mDa3aDa0a(25)",
           "morning_odds": 2.5,
           "live_odds": 2.8,
-          "o_t90": null,
+          "o_t90": 2.8,
           "o_t30": null,
           "o_t15": null,
-          "prob_pct": 33.5,
+          "prob_pct": 23.9,
           "value_index": 0.67,
-          "smart_signal": "BAISSE_CONFIRMEE",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 2,
-          "name": "MONSIEUR DARLING",
-          "driver": "M. ABRIVARD",
-          "shoeing": "D4",
-          "draw": 2,
-          "music": "2a5a5aDa5a4a1aDa3a5a",
-          "morning_odds": 3.8,
-          "live_odds": 4.8,
-          "o_t90": null,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 14.6,
-          "value_index": 0.73,
-          "smart_signal": "LEGERE_HAUSSE",
+          "smart_signal": "STABLE",
           "is_np": false,
           "odds_real": true
         },
@@ -3607,12 +3601,30 @@
           "music": "2a8a3a1a4a(25)3a1aDa1a",
           "morning_odds": 1.2,
           "live_odds": 4.3,
-          "o_t90": null,
+          "o_t90": 4.3,
           "o_t30": null,
           "o_t15": null,
-          "prob_pct": 14.5,
-          "value_index": 0.94,
+          "prob_pct": 19.0,
+          "value_index": 0.82,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 2,
+          "name": "MONSIEUR DARLING",
+          "driver": "M. ABRIVARD",
+          "shoeing": "D4",
+          "draw": 2,
+          "music": "2a5a5aDa5a4a1aDa3a5a",
+          "morning_odds": 3.8,
+          "live_odds": 4.8,
+          "o_t90": 4.8,
+          "o_t30": null,
+          "o_t15": null,
+          "prob_pct": 15.0,
+          "value_index": 0.72,
+          "smart_signal": "LEGERE_HAUSSE",
           "is_np": false,
           "odds_real": true
         },
@@ -3625,30 +3637,30 @@
           "music": "1a1a2a1aDa1a(25)Da",
           "morning_odds": 3.8,
           "live_odds": 6.9,
-          "o_t90": null,
+          "o_t90": 6.9,
           "o_t30": null,
           "o_t15": null,
-          "prob_pct": 10.7,
-          "value_index": 0.76,
+          "prob_pct": 10.9,
+          "value_index": 0.75,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
         },
         {
-          "num": 9,
-          "name": "MISSION DU GILET",
-          "driver": "B. VANACKER",
+          "num": 5,
+          "name": "MISTRAL DE FRECA",
+          "driver": "Q. MACHET",
           "shoeing": "D4",
-          "draw": 9,
-          "music": "9a6a8a1a3a3a3a(25)7a2a",
-          "morning_odds": 28.0,
-          "live_odds": 51.0,
-          "o_t90": null,
+          "draw": 5,
+          "music": "3a1a7aDa3aDa3a4a(25)6a",
+          "morning_odds": 50.0,
+          "live_odds": 25.0,
+          "o_t90": 25.0,
           "o_t30": null,
           "o_t15": null,
-          "prob_pct": 6.0,
-          "value_index": 1.68,
-          "smart_signal": "STABLE",
+          "prob_pct": 7.6,
+          "value_index": 1.9,
+          "smart_signal": "FORTE_BAISSE_INSIDER",
           "is_np": false,
           "odds_real": true
         },
@@ -3661,29 +3673,29 @@
           "music": "Da4a2a3a4a6aDa0a(25)0a",
           "morning_odds": 11.0,
           "live_odds": 16.0,
-          "o_t90": null,
+          "o_t90": 16.0,
           "o_t30": null,
           "o_t15": null,
-          "prob_pct": 5.1,
-          "value_index": 0.92,
-          "smart_signal": "FORTE_HAUSSE_DELAISSE",
+          "prob_pct": 5.9,
+          "value_index": 0.94,
+          "smart_signal": "LEGERE_HAUSSE",
           "is_np": false,
           "odds_real": true
         },
         {
-          "num": 1,
-          "name": "MAC VENESI",
-          "driver": "M. TIJOU",
+          "num": 3,
+          "name": "MONEY AIMEF",
+          "driver": "P. LE MOEL",
           "shoeing": "D4",
-          "draw": 1,
-          "music": "5aDaDaDa0a3a2a1a2aDa",
-          "morning_odds": 58.0,
-          "live_odds": 35.0,
-          "o_t90": null,
+          "draw": 3,
+          "music": "6a2a5aDa5aDaDaDaDaDa",
+          "morning_odds": 47.0,
+          "live_odds": 21.0,
+          "o_t90": 21.0,
           "o_t30": null,
           "o_t15": null,
-          "prob_pct": 4.3,
-          "value_index": 1.11,
+          "prob_pct": 5.6,
+          "value_index": 1.17,
           "smart_signal": "FORTE_BAISSE_INSIDER",
           "is_np": false,
           "odds_real": true
@@ -3697,48 +3709,48 @@
           "music": "Da5a1a2a1a6a4aDa9a7a",
           "morning_odds": 29.0,
           "live_odds": 26.0,
-          "o_t90": null,
+          "o_t90": 26.0,
           "o_t30": null,
           "o_t15": null,
-          "prob_pct": 4.2,
-          "value_index": 1.46,
-          "smart_signal": "LEGERE_HAUSSE",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 5,
-          "name": "MISTRAL DE FRECA",
-          "driver": "Q. MACHET",
-          "shoeing": "D4",
-          "draw": 5,
-          "music": "3a1a7aDa3aDa3a4a(25)6a",
-          "morning_odds": 50.0,
-          "live_odds": 25.0,
-          "o_t90": null,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 4.1,
-          "value_index": 2.29,
+          "prob_pct": 5.2,
+          "value_index": 1.36,
           "smart_signal": "STABLE",
           "is_np": false,
           "odds_real": true
         },
         {
-          "num": 3,
-          "name": "MONEY AIMEF",
-          "driver": "P. LE MOEL",
+          "num": 1,
+          "name": "MAC VENESI",
+          "driver": "M. TIJOU",
           "shoeing": "D4",
-          "draw": 3,
-          "music": "6a2a5aDa5aDaDaDaDaDa",
-          "morning_odds": 47.0,
-          "live_odds": 21.0,
-          "o_t90": null,
+          "draw": 1,
+          "music": "5aDaDaDa0a3a2a1a2aDa",
+          "morning_odds": 58.0,
+          "live_odds": 35.0,
+          "o_t90": 35.0,
           "o_t30": null,
           "o_t15": null,
-          "prob_pct": 3.1,
-          "value_index": 1.38,
-          "smart_signal": "STABLE",
+          "prob_pct": 3.6,
+          "value_index": 1.25,
+          "smart_signal": "FORTE_BAISSE_INSIDER",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 9,
+          "name": "MISSION DU GILET",
+          "driver": "B. VANACKER",
+          "shoeing": "D4",
+          "draw": 9,
+          "music": "9a6a8a1a3a3a3a(25)7a2a",
+          "morning_odds": 28.0,
+          "live_odds": 51.0,
+          "o_t90": 51.0,
+          "o_t30": null,
+          "o_t15": null,
+          "prob_pct": 3.3,
+          "value_index": 1.68,
+          "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
         }
@@ -13931,7 +13943,7 @@
       "autostart": false,
       "scheduled_start_time": "12:30 GMT (14:30 Paris)",
       "is_finished": false,
-      "status": "PARTIE",
+      "status": "ARRIVÉE PROVISOIRE",
       "is_cancelled": false,
       "is_started": true,
       "start_time_utc": "2026-09-14T12:30:00Z",
