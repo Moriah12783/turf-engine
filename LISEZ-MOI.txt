@@ -1,14 +1,19 @@
-CORRECTIF : Top 8 par probabilité calibrée
-==========================================
-Contenu : turf_lab/engine.py (modifié), backtest_reglages.py (nouvel outil, racine)
+CORRECTIF MOTEUR : poids du marché 0,70 -> 0,90 (réglage du 15/09, GO Steph)
+===========================================================================
+Contenu : turf_lab/engine.py (une constante modifiée : MARKET_WEIGHT = 0.90)
+          lab_trio_bases.py (outil de labo « base des bases », racine, optionnel)
+
+Périmètre : UNIQUEMENT le cœur du moteur (fichier Claude). Aucun fichier du
+développeur Radar n'est touché (porte de diffusion, résultats, pont Radar).
 
 1. Dézipper À LA RACINE du dossier "turf projet".
 2. Double-cliquer sur publier_vers_github.bat.
 
-Effet : les places 6-8 du top 8 vont aux chevaux les plus probables au lieu
-des paris de value. Sur 382 courses : Tiercé dans les 8 +14 pts, Quarté +13,
-Quinté +15. Bases, ROI, outsider inchangés. Prend effet sur les prochaines
-éditions verrouillées.
+Effet : dès la prochaine édition verrouillée, la probabilité de chaque cheval
+= 90 % marché + 10 % capteurs (au lieu de 70/30). Le moteur ne contredit plus
+le marché sur le gagnant ; il se différencie par l'ordre des chevaux 3 à 8 et
+par la composition du champ. Validé : 67/67 tests du dépôt + suite T-15.
+Réversible en remettant 0.70. Mesuré par le banc F3 sur le site.
 
-Outil : python backtest_reglages.py turf_bench.db  -> rejoue le moteur avec
-différents réglages sur l'historique réel (à lancer avant tout futur réglage).
+L'ajustement de la porte de fraîcheur (seuil de verrou 50 %) est un chantier
+SÉPARÉ, confié au développeur Radar (voir BRIEF_DEV_RADAR_porte_fraicheur.md).

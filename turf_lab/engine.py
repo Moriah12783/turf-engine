@@ -17,7 +17,14 @@ class NewValueEngine:
     # le modèle (correcteur ~30 %) déplace les curseurs là où ses
     # capteurs réels (déferrage, Smart Money, chrono, forme) détectent
     # un écart. La value se mesure ensuite sur ces VRAIS écarts.
-    MARKET_WEIGHT = 0.70
+    # Réglage du 15/09 : 0,70 -> 0,90. Banc rétrospectif sur 523 courses
+    # depuis le réglage des capteurs (01/09) : à 0,90 le moteur fait mieux
+    # sur 6 métriques sur 8 (tiercé/quarté/quinté dans les 8, tête gagnante,
+    # ROI gagnant, Brier) et reste devant le marché pur (1,00) en couverture ;
+    # en production, 56 divergences de tête à 0,70 n'ont gagné que 7 fois
+    # contre 19 pour le favori. Les capteurs (déferrage, chrono, humain)
+    # gardent 10 % : c'est ce qui bat encore le marché pur sur le quinté.
+    MARKET_WEIGHT = 0.90
     # En dessous de cette part de partants réellement cotés, la course
     # est considérée SANS cotes PMU (réunions étrangères hors
     # mutualisation : Suède, Argentine, Chili…) : repli automatique sur
