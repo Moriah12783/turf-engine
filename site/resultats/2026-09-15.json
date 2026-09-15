@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "acb58cfcd27695d1b7d67c84f718524a4cfd6d62",
-  "run_id": "34958341527",
+  "commit": "1e74725ec4251793f17d3e95c16466d587bbff79",
+  "run_id": "34959675104",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-15",
- "genere_le_utc": "2026-09-15T10:31:29Z",
+ "genere_le_utc": "2026-09-15T10:46:26Z",
  "nb_courses": 24,
  "compte_par_statut": {
   "EN_ATTENTE": 22,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 1,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "9ebb6d05b4a71c999466c52802a8edb39a9966599b9e9f9bdc82a172e7d78787",
+ "empreinte_sha256": "a6b4de5e69360a86bfd2b1503f4e18ba78f9359ccaa96a23682f4cdeb144e1b7",
  "courses": [
   {
    "course_id": "R1C1_15092026_COMPIEGNE",
@@ -583,7 +583,7 @@
     "verifiee_le_utc": "2026-09-15T10:15:58Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-15T10:15:58Z",
-    "derniere_verification_utc": "2026-09-15T10:31:04Z"
+    "derniere_verification_utc": "2026-09-15T10:45:59Z"
    },
    "correction": {
     "version": 2,
@@ -637,11 +637,11 @@
     "partants_actifs": 7
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "FIN_COURSE"
    },
    "classement": [
     {
@@ -667,13 +667,20 @@
      "num": 4,
      "nom": "ALLURE",
      "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 3,
+     "nom": "NOCTAMBULE",
+     "dead_heat": false
     }
    ],
    "arrivee": [
     6,
     8,
     5,
-    4
+    4,
+    3
    ],
    "non_classes": [
     {
@@ -694,11 +701,78 @@
     }
    ],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "6": 13.6
+    },
+    "simple_place": {
+     "6": 3.0,
+     "8": 2.2,
+     "5": 1.7
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "6-8",
+      "dividende_pour_1_eur": 47.9
+     },
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "6-NP",
+      "dividende_pour_1_eur": 12.2
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "6-8",
+      "dividende_pour_1_eur": 9.3
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "6-5",
+      "dividende_pour_1_eur": 6.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "8-5",
+      "dividende_pour_1_eur": 5.1
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "6-NP",
+      "dividende_pour_1_eur": 2.6
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "8-NP",
+      "dividende_pour_1_eur": 2.2
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "5-NP",
+      "dividende_pour_1_eur": 1.9
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "6-8-5",
+      "dividende_pour_1_eur": 44.3
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "6-8-NP",
+      "dividende_pour_1_eur": 44.3
+     },
+     {
+      "type_pari": "SUPER_QUATRE",
+      "combinaison": "6-8-5-4",
+      "dividende_pour_1_eur": 1721.8
+     },
+     {
+      "type_pari": "SUPER_QUATRE",
+      "combinaison": "6-8-5-NP",
+      "dividende_pour_1_eur": 377.8
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -708,14 +782,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-09-15T10:31:04Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-09-15T10:45:59Z",
+    "verifiee_le_utc": "2026-09-15T10:45:59Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-09-15T10:31:04Z",
-    "derniere_verification_utc": "2026-09-15T10:31:04Z"
+    "derniere_modification_utc": "2026-09-15T10:45:59Z",
+    "derniere_verification_utc": "2026-09-15T10:45:59Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -729,6 +803,20 @@
        8,
        5,
        4
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-09-15T10:45:59Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       6,
+       8,
+       5,
+       4,
+       3
       ]
      }
     ]
@@ -756,7 +844,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -1299,7 +1387,7 @@
     "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "16:45 GMT (18:45 Paris)",
     "partants_declares": 9,
-    "partants_actifs": 9
+    "partants_actifs": 8
    },
    "statut": {
     "code": "EN_ATTENTE",
@@ -1311,7 +1399,12 @@
    "classement": [],
    "arrivee": [],
    "non_classes": [],
-   "non_partants": [],
+   "non_partants": [
+    {
+     "num": 5,
+     "nom": "NOKITA DU RIB"
+    }
+   ],
    "rapports": {
     "disponibles": false,
     "unite": "EUR pour 1 EUR de mise",
