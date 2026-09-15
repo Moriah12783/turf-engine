@@ -198,11 +198,27 @@ def build_report_summary(report: Dict[str, Any], commit: Optional[str] = None,
             }
         horizons_out[h] = {"courses": block.get("courses"), "moteurs": engines_out}
 
+    # Version des réglages moteur en vigueur au moment du banc (traçabilité :
+    # un réglage changé en cours de fenêtre pré-enregistrée doit être visible).
+    try:
+        from turf_lab.engine import NewValueEngine  # import local : aucun cycle
+        moteur_nve = {"market_weight": float(NewValueEngine.MARKET_WEIGHT),
+                      "min_market_coverage": float(NewValueEngine.MIN_MARKET_COVERAGE)}
+    except Exception:  # jamais bloquant
+        moteur_nve = {}
+    try:
+        from turf_lab.odds_quality import MIN_LOCK_RATIO, MIN_PRICED_RATIO
+        seuils = {"verrou": float(MIN_LOCK_RATIO), "diffusion": float(MIN_PRICED_RATIO)}
+    except Exception:
+        seuils = {}
+
     return {
         "schema": SUMMARY_SCHEMA,
         "commit": commit,
         "run_id": run_id,
         "genere_le_utc": generated_at_utc or datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "moteur_nve": moteur_nve,
+        "seuils_cotes": seuils,
         "total_finished_races": report.get("total_finished_races"),
         "horizon_bench_start_date": report.get("horizon_bench_start_date"),
         "engines_communes": list(communes.get("engines") or []),

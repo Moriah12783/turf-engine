@@ -12,7 +12,7 @@ from turf_lab.database import TurfDatabase
 from turf_lab.engine import NewValueEngine
 from turf_lab.baselines import ETPEEngineProxy, MarketOddsEngine
 from turf_lab.human_stats import HumanStatsBook
-from turf_lab.odds_quality import MIN_PRICED_RATIO, priced_ratio
+from turf_lab.odds_quality import MIN_LOCK_RATIO, MIN_PRICED_RATIO, neutralize_odds, priced_ratio
 from turf_lab.radar_bridge import ENGINE_NAME as RADAR_ENGINE, RadarV4Engine
 from turf_lab import secure_http
 from turf_lab.results_reader import (
@@ -261,14 +261,18 @@ class DailySyncManager:
             return 0
 
         # ── VERROU DE FRAÎCHEUR (porte de données, Axe 3) ────────────────
-        # Aucun horizon n'est verrouillé sur une édition dont les cotes ne
-        # sont pas réelles : il faut ≥ 90 % de partants actifs cotés (≠ 15.0).
-        # La règle 06h30 de due_horizons() reste le PLANCHER horaire ; cette
-        # porte s'ajoute par-dessus. Refus => l'horizon revient à la passe
-        # suivante (due_horizons le représente tant que la fenêtre est ouverte).
+        # Deux seuils distincts depuis le 15/09/2026 :
+        #  - MIN_LOCK_RATIO (50 %) : en dessous, aucun horizon n'est verrouillé
+        #    (GATE_REFUSED) ; l'horizon revient à la passe suivante.
+        #  - MIN_PRICED_RATIO (90 %) : seuil de DIFFUSION. Entre 50 et 90 %,
+        #    l'édition est posée mais avec odds_real = false : les moteurs la
+        #    calculent SANS marché (cotes neutralisées → modèle pur, marché
+        #    nominal), jamais sur un mélange de vraies cotes et de sentinelles ;
+        #    can_publish la refuse (PRICED_RATIO_LOW / ODDS_DEFAULT).
+        # La règle 06h30 de due_horizons() reste le PLANCHER horaire.
         ratio = priced_ratio(runners)
         now_utc = datetime.utcnow()
-        if ratio < MIN_PRICED_RATIO:
+        if ratio < MIN_LOCK_RATIO:
             self.gate_refused += 1
             print("GATE_REFUSED " + json.dumps({
                 "race_id": race_id, "horizon": horizon,
@@ -276,6 +280,7 @@ class DailySyncManager:
             }))
             return 0
         lock_time_utc = now_utc.isoformat()
+        odds_real = ratio >= MIN_PRICED_RATIO
 
         # F2 — enrichissement des partants avec les stats humaines apprises
         # (drivers/entraîneurs/couples) avant tout calcul de pronostic.
@@ -283,18 +288,29 @@ class DailySyncManager:
             self._human_book = HumanStatsBook(self.db)
         self._human_book.enrich_runners(runners)
 
+        # Marché partiel : les moteurs reçoivent une copie SANS cotes (les
+        # partants d'origine, leurs cotes réelles et les snapshots du verrou
+        # restent intacts). Journalisé pour l'audit.
+        engine_runners = runners if odds_real else neutralize_odds(runners)
+        if not odds_real:
+            print("LOCK_PARTIAL_ODDS " + json.dumps({
+                "race_id": race_id, "horizon": horizon,
+                "priced_ratio": round(ratio, 3), "now_utc": now_utc.isoformat()
+            }))
+
         engines = [
             ("NEW", self.new_engine),
             ("ETPE", self.etpe_engine),
             ("MARKET", self.market_engine),
         ]
         for key, eng in engines:
-            p = eng.predict(race_data, runners)
+            p = eng.predict(race_data, engine_runners)
             p["prediction_id"] = f"{race_id}_{key}_{horizon}"
             p["race_id"] = race_id
             p["horizon"] = horizon
-            # Preuve de fraîcheur persistée avec l'édition (immuable).
-            p["odds_real"] = True
+            # Preuve de fraîcheur persistée avec l'édition (immuable) :
+            # odds_real ne vaut true qu'au-dessus du seuil de diffusion.
+            p["odds_real"] = odds_real
             p["priced_ratio"] = round(ratio, 4)
             p["lock_time_utc"] = lock_time_utc
             self.db.save_prediction(p)
@@ -311,8 +327,11 @@ class DailySyncManager:
         les trois autres moteurs. Retourne 1 si un verrou a été posé, sinon 0.
 
         - Pont désactivé (config absente) → 0, rien ne change.
-        - Même porte de fraîcheur : priced_ratio ≥ MIN_PRICED_RATIO, sinon
-          GATE_REFUSED (engine RADAR_V4) et retour à la passe suivante.
+        - Porte de fraîcheur à MIN_PRICED_RATIO (90 %), sinon GATE_REFUSED
+          (engine RADAR_V4) et retour à la passe suivante. VOLONTAIREMENT
+          inchangée par l'abaissement du seuil de verrou des autres moteurs
+          (15/09) : c'est la définition gelée du pont (clé
+          preregistration_pont_radar_v4) jusqu'à la lecture du 06/10.
         - Ligne Radar absente / couverture < 90 % / scelle_a postérieur au verrou
           → RADAR_ABSENT, rien n'est enregistré (l'édition du soir arrive à une
           passe suivante). Jamais de verrou rétroactif (due_horizons décide)."""

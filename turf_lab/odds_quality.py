@@ -20,9 +20,17 @@ DEFAULT_ODDS: float = NewValueEngine.DEFAULT_ODDS
 # Champs de cotes archivés sur chaque partant.
 ODDS_FIELDS = ("morning_odds", "odds_t15", "final_odds")
 
-# Seuil BLOQUANT : en dessous, aucun horizon n'est verrouillé et aucune
-# sélection n'est diffusée (verrou de fraîcheur, Axe 3 du Plan Value Radar).
+# Seuil de DIFFUSION (inchangé) : en dessous, aucune sélection n'est diffusée
+# (verrou de fraîcheur, Axe 3 du Plan Value Radar) et l'édition verrouillée
+# porte odds_real = false.
 MIN_PRICED_RATIO: float = 0.90
+
+# Seuil de VERROUILLAGE (15/09/2026) : en dessous, aucun horizon n'est
+# verrouillé (GATE_REFUSED). Entre MIN_LOCK_RATIO et MIN_PRICED_RATIO, l'édition
+# EXISTE en base — les moteurs la calculent SANS marché (cotes neutralisées :
+# modèle pur, marché nominal) et elle n'est jamais diffusable. Le vigile reste
+# à la porte de la salle, pas à celle de la cuisine.
+MIN_LOCK_RATIO: float = 0.50
 
 # Seuil d'AFFICHAGE (inchangé) : en dessous, le banc de mesure affiche
 # « cotes indisponibles » (réunions étrangères hors mutualisation).
@@ -107,3 +115,22 @@ def priced_ratio(runners: Iterable[Dict[str, Any]]) -> float:
 def odds_are_real(runners: Iterable[Dict[str, Any]], threshold: float = MIN_PRICED_RATIO) -> bool:
     """True si la course est suffisamment cotée pour être verrouillée / diffusée."""
     return priced_ratio(runners) >= threshold
+
+
+def neutralize_odds(runners: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Copie des partants où TOUTE cote est ramenée à DEFAULT_ODDS et la
+    provenance à « non réelle ». Utilisée au verrouillage quand le marché est
+    partiel (MIN_LOCK_RATIO ≤ ratio < MIN_PRICED_RATIO) : les moteurs voient
+    une course SANS marché — NewValueEngine reste sur son modèle pur,
+    MarketOddsEngine devient nominal — au lieu de calibrer sur un mélange de
+    vraies cotes et de sentinelles 15.0. Les cotes partielles réelles restent
+    archivées telles quelles dans `runners` et dans les snapshots du verrou.
+    Les partants d'origine ne sont jamais modifiés."""
+    out: List[Dict[str, Any]] = []
+    for r in runners:
+        c = dict(r)
+        for field in ODDS_FIELDS:
+            c[field] = DEFAULT_ODDS
+        c["odds_is_real"] = False
+        out.append(c)
+    return out

@@ -12,7 +12,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from turf_lab.database import TurfDatabase
 from turf_lab.daily_sync import DailySyncManager
-from turf_lab.odds_quality import DEFAULT_ODDS, MIN_PRICED_RATIO, priced_ratio
+from turf_lab.odds_quality import DEFAULT_ODDS, MIN_LOCK_RATIO, MIN_PRICED_RATIO, neutralize_odds, priced_ratio
 from turf_lab.publication_gate import can_publish
 
 RACE_DATE = "2026-09-07"
@@ -86,12 +86,57 @@ def test_edition_100pct_defaut_refusee():
     assert can_publish(db, RACE_ID, "T_MATIN", now_utc=NOON, log=False) == (False, "ODDS_DEFAULT")
 
 
-def test_edition_80pct_refusee():
-    """Édition à 80 % cotée → refusée (seuil 90 %)."""
+def test_edition_80pct_verrouillee_mais_non_diffusable():
+    """15/09 : entre 50 et 90 % l'édition EXISTE (odds_real = false, ratio réel
+    persisté) mais la porte de diffusion la refuse — rien ne part vers les abonnés."""
     db, mgr, race, runners = _setup(priced=8)
+    assert _lock(mgr, race, runners) == 1
+    assert mgr.gate_refused == 0
+    assert db.get_locked_horizons(RACE_ID) == ["T_MATIN"]
+    pred = [p for p in db.get_predictions(RACE_ID) if p["engine_name"] == "NEW_VALUE_ENGINE"][0]
+    assert pred["odds_real"] == 0 and pred["priced_ratio"] == 0.8 and pred["lock_time_utc"]
+    assert can_publish(db, RACE_ID, "T_MATIN", now_utc=NOON, log=False) == (False, "PRICED_RATIO_LOW")
+
+
+def test_edition_40pct_refusee():
+    """Sous le seuil de verrou (50 %) : aucun horizon posé, GATE_REFUSED conservé."""
+    db, mgr, race, runners = _setup(priced=4)
     assert _lock(mgr, race, runners) == 0
+    assert mgr.gate_refused == 1
     assert db.get_locked_horizons(RACE_ID) == []
     assert can_publish(db, RACE_ID, "T_MATIN", now_utc=NOON, log=False) == (False, "PRICED_RATIO_LOW")
+
+
+def test_verrou_partiel_calcule_sans_marche():
+    """Marché partiel (70 %) : les moteurs reçoivent des cotes neutralisées —
+    modèle pur pour NEW_VALUE_ENGINE (aucune calibration sur un mélange vraies
+    cotes / sentinelles), marché nominal pour MARKET_BASELINE — tandis que les
+    partants d'origine, leurs vraies cotes et les snapshots du verrou sont intacts."""
+    db, mgr, race, runners = _setup(priced=7)
+    before = [(r["num"], r["morning_odds"], r["odds_t15"], r["final_odds"]) for r in runners]
+    assert _lock(mgr, race, runners) == 1
+    after = [(r["num"], r["morning_odds"], r["odds_t15"], r["final_odds"]) for r in runners]
+    assert after == before                                     # cotes d'origine jamais modifiées
+    preds = {p["engine_name"]: p for p in db.get_predictions(RACE_ID)}
+    calib = preds["NEW_VALUE_ENGINE"]["metadata"]["market_calibration"]
+    assert calib["applied"] is False and calib["coverage_pct"] == 0.0
+    assert preds["NEW_VALUE_ENGINE"]["odds_real"] == 0 and preds["MARKET_BASELINE"]["odds_real"] == 0
+    # Le marché nominal ne « sait » rien : probabilités uniformes
+    probs = list(preds["MARKET_BASELINE"]["probabilities"].values())
+    assert max(probs) - min(probs) < 1e-6
+    # Les vraies cotes partielles restent archivées dans les snapshots du verrou
+    snaps = db.get_odds_snapshots(RACE_ID)
+    assert snaps and any(h.get("T_MATIN") not in (None, DEFAULT_ODDS) for h in snaps.values())
+    assert can_publish(db, RACE_ID, "T_MATIN", now_utc=NOON, log=False) == (False, "PRICED_RATIO_LOW")
+
+
+def test_verrou_complet_calibre_sur_le_marche():
+    """≥ 90 % : comportement inchangé — calibration marché appliquée, odds_real = true."""
+    db, mgr, race, runners = _setup(priced=10)
+    assert _lock(mgr, race, runners) == 1
+    pred = [p for p in db.get_predictions(RACE_ID) if p["engine_name"] == "NEW_VALUE_ENGINE"][0]
+    assert pred["metadata"]["market_calibration"]["applied"] is True
+    assert pred["odds_real"] == 1
 
 
 def test_edition_90pct_acceptee():

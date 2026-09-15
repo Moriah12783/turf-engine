@@ -57,6 +57,7 @@ def test_resume_compact_et_complet():
     s = build_report_summary(_report(), commit="abc123", run_id="42", generated_at_utc="2026-09-15T10:16:37Z")
     assert s["schema"] == SUMMARY_SCHEMA and s["commit"] == "abc123" and s["run_id"] == "42"
     assert s["total_finished_races"] == 870
+    assert s["moteur_nve"]["market_weight"] > 0 and s["seuils_cotes"] == {"verrou": 0.5, "diffusion": 0.9}
     assert s["total_races_par_moteur"]["RADAR_V4"] == 208 and s["total_races_par_moteur"]["MARKET_BASELINE"] == 845
     assert s["premier_log_race_id"] == "R1C1_15092026_COMPIEGNE" and s["nb_logs"] == 3
     assert list(s["horizons"].keys()) == SUMMARY_HORIZONS

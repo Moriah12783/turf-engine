@@ -142,6 +142,24 @@ def test_lock_radar_porte_de_fraicheur_et_absent():
     assert not db.has_prediction(RACE_ID, ENGINE_NAME, "T_MATIN")
 
 
+def test_lock_radar_reste_a_90_pct_malgre_le_seuil_de_verrou_50():
+    """15/09 : le seuil de verrou des trois autres moteurs passe à 50 %, mais la porte
+    RADAR_V4 reste à 90 % (définition gelée du pont jusqu'à la lecture du 06/10) :
+    à 70 % cotés, RADAR est refusé alors que NEW_VALUE_ENGINE est verrouillé."""
+    db, mgr = _mgr(rows=_rows(range(1, 11)))
+    db.save_race(_race())
+    partial = _runners(10, priced=7)
+    db.save_runners(RACE_ID, partial)
+    assert mgr._lock_horizon(_race(), partial, "T_MATIN") == 1          # moteurs : verrou (odds_real = false)
+    assert mgr._lock_radar(_race(), partial, "T_MATIN", NOW) == 0        # RADAR : GATE_REFUSED
+    assert mgr.gate_refused_radar == 1
+    assert not db.has_prediction(RACE_ID, ENGINE_NAME, "T_MATIN")
+    # À 90 % la porte RADAR s'ouvre comme avant
+    full = _runners(10, priced=9)
+    assert mgr._lock_radar(_race(), full, "T_MATIN", NOW) == 1
+    assert db.has_prediction(RACE_ID, ENGINE_NAME, "T_MATIN")
+
+
 def test_cache_une_requete_par_passe():
     client = FakeClient(_rows(range(1, 11)))
     eng = RadarV4Engine(client=client)
