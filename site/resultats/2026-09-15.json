@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "e71662dbad886ae2b90a7068e96822d2af8e5366",
-  "run_id": "34955641182",
+  "commit": "208b588e093508b0683c2c84acf171cbdc429c6b",
+  "run_id": "34957009127",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-15",
- "genere_le_utc": "2026-09-15T10:01:42Z",
+ "genere_le_utc": "2026-09-15T10:16:36Z",
  "nb_courses": 24,
  "compte_par_statut": {
   "EN_ATTENTE": 23,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 0,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 1,
   "ANNULEE": 0
  },
- "empreinte_sha256": "2d83a7e20338702f97a386159273e2a8c8ce9d8d1bb580e186bab902ba117e9d",
+ "empreinte_sha256": "e7af635d816c79312689d07e3c358223af4db078f223caec3f7f25b642073242",
  "courses": [
   {
    "course_id": "R1C1_15092026_COMPIEGNE",
@@ -496,11 +496,11 @@
     "partants_actifs": 5
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -526,22 +526,50 @@
      "num": 4,
      "nom": "ISULA SENAM",
      "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 2,
+     "nom": "FAKIR DE MIX",
+     "dead_heat": false
     }
    ],
    "arrivee": [
     3,
     5,
     1,
-    4
+    4,
+    2
    ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "3": 1.7
+    },
+    "simple_place": {
+     "3": 1.2,
+     "5": 1.4
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_ORDRE",
+      "combinaison": "3-5",
+      "dividende_pour_1_eur": 4.4
+     },
+     {
+      "type_pari": "TRIO_ORDRE",
+      "combinaison": "3-5-1",
+      "dividende_pour_1_eur": 8.9
+     },
+     {
+      "type_pari": "SUPER_QUATRE",
+      "combinaison": "3-5-1-4",
+      "dividende_pour_1_eur": 22.3
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -551,14 +579,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-09-15T10:01:06Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-09-15T10:15:58Z",
+    "verifiee_le_utc": "2026-09-15T10:15:58Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-09-15T10:01:06Z",
-    "derniere_verification_utc": "2026-09-15T10:01:06Z"
+    "derniere_modification_utc": "2026-09-15T10:15:58Z",
+    "derniere_verification_utc": "2026-09-15T10:15:58Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -572,6 +600,20 @@
        5,
        1,
        4
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-09-15T10:15:58Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       3,
+       5,
+       1,
+       4,
+       2
       ]
      }
     ]
@@ -592,19 +634,24 @@
     "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "10:23 GMT (12:23 Paris)",
     "partants_declares": 8,
-    "partants_actifs": 8
+    "partants_actifs": 7
    },
    "statut": {
     "code": "EN_ATTENTE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
    "non_classes": [],
-   "non_partants": [],
+   "non_partants": [
+    {
+     "num": 1,
+     "nom": "HAPPY TIME"
+    }
+   ],
    "rapports": {
     "disponibles": false,
     "unite": "EUR pour 1 EUR de mise",
