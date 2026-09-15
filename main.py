@@ -13,6 +13,7 @@ from turf_lab.html_report import generate_html_dashboard, export_site_archives
 from turf_lab.daily_sync import DailySyncManager
 from turf_lab.cloudflare_deploy import CloudflarePagesDeployer
 from turf_lab.results_export import export_results_json
+from turf_lab.radar_bridge import push_report_summary
 
 
 def format_markdown_table(report: dict) -> str:
@@ -173,6 +174,15 @@ def main():
     with open(args.export, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2, ensure_ascii=False)
     print(f"[+] Rapport JSON exporte dans : {os.path.abspath(args.export)}")
+
+    # 1bis. Pont RADAR_V4, sens retour : resume du banc depose dans Radar
+    #       (fn_pont_rapport, meme jeton). L'auditeur Radar lit ce resume en SQL
+    #       au lieu d'un fichier servi par un cache. Jamais bloquant.
+    try:
+        push_report_summary(report, commit=os.environ.get("GITHUB_SHA") or None,
+                            run_id=os.environ.get("GITHUB_RUN_ID") or None)
+    except Exception as exc:  # defense en profondeur : le banc ne depend pas du pont
+        print(f"[!] Pont retour Radar : {exc}")
 
     # 2. Historique permanent : archives mensuelles statiques dans site/archive/
     #    (les ~3 dernieres semaines restent embarquees dans index.html,

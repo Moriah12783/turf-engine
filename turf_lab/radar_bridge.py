@@ -68,10 +68,11 @@ class RadarBridgeClient:
     def enabled(self) -> bool:
         return self.config is not None
 
-    def _post(self, date_iso: str) -> Optional[List[Dict[str, Any]]]:
+    def _rpc(self, function: str, params: Dict[str, Any]) -> Any:
+        """Appel PostgREST /rest/v1/rpc/<function> (POST JSON, TLS vérifié)."""
         assert self.config is not None
-        url = f"{self.config['url']}/rest/v1/rpc/fn_journal_du_jour"
-        body = json.dumps({"p_date": date_iso, "p_token": self.config["token"]}).encode("utf-8")
+        url = f"{self.config['url']}/rest/v1/rpc/{function}"
+        body = json.dumps(params).encode("utf-8")
         headers = {
             "apikey": self.config["key"],
             "Authorization": f"Bearer {self.config['key']}",
@@ -84,8 +85,39 @@ class RadarBridgeClient:
             data = response.read()
             if response.info().get("Content-Encoding") == "gzip":
                 data = gzip.decompress(data)
-            payload = json.loads(data.decode("utf-8"))
-            return payload if isinstance(payload, list) else None
+            return json.loads(data.decode("utf-8"))
+
+    def _post(self, date_iso: str) -> Optional[List[Dict[str, Any]]]:
+        assert self.config is not None
+        payload = self._rpc("fn_journal_du_jour", {"p_date": date_iso, "p_token": self.config["token"]})
+        return payload if isinstance(payload, list) else None
+
+    def push_report_summary(self, summary: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        """Sens retour du pont : dépose le résumé du banc dans Radar
+        (`fn_pont_rapport`, même jeton). Une tentative + un retry ; jamais
+        d'exception vers l'appelant (log RADAR_BRIDGE_REPORT_ERROR). La réponse
+        de Radar (statut ACCEPTE / REFUSE_*) est journalisée telle quelle."""
+        if not self.enabled:
+            return None
+        last_error = ""
+        for attempt in (1, 2):
+            try:
+                result = self._rpc("fn_pont_rapport", {"p_token": self.config["token"], "p_rapport": summary})
+                if isinstance(result, dict):
+                    print("RADAR_BRIDGE_REPORT_PUSHED " + json.dumps({
+                        "statut": result.get("statut"), "detail": result.get("detail"),
+                        "communes_tous": result.get("communes_tous"), "commit": summary.get("commit"),
+                    }))
+                    return result
+                last_error = "reponse inattendue"
+            except urllib.error.HTTPError as e:
+                last_error = f"HTTP {e.code}"
+                if e.code in (400, 401, 403, 404, 422):
+                    break
+            except Exception as e:  # réseau, timeout, JSON
+                last_error = repr(e)
+        print("RADAR_BRIDGE_REPORT_ERROR " + json.dumps({"commit": summary.get("commit"), "error": last_error}))
+        return None
 
     def fetch_radar_journal(self, date_iso: str) -> List[Dict[str, Any]]:
         """Lignes du journal Radar pour la date (AAAA-MM-JJ). Une tentative + un
@@ -122,6 +154,75 @@ class RadarBridgeClient:
 def fetch_radar_journal(date_iso: str) -> List[Dict[str, Any]]:
     """Raccourci sans cache partagé (usage script / debug)."""
     return RadarBridgeClient(bridge_config()).fetch_radar_journal(date_iso)
+
+
+SUMMARY_SCHEMA = "1.0"
+SUMMARY_HORIZONS = ["T_MATIN", "T90", "T30", "T15", "TOUS"]
+
+
+def _num(value: Any) -> Optional[float]:
+    try:
+        return None if value is None else float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def build_report_summary(report: Dict[str, Any], commit: Optional[str] = None,
+                         run_id: Optional[str] = None, generated_at_utc: Optional[str] = None) -> Dict[str, Any]:
+    """Résumé compact (quelques Ko) de benchmark_report.json pour l'auditeur
+    Radar : identité du code, effectifs, et par horizon du bloc courses_communes
+    le Brier / Top1 / Top3 / Top8 / ROI gagnant de chaque moteur. Aucune donnée
+    par course : uniquement des agrégats déjà publiés."""
+    evaluations = report.get("evaluations") or {}
+    communes = report.get("courses_communes") or {}
+    horizons_in = communes.get("horizons") or {}
+    logs = report.get("historical_logs") or []
+    first_log = logs[0].get("race_id") if logs and isinstance(logs[0], dict) else None
+
+    horizons_out: Dict[str, Any] = {}
+    for h in SUMMARY_HORIZONS:
+        block = horizons_in.get(h) or {}
+        metriques = block.get("metriques") or {}
+        engines_out: Dict[str, Any] = {}
+        for engine, m in metriques.items():
+            hits = m.get("hit_rates") or {}
+            calib = m.get("statistical_calibration") or {}
+            fin = (m.get("financial_performance") or {}).get("simple_gagnant") or {}
+            engines_out[engine] = {
+                "brier": _num(calib.get("brier_score")),
+                "top1_pct": _num(hits.get("top1_win_rate_pct")),
+                "top3_pct": _num(hits.get("winner_in_top3_pct")),
+                "top8_pct": _num(hits.get("winner_in_top8_pct")),
+                "roi_gagnant_pct": _num(fin.get("roi_pct")),
+                "total_races": m.get("total_races"),
+            }
+        horizons_out[h] = {"courses": block.get("courses"), "moteurs": engines_out}
+
+    return {
+        "schema": SUMMARY_SCHEMA,
+        "commit": commit,
+        "run_id": run_id,
+        "genere_le_utc": generated_at_utc or datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "total_finished_races": report.get("total_finished_races"),
+        "horizon_bench_start_date": report.get("horizon_bench_start_date"),
+        "engines_communes": list(communes.get("engines") or []),
+        "total_races_par_moteur": {name: (ev or {}).get("total_races") for name, ev in evaluations.items()},
+        "premier_log_race_id": first_log,
+        "nb_logs": len(logs),
+        "horizons": horizons_out,
+    }
+
+
+def push_report_summary(report: Dict[str, Any], commit: Optional[str] = None,
+                        run_id: Optional[str] = None,
+                        client: Optional[RadarBridgeClient] = None) -> Optional[Dict[str, Any]]:
+    """Construit le résumé et le dépose dans Radar. Pont désactivé (secrets
+    absents) → None, log RADAR_BRIDGE_REPORT_SKIPPED, rien d'autre ne change."""
+    cli = client if client is not None else RadarBridgeClient(bridge_config())
+    if not cli.enabled:
+        print("RADAR_BRIDGE_REPORT_SKIPPED " + json.dumps({"reason": "bridge_disabled"}))
+        return None
+    return cli.push_report_summary(build_report_summary(report, commit=commit, run_id=run_id))
 
 
 class RadarV4Engine:
