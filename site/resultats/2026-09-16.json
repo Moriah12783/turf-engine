@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "2d975ea94f61dfbe132d6c6d0b8b58b1f0ac6449",
-  "run_id": "35084021295",
+  "commit": "ecc5627ed14588b1d91318679029196515a3dd88",
+  "run_id": "35085381444",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-16",
- "genere_le_utc": "2026-09-16T10:16:30Z",
+ "genere_le_utc": "2026-09-16T10:31:32Z",
  "nb_courses": 24,
  "compte_par_statut": {
-  "EN_ATTENTE": 23,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 22,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 1,
   "ANNULEE": 0
  },
- "empreinte_sha256": "fb9c42d3b5c3520d6eb1ce661865400963aa69dd8accba80c983e9d6481177cc",
+ "empreinte_sha256": "d991f4366d479b97e3413328a524a43af17d144bf584fa434a6d33aa3e053f57",
  "courses": [
   {
    "course_id": "R1C1_16092026_FEURS",
@@ -674,7 +674,7 @@
     "verifiee_le_utc": "2026-09-16T10:01:02Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-16T10:15:56Z",
-    "derniere_verification_utc": "2026-09-16T10:15:56Z"
+    "derniere_verification_utc": "2026-09-16T10:30:56Z"
    },
    "correction": {
     "version": 2,
@@ -736,15 +736,68 @@
     "partants_actifs": 14
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 9,
+     "nom": "LOGANE DU VIVIER",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 1,
+     "nom": "LADY CHANNEL",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 8,
+     "nom": "LADY DE NEUILLY",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 7,
+     "nom": "LOLITA CHARMEUSE",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 13,
+     "nom": "LA BAULE HAUFOR",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    9,
+    1,
+    8,
+    7,
+    13
+   ],
+   "non_classes": [
+    {
+     "num": 3,
+     "nom": "LAGHERTHA DU PONT",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 4,
+     "nom": "LIBERTY HEROLD",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 5,
+     "nom": "LYA DU VIVIER",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": false,
@@ -756,21 +809,36 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/16092026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-09-16T10:30:56Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-09-16T10:30:56Z",
+    "derniere_verification_utc": "2026-09-16T10:30:56Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-09-16T10:30:56Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       9,
+       1,
+       8,
+       7,
+       13
+      ]
+     }
+    ]
    }
   },
   {
