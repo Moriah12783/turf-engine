@@ -3,12 +3,12 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "5664cd3140c82f624641b99ef57e67258d652918",
-  "run_id": "35082635426",
+  "commit": "2d975ea94f61dfbe132d6c6d0b8b58b1f0ac6449",
+  "run_id": "35084021295",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-16",
- "genere_le_utc": "2026-09-16T10:01:39Z",
+ "genere_le_utc": "2026-09-16T10:16:30Z",
  "nb_courses": 24,
  "compte_par_statut": {
   "EN_ATTENTE": 23,
@@ -16,7 +16,7 @@
   "DEFINITIVE": 1,
   "ANNULEE": 0
  },
- "empreinte_sha256": "c25ed5457cefbd4357f31a9e358f884137f4d250ead9d77a46aa81a4eb1791c0",
+ "empreinte_sha256": "fb9c42d3b5c3520d6eb1ce661865400963aa69dd8accba80c983e9d6481177cc",
  "courses": [
   {
    "course_id": "R1C1_16092026_FEURS",
@@ -485,7 +485,7 @@
     "definitive": true,
     "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_DEFINITIVE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -517,6 +517,48 @@
      "num": 7,
      "nom": "INDY DE MAI",
      "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 8,
+     "nom": "JURELLA DE PALM",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 2,
+     "nom": "JEUNE ORANGE COTON",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 13,
+     "nom": "GYPSIE MAGIQUE",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 11,
+     "nom": "JADESKA",
+     "dead_heat": false
+    },
+    {
+     "rang": 10,
+     "num": 14,
+     "nom": "JOULE DE LA FYE",
+     "dead_heat": false
+    },
+    {
+     "rang": 11,
+     "num": 12,
+     "nom": "ISA DU PRESSOIR",
+     "dead_heat": false
+    },
+    {
+     "rang": 12,
+     "num": 10,
+     "nom": "HEGA DES LANDIERS",
+     "dead_heat": false
     }
    ],
    "arrivee": [
@@ -524,7 +566,14 @@
     3,
     5,
     9,
-    7
+    7,
+    8,
+    2,
+    13,
+    11,
+    14,
+    12,
+    10
    ],
    "non_classes": [
     {
@@ -540,11 +589,78 @@
     }
    ],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "4": 12.3
+    },
+    "simple_place": {
+     "4": 3.0,
+     "3": 2.0,
+     "5": 1.9
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "4-3",
+      "dividende_pour_1_eur": 21.8
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "4-3",
+      "dividende_pour_1_eur": 6.1
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "4-5",
+      "dividende_pour_1_eur": 7.5
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "3-5",
+      "dividende_pour_1_eur": 5.2
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "4-3",
+      "dividende_pour_1_eur": 4.6
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "4-5",
+      "dividende_pour_1_eur": 4.6
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "4-9",
+      "dividende_pour_1_eur": 4.6
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "3-5",
+      "dividende_pour_1_eur": 4.6
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "3-9",
+      "dividende_pour_1_eur": 4.6
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "5-9",
+      "dividende_pour_1_eur": 4.6
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "4-3-5",
+      "dividende_pour_1_eur": 28.6
+     },
+     {
+      "type_pari": "MULTI",
+      "combinaison": "4-3-5-9",
+      "dividende_pour_1_eur": 273.0
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -557,11 +673,11 @@
     "definitive_depuis_utc": "2026-09-16T10:01:02Z",
     "verifiee_le_utc": "2026-09-16T10:01:02Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-09-16T10:01:02Z",
-    "derniere_verification_utc": "2026-09-16T10:01:02Z"
+    "derniere_modification_utc": "2026-09-16T10:15:56Z",
+    "derniere_verification_utc": "2026-09-16T10:15:56Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -576,6 +692,27 @@
        5,
        9,
        7
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "COMPLETION",
+      "horodatage_utc": "2026-09-16T10:15:56Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       4,
+       3,
+       5,
+       9,
+       7,
+       8,
+       2,
+       13,
+       11,
+       14,
+       12,
+       10
       ]
      }
     ]
@@ -603,7 +740,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
