@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "096284ddd2d7cb9963c4db6c0eea9210b4ab2e91",
-  "run_id": "35088050163",
+  "commit": "f46aa6e5f43e1e7670cbbe5775054a9323ea58d2",
+  "run_id": "35089366207",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-16",
- "genere_le_utc": "2026-09-16T11:01:45Z",
+ "genere_le_utc": "2026-09-16T11:16:35Z",
  "nb_courses": 24,
  "compte_par_statut": {
   "EN_ATTENTE": 21,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 2,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 3,
   "ANNULEE": 0
  },
- "empreinte_sha256": "58498b874838eb8ae824ac179d4e36fead16c9e5cb761b9339a3adddc4cd8e2f",
+ "empreinte_sha256": "6681e400738caea6a9dcbe439779a586804f24c53ed26acf8af683e574e22152",
  "courses": [
   {
    "course_id": "R1C1_16092026_FEURS",
@@ -674,7 +674,7 @@
     "verifiee_le_utc": "2026-09-16T10:01:02Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-16T10:15:56Z",
-    "derniere_verification_utc": "2026-09-16T11:01:09Z"
+    "derniere_verification_utc": "2026-09-16T11:15:59Z"
    },
    "correction": {
     "version": 2,
@@ -927,7 +927,7 @@
     "verifiee_le_utc": "2026-09-16T10:45:57Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-16T10:45:57Z",
-    "derniere_verification_utc": "2026-09-16T11:01:09Z"
+    "derniere_verification_utc": "2026-09-16T11:15:59Z"
    },
    "correction": {
     "version": 2,
@@ -988,11 +988,11 @@
     "partants_actifs": 15
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -1024,6 +1024,42 @@
      "num": 10,
      "nom": "NILIPPE MAUZUN",
      "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 4,
+     "nom": "NO LIMIT DRY",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 9,
+     "nom": "NARUTO MALO",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 7,
+     "nom": "NOBODY BUT WIND",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 3,
+     "nom": "NEWTON SOLEDAD",
+     "dead_heat": false
+    },
+    {
+     "rang": 10,
+     "num": 8,
+     "nom": "NEPAL DES CAILLONS",
+     "dead_heat": false
+    },
+    {
+     "rang": 11,
+     "num": 2,
+     "nom": "NEW DEPART",
+     "dead_heat": false
     }
    ],
    "arrivee": [
@@ -1031,7 +1067,13 @@
     12,
     14,
     13,
-    10
+    10,
+    4,
+    9,
+    7,
+    3,
+    8,
+    2
    ],
    "non_classes": [
     {
@@ -1057,11 +1099,78 @@
    ],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "11": 5.7
+    },
+    "simple_place": {
+     "11": 2.2,
+     "12": 13.7,
+     "14": 2.3
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "11-12",
+      "dividende_pour_1_eur": 442.6
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "11-12",
+      "dividende_pour_1_eur": 62.6
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "11-14",
+      "dividende_pour_1_eur": 5.4
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "12-14",
+      "dividende_pour_1_eur": 60.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "11-12",
+      "dividende_pour_1_eur": 2.4
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "11-14",
+      "dividende_pour_1_eur": 2.4
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "11-13",
+      "dividende_pour_1_eur": 2.4
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "12-14",
+      "dividende_pour_1_eur": 2.4
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "12-13",
+      "dividende_pour_1_eur": 2.4
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "14-13",
+      "dividende_pour_1_eur": 2.4
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "11-12-14",
+      "dividende_pour_1_eur": 209.4
+     },
+     {
+      "type_pari": "MULTI",
+      "combinaison": "11-12-14-13",
+      "dividende_pour_1_eur": 3.9
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -1071,14 +1180,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-09-16T11:01:09Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-09-16T11:15:59Z",
+    "verifiee_le_utc": "2026-09-16T11:15:59Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-09-16T11:01:09Z",
-    "derniere_verification_utc": "2026-09-16T11:01:09Z"
+    "derniere_modification_utc": "2026-09-16T11:15:59Z",
+    "derniere_verification_utc": "2026-09-16T11:15:59Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -1093,6 +1202,26 @@
        14,
        13,
        10
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-09-16T11:15:59Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       11,
+       12,
+       14,
+       13,
+       10,
+       4,
+       9,
+       7,
+       3,
+       8,
+       2
       ]
      }
     ]
@@ -1113,19 +1242,24 @@
     "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "11:27 GMT (13:27 Paris)",
     "partants_declares": 14,
-    "partants_actifs": 14
+    "partants_actifs": 13
    },
    "statut": {
     "code": "EN_ATTENTE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
    "non_classes": [],
-   "non_partants": [],
+   "non_partants": [
+    {
+     "num": 8,
+     "nom": "NEWLIFE DE CAHOT"
+    }
+   ],
    "rapports": {
     "disponibles": false,
     "unite": "EUR pour 1 EUR de mise",
