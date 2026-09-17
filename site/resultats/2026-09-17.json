@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "5d1772dd0298eb8c6ade90530109fb9e124d5cb8",
-  "run_id": "35204155215",
+  "commit": "50ab317db9f2d581442cc881e56bbc1a5ebcd0a8",
+  "run_id": "35205517529",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-17",
- "genere_le_utc": "2026-09-17T09:16:35Z",
+ "genere_le_utc": "2026-09-17T09:31:30Z",
  "nb_courses": 24,
  "compte_par_statut": {
   "EN_ATTENTE": 22,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 1,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "dc0bcb775d66bf547c0ac000b79232542085ae7cb73441bae2cbfd99b864c5ec",
+ "empreinte_sha256": "cc686cbc970d19ca098d5676301ed07b2acc991f8abf3146ea5fa38f3f4089ac",
  "courses": [
   {
    "course_id": "R1C1_17092026_VINCENNES",
@@ -576,7 +576,7 @@
     "verifiee_le_utc": "2026-09-17T08:45:56Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-17T08:45:56Z",
-    "derniere_verification_utc": "2026-09-17T09:15:57Z"
+    "derniere_verification_utc": "2026-09-17T09:30:58Z"
    },
    "correction": {
     "version": 1,
@@ -618,11 +618,11 @@
     "partants_actifs": 8
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "FIN_COURSE"
    },
    "classement": [
     {
@@ -648,13 +648,27 @@
      "num": 4,
      "nom": "LAKADAME",
      "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 3,
+     "nom": "KONFINER",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 1,
+     "nom": "JIRAIS AU BALLE",
+     "dead_heat": false
     }
    ],
    "arrivee": [
     8,
     6,
     7,
-    4
+    4,
+    3,
+    1
    ],
    "non_classes": [
     {
@@ -670,11 +684,48 @@
    ],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "8": 7.8
+    },
+    "simple_place": {
+     "8": 1.9,
+     "6": 1.3,
+     "7": 3.1
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "8-6",
+      "dividende_pour_1_eur": 5.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "8-6",
+      "dividende_pour_1_eur": 2.9
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "8-7",
+      "dividende_pour_1_eur": 7.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "6-7",
+      "dividende_pour_1_eur": 5.3
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "8-6-7",
+      "dividende_pour_1_eur": 24.2
+     },
+     {
+      "type_pari": "SUPER_QUATRE",
+      "combinaison": "8-6-7-4",
+      "dividende_pour_1_eur": 668.3
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -684,14 +735,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-09-17T09:15:57Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-09-17T09:30:58Z",
+    "verifiee_le_utc": "2026-09-17T09:30:58Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-09-17T09:15:57Z",
-    "derniere_verification_utc": "2026-09-17T09:15:57Z"
+    "derniere_modification_utc": "2026-09-17T09:30:58Z",
+    "derniere_verification_utc": "2026-09-17T09:30:58Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -705,6 +756,21 @@
        6,
        7,
        4
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-09-17T09:30:58Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       8,
+       6,
+       7,
+       4,
+       3,
+       1
       ]
      }
     ]
@@ -721,9 +787,9 @@
     "libelle": "PRIX ROBERT LEJEUNE",
     "discipline": "OBSTACLE_HAIE",
     "distance_m": 3600,
-    "heure_depart_utc": "2026-09-17T09:42:00Z",
+    "heure_depart_utc": "2026-09-17T09:43:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "09:42 GMT (11:42 Paris)",
+    "heure_depart_affichee": "09:43 GMT (11:43 Paris)",
     "partants_declares": 7,
     "partants_actifs": 7
    },
@@ -732,7 +798,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
