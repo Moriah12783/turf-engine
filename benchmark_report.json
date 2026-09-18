@@ -4864,7 +4864,7 @@
       "provisoire_reason": null,
       "publishable": true,
       "publication_reason": "OK",
-      "display_horizon": "T90",
+      "display_horizon": "T30",
       "editions_moteur": {
         "T_MATIN": {
           "sel": "7-6-5-8-3-10-4-9",
@@ -4875,6 +4875,12 @@
         "T90": {
           "sel": "7-5-6-8-10-4-3-9",
           "lock": "18:45",
+          "priced_ratio": 1.0,
+          "odds_real": true
+        },
+        "T30": {
+          "sel": "7-6-5-8-4-10-3-9",
+          "lock": "19:39",
           "priced_ratio": 1.0,
           "odds_real": true
         }
@@ -4889,6 +4895,12 @@
         "T90": {
           "sel": "7-6-5-8-4-10-9-3",
           "lock": "18:45",
+          "priced_ratio": 1.0,
+          "odds_real": true
+        },
+        "T30": {
+          "sel": "7-6-5-8-4-10-9-3",
+          "lock": "19:39",
           "priced_ratio": 1.0,
           "odds_real": true
         }
@@ -4912,20 +4924,20 @@
       "is_no_bet": false,
       "is_master": false,
       "np_nums": [],
-      "sel_moteur": "7-5-6-8-10-4-3-9",
+      "sel_moteur": "7-6-5-8-4-10-3-9",
       "sel_moteur_list": [
         7,
-        5,
         6,
+        5,
         8,
-        10,
         4,
+        10,
         3,
         9
       ],
       "bases": [
         7,
-        5
+        6
       ],
       "outsider_num": 3,
       "regrets": [
@@ -4941,11 +4953,11 @@
             "libelle": "Couplé Placé (ou 2sur4)",
             "chevaux": [
               7,
-              5
+              6
             ],
             "bases": [
               7,
-              5
+              6
             ],
             "associes": [],
             "combinaisons": 1,
@@ -4953,19 +4965,19 @@
             "cout_total_eur": 2.0,
             "eligible": true,
             "motif_ineligibilite": null,
-            "texte": "7 - 5"
+            "texte": "7 - 6"
           },
           {
             "produit": "TRIO",
             "libelle": "Trio (Couplé Gagnant)",
             "chevaux": [
               7,
-              5,
+              6,
               3
             ],
             "bases": [
               7,
-              5
+              6
             ],
             "associes": [
               3
@@ -4975,69 +4987,69 @@
             "cout_total_eur": 2.0,
             "eligible": true,
             "motif_ineligibilite": null,
-            "texte": "7 - 5 - 3"
+            "texte": "7 - 6 - 3"
           },
           {
             "produit": "QUINTE_PLUS",
             "libelle": "Quinté+ champ réduit",
             "chevaux": [
               7,
-              5,
               6,
+              5,
               8,
-              10,
-              4
+              4,
+              10
             ],
             "bases": [
               7,
-              5
+              6
             ],
             "associes": [
-              6,
+              5,
               8,
-              10,
-              4
+              4,
+              10
             ],
             "combinaisons": 4,
             "mise_unitaire_eur": 2.0,
             "cout_total_eur": null,
             "eligible": false,
             "motif_ineligibilite": "PARI_NON_OUVERT",
-            "texte": "7 - 5 - X - X - X / 6, 8, 10, 4"
+            "texte": "7 - 6 - X - X - X / 5, 8, 4, 10"
           }
         ],
         "ticket_securite": {
           "pari": "Couplé Placé (ou 2sur4)",
           "chevaux": [
             7,
-            5
+            6
           ],
-          "formule": "7 - 5",
+          "formule": "7 - 6",
           "mise_base_eur": 2.0
         },
         "ticket_trio": {
           "pari": "Trio (Couplé Gagnant)",
           "chevaux": [
             7,
-            5,
+            6,
             3
           ],
-          "formule": "7 - 5 - 3",
+          "formule": "7 - 6 - 3",
           "mise_base_eur": 2.0
         },
         "quinte_champ_reduit": {
           "pari": "Quinté+ champ réduit",
           "bases_fixes": [
             7,
-            5
+            6
           ],
           "associes": [
-            6,
+            5,
             8,
-            10,
-            4
+            4,
+            10
           ],
-          "formule": "7 - 5 - X - X - X / 6, 8, 10, 4",
+          "formule": "7 - 6 - X - X - X / 5, 8, 4, 10",
           "combinaisons": 4,
           "budget_conseille_eur": null
         }
@@ -5063,7 +5075,7 @@
       "couv_marche": "0/5",
       "couv_marche_count": 0,
       "couverture_label": "Course à venir",
-      "decision": "Bases: 7 - 5",
+      "decision": "Bases: 7 - 6",
       "decision_badge": "badge-base",
       "runners": [
         {
@@ -5076,29 +5088,11 @@
           "morning_odds": 8.5,
           "live_odds": 1.2,
           "o_t90": 1.3,
-          "o_t30": null,
+          "o_t30": 1.2,
           "o_t15": null,
-          "prob_pct": 60.4,
-          "value_index": 0.79,
+          "prob_pct": 66.4,
+          "value_index": 0.8,
           "smart_signal": "FORTE_BAISSE_INSIDER",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 5,
-          "name": "OLGA STAR",
-          "driver": "R. LAMY",
-          "shoeing": "FERRE",
-          "draw": 5,
-          "music": "1a",
-          "morning_odds": 1.5,
-          "live_odds": 15.0,
-          "o_t90": 13.0,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 6.6,
-          "value_index": 0.86,
-          "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
         },
@@ -5112,10 +5106,28 @@
           "morning_odds": 2.9,
           "live_odds": 13.0,
           "o_t90": 12.0,
-          "o_t30": null,
+          "o_t30": 13.0,
           "o_t15": null,
-          "prob_pct": 6.5,
-          "value_index": 0.78,
+          "prob_pct": 6.2,
+          "value_index": 0.8,
+          "smart_signal": "FORTE_HAUSSE_DELAISSE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 5,
+          "name": "OLGA STAR",
+          "driver": "R. LAMY",
+          "shoeing": "FERRE",
+          "draw": 5,
+          "music": "1a",
+          "morning_odds": 1.5,
+          "live_odds": 15.0,
+          "o_t90": 13.0,
+          "o_t30": 15.0,
+          "o_t15": null,
+          "prob_pct": 6.0,
+          "value_index": 0.89,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -5130,28 +5142,10 @@
           "morning_odds": 8.5,
           "live_odds": 19.0,
           "o_t90": 15.0,
-          "o_t30": null,
+          "o_t30": 19.0,
           "o_t15": null,
-          "prob_pct": 5.5,
-          "value_index": 0.83,
-          "smart_signal": "FORTE_HAUSSE_DELAISSE",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 10,
-          "name": "OLGA DES MALBERAUX",
-          "driver": "A. MENAGER",
-          "shoeing": "FERRE",
-          "draw": 10,
-          "music": "1a2a",
-          "morning_odds": 2.8,
-          "live_odds": 24.0,
-          "o_t90": 17.0,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 5.1,
-          "value_index": 0.86,
+          "prob_pct": 4.6,
+          "value_index": 0.88,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -5166,10 +5160,28 @@
           "morning_odds": 2.1,
           "live_odds": 21.0,
           "o_t90": 16.0,
-          "o_t30": null,
+          "o_t30": 21.0,
           "o_t15": null,
-          "prob_pct": 5.0,
-          "value_index": 0.81,
+          "prob_pct": 4.0,
+          "value_index": 0.84,
+          "smart_signal": "FORTE_HAUSSE_DELAISSE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 10,
+          "name": "OLGA DES MALBERAUX",
+          "driver": "A. MENAGER",
+          "shoeing": "FERRE",
+          "draw": 10,
+          "music": "1a2a",
+          "morning_odds": 2.8,
+          "live_odds": 24.0,
+          "o_t90": 17.0,
+          "o_t30": 24.0,
+          "o_t15": null,
+          "prob_pct": 3.9,
+          "value_index": 0.93,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -5184,11 +5196,11 @@
           "morning_odds": 57.0,
           "live_odds": 43.0,
           "o_t90": 33.0,
-          "o_t30": null,
+          "o_t30": 43.0,
           "o_t15": null,
-          "prob_pct": 4.6,
-          "value_index": 1.51,
-          "smart_signal": "FORTE_BAISSE_INSIDER",
+          "prob_pct": 3.8,
+          "value_index": 1.63,
+          "smart_signal": "BAISSE_CONFIRMEE",
           "is_np": false,
           "odds_real": true
         },
@@ -5202,10 +5214,10 @@
           "morning_odds": 246.0,
           "live_odds": 38.0,
           "o_t90": 28.0,
-          "o_t30": null,
+          "o_t30": 38.0,
           "o_t15": null,
-          "prob_pct": 3.7,
-          "value_index": 1.04,
+          "prob_pct": 3.1,
+          "value_index": 1.18,
           "smart_signal": "FORTE_BAISSE_INSIDER",
           "is_np": false,
           "odds_real": true
@@ -5220,10 +5232,10 @@
           "morning_odds": 1.4,
           "live_odds": 68.0,
           "o_t90": 53.0,
-          "o_t30": null,
+          "o_t30": 68.0,
           "o_t15": null,
-          "prob_pct": 1.4,
-          "value_index": 0.75,
+          "prob_pct": 1.1,
+          "value_index": 0.77,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -5238,11 +5250,11 @@
           "morning_odds": 91.0,
           "live_odds": 119.0,
           "o_t90": 94.0,
-          "o_t30": null,
+          "o_t30": 119.0,
           "o_t15": null,
-          "prob_pct": 1.1,
-          "value_index": 1.06,
-          "smart_signal": "STABLE",
+          "prob_pct": 0.9,
+          "value_index": 1.08,
+          "smart_signal": "LEGERE_HAUSSE",
           "is_np": false,
           "odds_real": true
         }
