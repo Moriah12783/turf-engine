@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "ae79d316d88f27943fe0c732ecb590f3e9ee7a6f",
-  "run_id": "35432877602",
+  "commit": "da46ec508753c07db51a92edab5ad08ece533b4e",
+  "run_id": "35433528736",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-19",
- "genere_le_utc": "2026-09-19T08:46:44Z",
+ "genere_le_utc": "2026-09-19T09:02:20Z",
  "nb_courses": 59,
  "compte_par_statut": {
-  "EN_ATTENTE": 59,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 58,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 0,
   "ANNULEE": 0
  },
- "empreinte_sha256": "de5b604a00fa26704bcb108159a68ba5d9bbde1a575cfac7429f9fa216ea2d49",
+ "empreinte_sha256": "5f85d490ef44283b4a4395e91aa4382696eb0cb7cdc26455aeaa224b7f1bc4fe",
  "courses": [
   {
    "course_id": "R1C1_19092026_CHANTILLY",
@@ -531,15 +531,51 @@
     "partants_actifs": 10
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_CONFIRME"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 1,
+     "nom": "IGUSKI",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 3,
+     "nom": "JOINVILLE LE PONT",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 2,
+     "nom": "LYRICAL STAR",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 7,
+     "nom": "ILOTE",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    1,
+    3,
+    2,
+    7
+   ],
+   "non_classes": [
+    {
+     "num": 5,
+     "nom": "REVE DE LA MONE",
+     "incident": "TOMBE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": false,
@@ -551,21 +587,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/19092026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-09-19T09:01:32Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-09-19T09:01:32Z",
+    "derniere_verification_utc": "2026-09-19T09:01:32Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-09-19T09:01:32Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       1,
+       3,
+       2,
+       7
+      ]
+     }
+    ]
    }
   },
   {
@@ -2027,7 +2077,7 @@
     "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "18:22 GMT (20:22 Paris)",
     "partants_declares": 16,
-    "partants_actifs": 16
+    "partants_actifs": 15
    },
    "statut": {
     "code": "EN_ATTENTE",
@@ -2039,7 +2089,12 @@
    "classement": [],
    "arrivee": [],
    "non_classes": [],
-   "non_partants": [],
+   "non_partants": [
+    {
+     "num": 15,
+     "nom": "NOTRE DOMPIERRE"
+    }
+   ],
    "rapports": {
     "disponibles": false,
     "unite": "EUR pour 1 EUR de mise",
@@ -2797,7 +2852,7 @@
     "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "15:00 GMT (17:00 Paris)",
     "partants_declares": 12,
-    "partants_actifs": 12
+    "partants_actifs": 11
    },
    "statut": {
     "code": "EN_ATTENTE",
@@ -2809,7 +2864,12 @@
    "classement": [],
    "arrivee": [],
    "non_classes": [],
-   "non_partants": [],
+   "non_partants": [
+    {
+     "num": 12,
+     "nom": "JUSSIE"
+    }
+   ],
    "rapports": {
     "disponibles": false,
     "unite": "EUR pour 1 EUR de mise",
