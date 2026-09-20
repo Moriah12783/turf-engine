@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "2d96911c786c828a633e3bfd5c981f2ea927f23b",
-  "run_id": "35500457329",
+  "commit": "2101a2326d23de0a55331b94925b79f902199a26",
+  "run_id": "35501131269",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-20",
- "genere_le_utc": "2026-09-20T08:46:53Z",
+ "genere_le_utc": "2026-09-20T09:01:59Z",
  "nb_courses": 72,
  "compte_par_statut": {
-  "EN_ATTENTE": 72,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 71,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 0,
   "ANNULEE": 0
  },
- "empreinte_sha256": "cf7068cee2abc0ec923e996b2d422bd142aa3d4088f1950fd42b690b4692bdc6",
+ "empreinte_sha256": "cf22f0078a30734d65963a73d7c0c91d148922346b544b606117ea11adcb4052",
  "courses": [
   {
    "course_id": "R1C1_20092026_VINCENNES",
@@ -546,15 +546,83 @@
     "partants_actifs": 14
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_CONFIRME"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 2,
+     "nom": "MANGOUSTINE GAGOU",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 14,
+     "nom": "MISS SCARLET",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 11,
+     "nom": "MAIA BOURGEOISE",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 13,
+     "nom": "MONTSERRAT BLUE",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 4,
+     "nom": "MENDES DE JED",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    2,
+    14,
+    11,
+    13,
+    4
+   ],
+   "non_classes": [
+    {
+     "num": 1,
+     "nom": "MUFASA ACE",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 3,
+     "nom": "MAXIMUS D'ARGENT",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 6,
+     "nom": "MARA DU DERBY",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 7,
+     "nom": "MALICE HAUFOR",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 10,
+     "nom": "MELLINA DE MAI",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 12,
+     "nom": "MORANT DAIRPET",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": false,
@@ -566,21 +634,36 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/20092026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-09-20T09:01:06Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-09-20T09:01:06Z",
+    "derniere_verification_utc": "2026-09-20T09:01:06Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-09-20T09:01:06Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       2,
+       14,
+       11,
+       13,
+       4
+      ]
+     }
+    ]
    }
   },
   {
@@ -935,7 +1018,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "DEPART_CONFIRME"
    },
    "classement": [],
    "arrivee": [],
