@@ -8,6 +8,7 @@ import math
 from typing import Any, Dict, List, Optional
 from turf_lab.database import TurfDatabase
 from turf_lab.odds_quality import MIN_DISPLAY_RATIO, MIN_PRICED_RATIO, all_default_odds, priced_ratio
+from turf_lab.baselines import market_edition_informative
 from turf_lab.publication_gate import can_publish
 
 
@@ -78,6 +79,11 @@ class TurfBenchmarkLab:
                 continue
 
             engine_preds = [p for p in eval_data["predictions"] if p["engine_name"] == engine_name]
+            if engine_name == "MARKET_BASELINE":
+                # Une édition marché verrouillée sans cotes réelles (cotes
+                # neutralisées ou par défaut) n'est que l'ordre des numéros :
+                # elle est traitée comme ABSENTE, jamais comme un pronostic.
+                engine_preds = [p for p in engine_preds if market_edition_informative(p)]
             if horizon is not None:
                 # F3 : évaluation de l'édition de CET horizon uniquement.
                 pred = next((p for p in engine_preds if p.get("horizon") == horizon), None)
@@ -318,6 +324,8 @@ class TurfBenchmarkLab:
             for p in preds:
                 if p.get("engine_name") != engine or not p.get("selection"):
                     continue
+                if engine == "MARKET_BASELINE" and not market_edition_informative(p):
+                    continue  # édition marché nominale (sans cotes réelles) = pas de verrou
                 if horizon is None or p.get("horizon") == horizon:
                     return True
             return False
@@ -389,6 +397,10 @@ class TurfBenchmarkLab:
 
             def pick_prediction(engine: str):
                 cands = [p for p in predictions if p["engine_name"] == engine]
+                if engine == "MARKET_BASELINE":
+                    # Jamais afficher ni noter une « sélection marché » posée
+                    # sans cotes réelles (ordre des numéros 1-2-3-4-5-6-7-8).
+                    cands = [p for p in cands if market_edition_informative(p)]
                 if not cands:
                     return None
                 for h in horizon_priority:
@@ -404,8 +416,11 @@ class TurfBenchmarkLab:
                 for h in ["T_MATIN", "T90", "T30", "T15"]:
                     p = next((q for q in predictions if q["engine_name"] == engine and q.get("horizon") == h), None)
                     if p and p.get("selection"):
+                        nominal = engine == "MARKET_BASELINE" and not market_edition_informative(p)
                         eds[h] = {
-                            "sel": "-".join(map(str, p["selection"][:8])),
+                            # Édition marché sans cotes réelles au verrou : pas de sélection.
+                            "sel": "—" if nominal else "-".join(map(str, p["selection"][:8])),
+                            "nominal": nominal,
                             "lock": str(p.get("lock_time_utc") or p.get("lock_time", ""))[11:16],
                             # Preuve de fraîcheur persistée au verrou (None = verrou
                             # antérieur à la porte de fraîcheur, état inconnu).
@@ -504,7 +519,7 @@ class TurfBenchmarkLab:
                 matches_marche = [n for n in top5_arrival if n in sel_marche]
                 c_moteur = len(matches_moteur)
                 c_marche = len(matches_marche)
-                if market_odds_available:
+                if market_odds_available and sel_marche:
                     couverture_label = f"Moteur {c_moteur}/5 · Marché {c_marche}/5"
                 else:
                     # Sans cotes PMU, la « sélection marché » est purement
@@ -636,6 +651,24 @@ class TurfBenchmarkLab:
 
         return logs
 
+    def count_market_nominal_editions(self) -> int:
+        """Éditions MARKET_BASELINE archivées sans information de marché
+        (sélection vide, cotes neutralisées ou toutes par défaut au verrou)."""
+        total = 0
+        with self.db.transaction() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT selection_json, probabilities_json, odds_real FROM predictions WHERE engine_name = 'MARKET_BASELINE'")
+            for row in cursor.fetchall():
+                try:
+                    pred = {"selection": json.loads(row["selection_json"] or "[]"),
+                            "probabilities": json.loads(row["probabilities_json"] or "{}"),
+                            "odds_real": row["odds_real"]}
+                except (TypeError, ValueError):
+                    pred = {"selection": []}
+                if not market_edition_informative(pred):
+                    total += 1
+        return total
+
     def generate_comparative_report(self, engines: Optional[List[str]] = None) -> Dict[str, Any]:
         """Generate full comparative report across engines, discipline breakdowns, and permanent logs."""
         if engines is None:
@@ -668,9 +701,13 @@ class TurfBenchmarkLab:
         # sont conservées et exposées (la pagination/les archives mensuelles
         # gèrent le volume côté site).
         historical_logs = self.get_historical_race_logs(limit=None)
+        # Transparence : nombre d'éditions marché posées sans cotes réelles
+        # (ordre des numéros), désormais exclues de tous les bancs marché.
+        market_nominal_editions = self.count_market_nominal_editions()
 
         return {
             "engines_evaluated": engines,
+            "market_nominal_editions": market_nominal_editions,
             "total_finished_races": len(self.db.get_finished_races()),
             "evaluations": evaluations,
             "discipline_breakdown": discipline_breakdown,

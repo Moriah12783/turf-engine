@@ -187,6 +187,7 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
     horizon_breakdown = report_data.get("horizon_breakdown", {})
     horizon_breakdown_market = report_data.get("horizon_breakdown_market", {})
     horizon_bench_start = report_data.get("horizon_bench_start_date", "2026-09-01")
+    market_nominal_editions = int(report_data.get("market_nominal_editions") or 0)
     horizon_rows_html = []
     horizon_titles = [
         ("T_MATIN", "📡 Édition Matin", "verrouillée dès 06h30 GMT"),
@@ -539,7 +540,10 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                 immuables) : avant cette date, les quatre horizons étaient posés simultanément et ne
                 peuvent être comparés honnêtement. Les effectifs par horizon diffèrent : une course dont
                 le programme est chargé tard n'a pas d'édition Matin, et les passes rattrapent parfois
-                T-90/T-30/T-15 en un seul verrouillage.
+                T-90/T-30/T-15 en un seul verrouillage. Ligne « Marché » : une édition verrouillée sans
+                cotes PMU réelles (cotes non ouvertes ou partielles) n'est pas un pronostic du marché —
+                elle est exclue du banc et affichée « — » ({market_nominal_editions} éditions concernées
+                dans l'archive).
             </p>
         </div>
 
@@ -965,7 +969,7 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                             <small style="color:var(--text-muted); font-family:monospace;">${{item.date}}</small>
                         </td>
                         <td style="font-family:monospace; color:#60a5fa; font-weight:700; letter-spacing:0.5px;">${{provisoire ? provCell : item.sel_moteur}}</td>
-                        <td style="font-family:monospace; color:#94a3b8; letter-spacing:0.5px;">${{(noCotes || provisoire) ? '<em style="color:var(--text-muted); font-family:inherit;">indisponible</em>' : item.sel_marche}}</td>
+                        <td style="font-family:monospace; color:#94a3b8; letter-spacing:0.5px;">${{(noCotes || provisoire || !item.sel_marche || item.sel_marche === '-') ? '<em style="color:var(--text-muted); font-family:inherit;">indisponible</em>' : item.sel_marche}}</td>
                         <td style="font-family:monospace; color:#f8fafc; font-weight:700; letter-spacing:0.5px;">${{item.arrivee}}</td>
                         <td><span class="couv-tag ${{badgeClass}}">${{provisoire ? 'Cotes non ouvertes' : item.couverture_label}}</span></td>
                         <td style="font-size:0.85rem;"><span class="${{provisoire ? 'badge-provisoire' : item.decision_badge}}">${{provisoire ? 'ÉDITION PROVISOIRE' : item.decision}}</span></td>
@@ -1076,7 +1080,7 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
             document.getElementById("modal-regrets").textContent = provisoire ? "—" : (item.regrets.length ? item.regrets.join(" - ") : "N/A");
 
             document.getElementById("modal-sel-moteur").textContent = provisoire ? "— (édition provisoire, cotes non ouvertes)" : item.sel_moteur;
-            document.getElementById("modal-sel-marche").textContent = (noCotes || provisoire) ? "Indisponible (pas de cotes PMU)" : item.sel_marche;
+            document.getElementById("modal-sel-marche").textContent = (noCotes || provisoire || !item.sel_marche || item.sel_marche === '-') ? "Indisponible (pas de cotes PMU réelles au verrou)" : item.sel_marche;
             document.getElementById("modal-arrival").textContent = item.arrivee;
 
             const couvBox = document.getElementById("modal-coverage-badge");
@@ -1114,7 +1118,7 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                     <td style="font-family:monospace;">${{em ? em.lock : (ema ? ema.lock : '—')}}</td>
                     <td style="font-family:monospace;">${{fresh}}</td>
                     <td style="text-align:left; font-family:monospace; color:#60a5fa;">${{(em && !hideSel) ? em.sel : '—'}}</td>
-                    <td style="text-align:left; font-family:monospace; color:#94a3b8;">${{(noCotes || hideSel) ? '<em style="color:var(--text-muted); font-family:inherit;">indispo.</em>' : (ema ? ema.sel : '—')}}</td>
+                    <td style="text-align:left; font-family:monospace; color:#94a3b8;">${{(noCotes || hideSel) ? '<em style="color:var(--text-muted); font-family:inherit;">indispo.</em>' : ((ema && ema.nominal) ? '<em style="color:var(--text-muted); font-family:inherit;" title="Édition marché posée sans cotes PMU réelles : pas de pronostic du marché">— sans cotes réelles</em>' : (ema ? ema.sel : '—'))}}</td>
                 `;
                 edTbody.appendChild(tr);
             }});
