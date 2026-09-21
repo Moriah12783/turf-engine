@@ -4457,7 +4457,7 @@
       "autostart": false,
       "scheduled_start_time": "15:29 GMT (17:29 Paris)",
       "is_finished": false,
-      "status": "PARTIE",
+      "status": "ARRIVÉE PROVISOIRE",
       "is_cancelled": false,
       "is_started": true,
       "start_time_utc": "2026-09-21T15:29:00Z",
@@ -4901,7 +4901,7 @@
       "provisoire_reason": null,
       "publishable": true,
       "publication_reason": "OK",
-      "display_horizon": "T90",
+      "display_horizon": "T30",
       "editions_moteur": {
         "T_MATIN": {
           "sel": "12-15-11-5-3-14-8-6",
@@ -4912,6 +4912,12 @@
         "T90": {
           "sel": "12-11-5-15-14-3-9-7",
           "lock": "14:30",
+          "priced_ratio": 1.0,
+          "odds_real": true
+        },
+        "T30": {
+          "sel": "12-11-15-5-14-9-7-3",
+          "lock": "15:36",
           "priced_ratio": 1.0,
           "odds_real": true
         }
@@ -4926,6 +4932,12 @@
         "T90": {
           "sel": "12-11-5-15-3-14-9-1",
           "lock": "14:30",
+          "priced_ratio": 1.0,
+          "odds_real": true
+        },
+        "T30": {
+          "sel": "12-11-15-5-14-3-9-1",
+          "lock": "15:36",
           "priced_ratio": 1.0,
           "odds_real": true
         }
@@ -4947,35 +4959,35 @@
       "confidence_stars": 4,
       "confidence_label": "⭐⭐⭐⭐ (Course Favorable - Bon niveau de confiance)",
       "is_no_bet": false,
-      "is_master": true,
+      "is_master": false,
       "np_nums": [],
-      "sel_moteur": "12-11-5-15-14-3-9-7",
+      "sel_moteur": "12-11-15-5-14-9-7-3",
       "sel_moteur_list": [
         12,
         11,
-        5,
         15,
+        5,
         14,
-        3,
         9,
-        7
+        7,
+        3
       ],
       "bases": [
         12,
         11
       ],
-      "outsider_num": 7,
+      "outsider_num": 4,
       "regrets": [
         2,
-        10
+        1
       ],
       "smart_tickets": {
         "contract": 2,
         "no_bet": false,
         "tickets": [
           {
-            "produit": "COUPLE_GAGNANT",
-            "libelle": "Couplé Maître du jour (Gagnant & Placé)",
+            "produit": "COUPLE_PLACE",
+            "libelle": "Couplé Placé (ou 2sur4)",
             "chevaux": [
               12,
               11
@@ -4998,21 +5010,21 @@
             "chevaux": [
               12,
               11,
-              7
+              4
             ],
             "bases": [
               12,
               11
             ],
             "associes": [
-              7
+              4
             ],
             "combinaisons": 1,
             "mise_unitaire_eur": 2.0,
             "cout_total_eur": 2.0,
             "eligible": true,
             "motif_ineligibilite": null,
-            "texte": "12 - 11 - 7"
+            "texte": "12 - 11 - 4"
           },
           {
             "produit": "QUINTE_PLUS",
@@ -5020,31 +5032,31 @@
             "chevaux": [
               12,
               11,
-              5,
               15,
+              5,
               14,
-              3
+              9
             ],
             "bases": [
               12,
               11
             ],
             "associes": [
-              5,
               15,
+              5,
               14,
-              3
+              9
             ],
             "combinaisons": 4,
             "mise_unitaire_eur": 2.0,
             "cout_total_eur": null,
             "eligible": false,
             "motif_ineligibilite": "PARI_NON_OUVERT",
-            "texte": "12 - 11 - X - X - X / 5, 15, 14, 3"
+            "texte": "12 - 11 - X - X - X / 15, 5, 14, 9"
           }
         ],
         "ticket_securite": {
-          "pari": "Couplé Maître du jour (Gagnant & Placé)",
+          "pari": "Couplé Placé (ou 2sur4)",
           "chevaux": [
             12,
             11
@@ -5057,9 +5069,9 @@
           "chevaux": [
             12,
             11,
-            7
+            4
           ],
-          "formule": "12 - 11 - 7",
+          "formule": "12 - 11 - 4",
           "mise_base_eur": 2.0
         },
         "quinte_champ_reduit": {
@@ -5069,24 +5081,24 @@
             11
           ],
           "associes": [
-            5,
             15,
+            5,
             14,
-            3
+            9
           ],
-          "formule": "12 - 11 - X - X - X / 5, 15, 14, 3",
+          "formule": "12 - 11 - X - X - X / 15, 5, 14, 9",
           "combinaisons": 4,
           "budget_conseille_eur": null
         }
       },
-      "sel_marche": "12-11-5-15-3-14-9-1",
+      "sel_marche": "12-11-15-5-14-3-9-1",
       "sel_marche_list": [
         12,
         11,
-        5,
         15,
-        3,
+        5,
         14,
+        3,
         9,
         1
       ],
@@ -5100,8 +5112,8 @@
       "couv_marche": "0/5",
       "couv_marche_count": 0,
       "couverture_label": "Course à venir",
-      "decision": "⭐ COUPLE MAITRE: 12 - 11",
-      "decision_badge": "badge-master",
+      "decision": "Bases: 12 - 11",
+      "decision_badge": "badge-base",
       "runners": [
         {
           "num": 12,
@@ -5113,9 +5125,9 @@
           "morning_odds": 3.0,
           "live_odds": 2.8,
           "o_t90": 3.0,
-          "o_t30": null,
+          "o_t30": 2.8,
           "o_t15": null,
-          "prob_pct": 25.4,
+          "prob_pct": 27.3,
           "value_index": 0.76,
           "smart_signal": "STABLE",
           "is_np": false,
@@ -5131,9 +5143,27 @@
           "morning_odds": 5.1,
           "live_odds": 6.8,
           "o_t90": 6.6,
-          "o_t30": null,
+          "o_t30": 6.8,
           "o_t15": null,
-          "prob_pct": 12.1,
+          "prob_pct": 11.8,
+          "value_index": 0.8,
+          "smart_signal": "LEGERE_HAUSSE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 15,
+          "name": "JARVIS",
+          "driver": "J. KOUBICHE",
+          "shoeing": "D4",
+          "draw": 15,
+          "music": "6a7a6a0a(25)2a1a3a6a4a",
+          "morning_odds": 6.0,
+          "live_odds": 8.6,
+          "o_t90": 10.0,
+          "o_t30": 8.6,
+          "o_t15": null,
+          "prob_pct": 9.3,
           "value_index": 0.8,
           "smart_signal": "LEGERE_HAUSSE",
           "is_np": false,
@@ -5149,29 +5179,11 @@
           "morning_odds": 21.0,
           "live_odds": 10.0,
           "o_t90": 10.0,
-          "o_t30": null,
+          "o_t30": 10.0,
           "o_t15": null,
           "prob_pct": 8.0,
           "value_index": 0.8,
           "smart_signal": "FORTE_BAISSE_INSIDER",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 15,
-          "name": "JARVIS",
-          "driver": "J. KOUBICHE",
-          "shoeing": "D4",
-          "draw": 15,
-          "music": "6a7a6a0a(25)2a1a3a6a4a",
-          "morning_odds": 6.0,
-          "live_odds": 8.6,
-          "o_t90": 10.0,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 8.0,
-          "value_index": 0.8,
-          "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
         },
@@ -5185,10 +5197,28 @@
           "morning_odds": 14.0,
           "live_odds": 14.0,
           "o_t90": 13.0,
-          "o_t30": null,
+          "o_t30": 14.0,
           "o_t15": null,
-          "prob_pct": 6.3,
-          "value_index": 0.82,
+          "prob_pct": 5.9,
+          "value_index": 0.83,
+          "smart_signal": "STABLE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 9,
+          "name": "JETLAG HOPE",
+          "driver": "CH. WILDHAGEN",
+          "shoeing": "D4",
+          "draw": 9,
+          "music": "2a0aAa3aDa5a6a4a2a2a",
+          "morning_odds": 14.0,
+          "live_odds": 16.0,
+          "o_t90": 15.0,
+          "o_t30": 16.0,
+          "o_t15": null,
+          "prob_pct": 5.3,
+          "value_index": 0.84,
           "smart_signal": "STABLE",
           "is_np": false,
           "odds_real": true
@@ -5203,29 +5233,11 @@
           "morning_odds": 2.8,
           "live_odds": 16.0,
           "o_t90": 13.0,
-          "o_t30": null,
+          "o_t30": 16.0,
           "o_t15": null,
-          "prob_pct": 6.1,
-          "value_index": 0.79,
+          "prob_pct": 5.0,
+          "value_index": 0.8,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 9,
-          "name": "JETLAG HOPE",
-          "driver": "CH. WILDHAGEN",
-          "shoeing": "D4",
-          "draw": 9,
-          "music": "2a0aAa3aDa5a6a4a2a2a",
-          "morning_odds": 14.0,
-          "live_odds": 16.0,
-          "o_t90": 15.0,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 5.6,
-          "value_index": 0.84,
-          "smart_signal": "STABLE",
           "is_np": false,
           "odds_real": true
         },
@@ -5239,10 +5251,10 @@
           "morning_odds": 42.0,
           "live_odds": 26.0,
           "o_t90": 25.0,
-          "o_t30": null,
+          "o_t30": 26.0,
           "o_t15": null,
-          "prob_pct": 5.2,
-          "value_index": 1.29,
+          "prob_pct": 5.0,
+          "value_index": 1.3,
           "smart_signal": "FORTE_BAISSE_INSIDER",
           "is_np": false,
           "odds_real": true
@@ -5257,28 +5269,10 @@
           "morning_odds": 42.0,
           "live_odds": 23.0,
           "o_t90": 24.0,
-          "o_t30": null,
+          "o_t30": 23.0,
           "o_t15": null,
-          "prob_pct": 4.7,
-          "value_index": 1.13,
-          "smart_signal": "FORTE_BAISSE_INSIDER",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 10,
-          "name": "JOKER DE LA CRIERE",
-          "driver": "J.Y. RICART",
-          "shoeing": "D4",
-          "draw": 10,
-          "music": "9a5a5a5a7a2a4a1a3a3a",
-          "morning_odds": 42.0,
-          "live_odds": 31.0,
-          "o_t90": 28.0,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 4.2,
-          "value_index": 1.18,
+          "prob_pct": 4.8,
+          "value_index": 1.11,
           "smart_signal": "FORTE_BAISSE_INSIDER",
           "is_np": false,
           "odds_real": true
@@ -5293,11 +5287,29 @@
           "morning_odds": 3.0,
           "live_odds": 21.0,
           "o_t90": 21.0,
-          "o_t30": null,
+          "o_t30": 21.0,
           "o_t15": null,
           "prob_pct": 4.1,
           "value_index": 0.86,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 10,
+          "name": "JOKER DE LA CRIERE",
+          "driver": "J.Y. RICART",
+          "shoeing": "D4",
+          "draw": 10,
+          "music": "9a5a5a5a7a2a4a1a3a3a",
+          "morning_odds": 42.0,
+          "live_odds": 31.0,
+          "o_t90": 28.0,
+          "o_t30": 31.0,
+          "o_t15": null,
+          "prob_pct": 3.7,
+          "value_index": 1.14,
+          "smart_signal": "BAISSE_CONFIRMEE",
           "is_np": false,
           "odds_real": true
         },
@@ -5311,46 +5323,10 @@
           "morning_odds": 3.0,
           "live_odds": 22.0,
           "o_t90": 21.0,
-          "o_t30": null,
+          "o_t30": 22.0,
           "o_t15": null,
-          "prob_pct": 3.7,
+          "prob_pct": 3.5,
           "value_index": 0.78,
-          "smart_signal": "FORTE_HAUSSE_DELAISSE",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 8,
-          "name": "JAGGER DANICA",
-          "driver": "Mlle E. DESSARTRE",
-          "shoeing": "FERRE",
-          "draw": 8,
-          "music": "8a2a3a6a9aDa6a0a0a0a",
-          "morning_odds": 21.0,
-          "live_odds": 38.0,
-          "o_t90": 33.0,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 2.5,
-          "value_index": 0.81,
-          "smart_signal": "FORTE_HAUSSE_DELAISSE",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 6,
-          "name": "JET DE CANVILLE",
-          "driver": "J.G. VAN EECKHAUTE",
-          "shoeing": "FERRE",
-          "draw": 6,
-          "music": "6aDa3aDa7a4aDm3a5a0a",
-          "morning_odds": 9.4,
-          "live_odds": 47.0,
-          "o_t90": 36.0,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 2.2,
-          "value_index": 0.79,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -5365,11 +5341,47 @@
           "morning_odds": 74.0,
           "live_odds": 57.0,
           "o_t90": 62.0,
-          "o_t30": null,
+          "o_t30": 57.0,
           "o_t15": null,
-          "prob_pct": 1.9,
-          "value_index": 1.21,
-          "smart_signal": "STABLE",
+          "prob_pct": 2.4,
+          "value_index": 1.34,
+          "smart_signal": "BAISSE_CONFIRMEE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 8,
+          "name": "JAGGER DANICA",
+          "driver": "Mlle E. DESSARTRE",
+          "shoeing": "FERRE",
+          "draw": 8,
+          "music": "8a2a3a6a9aDa6a0a0a0a",
+          "morning_odds": 21.0,
+          "live_odds": 38.0,
+          "o_t90": 33.0,
+          "o_t30": 38.0,
+          "o_t15": null,
+          "prob_pct": 2.1,
+          "value_index": 0.82,
+          "smart_signal": "FORTE_HAUSSE_DELAISSE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 6,
+          "name": "JET DE CANVILLE",
+          "driver": "J.G. VAN EECKHAUTE",
+          "shoeing": "FERRE",
+          "draw": 6,
+          "music": "6aDa3aDa7a4aDm3a5a0a",
+          "morning_odds": 9.4,
+          "live_odds": 47.0,
+          "o_t90": 36.0,
+          "o_t30": 47.0,
+          "o_t15": null,
+          "prob_pct": 1.7,
+          "value_index": 0.8,
+          "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
         }
