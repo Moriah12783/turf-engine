@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "eba3496a438e3ec01e37b2daf14eb94d8f6baa59",
-  "run_id": "35714947649",
+  "commit": "c718015030dde7c22a0cd4867956b7e88a54c6a2",
+  "run_id": "35716323878",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-22",
- "genere_le_utc": "2026-09-22T10:16:07Z",
+ "genere_le_utc": "2026-09-22T10:30:52Z",
  "nb_courses": 32,
  "compte_par_statut": {
-  "EN_ATTENTE": 29,
+  "EN_ATTENTE": 28,
   "PROVISOIRE": 1,
-  "DEFINITIVE": 2,
+  "DEFINITIVE": 3,
   "ANNULEE": 0
  },
- "empreinte_sha256": "db8b5c6baba558f8cf516001e2202d77e21a8ccb2d3ea49cd31d123b292a5d56",
+ "empreinte_sha256": "a4e03c425b26251b12cfe00c506d09f2decc35f2e36ef0d9c5cc0df829ff9c11",
  "courses": [
   {
    "course_id": "R1C1_22092026_AUTEUIL",
@@ -36,11 +36,11 @@
     "partants_actifs": 9
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "FIN_COURSE"
    },
    "classement": [
     {
@@ -66,13 +66,27 @@
      "num": 7,
      "nom": "TACTICIEN",
      "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 6,
+     "nom": "DEAL DAILY",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 1,
+     "nom": "WANTOKNOWHATLOVEIS",
+     "dead_heat": false
     }
    ],
    "arrivee": [
     4,
     2,
     5,
-    7
+    7,
+    6,
+    1
    ],
    "non_classes": [
     {
@@ -93,11 +107,48 @@
    ],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "4": 24.8
+    },
+    "simple_place": {
+     "4": 4.0,
+     "2": 1.5,
+     "5": 2.0
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "4-2",
+      "dividende_pour_1_eur": 19.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "4-2",
+      "dividende_pour_1_eur": 5.5
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "4-5",
+      "dividende_pour_1_eur": 6.5
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "2-5",
+      "dividende_pour_1_eur": 3.3
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "4-2-5",
+      "dividende_pour_1_eur": 25.2
+     },
+     {
+      "type_pari": "SUPER_QUATRE",
+      "combinaison": "4-2-5-7",
+      "dividende_pour_1_eur": 949.0
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -107,14 +158,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-09-22T10:15:22Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-09-22T10:30:20Z",
+    "verifiee_le_utc": "2026-09-22T10:30:20Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-09-22T10:15:22Z",
-    "derniere_verification_utc": "2026-09-22T10:15:22Z"
+    "derniere_modification_utc": "2026-09-22T10:30:20Z",
+    "derniere_verification_utc": "2026-09-22T10:30:20Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -128,6 +179,21 @@
        2,
        5,
        7
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-09-22T10:30:20Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       4,
+       2,
+       5,
+       7,
+       6,
+       1
       ]
      }
     ]
@@ -144,9 +210,9 @@
     "libelle": "PRIX AMATI",
     "discipline": "OBSTACLE_HAIE",
     "distance_m": 3500,
-    "heure_depart_utc": "2026-09-22T10:35:00Z",
+    "heure_depart_utc": "2026-09-22T10:39:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "10:35 GMT (12:35 Paris)",
+    "heure_depart_affichee": "10:39 GMT (12:39 Paris)",
     "partants_declares": 8,
     "partants_actifs": 7
    },
@@ -155,7 +221,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
    },
    "classement": [],
    "arrivee": [],
@@ -716,7 +782,7 @@
     "verifiee_le_utc": "2026-09-22T09:45:26Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-22T09:45:26Z",
-    "derniere_verification_utc": "2026-09-22T10:15:22Z"
+    "derniere_verification_utc": "2026-09-22T10:30:20Z"
    },
    "correction": {
     "version": 2,
@@ -1026,7 +1092,7 @@
     "verifiee_le_utc": "2026-09-22T10:00:25Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-22T10:00:25Z",
-    "derniere_verification_utc": "2026-09-22T10:15:22Z"
+    "derniere_verification_utc": "2026-09-22T10:30:20Z"
    },
    "correction": {
     "version": 1,
@@ -1072,19 +1138,77 @@
     "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "10:17 GMT (12:17 Paris)",
     "partants_declares": 14,
-    "partants_actifs": 14
+    "partants_actifs": 13
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_DANS_TROIS_MINUTES"
+    "pmu_statut": "ARRIVEE_PROVISOIRE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
-   "non_partants": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 2,
+     "nom": "MONEY AIMEF",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 5,
+     "nom": "MIGUEL DU CHERISAY",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 4,
+     "nom": "MILLER DU VIVIER",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 13,
+     "nom": "MIDNIGHT EXPRESS",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 10,
+     "nom": "MISTRAL LOMIG",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    2,
+    5,
+    4,
+    13,
+    10
+   ],
+   "non_classes": [
+    {
+     "num": 3,
+     "nom": "MELODIE D'HOULBEC",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 8,
+     "nom": "MAGELLAN FOR CLARA",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 9,
+     "nom": "MADE IN CARLESS",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
+   "non_partants": [
+    {
+     "num": 7,
+     "nom": "MINOS DE BERLES"
+    }
+   ],
    "rapports": {
     "disponibles": false,
     "unite": "EUR pour 1 EUR de mise",
@@ -1095,21 +1219,36 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/22092026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-09-22T10:30:20Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-09-22T10:30:20Z",
+    "derniere_verification_utc": "2026-09-22T10:30:20Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-09-22T10:30:20Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       2,
+       5,
+       4,
+       13,
+       10
+      ]
+     }
+    ]
    }
   },
   {
