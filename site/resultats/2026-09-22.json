@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "c718015030dde7c22a0cd4867956b7e88a54c6a2",
-  "run_id": "35716323878",
+  "commit": "2a90220a89091a75b793ef781b7a6ba8144178f9",
+  "run_id": "35717701531",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-22",
- "genere_le_utc": "2026-09-22T10:30:52Z",
+ "genere_le_utc": "2026-09-22T10:46:15Z",
  "nb_courses": 32,
  "compte_par_statut": {
   "EN_ATTENTE": 28,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 3,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 4,
   "ANNULEE": 0
  },
- "empreinte_sha256": "a4e03c425b26251b12cfe00c506d09f2decc35f2e36ef0d9c5cc0df829ff9c11",
+ "empreinte_sha256": "14a91656f49b7c8754ad996f23ee9e6b5689f53a65e92b9470bf63f504a414be",
  "courses": [
   {
    "course_id": "R1C1_22092026_AUTEUIL",
@@ -162,7 +162,7 @@
     "verifiee_le_utc": "2026-09-22T10:30:20Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-22T10:30:20Z",
-    "derniere_verification_utc": "2026-09-22T10:30:20Z"
+    "derniere_verification_utc": "2026-09-22T10:45:21Z"
    },
    "correction": {
     "version": 2,
@@ -221,7 +221,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
+    "pmu_statut": "DEPART_CONFIRME"
    },
    "classement": [],
    "arrivee": [],
@@ -281,7 +281,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -782,7 +782,7 @@
     "verifiee_le_utc": "2026-09-22T09:45:26Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-22T09:45:26Z",
-    "derniere_verification_utc": "2026-09-22T10:30:20Z"
+    "derniere_verification_utc": "2026-09-22T10:45:21Z"
    },
    "correction": {
     "version": 2,
@@ -1092,7 +1092,7 @@
     "verifiee_le_utc": "2026-09-22T10:00:25Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-22T10:00:25Z",
-    "derniere_verification_utc": "2026-09-22T10:30:20Z"
+    "derniere_verification_utc": "2026-09-22T10:45:21Z"
    },
    "correction": {
     "version": 1,
@@ -1141,11 +1141,11 @@
     "partants_actifs": 13
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE"
+    "pmu_statut": "FIN_COURSE"
    },
    "classement": [
     {
@@ -1177,6 +1177,36 @@
      "num": 10,
      "nom": "MISTRAL LOMIG",
      "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 6,
+     "nom": "MIDLAND D'OYSE",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 1,
+     "nom": "MAMBA DES DURIEZ",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 12,
+     "nom": "MAITRE D'HOULBEC",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 11,
+     "nom": "MAASAI",
+     "dead_heat": false
+    },
+    {
+     "rang": 10,
+     "num": 14,
+     "nom": "MATIGNON",
+     "dead_heat": false
     }
    ],
    "arrivee": [
@@ -1184,7 +1214,12 @@
     5,
     4,
     13,
-    10
+    10,
+    6,
+    1,
+    12,
+    11,
+    14
    ],
    "non_classes": [
     {
@@ -1210,11 +1245,123 @@
     }
    ],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "2": 7.8
+    },
+    "simple_place": {
+     "2": 3.5,
+     "5": 3.1,
+     "4": 4.2
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "2-5",
+      "dividende_pour_1_eur": 39.5
+     },
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "2-NP",
+      "dividende_pour_1_eur": 7.6
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "2-5",
+      "dividende_pour_1_eur": 12.8
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "2-4",
+      "dividende_pour_1_eur": 15.2
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "5-4",
+      "dividende_pour_1_eur": 13.4
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "2-NP",
+      "dividende_pour_1_eur": 3.7
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "5-NP",
+      "dividende_pour_1_eur": 3.2
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "4-NP",
+      "dividende_pour_1_eur": 3.7
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "2-5",
+      "dividende_pour_1_eur": 5.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "2-4",
+      "dividende_pour_1_eur": 5.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "2-13",
+      "dividende_pour_1_eur": 5.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "5-4",
+      "dividende_pour_1_eur": 5.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "5-13",
+      "dividende_pour_1_eur": 5.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "4-13",
+      "dividende_pour_1_eur": 5.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "2-NP",
+      "dividende_pour_1_eur": 1.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "5-NP",
+      "dividende_pour_1_eur": 1.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "4-NP",
+      "dividende_pour_1_eur": 1.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "13-NP",
+      "dividende_pour_1_eur": 1.8
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "2-5-4",
+      "dividende_pour_1_eur": 167.0
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "2-5-NP",
+      "dividende_pour_1_eur": 41.4
+     },
+     {
+      "type_pari": "MULTI",
+      "combinaison": "2-5-4-13",
+      "dividende_pour_1_eur": 1.8
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -1224,14 +1371,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-09-22T10:30:20Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-09-22T10:45:21Z",
+    "verifiee_le_utc": "2026-09-22T10:45:21Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-09-22T10:30:20Z",
-    "derniere_verification_utc": "2026-09-22T10:30:20Z"
+    "derniere_modification_utc": "2026-09-22T10:45:21Z",
+    "derniere_verification_utc": "2026-09-22T10:45:21Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -1246,6 +1393,25 @@
        4,
        13,
        10
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-09-22T10:45:21Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       2,
+       5,
+       4,
+       13,
+       10,
+       6,
+       1,
+       12,
+       11,
+       14
       ]
      }
     ]
@@ -1262,23 +1428,28 @@
     "libelle": "PRIX DE FONTANILLE",
     "discipline": "TROT_ATTELE",
     "distance_m": 3000,
-    "heure_depart_utc": "2026-09-22T10:52:00Z",
+    "heure_depart_utc": "2026-09-22T10:56:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "10:52 GMT (12:52 Paris)",
+    "heure_depart_affichee": "10:56 GMT (12:56 Paris)",
     "partants_declares": 12,
-    "partants_actifs": 12
+    "partants_actifs": 11
    },
    "statut": {
     "code": "EN_ATTENTE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
    "non_classes": [],
-   "non_partants": [],
+   "non_partants": [
+    {
+     "num": 7,
+     "nom": "LOTHBROCK"
+    }
+   ],
    "rapports": {
     "disponibles": false,
     "unite": "EUR pour 1 EUR de mise",
