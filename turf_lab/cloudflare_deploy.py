@@ -69,6 +69,7 @@ class CloudflarePagesDeployer:
             ".css": "text/css",
             ".js": "application/javascript",
             ".txt": "text/plain",
+            ".svg": "image/svg+xml",   # favicon vectoriel (texte, comme les autres)
         }
 
         try:

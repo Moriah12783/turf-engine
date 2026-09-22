@@ -8,6 +8,43 @@ import os
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Tuple
 
+# Favicon 32×32 (PNG, 2972 caractères base64) : fer à cheval or (#f59e0b) sur
+# fond nuit (#0b1120), généré depuis site/favicon.svg. Embarqué dans la page pour
+# ne dépendre d'aucun fichier binaire au déploiement.
+FAVICON_PNG_B64 = (
+    "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"
+)
+
 
 def export_site_archives(report_data: Dict[str, Any], site_dir: str, recent_days: int = 21) -> Tuple[List[Dict[str, Any]], Dict[str, int]]:
     """Persistance « pour toujours » de l'historique des courses.
@@ -188,6 +225,7 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
     horizon_breakdown_market = report_data.get("horizon_breakdown_market", {})
     horizon_bench_start = report_data.get("horizon_bench_start_date", "2026-09-01")
     market_nominal_editions = int(report_data.get("market_nominal_editions") or 0)
+    favicon_png_b64 = FAVICON_PNG_B64
     horizon_rows_html = []
     horizon_titles = [
         ("T_MATIN", "📡 Édition Matin", "verrouillée dès 06h30 GMT"),
@@ -265,6 +303,12 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Banc de Mesure - Moteur Prédictif Turf & Cockpit des Résultats</title>
+    <!-- Favicon Elite Turf (fer à cheval or sur nuit) : PNG 32 px embarqué pour
+         tous les navigateurs, SVG vectoriel (site/favicon.svg) pour ceux qui le
+         préfèrent ; couleur de barre d'adresse sur mobile. -->
+    <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,{favicon_png_b64}">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <meta name="theme-color" content="#0b1120">
     <style>
         :root {{
             --bg: #0b1120;
