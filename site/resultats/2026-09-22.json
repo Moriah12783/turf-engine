@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "2a90220a89091a75b793ef781b7a6ba8144178f9",
-  "run_id": "35717701531",
+  "commit": "e23aeee3f1a86a640b1079802bc25b4283b364c1",
+  "run_id": "35719022025",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-22",
- "genere_le_utc": "2026-09-22T10:46:15Z",
+ "genere_le_utc": "2026-09-22T11:01:09Z",
  "nb_courses": 32,
  "compte_par_statut": {
-  "EN_ATTENTE": 28,
+  "EN_ATTENTE": 27,
   "PROVISOIRE": 0,
-  "DEFINITIVE": 4,
+  "DEFINITIVE": 5,
   "ANNULEE": 0
  },
- "empreinte_sha256": "14a91656f49b7c8754ad996f23ee9e6b5689f53a65e92b9470bf63f504a414be",
+ "empreinte_sha256": "ac23d201879fcd48033facd83cbcb30be494f3b1c49774258fc0a7c8f8735178",
  "courses": [
   {
    "course_id": "R1C1_22092026_AUTEUIL",
@@ -162,7 +162,7 @@
     "verifiee_le_utc": "2026-09-22T10:30:20Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-22T10:30:20Z",
-    "derniere_verification_utc": "2026-09-22T10:45:21Z"
+    "derniere_verification_utc": "2026-09-22T11:00:19Z"
    },
    "correction": {
     "version": 2,
@@ -217,15 +217,65 @@
     "partants_actifs": 7
    },
    "statut": {
-    "code": "EN_ATTENTE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "DEPART_CONFIRME"
+    "pmu_statut": "FIN_COURSE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 8,
+     "nom": "NEATIKAT",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 1,
+     "nom": "LA SAGRA",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 6,
+     "nom": "KELLY CHIRON",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 7,
+     "nom": "HARYNA DES OBEAUX",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 3,
+     "nom": "NEW YORK D'ERABLE",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 4,
+     "nom": "NEVELE STAR",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    8,
+    1,
+    6,
+    7,
+    3,
+    4
+   ],
+   "non_classes": [
+    {
+     "num": 5,
+     "nom": "NAOMI LA COLMINE",
+     "incident": "ARRETE"
+    }
+   ],
    "non_partants": [
     {
      "num": 2,
@@ -233,30 +283,88 @@
     }
    ],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "8": 4.5
+    },
+    "simple_place": {
+     "8": 1.3,
+     "1": 1.2,
+     "6": 1.3
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "8-1",
+      "dividende_pour_1_eur": 4.6
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "8-1",
+      "dividende_pour_1_eur": 1.9
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "8-6",
+      "dividende_pour_1_eur": 1.9
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "1-6",
+      "dividende_pour_1_eur": 1.8
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "6-NP",
+      "dividende_pour_1_eur": 1.2
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "8-1-6",
+      "dividende_pour_1_eur": 3.9
+     },
+     {
+      "type_pari": "SUPER_QUATRE",
+      "combinaison": "8-1-6-7",
+      "dividende_pour_1_eur": 91.7
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/22092026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "premiere_lecture_utc": "2026-09-22T11:00:19Z",
+    "definitive_depuis_utc": "2026-09-22T11:00:19Z",
+    "verifiee_le_utc": "2026-09-22T11:00:19Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-09-22T11:00:19Z",
+    "derniere_verification_utc": "2026-09-22T11:00:19Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "DEFINITIVE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-09-22T11:00:19Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       8,
+       1,
+       6,
+       7,
+       3,
+       4
+      ]
+     }
+    ]
    }
   },
   {
@@ -270,9 +378,9 @@
     "libelle": "PRIX KARGAL",
     "discipline": "OBSTACLE_STEEPLE",
     "distance_m": 3500,
-    "heure_depart_utc": "2026-09-22T11:10:00Z",
+    "heure_depart_utc": "2026-09-22T11:13:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "11:10 GMT (13:10 Paris)",
+    "heure_depart_affichee": "11:13 GMT (13:13 Paris)",
     "partants_declares": 12,
     "partants_actifs": 12
    },
@@ -782,7 +890,7 @@
     "verifiee_le_utc": "2026-09-22T09:45:26Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-22T09:45:26Z",
-    "derniere_verification_utc": "2026-09-22T10:45:21Z"
+    "derniere_verification_utc": "2026-09-22T11:00:19Z"
    },
    "correction": {
     "version": 2,
@@ -1092,7 +1200,7 @@
     "verifiee_le_utc": "2026-09-22T10:00:25Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-22T10:00:25Z",
-    "derniere_verification_utc": "2026-09-22T10:45:21Z"
+    "derniere_verification_utc": "2026-09-22T11:00:19Z"
    },
    "correction": {
     "version": 1,
@@ -1375,7 +1483,7 @@
     "verifiee_le_utc": "2026-09-22T10:45:21Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-22T10:45:21Z",
-    "derniere_verification_utc": "2026-09-22T10:45:21Z"
+    "derniere_verification_utc": "2026-09-22T11:00:19Z"
    },
    "correction": {
     "version": 2,
@@ -1439,7 +1547,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "DEPART_CONFIRME"
    },
    "classement": [],
    "arrivee": [],
