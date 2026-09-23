@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "9dc126f2abff0d4d82f2fd4280312b05f428e8bb",
-  "run_id": "35848280202",
+  "commit": "31302f1d096e0e0d8227a59dea0970f316fc59ab",
+  "run_id": "35849154616",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-23",
- "genere_le_utc": "2026-09-23T10:22:00Z",
+ "genere_le_utc": "2026-09-23T10:31:11Z",
  "nb_courses": 24,
  "compte_par_statut": {
-  "EN_ATTENTE": 23,
+  "EN_ATTENTE": 22,
   "PROVISOIRE": 0,
-  "DEFINITIVE": 1,
+  "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "7e3a01cc3a64a62b5d4552a81a16b5d7e418c084db10140a262754eb91463547",
+ "empreinte_sha256": "27cad6934c1536f7343ad9dbc0c77b6969892e402f4b5b25ffd5c1659bc0304d",
  "courses": [
   {
    "course_id": "R1C1_23092026_ARGENTAN",
@@ -633,7 +633,7 @@
     "verifiee_le_utc": "2026-09-23T10:00:20Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-23T10:00:20Z",
-    "derniere_verification_utc": "2026-09-23T10:21:10Z"
+    "derniere_verification_utc": "2026-09-23T10:30:20Z"
    },
    "correction": {
     "version": 2,
@@ -689,14 +689,65 @@
     "partants_actifs": 7
    },
    "statut": {
-    "code": "EN_ATTENTE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "DEPART_CONFIRME"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 5,
+     "nom": "EVENEMENTIELLE",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 1,
+     "nom": "LAILISSA",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 3,
+     "nom": "ASIAH",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 2,
+     "nom": "QUEEN OF SPADES",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 6,
+     "nom": "IT'S ONLY LOVE",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 8,
+     "nom": "YAKAAR",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 7,
+     "nom": "ARIZONA'S VICTORIA",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    5,
+    1,
+    3,
+    2,
+    6,
+    8,
+    7
+   ],
    "non_classes": [],
    "non_partants": [
     {
@@ -714,21 +765,38 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/23092026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "premiere_lecture_utc": "2026-09-23T10:30:20Z",
+    "definitive_depuis_utc": "2026-09-23T10:30:20Z",
+    "verifiee_le_utc": "2026-09-23T10:30:20Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-09-23T10:30:20Z",
+    "derniere_verification_utc": "2026-09-23T10:30:20Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "DEFINITIVE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-09-23T10:30:20Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       5,
+       1,
+       3,
+       2,
+       6,
+       8,
+       7
+      ]
+     }
+    ]
    }
   },
   {
@@ -753,7 +821,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
