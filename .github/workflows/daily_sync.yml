@@ -43,6 +43,24 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Restore Database from Cloudflare R2 (étape 1 — sortie de GitHub)
+        # Secrets R2 absents => mode legacy (R2_DISABLED) : rien ne change, la
+        # base reste committée. Secrets posés => R2 devient la source de vérité :
+        # amorçage UNIQUE depuis la copie Git au premier passage, puis
+        # téléchargement vérifié (SHA-256 + intégrité SQLite) à chaque passe.
+        # Toute anomalie fait ÉCHOUER le job : on ne repart jamais d'une base
+        # périmée ou vide.
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          if [ -n "$R2_ACCESS_KEY_ID$R2_SECRET_ACCESS_KEY$R2_BUCKET" ]; then
+            pip install -q "boto3>=1.36,<2"
+          fi
+          python -m turf_lab.r2_store pull --db turf_bench.db
+
       - name: Run Turf Prediction Engine (verrouillage multi-horizon T_MATIN/T90/T30/T15)
         # Pont RADAR_V4 (4e moteur du banc) : les trois secrets sont posés dans
         # GitHub → Settings → Secrets and variables → Actions. Absents => pont
@@ -72,11 +90,32 @@ jobs:
           fi
           python main.py --action sync --days $DAYS
 
+      - name: Persist Database to Cloudflare R2 (source de vérité + sauvegarde du jour)
+        # Refuse (job rouge) toute base qui aurait perdu des éditions, courses,
+        # arrivées ou photographies de cotes depuis le pull, ou une base
+        # distante modifiée pendant la passe. Dans ce cas rien n'est committé
+        # ni déployé : le site ne montre jamais un état non persisté.
+        if: env.R2_MODE == 'r2'
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: python -m turf_lab.r2_store push --db turf_bench.db
+
       - name: Commit & Push Updated Database (Persistance définitive de l'historique)
         run: |
           git config --global user.name "Turf-Automation-Bot"
           git config --global user.email "bot@elite-turf.fr"
-          git add turf_bench.db benchmark_report.json benchmark_dashboard.html site/
+          if [ "$R2_MODE" = "r2" ]; then
+            # La base vit sur R2 : la copie Git reste figée à l'amorçage. On la
+            # restaure pour garder l'arbre propre (le rebase refuse un fichier
+            # suivi modifié) et on ne committe plus que les exports légers.
+            git checkout -- turf_bench.db
+            git add benchmark_report.json benchmark_dashboard.html site/
+          else
+            git add turf_bench.db benchmark_report.json benchmark_dashboard.html site/
+          fi
           # Ne committe que s'il y a un vrai changement (évite les commits vides)
           if git diff --staged --quiet; then
             echo "[*] Aucun changement à committer."
