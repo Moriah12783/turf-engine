@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "3fa905d3813716f494f0eea7a242a4669a84c1b9",
-  "run_id": "35861499126",
+  "commit": "f4c3969ae4842353ff785aff5e4d255d70822a88",
+  "run_id": "35862481134",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-23",
- "genere_le_utc": "2026-09-23T12:37:03Z",
+ "genere_le_utc": "2026-09-23T12:46:12Z",
  "nb_courses": 24,
  "compte_par_statut": {
-  "EN_ATTENTE": 18,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 17,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 6,
   "ANNULEE": 0
  },
- "empreinte_sha256": "3c574938d1b4b696eeae07dfd103cd6496bc4322792e641b91ce9b112835c50a",
+ "empreinte_sha256": "7cdee4e2b31aa73a1e98f63b75409cef505c812607ef55a4e6ded53987f050c3",
  "courses": [
   {
    "course_id": "R1C1_23092026_ARGENTAN",
@@ -265,7 +265,7 @@
     "verifiee_le_utc": "2026-09-23T12:15:19Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-23T12:15:19Z",
-    "derniere_verification_utc": "2026-09-23T12:36:10Z"
+    "derniere_verification_utc": "2026-09-23T12:45:19Z"
    },
    "correction": {
     "version": 2,
@@ -325,15 +325,58 @@
     "partants_actifs": 16
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_CONFIRME"
+    "pmu_statut": "ARRIVEE_PROVISOIRE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 15,
+     "nom": "JASON BLUE",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 7,
+     "nom": "JUSTY DU OLPASI",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 12,
+     "nom": "JUSTESS VIKING",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 11,
+     "nom": "KISS ME DU LIVET",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 10,
+     "nom": "JALMAROSA",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    15,
+    7,
+    12,
+    11,
+    10
+   ],
+   "non_classes": [
+    {
+     "num": 1,
+     "nom": "KLASS D'ESPOIR",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": false,
@@ -345,21 +388,36 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/23092026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-09-23T12:45:19Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-09-23T12:45:19Z",
+    "derniere_verification_utc": "2026-09-23T12:45:19Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-09-23T12:45:19Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       15,
+       7,
+       12,
+       11,
+       10
+      ]
+     }
+    ]
    }
   },
   {
@@ -384,7 +442,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -867,7 +925,7 @@
     "verifiee_le_utc": "2026-09-23T10:00:20Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-23T10:00:20Z",
-    "derniere_verification_utc": "2026-09-23T12:36:10Z"
+    "derniere_verification_utc": "2026-09-23T12:45:19Z"
    },
    "correction": {
     "version": 2,
@@ -1075,7 +1133,7 @@
     "verifiee_le_utc": "2026-09-23T10:30:20Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-23T10:30:20Z",
-    "derniere_verification_utc": "2026-09-23T12:36:10Z"
+    "derniere_verification_utc": "2026-09-23T12:45:19Z"
    },
    "correction": {
     "version": 1,
@@ -1242,7 +1300,7 @@
     "verifiee_le_utc": "2026-09-23T11:06:11Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-23T11:06:11Z",
-    "derniere_verification_utc": "2026-09-23T12:36:10Z"
+    "derniere_verification_utc": "2026-09-23T12:45:19Z"
    },
    "correction": {
     "version": 2,
@@ -1517,7 +1575,7 @@
     "verifiee_le_utc": "2026-09-23T11:45:18Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-23T11:45:18Z",
-    "derniere_verification_utc": "2026-09-23T12:36:10Z"
+    "derniere_verification_utc": "2026-09-23T12:45:19Z"
    },
    "correction": {
     "version": 2,
@@ -1705,7 +1763,7 @@
     "verifiee_le_utc": "2026-09-23T12:30:20Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-23T12:30:20Z",
-    "derniere_verification_utc": "2026-09-23T12:36:10Z"
+    "derniere_verification_utc": "2026-09-23T12:45:19Z"
    },
    "correction": {
     "version": 3,
@@ -1779,7 +1837,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "DEPART_DANS_TROIS_MINUTES"
    },
    "classement": [],
    "arrivee": [],
