@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "f3fedcbab433efe5d99fac339cbb92dbf4798dc3",
-  "run_id": "35865782849",
+  "commit": "be98d13c10368604c704473d58646073ffbaf30b",
+  "run_id": "35866445675",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-23",
- "genere_le_utc": "2026-09-23T13:16:18Z",
+ "genere_le_utc": "2026-09-23T13:22:06Z",
  "nb_courses": 24,
  "compte_par_statut": {
-  "EN_ATTENTE": 16,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 15,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 8,
   "ANNULEE": 0
  },
- "empreinte_sha256": "59a211691b77f0eab714bdb37f2b8dd8557fe787aa244c5be2a723a220dc38f4",
+ "empreinte_sha256": "ac298ee2a8e9783b25466f64d0d49098b796fc296f11acd4493dd12bd8494925",
  "courses": [
   {
    "course_id": "R1C1_23092026_ARGENTAN",
@@ -265,7 +265,7 @@
     "verifiee_le_utc": "2026-09-23T12:15:19Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-23T12:15:19Z",
-    "derniere_verification_utc": "2026-09-23T13:15:23Z"
+    "derniere_verification_utc": "2026-09-23T13:21:11Z"
    },
    "correction": {
     "version": 2,
@@ -499,7 +499,7 @@
     "verifiee_le_utc": "2026-09-23T12:51:11Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-23T12:51:11Z",
-    "derniere_verification_utc": "2026-09-23T13:15:23Z"
+    "derniere_verification_utc": "2026-09-23T13:21:11Z"
    },
    "correction": {
     "version": 2,
@@ -559,15 +559,68 @@
     "partants_actifs": 15
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_CONFIRME"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 13,
+     "nom": "KOBRA JENILOU",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 14,
+     "nom": "KATIA DE MUZE",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 7,
+     "nom": "KING DU PRESSOIR",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 4,
+     "nom": "KANDERO BELLO",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 9,
+     "nom": "KIM DE BEAUM",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    13,
+    14,
+    7,
+    4,
+    9
+   ],
+   "non_classes": [
+    {
+     "num": 2,
+     "nom": "KUEEN DE MONGUERET",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 6,
+     "nom": "KENTIA DES RIOULTS",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 15,
+     "nom": "KATINKA COTON",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [
     {
      "num": 5,
@@ -584,21 +637,36 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/23092026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-09-23T13:21:11Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-09-23T13:21:11Z",
+    "derniere_verification_utc": "2026-09-23T13:21:11Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-09-23T13:21:11Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       13,
+       14,
+       7,
+       4,
+       9
+      ]
+     }
+    ]
    }
   },
   {
@@ -612,9 +680,9 @@
     "libelle": "PRIX DU CHATEAU DE CARRONGES",
     "discipline": "TROT_ATTELE",
     "distance_m": 2875,
-    "heure_depart_utc": "2026-09-23T13:40:00Z",
+    "heure_depart_utc": "2026-09-23T13:43:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "13:40 GMT (15:40 Paris)",
+    "heure_depart_affichee": "13:43 GMT (15:43 Paris)",
     "partants_declares": 18,
     "partants_actifs": 18
    },
@@ -1046,7 +1114,7 @@
     "verifiee_le_utc": "2026-09-23T10:00:20Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-23T10:00:20Z",
-    "derniere_verification_utc": "2026-09-23T13:15:23Z"
+    "derniere_verification_utc": "2026-09-23T13:21:11Z"
    },
    "correction": {
     "version": 2,
@@ -1254,7 +1322,7 @@
     "verifiee_le_utc": "2026-09-23T10:30:20Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-23T10:30:20Z",
-    "derniere_verification_utc": "2026-09-23T13:15:23Z"
+    "derniere_verification_utc": "2026-09-23T13:21:11Z"
    },
    "correction": {
     "version": 1,
@@ -1421,7 +1489,7 @@
     "verifiee_le_utc": "2026-09-23T11:06:11Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-23T11:06:11Z",
-    "derniere_verification_utc": "2026-09-23T13:15:23Z"
+    "derniere_verification_utc": "2026-09-23T13:21:11Z"
    },
    "correction": {
     "version": 2,
@@ -1696,7 +1764,7 @@
     "verifiee_le_utc": "2026-09-23T11:45:18Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-23T11:45:18Z",
-    "derniere_verification_utc": "2026-09-23T13:15:23Z"
+    "derniere_verification_utc": "2026-09-23T13:21:11Z"
    },
    "correction": {
     "version": 2,
@@ -1884,7 +1952,7 @@
     "verifiee_le_utc": "2026-09-23T12:30:20Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-23T12:30:20Z",
-    "derniere_verification_utc": "2026-09-23T13:15:23Z"
+    "derniere_verification_utc": "2026-09-23T13:21:11Z"
    },
    "correction": {
     "version": 3,
@@ -2174,7 +2242,7 @@
     "verifiee_le_utc": "2026-09-23T13:00:20Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-23T13:06:12Z",
-    "derniere_verification_utc": "2026-09-23T13:15:23Z"
+    "derniere_verification_utc": "2026-09-23T13:21:11Z"
    },
    "correction": {
     "version": 3,
@@ -2256,7 +2324,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
    },
    "classement": [],
    "arrivee": [],
