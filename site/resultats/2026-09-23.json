@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "7fccd4ffddefd4bd806408598aaad5b2b691815d",
-  "run_id": "35851136503",
+  "commit": "b291e885c02f9bbc002b85918e61232813aa4d31",
+  "run_id": "35851991130",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-23",
- "genere_le_utc": "2026-09-23T10:52:07Z",
+ "genere_le_utc": "2026-09-23T11:00:59Z",
  "nb_courses": 24,
  "compte_par_statut": {
-  "EN_ATTENTE": 22,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 21,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "906b06de72af9daf9c57f9a3b0840afd5eccd8edc2a4c6b768af251b54869264",
+ "empreinte_sha256": "39ca5635eb0d1c9e49672d25f04c9774317128905b44aa713d9853d276c1e17f",
  "courses": [
   {
    "course_id": "R1C1_23092026_ARGENTAN",
@@ -633,7 +633,7 @@
     "verifiee_le_utc": "2026-09-23T10:00:20Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-23T10:00:20Z",
-    "derniere_verification_utc": "2026-09-23T10:51:13Z"
+    "derniere_verification_utc": "2026-09-23T11:00:20Z"
    },
    "correction": {
     "version": 2,
@@ -841,7 +841,7 @@
     "verifiee_le_utc": "2026-09-23T10:30:20Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-23T10:30:20Z",
-    "derniere_verification_utc": "2026-09-23T10:51:13Z"
+    "derniere_verification_utc": "2026-09-23T11:00:20Z"
    },
    "correction": {
     "version": 1,
@@ -884,14 +884,44 @@
     "partants_actifs": 8
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "CHEVAUX_SOUS_ORDRES"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 6,
+     "nom": "MIUCCIA",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 4,
+     "nom": "SOUL AMBASSADOR",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 2,
+     "nom": "MISTER CHARMES",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 1,
+     "nom": "ROSTAK",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    6,
+    4,
+    2,
+    1
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
@@ -904,21 +934,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/23092026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-09-23T11:00:20Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-09-23T11:00:20Z",
+    "derniere_verification_utc": "2026-09-23T11:00:20Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-09-23T11:00:20Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       6,
+       4,
+       2,
+       1
+      ]
+     }
+    ]
    }
   },
   {
