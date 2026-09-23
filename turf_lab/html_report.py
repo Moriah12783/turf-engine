@@ -226,6 +226,42 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
     horizon_bench_start = report_data.get("horizon_bench_start_date", "2026-09-01")
     market_nominal_editions = int(report_data.get("market_nominal_editions") or 0)
     favicon_png_b64 = FAVICON_PNG_B64
+
+    # ── Tableau de score « Benter » (protocole commun) ─────────────────
+    # Gain de log-vraisemblance par course face au marché, hors échantillon,
+    # sur les courses communes Marché / Moteur pur / Radar, par horizon.
+    benter = report_data.get("benter_delta") or {}
+    benter_rows_html = []
+    benter_labels = {"T_MATIN": "📡 Matin", "T90": "📢 T-90", "T30": "⚡ T-30", "T15": "🔒 T-15"}
+    benter_variants = [("marche_recalibre", "Marché recalibré"), ("marche_nve", "Marché + Moteur pur"),
+                       ("marche_radar", "Marché + Radar"), ("marche_nve_radar", "Marché + Moteur pur + Radar")]
+
+    def _gain_cell(v):
+        if not v:
+            return '<td style="color:var(--text-muted);">—</td>'
+        g = float(v.get("gain", 0.0)); lo, hi = v.get("ic95", [0, 0])
+        color = "var(--green)" if lo > 0 else ("#f87171" if hi < 0 else "var(--text-muted)")
+        return (f'<td style="font-family:monospace; color:{color}; font-weight:700;">{g:+.4f}'
+                f'<br><span style="font-size:0.72rem; font-weight:400; color:var(--text-muted);">IC95 [{lo:+.4f} ; {hi:+.4f}]</span></td>')
+
+    for h in ["T_MATIN", "T90", "T30", "T15"]:
+        d = benter.get(h) or {}
+        if not d or d.get("status") != "OK":
+            benter_rows_html.append(f'<tr><td style="text-align:left; font-weight:700;">{benter_labels[h]}</td>'
+                                    f'<td colspan="6" style="color:var(--text-muted);">Pas assez de courses communes ({(d or {}).get("courses", 0)})</td></tr>')
+            continue
+        loyal = bool(d.get("comparaison_loyale", True))
+        gap = d.get("lock_gap_median_min")
+        flag = "" if loyal else (f' <span class="badge-nocotes" title="Le Radar est verrouillé {gap:+.0f} min après la ligne de base marché : '
+                                 f'un moteur verrouillé plus tard peut porter des cotes plus fraîches. Résultat non comparable.">⚠️ verrous non simultanés ({gap:+.0f} min)</span>')
+        coefs = (d.get("variantes", {}).get("marche_nve_radar") or {}).get("coefs", {})
+        coef_txt = " · ".join(f"{k.replace('MARCHE', 'marché').replace('NVE_PUR', 'moteur').replace('RADAR', 'radar')} {v:+.2f}" for k, v in coefs.items())
+        cells = "".join(_gain_cell(d.get("variantes", {}).get(key)) for key, _ in benter_variants)
+        row_style = "" if loyal else ' style="opacity:0.55;"'
+        benter_rows_html.append(
+            f'<tr{row_style}><td style="text-align:left; font-weight:700;">{benter_labels[h]}{flag}</td>'
+            f'<td>{d.get("courses", 0)}<br><span style="font-size:0.72rem; color:var(--text-muted);">appr. {d.get("train", 0)} · test {d.get("test", 0)}</span></td>'
+            f'{cells}<td style="font-size:0.78rem; color:var(--text-muted);">{coef_txt}</td></tr>')
     horizon_rows_html = []
     horizon_titles = [
         ("T_MATIN", "📡 Édition Matin", "verrouillée dès 06h30 GMT"),
@@ -588,6 +624,39 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                 cotes PMU réelles (cotes non ouvertes ou partielles) n'est pas un pronostic du marché —
                 elle est exclue du banc et affichée « — » ({market_nominal_editions} éditions concernées
                 dans l'archive).
+            </p>
+        </div>
+
+        <!-- Tableau de score « Benter » : gain d'information face au marché (protocole commun) -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Tableau de score — Gain d'information face au marché (méthode Benter)</h2>
+                <span class="badge-count">Une seule métrique de pilotage : Δ log-vraisemblance par course, hors échantillon</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 18%;">Horizon</th>
+                        <th>Courses communes</th>
+                        <th>Marché recalibré</th>
+                        <th>Marché + Moteur pur</th>
+                        <th>Marché + Radar</th>
+                        <th>Marché + Moteur pur + Radar</th>
+                        <th>Poids appris (3 sources)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {''.join(benter_rows_html)}
+                </tbody>
+            </table>
+            <p style="margin-top:10px; font-size:0.78rem; color:var(--text-muted);">
+                📐 Δ = moyenne sur les courses de test de [ log p(gagnant) de la combinaison − log p(gagnant) du marché ],
+                en nats par course. Coefficients appris par logit conditionnel sur les 60 % de courses les plus
+                anciennes, jugés sur les 40 % les plus récentes, jamais vues. Marché = cotes du verrou (éditions à
+                cotes réelles) ; Moteur pur = probabilités fondamentales sans marché ; Radar = probabilités scellées.
+                Succès du protocole : Δ &gt; 0 avec une borne basse de l'IC95 &gt; 0 sur au moins 1 000 courses de test.
+                Une ligne grisée signale des verrous non simultanés entre le Radar et la ligne de base marché :
+                le gain affiché peut n'être que de la fraîcheur de cotes, il n'est pas comparable.
             </p>
         </div>
 

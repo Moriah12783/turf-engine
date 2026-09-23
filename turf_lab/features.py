@@ -10,6 +10,9 @@ def parse_music(music: str) -> Dict[str, float]:
         return {"form_score": 30.0, "regularity": 0.2, "dai_rate": 0.1}
 
     clean_music = re.sub(r"\(\d+\)", "", music.strip())
+    # « Ret » / « R » (retiré, non-partant) n'est pas une performance : retiré
+    # avant découpage, sinon son « t » ou son « a » serait lu comme un incident.
+    clean_music = re.sub(r"[Rr]et[a-z]?|[Rr][a-z]?", " ", clean_music)
     tokens = re.findall(r"(\d+|[Dd]|[Tt]|[Aa]|[Ff])([a-zA-Z]?)", clean_music)
 
     if not tokens:
@@ -32,7 +35,12 @@ def parse_music(music: str) -> Dict[str, float]:
         else:
             try:
                 pos = int(pos_str)
-                if pos == 1:
+                if pos == 0:
+                    # « 0 » = non placé (au-delà de la 9e place) : la note la
+                    # plus basse, comme une 10e place ou pire — et non 15
+                    # points comme une 6e à 9e place (correctif 23/09/2026).
+                    score = 5.0
+                elif pos == 1:
                     score = 100.0
                     top_3_count += 1
                 elif pos == 2:

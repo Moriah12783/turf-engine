@@ -9,6 +9,7 @@ from typing import Any, Dict, List, Optional
 from turf_lab.database import TurfDatabase
 from turf_lab.odds_quality import MIN_DISPLAY_RATIO, MIN_PRICED_RATIO, all_default_odds, priced_ratio
 from turf_lab.baselines import market_edition_informative
+from turf_lab.combinaison import evaluate_all as evaluate_benter_all
 from turf_lab.publication_gate import can_publish
 
 
@@ -704,10 +705,18 @@ class TurfBenchmarkLab:
         # Transparence : nombre d'éditions marché posées sans cotes réelles
         # (ordre des numéros), désormais exclues de tous les bancs marché.
         market_nominal_editions = self.count_market_nominal_editions()
+        # Tableau de score « Benter » (protocole commun) : gain de
+        # log-vraisemblance face au marché, hors échantillon, par horizon,
+        # sur les courses communes aux trois sources.
+        try:
+            benter_delta = evaluate_benter_all(self.db)
+        except Exception as exc:  # jamais bloquant pour la publication
+            benter_delta = {"error": str(exc)}
 
         return {
             "engines_evaluated": engines,
             "market_nominal_editions": market_nominal_editions,
+            "benter_delta": benter_delta,
             "total_finished_races": len(self.db.get_finished_races()),
             "evaluations": evaluations,
             "discipline_breakdown": discipline_breakdown,
