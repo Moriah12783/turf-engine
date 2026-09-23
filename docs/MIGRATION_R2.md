@@ -159,14 +159,14 @@ et plusieurs millions d'opérations par mois, sortie de données gratuite).
 De préférence la nuit, hors fenêtres de verrouillage.
 
 1. **Geler les écritures.** GitHub, **Actions**, *Turf Engine 24/7 Cloud Sync
-   & Deploy*, menu **⋯**, **Disable workflow**. Mettre aussi en pause le
-   métronome n8n.
+   & Deploy*, menu **⋯**, **Disable workflow**. Mettre aussi en pause les
+   métronomes : n8n et le Worker Cloudflare `metronome-turf` (déclencheur Cron).
 2. **Récupérer la base à jour :**
    `python -m turf_lab.r2_store fetch --db turf_bench.db` (ou la télécharger
    depuis le bucket, onglet **Objects**).
 3. **La committer sur `main`** à la place de la copie figée.
 4. **Supprimer les 3 secrets R2** : le mode legacy reprend.
-5. **Réactiver** le workflow (**Enable workflow**) et le métronome.
+5. **Réactiver** le workflow (**Enable workflow**) et les métronomes.
 
 > ⚠️ Supprimer les secrets **sans** les étapes 1 à 3 ferait repartir le
 > pipeline de la copie Git figée à la date de bascule. Tout ce qui a été
@@ -196,6 +196,6 @@ Pour `fetch` et `status`, définir les variables `R2_ACCESS_KEY_ID`,
   - `site/` est persisté sur R2 ;
   - un identifiant de build remplace `GITHUB_SHA` et `GITHUB_RUN_ID` ;
   - la re-vérification `verify_days` passe par un point d'appel authentifié ;
-  - le métronome n8n est retiré.
+  - les métronomes (n8n et Worker `metronome-turf`) sont remplacés par l'ordonnanceur.
 - **3** : dépôt privé, et purge éventuelle de l'historique Git. Cette purge est
   une opération **manuelle** et concertée.
