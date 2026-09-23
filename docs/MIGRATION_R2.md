@@ -19,27 +19,111 @@ Contenu du bucket :
 - `state/seed.json` : témoin d'amorçage (date, empreinte, comptes) ;
 - `backups/turf_bench_AAAA-MM-JJ.db` : dernier état de chaque journée.
 
-## Mise en place (Steph, environ 10 minutes)
+## Mise en place pas à pas (Steph, environ 15 minutes)
 
-1. **Cloudflare, R2 :** créer le bucket `turf-engine-data`, privé (aucun accès public).
-2. **R2, Manage API tokens :** créer un jeton **Object Read & Write** limité à
-   ce bucket. Noter l'*Access Key ID* et le *Secret Access Key*.
-3. **Pour les devs :** créer un second jeton **Object Read only** sur le même
-   bucket (commande `fetch`).
-4. **Fusionner la branche dans `main`.** Tant que les secrets ne sont pas posés, rien ne change.
-5. **Le soir, après la passe de 21h30 GMT :** GitHub, Settings, Secrets and
-   variables, Actions. Ajouter :
-   - `R2_ACCESS_KEY_ID`
-   - `R2_SECRET_ACCESS_KEY`
-   - `R2_BUCKET` = `turf-engine-data`
+> Les intitulés du tableau de bord Cloudflare peuvent varier légèrement selon
+> les versions de l'interface ; la logique reste la même.
+> **Ne collez jamais une clé secrète dans une conversation, un commit ou un e-mail.**
 
-   (`CLOUDFLARE_ACCOUNT_ID` existe déjà et sert à construire l'adresse R2.)
-6. **Vérifier la passe suivante,** ou la lancer via *Run workflow* :
-   - les logs affichent `R2_SEED_PENDING` puis `R2_SEED_OK` ;
-   - le bucket contient les 3 objets ;
-   - le site continue de se mettre à jour ;
-   - les commits `Auto-sync` ne contiennent plus `turf_bench.db`.
-7. **Optionnel :** règle de cycle de vie R2 sur le préfixe `backups/`, suppression après 90 jours.
+### A. Cloudflare : créer le bucket
+1. Se connecter sur https://dash.cloudflare.com et choisir le compte qui
+   héberge `prono-elite-turf`.
+2. Menu de gauche : **R2 Object Storage** (ou **R2**). À la toute première
+   utilisation, Cloudflare demande d'activer R2 : accepter. La franchise
+   gratuite est incluse.
+3. Cliquer sur **Create bucket**.
+4. Renseigner :
+   - **Bucket name :** `turf-engine-data` (minuscules, chiffres et tirets uniquement) ;
+   - **Location :** *Automatic* ;
+   - **Default storage class :** *Standard*. Surtout **pas** *Infrequent
+     Access* : la base est lue environ 100 fois par jour.
+5. **Create bucket**.
+6. Dans le bucket, onglet **Settings** : vérifier que **Public access**
+   (*Public Development URL* / *R2.dev subdomain*) est **désactivé** et
+   qu'aucun domaine personnalisé n'est branché. Le bucket doit rester privé.
+
+### B. Cloudflare : jeton d'écriture pour GitHub
+1. Revenir sur la page **R2 Object Storage**, puis **Manage API tokens**
+   (bouton ou menu *API* en haut à droite).
+2. **Create API token.** S'il y a le choix, préférer un **Account API token** :
+   il n'est pas lié à une personne et survit à un départ.
+3. Renseigner :
+   - **Token name :** `turf-engine-github-rw` ;
+   - **Permissions :** **Object Read & Write** (pas *Admin*) ;
+   - **Specify bucket(s) :** *Apply to specific buckets only*, puis `turf-engine-data` ;
+   - **TTL :** *Forever* ;
+   - **Client IP Address Filtering :** laisser vide (les machines GitHub changent d'adresse).
+4. **Create API Token.** L'écran suivant n'apparaît **qu'une seule fois**.
+   Copier dans un gestionnaire de mots de passe :
+   - **Access Key ID** ;
+   - **Secret Access Key** ;
+   - l'adresse S3 affichée, de la forme
+     `https://<ACCOUNT_ID>.r2.cloudflarestorage.com`. Son `<ACCOUNT_ID>` doit
+     être identique au secret GitHub `CLOUDFLARE_ACCOUNT_ID` déjà en place.
+
+### C. Cloudflare : jeton lecture seule pour les devs
+Même procédure, avec :
+- **Token name :** `turf-engine-devs-ro` ;
+- **Permissions :** **Object Read only** ;
+- **Bucket :** `turf-engine-data` uniquement.
+
+Le transmettre aux devs par un canal sûr. Dans les sessions Claude des devs,
+poser les clés comme **variables d'environnement** de l'environnement cloud
+(`R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`, `R2_ACCOUNT_ID`) et
+autoriser le domaine `<ACCOUNT_ID>.r2.cloudflarestorage.com` dans l'accès
+réseau de cet environnement. Sinon `fetch` sera bloqué.
+
+### D. Cloudflare (optionnel) : purge automatique des sauvegardes
+Bucket, onglet **Settings**, **Object lifecycle rules**, **Add rule** :
+- nom `purge-backups-90j` ;
+- préfixe `backups/` ;
+- action : suppression des objets après **90 jours**.
+
+Sans cette règle, les sauvegardes s'accumulent (environ 1 Go par mois), ce qui reste dans la franchise gratuite pendant des mois.
+
+### E. GitHub : fusionner la branche (n'importe quand)
+Fusionner la PR dans `main`. **Sans secrets R2, rien ne change** : les logs
+affichent `R2_DISABLED` et la base continue d'être committée.
+
+### F. GitHub : poser les secrets (le soir, après la passe de 21h30 GMT)
+1. Dépôt `turf-engine`, **Settings**, **Secrets and variables**, **Actions**,
+   onglet **Secrets**.
+2. Vérifier que `CLOUDFLARE_ACCOUNT_ID` est présent. Il l'est déjà, car il
+   sert au déploiement.
+3. **New repository secret**, trois fois :
+   - `R2_ACCESS_KEY_ID` : l'Access Key ID du jeton `turf-engine-github-rw` ;
+   - `R2_SECRET_ACCESS_KEY` : son Secret Access Key ;
+   - `R2_BUCKET` : `turf-engine-data`.
+
+   Poser les **trois** : une configuration partielle fait échouer la passe
+   (`R2_CONFIG_ERROR`), volontairement.
+4. Pour ne pas attendre le métronome : **Actions**, *Turf Engine 24/7 Cloud
+   Sync & Deploy*, **Run workflow**, branche `main`, `verify_days` vide, **Run workflow**.
+
+### G. Vérifier (5 minutes)
+1. Dans la passe GitHub :
+   - l'étape *Restore Database from Cloudflare R2* affiche `R2_SEED_PENDING` ;
+   - l'étape *Persist Database to Cloudflare R2* affiche `R2_SEED_OK` puis `R2_PUSH_OK`.
+2. Dans le bucket R2, onglet **Objects** :
+   - `turf_bench.db` (environ 34 Mo) ;
+   - `state/seed.json` ;
+   - `backups/turf_bench_AAAA-MM-JJ.db`.
+3. À la passe suivante : `R2_PULL_OK` dans les logs.
+4. Le dernier commit *Auto-sync PMU multi-horizon* ne contient plus `turf_bench.db`.
+5. prono.elite-turf.fr continue de se mettre à jour.
+
+### Dépannage rapide
+| Message dans les logs | Cause probable | Action |
+|---|---|---|
+| `R2_CONFIG_ERROR … manquant : X` | un secret absent ou mal nommé | corriger le nom du secret X |
+| `AccessDenied` / `403` | jeton sans *Object Read & Write* ou limité à un autre bucket | recréer le jeton (étape B) |
+| `InvalidAccessKeyId` / `SignatureDoesNotMatch` | clé copiée incomplète (espace, retour à la ligne) | recoller les deux clés |
+| `NoSuchBucket` | `R2_BUCKET` mal orthographié | corriger le secret |
+| `R2_GUARD_REFUSED …` | garde-fou déclenché (voir le motif) | ne rien forcer, me transmettre le log |
+
+> **Tant qu'aucun `R2_SEED_OK` n'est apparu**, supprimer les trois secrets
+> ramène sans risque au mode legacy. **Après**, suivre la procédure de retour
+> arrière ci-dessous.
 
 Coût attendu : environ 0 €. Tout reste dans la franchise R2 (10 Go de stockage
 et plusieurs millions d'opérations par mois, sortie de données gratuite).
@@ -55,12 +139,19 @@ et plusieurs millions d'opérations par mois, sortie de données gratuite).
 
 ## Retour arrière (dans cet ordre, sinon perte de données)
 
-1. Récupérer la base à jour :
-   `python -m turf_lab.r2_store fetch --db turf_bench.db` (ou la télécharger depuis le tableau de bord R2).
-2. La committer sur `main` à la place de la copie figée.
-3. Seulement ensuite, supprimer les 3 secrets R2 : le mode legacy reprend.
+De préférence la nuit, hors fenêtres de verrouillage.
 
-> ⚠️ Supprimer les secrets **sans** les étapes 1 et 2 ferait repartir le
+1. **Geler les écritures.** GitHub, **Actions**, *Turf Engine 24/7 Cloud Sync
+   & Deploy*, menu **⋯**, **Disable workflow**. Mettre aussi en pause le
+   métronome n8n.
+2. **Récupérer la base à jour :**
+   `python -m turf_lab.r2_store fetch --db turf_bench.db` (ou la télécharger
+   depuis le bucket, onglet **Objects**).
+3. **La committer sur `main`** à la place de la copie figée.
+4. **Supprimer les 3 secrets R2** : le mode legacy reprend.
+5. **Réactiver** le workflow (**Enable workflow**) et le métronome.
+
+> ⚠️ Supprimer les secrets **sans** les étapes 1 à 3 ferait repartir le
 > pipeline de la copie Git figée à la date de bascule. Tout ce qui a été
 > verrouillé depuis serait perdu.
 
