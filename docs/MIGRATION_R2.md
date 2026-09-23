@@ -25,46 +25,63 @@ Contenu du bucket :
 > les versions de l'interface ; la logique reste la même.
 > **Ne collez jamais une clé secrète dans une conversation, un commit ou un e-mail.**
 
+### 0. Cloudflare : activer R2 (une seule fois, par Steph)
+R2 n'est pas encore activé sur le compte : l'API répond `10042 Please enable
+R2 through the Cloudflare Dashboard`. Cloudflare exige cette activation
+**avant** toute création de bucket ou de jeton.
+1. Se connecter sur https://dash.cloudflare.com, compte Elite Turf (celui qui
+   porte les Workers `metronome-turf`, `elite-turf-predictive-engine`,
+   `pmu-proxy`…).
+2. Menu de gauche : **Storage & databases**, **R2 object storage** (ou
+   directement **R2**).
+3. Suivre l'activation proposée (*Purchase R2* / *Enable R2*) : validation
+   du moyen de paiement déjà enregistré. La franchise gratuite est incluse
+   (10 Go-mois de stockage, des millions d'opérations par mois, sortie de
+   données gratuite). Rien n'est facturé à notre volume.
+
 ### A. Cloudflare : créer le bucket
-1. Se connecter sur https://dash.cloudflare.com et choisir le compte qui
-   héberge `prono-elite-turf`.
-2. Menu de gauche : **R2 Object Storage** (ou **R2**). À la toute première
-   utilisation, Cloudflare demande d'activer R2 : accepter. La franchise
-   gratuite est incluse.
-3. Cliquer sur **Create bucket**.
-4. Renseigner :
+*Claude peut le faire via le connecteur Cloudflare dès que R2 est activé.
+Sinon, à la main :*
+1. Page **R2 object storage**, bouton **Create bucket**.
+2. Renseigner :
    - **Bucket name :** `turf-engine-data` (minuscules, chiffres et tirets uniquement) ;
    - **Location :** *Automatic* ;
    - **Default storage class :** *Standard*. Surtout **pas** *Infrequent
      Access* : la base est lue environ 100 fois par jour.
-5. **Create bucket**.
-6. Dans le bucket, onglet **Settings** : vérifier que **Public access**
-   (*Public Development URL* / *R2.dev subdomain*) est **désactivé** et
-   qu'aucun domaine personnalisé n'est branché. Le bucket doit rester privé.
+3. **Create bucket**.
+4. Onglet **Settings** du bucket : vérifier que l'accès public (*Public
+   Development URL* / *r2.dev*) est **désactivé** et qu'aucun domaine
+   personnalisé n'est branché. Le bucket doit rester privé.
+5. **Ne pas activer de *Bucket Lock*** pour l'instant : la sauvegarde du jour
+   est réécrite à chaque passe, et un verrou la bloquerait (job rouge). Un
+   verrou d'immuabilité sur des sauvegardes à écriture unique est prévu à
+   l'étape 2.
 
 ### B. Cloudflare : jeton d'écriture pour GitHub
-1. Revenir sur la page **R2 Object Storage**, puis **Manage API tokens**
-   (bouton ou menu *API* en haut à droite).
-2. **Create API token.** S'il y a le choix, préférer un **Account API token** :
-   il n'est pas lié à une personne et survit à un départ.
+Selon la documentation officielle (août 2026) :
+1. Page **R2 object storage**, section **Account Details** : cliquer sur
+   **Manage** à côté de **API Tokens**.
+2. Choisir **Create Account API token** (recommandé : lié au compte, pas à une
+   personne, valable jusqu'à révocation). Cela exige le rôle **Super
+   Administrator**. Sinon, *Create User API token* fonctionne aussi.
 3. Renseigner :
-   - **Token name :** `turf-engine-github-rw` ;
-   - **Permissions :** **Object Read & Write** (pas *Admin*) ;
-   - **Specify bucket(s) :** *Apply to specific buckets only*, puis `turf-engine-data` ;
+   - **Nom :** `turf-engine-github-rw` ;
+   - **Permissions :** **Object Read & Write** (*Object Read and Write*), pas *Admin* ;
+   - **Buckets :** restreindre à `turf-engine-data` uniquement ;
    - **TTL :** *Forever* ;
-   - **Client IP Address Filtering :** laisser vide (les machines GitHub changent d'adresse).
-4. **Create API Token.** L'écran suivant n'apparaît **qu'une seule fois**.
-   Copier dans un gestionnaire de mots de passe :
+   - **Filtrage par adresse IP :** laisser vide (les machines GitHub changent d'adresse).
+4. Valider (**Create Account API token**). L'écran suivant n'apparaît
+   **qu'une seule fois**. Copier dans un gestionnaire de mots de passe :
    - **Access Key ID** ;
    - **Secret Access Key** ;
-   - l'adresse S3 affichée, de la forme
-     `https://<ACCOUNT_ID>.r2.cloudflarestorage.com`. Son `<ACCOUNT_ID>` doit
-     être identique au secret GitHub `CLOUDFLARE_ACCOUNT_ID` déjà en place.
+   - l'adresse S3 `https://<ACCOUNT_ID>.r2.cloudflarestorage.com`. Son
+     `<ACCOUNT_ID>` doit être identique au secret GitHub
+     `CLOUDFLARE_ACCOUNT_ID` déjà en place.
 
 ### C. Cloudflare : jeton lecture seule pour les devs
 Même procédure, avec :
 - **Token name :** `turf-engine-devs-ro` ;
-- **Permissions :** **Object Read only** ;
+- **Permissions :** **Object Read only** (*Object Read*) ;
 - **Bucket :** `turf-engine-data` uniquement.
 
 Le transmettre aux devs par un canal sûr. Dans les sessions Claude des devs,
