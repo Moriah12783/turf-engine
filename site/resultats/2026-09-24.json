@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "50c40b30e58461e01b961a8242f12c85271b9617",
-  "run_id": "36003364108",
+  "commit": "bf25a154194a8899324a8e78d1de9febd8dfa683",
+  "run_id": "36004379753",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-24",
- "genere_le_utc": "2026-09-24T13:07:15Z",
+ "genere_le_utc": "2026-09-24T13:16:20Z",
  "nb_courses": 25,
  "compte_par_statut": {
-  "EN_ATTENTE": 17,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 16,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 8,
   "ANNULEE": 0
  },
- "empreinte_sha256": "4b26096436486b0582f1b1a7f3dcde439f52977faf50bcb747722b6dfbd2c1ab",
+ "empreinte_sha256": "af11db5193215e06d92b3610047eedba3d9b38958846c140cec483dd86d9991f",
  "courses": [
   {
    "course_id": "R1C1_24092026_COMPIEGNE",
@@ -289,7 +289,7 @@
     "verifiee_le_utc": "2026-09-24T12:06:14Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-24T12:06:14Z",
-    "derniere_verification_utc": "2026-09-24T13:06:18Z"
+    "derniere_verification_utc": "2026-09-24T13:15:25Z"
    },
    "correction": {
     "version": 2,
@@ -536,7 +536,7 @@
     "verifiee_le_utc": "2026-09-24T12:45:23Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-24T12:45:23Z",
-    "derniere_verification_utc": "2026-09-24T13:06:18Z"
+    "derniere_verification_utc": "2026-09-24T13:15:25Z"
    },
    "correction": {
     "version": 2,
@@ -597,14 +597,44 @@
     "partants_actifs": 13
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "CHEVAUX_SOUS_ORDRES"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 2,
+     "nom": "ORANGE VIF",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 4,
+     "nom": "CIRCO MASSIMO",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 12,
+     "nom": "BAILEYS ECLAIR",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 6,
+     "nom": "LES TROIS VALLEES",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    2,
+    4,
+    12,
+    6
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
@@ -617,21 +647,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/24092026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-09-24T13:15:25Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-09-24T13:15:25Z",
+    "derniere_verification_utc": "2026-09-24T13:15:25Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-09-24T13:15:25Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       2,
+       4,
+       12,
+       6
+      ]
+     }
+    ]
    }
   },
   {
@@ -656,7 +700,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -1103,7 +1147,7 @@
     "verifiee_le_utc": "2026-09-24T10:06:16Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-24T10:06:16Z",
-    "derniere_verification_utc": "2026-09-24T13:06:18Z"
+    "derniere_verification_utc": "2026-09-24T13:15:25Z"
    },
    "correction": {
     "version": 2,
@@ -1334,7 +1378,7 @@
     "verifiee_le_utc": "2026-09-24T10:45:32Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-24T10:45:32Z",
-    "derniere_verification_utc": "2026-09-24T13:06:18Z"
+    "derniere_verification_utc": "2026-09-24T13:15:25Z"
    },
    "correction": {
     "version": 2,
@@ -1525,7 +1569,7 @@
     "verifiee_le_utc": "2026-09-24T11:15:29Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-24T11:15:29Z",
-    "derniere_verification_utc": "2026-09-24T13:06:18Z"
+    "derniere_verification_utc": "2026-09-24T13:15:25Z"
    },
    "correction": {
     "version": 2,
@@ -1751,7 +1795,7 @@
     "verifiee_le_utc": "2026-09-24T11:36:14Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-24T11:36:14Z",
-    "derniere_verification_utc": "2026-09-24T13:06:18Z"
+    "derniere_verification_utc": "2026-09-24T13:15:25Z"
    },
    "correction": {
     "version": 1,
@@ -2038,7 +2082,7 @@
     "verifiee_le_utc": "2026-09-24T12:30:26Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-24T12:30:26Z",
-    "derniere_verification_utc": "2026-09-24T13:06:18Z"
+    "derniere_verification_utc": "2026-09-24T13:15:25Z"
    },
    "correction": {
     "version": 3,
@@ -2348,7 +2392,7 @@
     "verifiee_le_utc": "2026-09-24T13:06:18Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-24T13:06:18Z",
-    "derniere_verification_utc": "2026-09-24T13:06:18Z"
+    "derniere_verification_utc": "2026-09-24T13:15:25Z"
    },
    "correction": {
     "version": 2,
@@ -2415,7 +2459,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
    },
    "classement": [],
    "arrivee": [],
