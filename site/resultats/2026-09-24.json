@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "b7c4e98c25062e8dd3fd81e98954bfb743a8e9b6",
-  "run_id": "35989604290",
+  "commit": "3f93bb6690afb233c16f0bc0f7f1c6770771bd41",
+  "run_id": "35990462746",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-24",
- "genere_le_utc": "2026-09-24T10:52:14Z",
+ "genere_le_utc": "2026-09-24T11:01:24Z",
  "nb_courses": 25,
  "compte_par_statut": {
-  "EN_ATTENTE": 23,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 22,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "3e8805cdeb690fb45425ae958453aa4488b6bf5261dcf48b3452a456ead4b92f",
+ "empreinte_sha256": "fb2a82f3421d0cc41132b3e07ada41a8c232d1e7a94a28053f68e89a62463f1a",
  "courses": [
   {
    "course_id": "R1C1_24092026_COMPIEGNE",
@@ -657,7 +657,7 @@
     "verifiee_le_utc": "2026-09-24T10:06:16Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-24T10:06:16Z",
-    "derniere_verification_utc": "2026-09-24T10:51:17Z"
+    "derniere_verification_utc": "2026-09-24T11:00:28Z"
    },
    "correction": {
     "version": 2,
@@ -888,7 +888,7 @@
     "verifiee_le_utc": "2026-09-24T10:45:32Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-24T10:45:32Z",
-    "derniere_verification_utc": "2026-09-24T10:51:17Z"
+    "derniere_verification_utc": "2026-09-24T11:00:28Z"
    },
    "correction": {
     "version": 2,
@@ -948,14 +948,44 @@
     "partants_actifs": 9
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "JOKEYS_MONTENT_A_CHEVAL"
+    "pmu_statut": "DEPART_CONFIRME"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 1,
+     "nom": "TALENTUOSO",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 5,
+     "nom": "IRONICO",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 3,
+     "nom": "MR FLEURANT",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 9,
+     "nom": "MORGAN BAY",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    1,
+    5,
+    3,
+    9
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
@@ -968,21 +998,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PARTICIPANTS",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/24092026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-09-24T11:00:28Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-09-24T11:00:28Z",
+    "derniere_verification_utc": "2026-09-24T11:00:28Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-09-24T11:00:28Z",
+      "source": "PMU_PARTICIPANTS",
+      "classement": [
+       1,
+       5,
+       3,
+       9
+      ]
+     }
+    ]
    }
   },
   {
