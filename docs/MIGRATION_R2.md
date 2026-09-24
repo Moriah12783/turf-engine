@@ -145,6 +145,32 @@ affichent `R2_DISABLED` et la base continue d'être committée.
 Coût attendu : environ 0 €. Tout reste dans la franchise R2 (10 Go de stockage
 et plusieurs millions d'opérations par mois, sortie de données gratuite).
 
+## Incident du 23/09 et mise à niveau unique du PC
+
+À 10h45 GMT, `publier_vers_github.bat` a republié depuis le PC une copie
+**périmée** de `daily_sync.yml` et de `.gitignore`, antérieure à la
+migration. Les étapes R2 ont ainsi été annulées sans bruit : aucun job rouge,
+aucune donnée perdue, mais les secrets R2 n'étaient plus lus.
+
+**Correctif :** `garde_fichiers_perimes.py`, appelé par le script de
+publication. Tout fichier du PC identique à une *ancienne* version GitHub est
+remplacé par la version à jour au lieu d'être publié. Validé sur l'historique
+réel : l'incident aurait été bloqué, et le vrai travail du dev
+(`combinaison.py`) publié normalement.
+
+**Mise à niveau du PC, une seule fois, après la fusion du correctif et AVANT
+toute nouvelle publication.** Dans le dossier `TURF PROJET`, ouvrir un terminal
+et taper :
+
+```bat
+git fetch origin main
+git checkout FETCH_HEAD -- publier_vers_github.bat garde_fichiers_perimes.py .github/workflows/daily_sync.yml .gitignore
+```
+
+> ⚠️ Tant que cette mise à niveau n'est pas faite, **ne pas lancer**
+> l'ancien `publier_vers_github.bat` : il annulerait de nouveau la migration
+> et remettrait l'ancien script sur GitHub.
+
 ## Continuité de service
 
 - **Avant la pose des secrets :** comportement identique à aujourd'hui.
