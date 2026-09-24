@@ -5771,7 +5771,7 @@
       "provisoire_reason": null,
       "publishable": true,
       "publication_reason": "OK",
-      "display_horizon": "T30",
+      "display_horizon": "T15",
       "editions_moteur": {
         "T_MATIN": {
           "sel": "3-7-4-5-6-1-2",
@@ -5791,6 +5791,13 @@
           "sel": "7-4-3-5-1-6-2",
           "nominal": false,
           "lock": "09:21",
+          "priced_ratio": 1.0,
+          "odds_real": true
+        },
+        "T15": {
+          "sel": "7-4-5-3-1-6-2",
+          "nominal": false,
+          "lock": "09:36",
           "priced_ratio": 1.0,
           "odds_real": true
         }
@@ -5816,6 +5823,13 @@
           "lock": "09:21",
           "priced_ratio": 1.0,
           "odds_real": true
+        },
+        "T15": {
+          "sel": "7-4-5-1-3-6-2",
+          "nominal": false,
+          "lock": "09:36",
+          "priced_ratio": 1.0,
+          "odds_real": true
         }
       },
       "date": "2026-09-24",
@@ -5837,12 +5851,12 @@
       "is_no_bet": false,
       "is_master": true,
       "np_nums": [],
-      "sel_moteur": "7-4-3-5-1-6-2",
+      "sel_moteur": "7-4-5-3-1-6-2",
       "sel_moteur_list": [
         7,
         4,
-        3,
         5,
+        3,
         1,
         6,
         2
@@ -5904,8 +5918,8 @@
             "chevaux": [
               7,
               4,
-              3,
               5,
+              3,
               1,
               6
             ],
@@ -5914,8 +5928,8 @@
               4
             ],
             "associes": [
-              3,
               5,
+              3,
               1,
               6
             ],
@@ -5924,7 +5938,7 @@
             "cout_total_eur": null,
             "eligible": false,
             "motif_ineligibilite": "MOINS_DE_8_PARTANTS",
-            "texte": "7 - 4 - X - X - X / 3, 5, 1, 6"
+            "texte": "7 - 4 - X - X - X / 5, 3, 1, 6"
           }
         ],
         "ticket_securite": {
@@ -5953,23 +5967,23 @@
             4
           ],
           "associes": [
-            3,
             5,
+            3,
             1,
             6
           ],
-          "formule": "7 - 4 - X - X - X / 3, 5, 1, 6",
+          "formule": "7 - 4 - X - X - X / 5, 3, 1, 6",
           "combinaisons": 4,
           "budget_conseille_eur": null
         }
       },
-      "sel_marche": "7-4-3-5-1-6-2",
+      "sel_marche": "7-4-5-1-3-6-2",
       "sel_marche_list": [
         7,
         4,
-        3,
         5,
         1,
+        3,
         6,
         2
       ],
@@ -5997,8 +6011,8 @@
           "live_odds": 1.9,
           "o_t90": 2.6,
           "o_t30": 1.8,
-          "o_t15": null,
-          "prob_pct": 43.8,
+          "o_t15": 1.9,
+          "prob_pct": 41.8,
           "value_index": 0.79,
           "smart_signal": "FORTE_BAISSE_INSIDER",
           "is_np": false,
@@ -6012,31 +6026,13 @@
           "draw": 2,
           "music": "3p7p3p5p(25)1p1p3p8p4p",
           "morning_odds": 1.1,
-          "live_odds": 5.0,
+          "live_odds": 4.9,
           "o_t90": 3.8,
           "o_t30": 4.7,
-          "o_t15": null,
-          "prob_pct": 17.7,
-          "value_index": 0.83,
+          "o_t15": 4.9,
+          "prob_pct": 17.2,
+          "value_index": 0.84,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 3,
-          "name": "AQUITAIN",
-          "driver": "T.BLANCHOUIN",
-          "shoeing": "FERRE",
-          "draw": 5,
-          "music": "2p5p1p0p0p0p1p2p0p9p",
-          "morning_odds": 34.0,
-          "live_odds": 9.4,
-          "o_t90": 5.7,
-          "o_t30": 9.1,
-          "o_t15": null,
-          "prob_pct": 10.3,
-          "value_index": 0.94,
-          "smart_signal": "FORTE_BAISSE_INSIDER",
           "is_np": false,
           "odds_real": true
         },
@@ -6048,13 +6044,31 @@
           "draw": 7,
           "music": "0p9p3p1p(25)7p1p1p5p1p",
           "morning_odds": 8.5,
-          "live_odds": 7.5,
+          "live_odds": 7.3,
           "o_t90": 8.0,
           "o_t30": 9.2,
-          "o_t15": null,
-          "prob_pct": 9.6,
-          "value_index": 0.89,
+          "o_t15": 7.3,
+          "prob_pct": 11.8,
+          "value_index": 0.86,
           "smart_signal": "STABLE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 3,
+          "name": "AQUITAIN",
+          "driver": "T.BLANCHOUIN",
+          "shoeing": "FERRE",
+          "draw": 5,
+          "music": "2p5p1p0p0p0p1p2p0p9p",
+          "morning_odds": 34.0,
+          "live_odds": 9.3,
+          "o_t90": 5.7,
+          "o_t30": 9.1,
+          "o_t15": 9.3,
+          "prob_pct": 10.2,
+          "value_index": 0.95,
+          "smart_signal": "FORTE_BAISSE_INSIDER",
           "is_np": false,
           "odds_real": true
         },
@@ -6066,12 +6080,12 @@
           "draw": 1,
           "music": "4p1p0p8p(25)1p3p3p2p1p",
           "morning_odds": 12.0,
-          "live_odds": 9.1,
+          "live_odds": 9.2,
           "o_t90": 9.6,
           "o_t30": 10.0,
-          "o_t15": null,
-          "prob_pct": 9.0,
-          "value_index": 0.9,
+          "o_t15": 9.2,
+          "prob_pct": 9.7,
+          "value_index": 0.89,
           "smart_signal": "BAISSE_CONFIRMEE",
           "is_np": false,
           "odds_real": true
@@ -6087,7 +6101,7 @@
           "live_odds": 15.0,
           "o_t90": 14.0,
           "o_t30": 15.0,
-          "o_t15": null,
+          "o_t15": 15.0,
           "prob_pct": 5.7,
           "value_index": 0.86,
           "smart_signal": "STABLE",
@@ -6102,12 +6116,12 @@
           "draw": 6,
           "music": "5p1p3p3p8p2p(25)1p3p2p",
           "morning_odds": 5.1,
-          "live_odds": 25.0,
+          "live_odds": 26.0,
           "o_t90": 18.0,
           "o_t30": 24.0,
-          "o_t15": null,
-          "prob_pct": 3.8,
-          "value_index": 0.92,
+          "o_t15": 26.0,
+          "prob_pct": 3.6,
+          "value_index": 0.94,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
