@@ -89,6 +89,28 @@ if defined DELETIONS (
     git add -A
 )
 
+REM ------------------------------------------------------------
+REM GARDE-FOU 3 (incident du 23/09) : un fichier du PC identique a
+REM une ANCIENNE version GitHub est une copie perimee, pas une
+REM modification. Il est remplace par la version GitHub a jour au
+REM lieu d'annuler en silence un changement fait dans le cloud.
+REM ------------------------------------------------------------
+where python >nul 2>nul
+if %errorlevel% neq 0 (
+    echo [STOP] Python est introuvable : impossible de verifier les fichiers perimes.
+    echo Installez Python ^(case "Add Python to PATH"^) puis relancez.
+    pause
+    exit /b
+)
+if not exist "garde_fichiers_perimes.py" git checkout FETCH_HEAD -- garde_fichiers_perimes.py
+python garde_fichiers_perimes.py FETCH_HEAD
+if %errorlevel% neq 0 (
+    echo [STOP] La verification des fichiers perimes a echoue : rien n'est publie.
+    pause
+    exit /b
+)
+git add -A
+
 git diff --staged --quiet
 if %errorlevel% equ 0 (
     echo.
