@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "0ef2c1f927b7254dfeef5d670d8a0575fc1bb1f8",
-  "run_id": "36011429282",
+  "commit": "76dd6880e7cab7f3a2be2a85ab587cf0aae6e458",
+  "run_id": "36012149816",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-24",
- "genere_le_utc": "2026-09-24T14:16:27Z",
+ "genere_le_utc": "2026-09-24T14:22:16Z",
  "nb_courses": 25,
  "compte_par_statut": {
-  "EN_ATTENTE": 13,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 12,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 12,
   "ANNULEE": 0
  },
- "empreinte_sha256": "b4dd79feb02e271ca52e3a21c8fad16ae6a9913f96d88f5a5364f586ff9e4293",
+ "empreinte_sha256": "4555a9603f3ed7bdcbab4708c5bf9064a48a9b91639ebdeef9e8719f9b6862e1",
  "courses": [
   {
    "course_id": "R1C1_24092026_COMPIEGNE",
@@ -289,7 +289,7 @@
     "verifiee_le_utc": "2026-09-24T12:06:14Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-24T12:06:14Z",
-    "derniere_verification_utc": "2026-09-24T14:15:33Z"
+    "derniere_verification_utc": "2026-09-24T14:21:19Z"
    },
    "correction": {
     "version": 2,
@@ -536,7 +536,7 @@
     "verifiee_le_utc": "2026-09-24T12:45:23Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-24T12:45:23Z",
-    "derniere_verification_utc": "2026-09-24T14:15:33Z"
+    "derniere_verification_utc": "2026-09-24T14:21:19Z"
    },
    "correction": {
     "version": 2,
@@ -786,7 +786,7 @@
     "verifiee_le_utc": "2026-09-24T13:21:16Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-24T13:21:16Z",
-    "derniere_verification_utc": "2026-09-24T14:15:33Z"
+    "derniere_verification_utc": "2026-09-24T14:21:19Z"
    },
    "correction": {
     "version": 2,
@@ -1021,7 +1021,7 @@
     "verifiee_le_utc": "2026-09-24T13:51:19Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-24T13:51:19Z",
-    "derniere_verification_utc": "2026-09-24T14:15:33Z"
+    "derniere_verification_utc": "2026-09-24T14:21:19Z"
    },
    "correction": {
     "version": 2,
@@ -1080,14 +1080,44 @@
     "partants_actifs": 11
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "CHEVAUX_SOUS_ORDRES"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 9,
+     "nom": "GALASSI",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 12,
+     "nom": "GOLDENPALM",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 7,
+     "nom": "ZARABABY",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 8,
+     "nom": "INCENTIVE VICTORY",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    9,
+    12,
+    7,
+    8
+   ],
    "non_classes": [],
    "non_partants": [
     {
@@ -1105,21 +1135,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/24092026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-09-24T14:21:19Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-09-24T14:21:19Z",
+    "derniere_verification_utc": "2026-09-24T14:21:19Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-09-24T14:21:19Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       9,
+       12,
+       7,
+       8
+      ]
+     }
+    ]
    }
   },
   {
@@ -1471,7 +1515,7 @@
     "verifiee_le_utc": "2026-09-24T10:06:16Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-24T10:06:16Z",
-    "derniere_verification_utc": "2026-09-24T14:15:33Z"
+    "derniere_verification_utc": "2026-09-24T14:21:19Z"
    },
    "correction": {
     "version": 2,
@@ -1702,7 +1746,7 @@
     "verifiee_le_utc": "2026-09-24T10:45:32Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-24T10:45:32Z",
-    "derniere_verification_utc": "2026-09-24T14:15:33Z"
+    "derniere_verification_utc": "2026-09-24T14:21:19Z"
    },
    "correction": {
     "version": 2,
@@ -1893,7 +1937,7 @@
     "verifiee_le_utc": "2026-09-24T11:15:29Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-24T11:15:29Z",
-    "derniere_verification_utc": "2026-09-24T14:15:33Z"
+    "derniere_verification_utc": "2026-09-24T14:21:19Z"
    },
    "correction": {
     "version": 2,
@@ -2119,7 +2163,7 @@
     "verifiee_le_utc": "2026-09-24T11:36:14Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-24T11:36:14Z",
-    "derniere_verification_utc": "2026-09-24T14:15:33Z"
+    "derniere_verification_utc": "2026-09-24T14:21:19Z"
    },
    "correction": {
     "version": 1,
@@ -2406,7 +2450,7 @@
     "verifiee_le_utc": "2026-09-24T12:30:26Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-24T12:30:26Z",
-    "derniere_verification_utc": "2026-09-24T14:15:33Z"
+    "derniere_verification_utc": "2026-09-24T14:21:19Z"
    },
    "correction": {
     "version": 3,
@@ -2716,7 +2760,7 @@
     "verifiee_le_utc": "2026-09-24T13:06:18Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-24T13:06:18Z",
-    "derniere_verification_utc": "2026-09-24T14:15:33Z"
+    "derniere_verification_utc": "2026-09-24T14:21:19Z"
    },
    "correction": {
     "version": 2,
@@ -2982,7 +3026,7 @@
     "verifiee_le_utc": "2026-09-24T13:36:19Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-24T13:36:19Z",
-    "derniere_verification_utc": "2026-09-24T14:15:33Z"
+    "derniere_verification_utc": "2026-09-24T14:21:19Z"
    },
    "correction": {
     "version": 2,
@@ -3250,7 +3294,7 @@
     "verifiee_le_utc": "2026-09-24T14:09:46Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-24T14:09:46Z",
-    "derniere_verification_utc": "2026-09-24T14:15:33Z"
+    "derniere_verification_utc": "2026-09-24T14:21:19Z"
    },
    "correction": {
     "version": 2,
