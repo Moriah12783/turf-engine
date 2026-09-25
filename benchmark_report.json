@@ -9,33 +9,33 @@
   "benter_delta": {
     "T_MATIN": {
       "horizon": "T_MATIN",
-      "courses": 470,
+      "courses": 471,
       "lock_gap_median_min": 74.9,
       "comparaison_loyale": false,
       "status": "OK",
       "train": 282,
-      "test": 188,
+      "test": 189,
       "periode_test": [
         "2026-09-18",
         "2026-09-25"
       ],
-      "ll_marche_brut": 2.1866,
+      "ll_marche_brut": 2.1833,
       "variantes": {
         "marche_recalibre": {
-          "gain": 0.0084,
+          "gain": 0.0081,
           "ic95": [
-            -0.0061,
-            0.0236
+            -0.0063,
+            0.023
           ],
           "coefs": {
             "MARCHE": 0.857
           }
         },
         "marche_nve": {
-          "gain": 0.0185,
+          "gain": 0.0181,
           "ic95": [
-            -0.0001,
-            0.038
+            -0.0009,
+            0.0383
           ],
           "coefs": {
             "MARCHE": 0.82,
@@ -43,10 +43,10 @@
           }
         },
         "marche_radar": {
-          "gain": 0.0651,
+          "gain": 0.0656,
           "ic95": [
-            0.0061,
-            0.1211
+            0.0078,
+            0.1194
           ],
           "coefs": {
             "MARCHE": 0.137,
@@ -54,10 +54,10 @@
           }
         },
         "marche_nve_radar": {
-          "gain": 0.0626,
+          "gain": 0.0632,
           "ic95": [
-            0.0039,
-            0.1188
+            0.0048,
+            0.1175
           ],
           "coefs": {
             "MARCHE": 0.134,
@@ -70,11 +70,72 @@
     },
     "T90": {
       "horizon": "T90",
-      "courses": 504,
+      "courses": 505,
       "lock_gap_median_min": -0.1,
       "comparaison_loyale": true,
       "status": "OK",
-      "train": 302,
+      "train": 303,
+      "test": 202,
+      "periode_test": [
+        "2026-09-18",
+        "2026-09-25"
+      ],
+      "ll_marche_brut": 2.0466,
+      "variantes": {
+        "marche_recalibre": {
+          "gain": 0.0036,
+          "ic95": [
+            -0.0198,
+            0.0265
+          ],
+          "coefs": {
+            "MARCHE": 1.258
+          }
+        },
+        "marche_nve": {
+          "gain": 0.0037,
+          "ic95": [
+            -0.0197,
+            0.0263
+          ],
+          "coefs": {
+            "MARCHE": 1.252,
+            "NVE_PUR": 0.015
+          }
+        },
+        "marche_radar": {
+          "gain": 0.0013,
+          "ic95": [
+            -0.0228,
+            0.0242
+          ],
+          "coefs": {
+            "MARCHE": 1.288,
+            "RADAR": -0.032
+          }
+        },
+        "marche_nve_radar": {
+          "gain": 0.0012,
+          "ic95": [
+            -0.0229,
+            0.0239
+          ],
+          "coefs": {
+            "MARCHE": 1.283,
+            "NVE_PUR": 0.017,
+            "RADAR": -0.034
+          }
+        }
+      },
+      "succes": false
+    },
+    "T30": {
+      "horizon": "T30",
+      "courses": 505,
+      "lock_gap_median_min": -0.1,
+      "comparaison_loyale": true,
+      "status": "OK",
+      "train": 303,
       "test": 202,
       "periode_test": [
         "2026-09-18",
@@ -83,107 +144,46 @@
       "ll_marche_brut": 2.0453,
       "variantes": {
         "marche_recalibre": {
-          "gain": 0.004,
+          "gain": 0.0013,
           "ic95": [
-            -0.0174,
-            0.0257
+            -0.0115,
+            0.014
           ],
           "coefs": {
-            "MARCHE": 1.254
+            "MARCHE": 1.137
           }
         },
         "marche_nve": {
-          "gain": 0.0041,
+          "gain": 0.0013,
           "ic95": [
-            -0.0169,
-            0.0253
+            -0.0116,
+            0.0142
           ],
           "coefs": {
-            "MARCHE": 1.249,
-            "NVE_PUR": 0.012
+            "MARCHE": 1.139,
+            "NVE_PUR": -0.004
           }
         },
         "marche_radar": {
-          "gain": 0.0014,
+          "gain": 0.0042,
           "ic95": [
-            -0.0208,
-            0.0231
+            -0.0087,
+            0.017
           ],
           "coefs": {
-            "MARCHE": 1.287,
-            "RADAR": -0.035
-          }
-        },
-        "marche_nve_radar": {
-          "gain": 0.0014,
-          "ic95": [
-            -0.0206,
-            0.023
-          ],
-          "coefs": {
-            "MARCHE": 1.283,
-            "NVE_PUR": 0.014,
-            "RADAR": -0.037
-          }
-        }
-      },
-      "succes": false
-    },
-    "T30": {
-      "horizon": "T30",
-      "courses": 504,
-      "lock_gap_median_min": -0.1,
-      "comparaison_loyale": true,
-      "status": "OK",
-      "train": 302,
-      "test": 202,
-      "periode_test": [
-        "2026-09-18",
-        "2026-09-25"
-      ],
-      "ll_marche_brut": 2.0446,
-      "variantes": {
-        "marche_recalibre": {
-          "gain": 0.0014,
-          "ic95": [
-            -0.0111,
-            0.0135
-          ],
-          "coefs": {
-            "MARCHE": 1.133
-          }
-        },
-        "marche_nve": {
-          "gain": 0.0014,
-          "ic95": [
-            -0.0111,
-            0.0137
-          ],
-          "coefs": {
-            "MARCHE": 1.135,
-            "NVE_PUR": -0.007
-          }
-        },
-        "marche_radar": {
-          "gain": 0.0043,
-          "ic95": [
-            -0.0078,
-            0.0163
-          ],
-          "coefs": {
-            "MARCHE": 1.099,
+            "MARCHE": 1.103,
             "RADAR": 0.04
           }
         },
         "marche_nve_radar": {
-          "gain": 0.0044,
+          "gain": 0.0042,
           "ic95": [
-            -0.0077,
-            0.0164
+            -0.0087,
+            0.0173
           ],
           "coefs": {
-            "MARCHE": 1.101,
-            "NVE_PUR": -0.009,
+            "MARCHE": 1.105,
+            "NVE_PUR": -0.006,
             "RADAR": 0.041
           }
         }
@@ -192,130 +192,130 @@
     },
     "T15": {
       "horizon": "T15",
-      "courses": 504,
+      "courses": 505,
       "lock_gap_median_min": -0.1,
       "comparaison_loyale": true,
       "status": "OK",
-      "train": 302,
+      "train": 303,
       "test": 202,
       "periode_test": [
         "2026-09-18",
         "2026-09-25"
       ],
-      "ll_marche_brut": 2.0254,
+      "ll_marche_brut": 2.0259,
       "variantes": {
         "marche_recalibre": {
           "gain": 0.0009,
           "ic95": [
-            -0.0042,
-            0.0058
+            -0.005,
+            0.0065
           ],
           "coefs": {
-            "MARCHE": 1.054
+            "MARCHE": 1.058
           }
         },
         "marche_nve": {
-          "gain": 0.0009,
+          "gain": 0.001,
           "ic95": [
-            -0.0045,
-            0.0062
+            -0.0049,
+            0.0066
           ],
           "coefs": {
-            "MARCHE": 1.059,
-            "NVE_PUR": -0.013
+            "MARCHE": 1.063,
+            "NVE_PUR": -0.011
           }
         },
         "marche_radar": {
-          "gain": 0.0056,
+          "gain": 0.0055,
           "ic95": [
-            -0.0017,
-            0.0126
-          ],
-          "coefs": {
-            "MARCHE": 0.982,
-            "RADAR": 0.092
-          }
-        },
-        "marche_nve_radar": {
-          "gain": 0.0058,
-          "ic95": [
-            -0.0017,
-            0.0135
+            -0.0022,
+            0.0129
           ],
           "coefs": {
             "MARCHE": 0.988,
-            "NVE_PUR": -0.017,
-            "RADAR": 0.094
+            "RADAR": 0.09
+          }
+        },
+        "marche_nve_radar": {
+          "gain": 0.0057,
+          "ic95": [
+            -0.0021,
+            0.0133
+          ],
+          "coefs": {
+            "MARCHE": 0.993,
+            "NVE_PUR": -0.015,
+            "RADAR": 0.092
           }
         }
       },
       "succes": false
     }
   },
-  "total_finished_races": 1227,
+  "total_finished_races": 1228,
   "evaluations": {
     "NEW_VALUE_ENGINE": {
       "engine_name": "NEW_VALUE_ENGINE",
-      "total_races": 1202,
+      "total_races": 1203,
       "hit_rates": {
-        "top1_win_rate_pct": 26.04,
-        "winner_in_top3_pct": 58.15,
+        "top1_win_rate_pct": 26.1,
+        "winner_in_top3_pct": 58.19,
         "winner_in_top8_pct": 88.94,
-        "at_least_one_base_placed_pct": 78.37,
-        "both_bases_placed_pct": 24.46,
-        "tierce_in_top8_pct": 63.89,
-        "quarte_in_top8_pct": 52.41,
-        "quinte_in_top8_pct": 42.43,
-        "outsider_placed_pct": 16.22
+        "at_least_one_base_placed_pct": 78.39,
+        "both_bases_placed_pct": 24.44,
+        "tierce_in_top8_pct": 63.92,
+        "quarte_in_top8_pct": 52.45,
+        "quinte_in_top8_pct": 42.48,
+        "outsider_placed_pct": 16.21
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 1112.0,
-          "total_returned_eur": 893.7,
-          "net_profit_eur": -218.3,
-          "roi_pct": -19.63,
+          "total_staked_eur": 1113.0,
+          "total_returned_eur": 895.7,
+          "net_profit_eur": -217.3,
+          "roi_pct": -19.52,
           "max_drawdown_eur": 232.5
         },
         "simple_place": {
-          "total_staked_eur": 2216.0,
-          "total_returned_eur": 1958.4,
-          "net_profit_eur": -257.6,
-          "roi_pct": -11.62,
-          "max_drawdown_eur": 258.9
+          "total_staked_eur": 2218.0,
+          "total_returned_eur": 1959.45,
+          "net_profit_eur": -258.55,
+          "roi_pct": -11.66,
+          "max_drawdown_eur": 259.55
         }
       },
       "statistical_calibration": {
         "brier_score": 0.0742,
-        "log_loss": 2.0751
+        "log_loss": 2.0741
       }
     },
     "ETPE_ENGINE": {
       "engine_name": "ETPE_ENGINE",
-      "total_races": 1202,
+      "total_races": 1203,
       "hit_rates": {
-        "top1_win_rate_pct": 20.88,
-        "winner_in_top3_pct": 46.51,
-        "winner_in_top8_pct": 83.61,
-        "at_least_one_base_placed_pct": 69.05,
-        "both_bases_placed_pct": 18.47,
-        "tierce_in_top8_pct": 58.9,
-        "quarte_in_top8_pct": 47.17,
-        "quinte_in_top8_pct": 38.6,
-        "outsider_placed_pct": 21.13
+        "top1_win_rate_pct": 20.95,
+        "winner_in_top3_pct": 46.55,
+        "winner_in_top8_pct": 83.62,
+        "at_least_one_base_placed_pct": 69.08,
+        "both_bases_placed_pct": 18.54,
+        "tierce_in_top8_pct": 58.94,
+        "quarte_in_top8_pct": 47.22,
+        "quinte_in_top8_pct": 38.65,
+        "outsider_placed_pct": 21.11
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 1112.0,
-          "total_returned_eur": 921.9,
-          "net_profit_eur": -190.1,
-          "roi_pct": -17.1,
+          "total_staked_eur": 1113.0,
+          "total_returned_eur": 923.9,
+          "net_profit_eur": -189.1,
+          "roi_pct": -16.99,
           "max_drawdown_eur": 215.2
         },
         "simple_place": {
-          "total_staked_eur": 2216.0,
-          "total_returned_eur": 1791.7,
-          "net_profit_eur": -424.3,
-          "roi_pct": -19.15,
+          "total_staked_eur": 2218.0,
+          "total_returned_eur": 1793.95,
+          "net_profit_eur": -424.05,
+          "roi_pct": -19.12,
           "max_drawdown_eur": 436.0
         }
       },
@@ -326,72 +326,72 @@
     },
     "MARKET_BASELINE": {
       "engine_name": "MARKET_BASELINE",
-      "total_races": 1082,
+      "total_races": 1083,
       "hit_rates": {
-        "top1_win_rate_pct": 29.67,
-        "winner_in_top3_pct": 62.66,
-        "winner_in_top8_pct": 93.62,
-        "at_least_one_base_placed_pct": 80.78,
-        "both_bases_placed_pct": 27.91,
-        "tierce_in_top8_pct": 70.24,
-        "quarte_in_top8_pct": 57.58,
-        "quinte_in_top8_pct": 46.49,
-        "outsider_placed_pct": 14.51
+        "top1_win_rate_pct": 29.73,
+        "winner_in_top3_pct": 62.7,
+        "winner_in_top8_pct": 93.63,
+        "at_least_one_base_placed_pct": 80.79,
+        "both_bases_placed_pct": 27.89,
+        "tierce_in_top8_pct": 70.27,
+        "quarte_in_top8_pct": 57.62,
+        "quinte_in_top8_pct": 46.54,
+        "outsider_placed_pct": 14.5
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 1082.0,
-          "total_returned_eur": 948.6,
-          "net_profit_eur": -133.4,
-          "roi_pct": -12.33,
+          "total_staked_eur": 1083.0,
+          "total_returned_eur": 950.6,
+          "net_profit_eur": -132.4,
+          "roi_pct": -12.23,
           "max_drawdown_eur": 148.6
         },
         "simple_place": {
-          "total_staked_eur": 2156.0,
-          "total_returned_eur": 1947.45,
-          "net_profit_eur": -208.55,
-          "roi_pct": -9.67,
-          "max_drawdown_eur": 211.75
+          "total_staked_eur": 2158.0,
+          "total_returned_eur": 1948.5,
+          "net_profit_eur": -209.5,
+          "roi_pct": -9.71,
+          "max_drawdown_eur": 212.4
         }
       },
       "statistical_calibration": {
         "brier_score": 0.0715,
-        "log_loss": 1.9891
+        "log_loss": 1.9881
       }
     },
     "RADAR_V4": {
       "engine_name": "RADAR_V4",
-      "total_races": 504,
+      "total_races": 505,
       "hit_rates": {
-        "top1_win_rate_pct": 27.98,
-        "winner_in_top3_pct": 57.54,
-        "winner_in_top8_pct": 91.07,
-        "at_least_one_base_placed_pct": 76.98,
-        "both_bases_placed_pct": 22.22,
-        "tierce_in_top8_pct": 65.48,
-        "quarte_in_top8_pct": 52.18,
-        "quinte_in_top8_pct": 40.87,
-        "outsider_placed_pct": 13.69
+        "top1_win_rate_pct": 28.12,
+        "winner_in_top3_pct": 57.62,
+        "winner_in_top8_pct": 91.09,
+        "at_least_one_base_placed_pct": 77.03,
+        "both_bases_placed_pct": 22.38,
+        "tierce_in_top8_pct": 65.54,
+        "quarte_in_top8_pct": 52.28,
+        "quinte_in_top8_pct": 40.99,
+        "outsider_placed_pct": 13.66
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 504.0,
-          "total_returned_eur": 489.3,
-          "net_profit_eur": -14.7,
-          "roi_pct": -2.92,
+          "total_staked_eur": 505.0,
+          "total_returned_eur": 491.3,
+          "net_profit_eur": -13.7,
+          "roi_pct": -2.71,
           "max_drawdown_eur": 84.7
         },
         "simple_place": {
-          "total_staked_eur": 1008.0,
-          "total_returned_eur": 891.55,
-          "net_profit_eur": -116.45,
-          "roi_pct": -11.55,
+          "total_staked_eur": 1010.0,
+          "total_returned_eur": 893.9,
+          "net_profit_eur": -116.1,
+          "roi_pct": -11.5,
           "max_drawdown_eur": 121.55
         }
       },
       "statistical_calibration": {
         "brier_score": 0.0708,
-        "log_loss": 2.0957
+        "log_loss": 2.0943
       }
     }
   },
@@ -433,37 +433,37 @@
     },
     "PLAT": {
       "engine_name": "NEW_VALUE_ENGINE",
-      "total_races": 470,
+      "total_races": 471,
       "hit_rates": {
-        "top1_win_rate_pct": 25.74,
-        "winner_in_top3_pct": 58.3,
-        "winner_in_top8_pct": 88.72,
-        "at_least_one_base_placed_pct": 78.72,
-        "both_bases_placed_pct": 24.89,
-        "tierce_in_top8_pct": 65.11,
-        "quarte_in_top8_pct": 58.51,
-        "quinte_in_top8_pct": 51.06,
-        "outsider_placed_pct": 20.21
+        "top1_win_rate_pct": 25.9,
+        "winner_in_top3_pct": 58.39,
+        "winner_in_top8_pct": 88.75,
+        "at_least_one_base_placed_pct": 78.77,
+        "both_bases_placed_pct": 24.84,
+        "tierce_in_top8_pct": 65.18,
+        "quarte_in_top8_pct": 58.6,
+        "quinte_in_top8_pct": 51.17,
+        "outsider_placed_pct": 20.17
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 406.0,
-          "total_returned_eur": 319.0,
-          "net_profit_eur": -87.0,
-          "roi_pct": -21.43,
+          "total_staked_eur": 407.0,
+          "total_returned_eur": 321.0,
+          "net_profit_eur": -86.0,
+          "roi_pct": -21.13,
           "max_drawdown_eur": 102.6
         },
         "simple_place": {
-          "total_staked_eur": 808.0,
-          "total_returned_eur": 696.6,
-          "net_profit_eur": -111.4,
-          "roi_pct": -13.79,
+          "total_staked_eur": 810.0,
+          "total_returned_eur": 697.65,
+          "net_profit_eur": -112.35,
+          "roi_pct": -13.87,
           "max_drawdown_eur": 124.1
         }
       },
       "statistical_calibration": {
-        "brier_score": 0.0808,
-        "log_loss": 2.0749
+        "brier_score": 0.0807,
+        "log_loss": 2.0724
       }
     },
     "OBSTACLE": {
@@ -540,37 +540,37 @@
     },
     "PLAT": {
       "engine_name": "MARKET_BASELINE",
-      "total_races": 405,
+      "total_races": 406,
       "hit_rates": {
-        "top1_win_rate_pct": 27.9,
-        "winner_in_top3_pct": 61.23,
-        "winner_in_top8_pct": 93.09,
-        "at_least_one_base_placed_pct": 78.27,
-        "both_bases_placed_pct": 28.89,
-        "tierce_in_top8_pct": 70.62,
-        "quarte_in_top8_pct": 62.22,
-        "quinte_in_top8_pct": 53.83,
-        "outsider_placed_pct": 14.32
+        "top1_win_rate_pct": 28.08,
+        "winner_in_top3_pct": 61.33,
+        "winner_in_top8_pct": 93.1,
+        "at_least_one_base_placed_pct": 78.33,
+        "both_bases_placed_pct": 28.82,
+        "tierce_in_top8_pct": 70.69,
+        "quarte_in_top8_pct": 62.32,
+        "quinte_in_top8_pct": 53.94,
+        "outsider_placed_pct": 14.29
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 405.0,
-          "total_returned_eur": 354.9,
-          "net_profit_eur": -50.1,
-          "roi_pct": -12.37,
+          "total_staked_eur": 406.0,
+          "total_returned_eur": 356.9,
+          "net_profit_eur": -49.1,
+          "roi_pct": -12.09,
           "max_drawdown_eur": 68.5
         },
         "simple_place": {
-          "total_staked_eur": 806.0,
-          "total_returned_eur": 683.15,
-          "net_profit_eur": -122.85,
-          "roi_pct": -15.24,
+          "total_staked_eur": 808.0,
+          "total_returned_eur": 684.2,
+          "net_profit_eur": -123.8,
+          "roi_pct": -15.32,
           "max_drawdown_eur": 135.45
         }
       },
       "statistical_calibration": {
         "brier_score": 0.0776,
-        "log_loss": 2.0314
+        "log_loss": 2.0284
       }
     },
     "OBSTACLE": {
@@ -612,426 +612,426 @@
   "horizon_breakdown": {
     "T_MATIN": {
       "engine_name": "NEW_VALUE_ENGINE",
-      "total_races": 867,
+      "total_races": 868,
       "hit_rates": {
-        "top1_win_rate_pct": 22.84,
-        "winner_in_top3_pct": 50.75,
-        "winner_in_top8_pct": 86.62,
-        "at_least_one_base_placed_pct": 73.24,
-        "both_bases_placed_pct": 19.72,
-        "tierce_in_top8_pct": 59.05,
-        "quarte_in_top8_pct": 48.56,
-        "quinte_in_top8_pct": 39.22,
-        "outsider_placed_pct": 24.68
+        "top1_win_rate_pct": 22.81,
+        "winner_in_top3_pct": 50.81,
+        "winner_in_top8_pct": 86.64,
+        "at_least_one_base_placed_pct": 73.27,
+        "both_bases_placed_pct": 19.7,
+        "tierce_in_top8_pct": 59.1,
+        "quarte_in_top8_pct": 48.62,
+        "quinte_in_top8_pct": 39.29,
+        "outsider_placed_pct": 24.77
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 836.0,
+          "total_staked_eur": 837.0,
           "total_returned_eur": 651.5,
-          "net_profit_eur": -184.5,
-          "roi_pct": -22.07,
+          "net_profit_eur": -185.5,
+          "roi_pct": -22.16,
           "max_drawdown_eur": 201.3
         },
         "simple_place": {
-          "total_staked_eur": 1664.0,
-          "total_returned_eur": 1397.2,
-          "net_profit_eur": -266.8,
-          "roi_pct": -16.03,
+          "total_staked_eur": 1666.0,
+          "total_returned_eur": 1398.25,
+          "net_profit_eur": -267.75,
+          "roi_pct": -16.07,
           "max_drawdown_eur": 271.1
         }
       },
       "statistical_calibration": {
         "brier_score": 0.0739,
-        "log_loss": 2.1942
+        "log_loss": 2.1936
       }
     },
     "T90": {
       "engine_name": "NEW_VALUE_ENGINE",
-      "total_races": 866,
+      "total_races": 867,
       "hit_rates": {
-        "top1_win_rate_pct": 26.67,
-        "winner_in_top3_pct": 58.2,
-        "winner_in_top8_pct": 90.18,
-        "at_least_one_base_placed_pct": 78.52,
-        "both_bases_placed_pct": 25.17,
-        "tierce_in_top8_pct": 65.47,
-        "quarte_in_top8_pct": 54.73,
-        "quinte_in_top8_pct": 43.76,
-        "outsider_placed_pct": 17.09
+        "top1_win_rate_pct": 26.76,
+        "winner_in_top3_pct": 58.25,
+        "winner_in_top8_pct": 90.2,
+        "at_least_one_base_placed_pct": 78.55,
+        "both_bases_placed_pct": 25.26,
+        "tierce_in_top8_pct": 65.51,
+        "quarte_in_top8_pct": 54.79,
+        "quinte_in_top8_pct": 43.83,
+        "outsider_placed_pct": 17.07
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 836.0,
-          "total_returned_eur": 688.6,
-          "net_profit_eur": -147.4,
-          "roi_pct": -17.63,
+          "total_staked_eur": 837.0,
+          "total_returned_eur": 690.6,
+          "net_profit_eur": -146.4,
+          "roi_pct": -17.49,
           "max_drawdown_eur": 186.8
         },
         "simple_place": {
-          "total_staked_eur": 1664.0,
-          "total_returned_eur": 1487.95,
-          "net_profit_eur": -176.05,
-          "roi_pct": -10.58,
+          "total_staked_eur": 1666.0,
+          "total_returned_eur": 1490.2,
+          "net_profit_eur": -175.8,
+          "roi_pct": -10.55,
           "max_drawdown_eur": 176.35
         }
       },
       "statistical_calibration": {
         "brier_score": 0.0724,
-        "log_loss": 2.0902
+        "log_loss": 2.0895
       }
     },
     "T30": {
       "engine_name": "NEW_VALUE_ENGINE",
-      "total_races": 858,
+      "total_races": 859,
       "hit_rates": {
-        "top1_win_rate_pct": 26.69,
-        "winner_in_top3_pct": 58.97,
-        "winner_in_top8_pct": 90.56,
-        "at_least_one_base_placed_pct": 79.49,
-        "both_bases_placed_pct": 25.41,
-        "tierce_in_top8_pct": 65.15,
-        "quarte_in_top8_pct": 54.55,
-        "quinte_in_top8_pct": 44.17,
-        "outsider_placed_pct": 16.78
+        "top1_win_rate_pct": 26.78,
+        "winner_in_top3_pct": 59.02,
+        "winner_in_top8_pct": 90.57,
+        "at_least_one_base_placed_pct": 79.51,
+        "both_bases_placed_pct": 25.38,
+        "tierce_in_top8_pct": 65.19,
+        "quarte_in_top8_pct": 54.6,
+        "quinte_in_top8_pct": 44.24,
+        "outsider_placed_pct": 16.76
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 832.0,
-          "total_returned_eur": 680.5,
-          "net_profit_eur": -151.5,
-          "roi_pct": -18.21,
+          "total_staked_eur": 833.0,
+          "total_returned_eur": 682.5,
+          "net_profit_eur": -150.5,
+          "roi_pct": -18.07,
           "max_drawdown_eur": 172.3
         },
         "simple_place": {
-          "total_staked_eur": 1656.0,
-          "total_returned_eur": 1479.65,
-          "net_profit_eur": -176.35,
-          "roi_pct": -10.65,
-          "max_drawdown_eur": 176.65
+          "total_staked_eur": 1658.0,
+          "total_returned_eur": 1480.7,
+          "net_profit_eur": -177.3,
+          "roi_pct": -10.69,
+          "max_drawdown_eur": 177.3
         }
       },
       "statistical_calibration": {
         "brier_score": 0.0722,
-        "log_loss": 2.0722
+        "log_loss": 2.071
       }
     },
     "T15": {
       "engine_name": "NEW_VALUE_ENGINE",
-      "total_races": 853,
+      "total_races": 854,
       "hit_rates": {
-        "top1_win_rate_pct": 28.14,
-        "winner_in_top3_pct": 61.08,
-        "winner_in_top8_pct": 91.21,
-        "at_least_one_base_placed_pct": 79.95,
-        "both_bases_placed_pct": 26.49,
-        "tierce_in_top8_pct": 67.41,
-        "quarte_in_top8_pct": 56.15,
-        "quinte_in_top8_pct": 45.96,
-        "outsider_placed_pct": 14.77
+        "top1_win_rate_pct": 28.22,
+        "winner_in_top3_pct": 61.12,
+        "winner_in_top8_pct": 91.22,
+        "at_least_one_base_placed_pct": 79.98,
+        "both_bases_placed_pct": 26.46,
+        "tierce_in_top8_pct": 67.45,
+        "quarte_in_top8_pct": 56.21,
+        "quinte_in_top8_pct": 46.02,
+        "outsider_placed_pct": 14.75
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 829.0,
-          "total_returned_eur": 695.7,
-          "net_profit_eur": -133.3,
-          "roi_pct": -16.08,
+          "total_staked_eur": 830.0,
+          "total_returned_eur": 697.7,
+          "net_profit_eur": -132.3,
+          "roi_pct": -15.94,
           "max_drawdown_eur": 157.2
         },
         "simple_place": {
-          "total_staked_eur": 1650.0,
-          "total_returned_eur": 1484.45,
-          "net_profit_eur": -165.55,
-          "roi_pct": -10.03,
-          "max_drawdown_eur": 165.85
+          "total_staked_eur": 1652.0,
+          "total_returned_eur": 1485.5,
+          "net_profit_eur": -166.5,
+          "roi_pct": -10.08,
+          "max_drawdown_eur": 166.5
         }
       },
       "statistical_calibration": {
         "brier_score": 0.0719,
-        "log_loss": 2.0519
+        "log_loss": 2.0506
       }
     }
   },
   "horizon_breakdown_market": {
     "T_MATIN": {
       "engine_name": "MARKET_BASELINE",
-      "total_races": 689,
+      "total_races": 690,
       "hit_rates": {
-        "top1_win_rate_pct": 24.67,
-        "winner_in_top3_pct": 55.15,
-        "winner_in_top8_pct": 87.66,
-        "at_least_one_base_placed_pct": 74.46,
-        "both_bases_placed_pct": 23.08,
-        "tierce_in_top8_pct": 62.12,
-        "quarte_in_top8_pct": 49.35,
-        "quinte_in_top8_pct": 40.2,
-        "outsider_placed_pct": 14.22
+        "top1_win_rate_pct": 24.64,
+        "winner_in_top3_pct": 55.22,
+        "winner_in_top8_pct": 87.68,
+        "at_least_one_base_placed_pct": 74.49,
+        "both_bases_placed_pct": 23.04,
+        "tierce_in_top8_pct": 62.17,
+        "quarte_in_top8_pct": 49.42,
+        "quinte_in_top8_pct": 40.29,
+        "outsider_placed_pct": 14.2
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 689.0,
+          "total_staked_eur": 690.0,
           "total_returned_eur": 587.3,
-          "net_profit_eur": -101.7,
-          "roi_pct": -14.76,
+          "net_profit_eur": -102.7,
+          "roi_pct": -14.88,
           "max_drawdown_eur": 156.7
         },
         "simple_place": {
-          "total_staked_eur": 1370.0,
-          "total_returned_eur": 1188.5,
-          "net_profit_eur": -181.5,
-          "roi_pct": -13.25,
+          "total_staked_eur": 1372.0,
+          "total_returned_eur": 1189.55,
+          "net_profit_eur": -182.45,
+          "roi_pct": -13.3,
           "max_drawdown_eur": 192.9
         }
       },
       "statistical_calibration": {
         "brier_score": 0.0731,
-        "log_loss": 2.1579
+        "log_loss": 2.1571
       }
     },
     "T90": {
       "engine_name": "MARKET_BASELINE",
-      "total_races": 781,
+      "total_races": 782,
       "hit_rates": {
-        "top1_win_rate_pct": 28.55,
-        "winner_in_top3_pct": 59.92,
-        "winner_in_top8_pct": 92.96,
-        "at_least_one_base_placed_pct": 80.03,
-        "both_bases_placed_pct": 27.66,
-        "tierce_in_top8_pct": 68.12,
-        "quarte_in_top8_pct": 55.95,
-        "quinte_in_top8_pct": 44.81,
-        "outsider_placed_pct": 14.6
+        "top1_win_rate_pct": 28.64,
+        "winner_in_top3_pct": 59.97,
+        "winner_in_top8_pct": 92.97,
+        "at_least_one_base_placed_pct": 80.05,
+        "both_bases_placed_pct": 27.62,
+        "tierce_in_top8_pct": 68.16,
+        "quarte_in_top8_pct": 56.01,
+        "quinte_in_top8_pct": 44.88,
+        "outsider_placed_pct": 14.58
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 781.0,
-          "total_returned_eur": 685.2,
-          "net_profit_eur": -95.8,
-          "roi_pct": -12.27,
+          "total_staked_eur": 782.0,
+          "total_returned_eur": 687.2,
+          "net_profit_eur": -94.8,
+          "roi_pct": -12.12,
           "max_drawdown_eur": 119.4
         },
         "simple_place": {
-          "total_staked_eur": 1554.0,
-          "total_returned_eur": 1406.25,
-          "net_profit_eur": -147.75,
-          "roi_pct": -9.51,
-          "max_drawdown_eur": 151.55
+          "total_staked_eur": 1556.0,
+          "total_returned_eur": 1407.3,
+          "net_profit_eur": -148.7,
+          "roi_pct": -9.56,
+          "max_drawdown_eur": 152.2
         }
       },
       "statistical_calibration": {
         "brier_score": 0.0709,
-        "log_loss": 2.0245
+        "log_loss": 2.0237
       }
     },
     "T30": {
       "engine_name": "MARKET_BASELINE",
-      "total_races": 788,
+      "total_races": 789,
       "hit_rates": {
-        "top1_win_rate_pct": 29.06,
-        "winner_in_top3_pct": 60.79,
-        "winner_in_top8_pct": 92.77,
-        "at_least_one_base_placed_pct": 80.58,
-        "both_bases_placed_pct": 27.92,
-        "tierce_in_top8_pct": 68.15,
-        "quarte_in_top8_pct": 55.96,
-        "quinte_in_top8_pct": 45.18,
-        "outsider_placed_pct": 13.83
+        "top1_win_rate_pct": 29.15,
+        "winner_in_top3_pct": 60.84,
+        "winner_in_top8_pct": 92.78,
+        "at_least_one_base_placed_pct": 80.61,
+        "both_bases_placed_pct": 27.88,
+        "tierce_in_top8_pct": 68.19,
+        "quarte_in_top8_pct": 56.02,
+        "quinte_in_top8_pct": 45.25,
+        "outsider_placed_pct": 13.81
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 788.0,
-          "total_returned_eur": 694.7,
-          "net_profit_eur": -93.3,
-          "roi_pct": -11.84,
+          "total_staked_eur": 789.0,
+          "total_returned_eur": 696.7,
+          "net_profit_eur": -92.3,
+          "roi_pct": -11.7,
           "max_drawdown_eur": 127.8
         },
         "simple_place": {
-          "total_staked_eur": 1568.0,
-          "total_returned_eur": 1424.35,
-          "net_profit_eur": -143.65,
-          "roi_pct": -9.16,
-          "max_drawdown_eur": 147.45
+          "total_staked_eur": 1570.0,
+          "total_returned_eur": 1425.4,
+          "net_profit_eur": -144.6,
+          "roi_pct": -9.21,
+          "max_drawdown_eur": 148.1
         }
       },
       "statistical_calibration": {
         "brier_score": 0.071,
-        "log_loss": 2.0199
+        "log_loss": 2.0186
       }
     },
     "T15": {
       "engine_name": "MARKET_BASELINE",
-      "total_races": 799,
+      "total_races": 800,
       "hit_rates": {
-        "top1_win_rate_pct": 29.79,
-        "winner_in_top3_pct": 62.7,
-        "winner_in_top8_pct": 93.74,
-        "at_least_one_base_placed_pct": 80.6,
-        "both_bases_placed_pct": 28.66,
-        "tierce_in_top8_pct": 70.71,
-        "quarte_in_top8_pct": 58.07,
-        "quinte_in_top8_pct": 46.81,
-        "outsider_placed_pct": 15.14
+        "top1_win_rate_pct": 29.88,
+        "winner_in_top3_pct": 62.75,
+        "winner_in_top8_pct": 93.75,
+        "at_least_one_base_placed_pct": 80.62,
+        "both_bases_placed_pct": 28.62,
+        "tierce_in_top8_pct": 70.75,
+        "quarte_in_top8_pct": 58.13,
+        "quinte_in_top8_pct": 46.88,
+        "outsider_placed_pct": 15.12
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 799.0,
-          "total_returned_eur": 713.1,
-          "net_profit_eur": -85.9,
-          "roi_pct": -10.75,
+          "total_staked_eur": 800.0,
+          "total_returned_eur": 715.1,
+          "net_profit_eur": -84.9,
+          "roi_pct": -10.61,
           "max_drawdown_eur": 112.1
         },
         "simple_place": {
-          "total_staked_eur": 1590.0,
-          "total_returned_eur": 1437.0,
-          "net_profit_eur": -153.0,
-          "roi_pct": -9.62,
-          "max_drawdown_eur": 156.8
+          "total_staked_eur": 1592.0,
+          "total_returned_eur": 1438.05,
+          "net_profit_eur": -153.95,
+          "roi_pct": -9.67,
+          "max_drawdown_eur": 157.45
         }
       },
       "statistical_calibration": {
-        "brier_score": 0.0708,
-        "log_loss": 1.9909
+        "brier_score": 0.0707,
+        "log_loss": 1.9894
       }
     }
   },
   "horizon_breakdown_radar": {
     "T_MATIN": {
       "engine_name": "RADAR_V4",
-      "total_races": 504,
+      "total_races": 505,
       "hit_rates": {
-        "top1_win_rate_pct": 27.78,
-        "winner_in_top3_pct": 56.94,
-        "winner_in_top8_pct": 90.48,
-        "at_least_one_base_placed_pct": 76.98,
-        "both_bases_placed_pct": 21.63,
-        "tierce_in_top8_pct": 64.48,
-        "quarte_in_top8_pct": 51.59,
-        "quinte_in_top8_pct": 39.48,
-        "outsider_placed_pct": 13.89
+        "top1_win_rate_pct": 27.92,
+        "winner_in_top3_pct": 57.03,
+        "winner_in_top8_pct": 90.5,
+        "at_least_one_base_placed_pct": 77.03,
+        "both_bases_placed_pct": 21.78,
+        "tierce_in_top8_pct": 64.55,
+        "quarte_in_top8_pct": 51.68,
+        "quinte_in_top8_pct": 39.6,
+        "outsider_placed_pct": 13.86
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 504.0,
-          "total_returned_eur": 482.9,
-          "net_profit_eur": -21.1,
-          "roi_pct": -4.19,
+          "total_staked_eur": 505.0,
+          "total_returned_eur": 484.9,
+          "net_profit_eur": -20.1,
+          "roi_pct": -3.98,
           "max_drawdown_eur": 91.1
         },
         "simple_place": {
-          "total_staked_eur": 1008.0,
-          "total_returned_eur": 886.05,
-          "net_profit_eur": -121.95,
-          "roi_pct": -12.1,
+          "total_staked_eur": 1010.0,
+          "total_returned_eur": 888.4,
+          "net_profit_eur": -121.6,
+          "roi_pct": -12.04,
           "max_drawdown_eur": 127.05
         }
       },
       "statistical_calibration": {
         "brier_score": 0.0703,
-        "log_loss": 2.1077
+        "log_loss": 2.1063
       }
     },
     "T90": {
       "engine_name": "RADAR_V4",
-      "total_races": 504,
+      "total_races": 505,
       "hit_rates": {
-        "top1_win_rate_pct": 27.98,
-        "winner_in_top3_pct": 57.14,
-        "winner_in_top8_pct": 90.87,
-        "at_least_one_base_placed_pct": 76.98,
-        "both_bases_placed_pct": 22.22,
-        "tierce_in_top8_pct": 65.08,
-        "quarte_in_top8_pct": 51.79,
-        "quinte_in_top8_pct": 39.88,
-        "outsider_placed_pct": 13.49
+        "top1_win_rate_pct": 28.12,
+        "winner_in_top3_pct": 57.23,
+        "winner_in_top8_pct": 90.89,
+        "at_least_one_base_placed_pct": 77.03,
+        "both_bases_placed_pct": 22.38,
+        "tierce_in_top8_pct": 65.15,
+        "quarte_in_top8_pct": 51.88,
+        "quinte_in_top8_pct": 40.0,
+        "outsider_placed_pct": 13.47
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 504.0,
-          "total_returned_eur": 489.3,
-          "net_profit_eur": -14.7,
-          "roi_pct": -2.92,
+          "total_staked_eur": 505.0,
+          "total_returned_eur": 491.3,
+          "net_profit_eur": -13.7,
+          "roi_pct": -2.71,
           "max_drawdown_eur": 84.7
         },
         "simple_place": {
-          "total_staked_eur": 1008.0,
-          "total_returned_eur": 891.55,
-          "net_profit_eur": -116.45,
-          "roi_pct": -11.55,
+          "total_staked_eur": 1010.0,
+          "total_returned_eur": 893.9,
+          "net_profit_eur": -116.1,
+          "roi_pct": -11.5,
           "max_drawdown_eur": 121.55
         }
       },
       "statistical_calibration": {
         "brier_score": 0.0706,
-        "log_loss": 2.1003
+        "log_loss": 2.0989
       }
     },
     "T30": {
       "engine_name": "RADAR_V4",
-      "total_races": 504,
+      "total_races": 505,
       "hit_rates": {
-        "top1_win_rate_pct": 27.98,
-        "winner_in_top3_pct": 57.34,
-        "winner_in_top8_pct": 91.07,
-        "at_least_one_base_placed_pct": 76.98,
-        "both_bases_placed_pct": 22.22,
-        "tierce_in_top8_pct": 65.48,
-        "quarte_in_top8_pct": 52.18,
-        "quinte_in_top8_pct": 40.67,
-        "outsider_placed_pct": 13.89
+        "top1_win_rate_pct": 28.12,
+        "winner_in_top3_pct": 57.43,
+        "winner_in_top8_pct": 91.09,
+        "at_least_one_base_placed_pct": 77.03,
+        "both_bases_placed_pct": 22.38,
+        "tierce_in_top8_pct": 65.54,
+        "quarte_in_top8_pct": 52.28,
+        "quinte_in_top8_pct": 40.79,
+        "outsider_placed_pct": 13.86
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 504.0,
-          "total_returned_eur": 489.3,
-          "net_profit_eur": -14.7,
-          "roi_pct": -2.92,
+          "total_staked_eur": 505.0,
+          "total_returned_eur": 491.3,
+          "net_profit_eur": -13.7,
+          "roi_pct": -2.71,
           "max_drawdown_eur": 84.7
         },
         "simple_place": {
-          "total_staked_eur": 1008.0,
-          "total_returned_eur": 891.55,
-          "net_profit_eur": -116.45,
-          "roi_pct": -11.55,
+          "total_staked_eur": 1010.0,
+          "total_returned_eur": 893.9,
+          "net_profit_eur": -116.1,
+          "roi_pct": -11.5,
           "max_drawdown_eur": 121.55
         }
       },
       "statistical_calibration": {
         "brier_score": 0.0707,
-        "log_loss": 2.0976
+        "log_loss": 2.0962
       }
     },
     "T15": {
       "engine_name": "RADAR_V4",
-      "total_races": 504,
+      "total_races": 505,
       "hit_rates": {
-        "top1_win_rate_pct": 27.98,
-        "winner_in_top3_pct": 57.54,
-        "winner_in_top8_pct": 91.07,
-        "at_least_one_base_placed_pct": 76.98,
-        "both_bases_placed_pct": 22.22,
-        "tierce_in_top8_pct": 65.48,
-        "quarte_in_top8_pct": 52.18,
-        "quinte_in_top8_pct": 40.87,
-        "outsider_placed_pct": 13.69
+        "top1_win_rate_pct": 28.12,
+        "winner_in_top3_pct": 57.62,
+        "winner_in_top8_pct": 91.09,
+        "at_least_one_base_placed_pct": 77.03,
+        "both_bases_placed_pct": 22.38,
+        "tierce_in_top8_pct": 65.54,
+        "quarte_in_top8_pct": 52.28,
+        "quinte_in_top8_pct": 40.99,
+        "outsider_placed_pct": 13.66
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 504.0,
-          "total_returned_eur": 489.3,
-          "net_profit_eur": -14.7,
-          "roi_pct": -2.92,
+          "total_staked_eur": 505.0,
+          "total_returned_eur": 491.3,
+          "net_profit_eur": -13.7,
+          "roi_pct": -2.71,
           "max_drawdown_eur": 84.7
         },
         "simple_place": {
-          "total_staked_eur": 1008.0,
-          "total_returned_eur": 891.55,
-          "net_profit_eur": -116.45,
-          "roi_pct": -11.55,
+          "total_staked_eur": 1010.0,
+          "total_returned_eur": 893.9,
+          "net_profit_eur": -116.1,
+          "roi_pct": -11.5,
           "max_drawdown_eur": 121.55
         }
       },
       "statistical_calibration": {
         "brier_score": 0.0708,
-        "log_loss": 2.0957
+        "log_loss": 2.0943
       }
     }
   },
@@ -1073,37 +1073,37 @@
     },
     "PLAT": {
       "engine_name": "RADAR_V4",
-      "total_races": 211,
+      "total_races": 212,
       "hit_rates": {
-        "top1_win_rate_pct": 27.01,
-        "winner_in_top3_pct": 54.98,
-        "winner_in_top8_pct": 87.68,
-        "at_least_one_base_placed_pct": 77.25,
-        "both_bases_placed_pct": 24.64,
-        "tierce_in_top8_pct": 65.88,
-        "quarte_in_top8_pct": 57.35,
-        "quinte_in_top8_pct": 45.97,
-        "outsider_placed_pct": 16.59
+        "top1_win_rate_pct": 27.36,
+        "winner_in_top3_pct": 55.19,
+        "winner_in_top8_pct": 87.74,
+        "at_least_one_base_placed_pct": 77.36,
+        "both_bases_placed_pct": 25.0,
+        "tierce_in_top8_pct": 66.04,
+        "quarte_in_top8_pct": 57.55,
+        "quinte_in_top8_pct": 46.23,
+        "outsider_placed_pct": 16.51
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 211.0,
-          "total_returned_eur": 238.7,
-          "net_profit_eur": 27.7,
-          "roi_pct": 13.13,
+          "total_staked_eur": 212.0,
+          "total_returned_eur": 240.7,
+          "net_profit_eur": 28.7,
+          "roi_pct": 13.54,
           "max_drawdown_eur": 35.5
         },
         "simple_place": {
-          "total_staked_eur": 422.0,
-          "total_returned_eur": 381.9,
-          "net_profit_eur": -40.1,
-          "roi_pct": -9.5,
+          "total_staked_eur": 424.0,
+          "total_returned_eur": 384.25,
+          "net_profit_eur": -39.75,
+          "roi_pct": -9.37,
           "max_drawdown_eur": 48.15
         }
       },
       "statistical_calibration": {
-        "brier_score": 0.0769,
-        "log_loss": 2.1379
+        "brier_score": 0.077,
+        "log_loss": 2.1344
       }
     },
     "OBSTACLE": {
@@ -1150,551 +1150,551 @@
     ],
     "horizons": {
       "T_MATIN": {
-        "courses": 478,
+        "courses": 479,
         "metriques": {
           "NEW_VALUE_ENGINE": {
             "engine_name": "NEW_VALUE_ENGINE",
-            "total_races": 478,
+            "total_races": 479,
             "hit_rates": {
-              "top1_win_rate_pct": 23.64,
-              "winner_in_top3_pct": 51.88,
-              "winner_in_top8_pct": 86.61,
-              "at_least_one_base_placed_pct": 73.85,
-              "both_bases_placed_pct": 19.25,
-              "tierce_in_top8_pct": 61.3,
-              "quarte_in_top8_pct": 49.58,
-              "quinte_in_top8_pct": 39.12,
-              "outsider_placed_pct": 17.15
+              "top1_win_rate_pct": 23.59,
+              "winner_in_top3_pct": 51.98,
+              "winner_in_top8_pct": 86.64,
+              "at_least_one_base_placed_pct": 73.9,
+              "both_bases_placed_pct": 19.21,
+              "tierce_in_top8_pct": 61.38,
+              "quarte_in_top8_pct": 49.69,
+              "quinte_in_top8_pct": 39.25,
+              "outsider_placed_pct": 17.33
             },
             "financial_performance": {
               "simple_gagnant": {
-                "total_staked_eur": 478.0,
+                "total_staked_eur": 479.0,
                 "total_returned_eur": 404.6,
-                "net_profit_eur": -73.4,
-                "roi_pct": -15.36,
+                "net_profit_eur": -74.4,
+                "roi_pct": -15.53,
                 "max_drawdown_eur": 120.3
               },
               "simple_place": {
-                "total_staked_eur": 956.0,
-                "total_returned_eur": 814.85,
-                "net_profit_eur": -141.15,
-                "roi_pct": -14.76,
+                "total_staked_eur": 958.0,
+                "total_returned_eur": 815.9,
+                "net_profit_eur": -142.1,
+                "roi_pct": -14.83,
                 "max_drawdown_eur": 151.9
               }
             },
             "statistical_calibration": {
               "brier_score": 0.0718,
-              "log_loss": 2.1898
+              "log_loss": 2.1885
             }
           },
           "MARKET_BASELINE": {
             "engine_name": "MARKET_BASELINE",
-            "total_races": 478,
+            "total_races": 479,
             "hit_rates": {
-              "top1_win_rate_pct": 22.8,
-              "winner_in_top3_pct": 53.14,
-              "winner_in_top8_pct": 86.82,
-              "at_least_one_base_placed_pct": 72.59,
-              "both_bases_placed_pct": 21.55,
-              "tierce_in_top8_pct": 60.88,
-              "quarte_in_top8_pct": 48.12,
-              "quinte_in_top8_pct": 38.7,
-              "outsider_placed_pct": 14.64
+              "top1_win_rate_pct": 22.76,
+              "winner_in_top3_pct": 53.24,
+              "winner_in_top8_pct": 86.85,
+              "at_least_one_base_placed_pct": 72.65,
+              "both_bases_placed_pct": 21.5,
+              "tierce_in_top8_pct": 60.96,
+              "quarte_in_top8_pct": 48.23,
+              "quinte_in_top8_pct": 38.83,
+              "outsider_placed_pct": 14.61
             },
             "financial_performance": {
               "simple_gagnant": {
-                "total_staked_eur": 478.0,
+                "total_staked_eur": 479.0,
                 "total_returned_eur": 385.6,
-                "net_profit_eur": -92.4,
-                "roi_pct": -19.33,
+                "net_profit_eur": -93.4,
+                "roi_pct": -19.5,
                 "max_drawdown_eur": 113.3
               },
               "simple_place": {
-                "total_staked_eur": 956.0,
-                "total_returned_eur": 831.75,
-                "net_profit_eur": -124.25,
-                "roi_pct": -13.0,
+                "total_staked_eur": 958.0,
+                "total_returned_eur": 832.8,
+                "net_profit_eur": -125.2,
+                "roi_pct": -13.07,
                 "max_drawdown_eur": 142.85
               }
             },
             "statistical_calibration": {
               "brier_score": 0.0721,
-              "log_loss": 2.1948
+              "log_loss": 2.1935
             }
           },
           "RADAR_V4": {
             "engine_name": "RADAR_V4",
-            "total_races": 478,
+            "total_races": 479,
             "hit_rates": {
-              "top1_win_rate_pct": 27.62,
-              "winner_in_top3_pct": 55.65,
-              "winner_in_top8_pct": 90.17,
-              "at_least_one_base_placed_pct": 76.15,
-              "both_bases_placed_pct": 21.55,
-              "tierce_in_top8_pct": 64.02,
-              "quarte_in_top8_pct": 51.88,
-              "quinte_in_top8_pct": 39.75,
-              "outsider_placed_pct": 14.02
+              "top1_win_rate_pct": 27.77,
+              "winner_in_top3_pct": 55.74,
+              "winner_in_top8_pct": 90.19,
+              "at_least_one_base_placed_pct": 76.2,
+              "both_bases_placed_pct": 21.71,
+              "tierce_in_top8_pct": 64.09,
+              "quarte_in_top8_pct": 51.98,
+              "quinte_in_top8_pct": 39.87,
+              "outsider_placed_pct": 13.99
             },
             "financial_performance": {
               "simple_gagnant": {
-                "total_staked_eur": 478.0,
-                "total_returned_eur": 456.2,
-                "net_profit_eur": -21.8,
-                "roi_pct": -4.56,
+                "total_staked_eur": 479.0,
+                "total_returned_eur": 458.2,
+                "net_profit_eur": -20.8,
+                "roi_pct": -4.34,
                 "max_drawdown_eur": 91.8
               },
               "simple_place": {
-                "total_staked_eur": 956.0,
-                "total_returned_eur": 825.25,
-                "net_profit_eur": -130.75,
-                "roi_pct": -13.68,
+                "total_staked_eur": 958.0,
+                "total_returned_eur": 827.6,
+                "net_profit_eur": -130.4,
+                "roi_pct": -13.61,
                 "max_drawdown_eur": 135.85
               }
             },
             "statistical_calibration": {
               "brier_score": 0.0707,
-              "log_loss": 2.1248
+              "log_loss": 2.1233
             }
           }
         }
       },
       "T90": {
-        "courses": 504,
+        "courses": 505,
         "metriques": {
           "NEW_VALUE_ENGINE": {
             "engine_name": "NEW_VALUE_ENGINE",
-            "total_races": 504,
+            "total_races": 505,
             "hit_rates": {
-              "top1_win_rate_pct": 27.78,
-              "winner_in_top3_pct": 59.33,
-              "winner_in_top8_pct": 92.66,
-              "at_least_one_base_placed_pct": 79.76,
-              "both_bases_placed_pct": 26.19,
-              "tierce_in_top8_pct": 69.44,
-              "quarte_in_top8_pct": 56.94,
-              "quinte_in_top8_pct": 43.06,
-              "outsider_placed_pct": 10.32
+              "top1_win_rate_pct": 27.92,
+              "winner_in_top3_pct": 59.41,
+              "winner_in_top8_pct": 92.67,
+              "at_least_one_base_placed_pct": 79.8,
+              "both_bases_placed_pct": 26.34,
+              "tierce_in_top8_pct": 69.5,
+              "quarte_in_top8_pct": 57.03,
+              "quinte_in_top8_pct": 43.17,
+              "outsider_placed_pct": 10.3
             },
             "financial_performance": {
               "simple_gagnant": {
-                "total_staked_eur": 504.0,
-                "total_returned_eur": 435.1,
-                "net_profit_eur": -68.9,
-                "roi_pct": -13.67,
+                "total_staked_eur": 505.0,
+                "total_returned_eur": 437.1,
+                "net_profit_eur": -67.9,
+                "roi_pct": -13.45,
                 "max_drawdown_eur": 103.2
               },
               "simple_place": {
-                "total_staked_eur": 1008.0,
-                "total_returned_eur": 913.55,
-                "net_profit_eur": -94.45,
-                "roi_pct": -9.37,
+                "total_staked_eur": 1010.0,
+                "total_returned_eur": 915.8,
+                "net_profit_eur": -94.2,
+                "roi_pct": -9.33,
                 "max_drawdown_eur": 94.75
               }
             },
             "statistical_calibration": {
-              "brier_score": 0.0698,
-              "log_loss": 2.058
+              "brier_score": 0.0699,
+              "log_loss": 2.0568
             }
           },
           "MARKET_BASELINE": {
             "engine_name": "MARKET_BASELINE",
-            "total_races": 504,
+            "total_races": 505,
             "hit_rates": {
-              "top1_win_rate_pct": 28.77,
-              "winner_in_top3_pct": 60.52,
-              "winner_in_top8_pct": 92.66,
-              "at_least_one_base_placed_pct": 80.75,
-              "both_bases_placed_pct": 26.79,
-              "tierce_in_top8_pct": 69.84,
-              "quarte_in_top8_pct": 57.54,
-              "quinte_in_top8_pct": 44.64,
-              "outsider_placed_pct": 15.87
+              "top1_win_rate_pct": 28.91,
+              "winner_in_top3_pct": 60.59,
+              "winner_in_top8_pct": 92.67,
+              "at_least_one_base_placed_pct": 80.79,
+              "both_bases_placed_pct": 26.73,
+              "tierce_in_top8_pct": 69.9,
+              "quarte_in_top8_pct": 57.62,
+              "quinte_in_top8_pct": 44.75,
+              "outsider_placed_pct": 15.84
             },
             "financial_performance": {
               "simple_gagnant": {
-                "total_staked_eur": 504.0,
-                "total_returned_eur": 449.4,
-                "net_profit_eur": -54.6,
-                "roi_pct": -10.83,
+                "total_staked_eur": 505.0,
+                "total_returned_eur": 451.4,
+                "net_profit_eur": -53.6,
+                "roi_pct": -10.61,
                 "max_drawdown_eur": 92.3
               },
               "simple_place": {
-                "total_staked_eur": 1008.0,
-                "total_returned_eur": 923.25,
-                "net_profit_eur": -84.75,
-                "roi_pct": -8.41,
-                "max_drawdown_eur": 87.25
+                "total_staked_eur": 1010.0,
+                "total_returned_eur": 924.3,
+                "net_profit_eur": -85.7,
+                "roi_pct": -8.49,
+                "max_drawdown_eur": 87.9
               }
             },
             "statistical_calibration": {
               "brier_score": 0.0694,
-              "log_loss": 2.0274
+              "log_loss": 2.0262
             }
           },
           "RADAR_V4": {
             "engine_name": "RADAR_V4",
-            "total_races": 504,
+            "total_races": 505,
             "hit_rates": {
-              "top1_win_rate_pct": 27.98,
-              "winner_in_top3_pct": 57.14,
-              "winner_in_top8_pct": 90.87,
-              "at_least_one_base_placed_pct": 76.98,
-              "both_bases_placed_pct": 22.22,
-              "tierce_in_top8_pct": 65.08,
-              "quarte_in_top8_pct": 51.79,
-              "quinte_in_top8_pct": 39.88,
-              "outsider_placed_pct": 13.49
+              "top1_win_rate_pct": 28.12,
+              "winner_in_top3_pct": 57.23,
+              "winner_in_top8_pct": 90.89,
+              "at_least_one_base_placed_pct": 77.03,
+              "both_bases_placed_pct": 22.38,
+              "tierce_in_top8_pct": 65.15,
+              "quarte_in_top8_pct": 51.88,
+              "quinte_in_top8_pct": 40.0,
+              "outsider_placed_pct": 13.47
             },
             "financial_performance": {
               "simple_gagnant": {
-                "total_staked_eur": 504.0,
-                "total_returned_eur": 489.3,
-                "net_profit_eur": -14.7,
-                "roi_pct": -2.92,
+                "total_staked_eur": 505.0,
+                "total_returned_eur": 491.3,
+                "net_profit_eur": -13.7,
+                "roi_pct": -2.71,
                 "max_drawdown_eur": 84.7
               },
               "simple_place": {
-                "total_staked_eur": 1008.0,
-                "total_returned_eur": 891.55,
-                "net_profit_eur": -116.45,
-                "roi_pct": -11.55,
+                "total_staked_eur": 1010.0,
+                "total_returned_eur": 893.9,
+                "net_profit_eur": -116.1,
+                "roi_pct": -11.5,
                 "max_drawdown_eur": 121.55
               }
             },
             "statistical_calibration": {
               "brier_score": 0.0706,
-              "log_loss": 2.1003
+              "log_loss": 2.0989
             }
           }
         }
       },
       "T30": {
-        "courses": 504,
+        "courses": 505,
         "metriques": {
           "NEW_VALUE_ENGINE": {
             "engine_name": "NEW_VALUE_ENGINE",
-            "total_races": 504,
+            "total_races": 505,
             "hit_rates": {
-              "top1_win_rate_pct": 27.18,
-              "winner_in_top3_pct": 58.13,
-              "winner_in_top8_pct": 93.06,
-              "at_least_one_base_placed_pct": 80.56,
-              "both_bases_placed_pct": 26.59,
-              "tierce_in_top8_pct": 68.06,
-              "quarte_in_top8_pct": 55.75,
-              "quinte_in_top8_pct": 43.65,
-              "outsider_placed_pct": 10.71
+              "top1_win_rate_pct": 27.33,
+              "winner_in_top3_pct": 58.22,
+              "winner_in_top8_pct": 93.07,
+              "at_least_one_base_placed_pct": 80.59,
+              "both_bases_placed_pct": 26.53,
+              "tierce_in_top8_pct": 68.12,
+              "quarte_in_top8_pct": 55.84,
+              "quinte_in_top8_pct": 43.76,
+              "outsider_placed_pct": 10.69
             },
             "financial_performance": {
               "simple_gagnant": {
-                "total_staked_eur": 504.0,
-                "total_returned_eur": 420.2,
-                "net_profit_eur": -83.8,
-                "roi_pct": -16.63,
+                "total_staked_eur": 505.0,
+                "total_returned_eur": 422.2,
+                "net_profit_eur": -82.8,
+                "roi_pct": -16.4,
                 "max_drawdown_eur": 105.6
               },
               "simple_place": {
-                "total_staked_eur": 1008.0,
-                "total_returned_eur": 907.75,
-                "net_profit_eur": -100.25,
-                "roi_pct": -9.95,
-                "max_drawdown_eur": 100.55
+                "total_staked_eur": 1010.0,
+                "total_returned_eur": 908.8,
+                "net_profit_eur": -101.2,
+                "roi_pct": -10.02,
+                "max_drawdown_eur": 101.2
               }
             },
             "statistical_calibration": {
               "brier_score": 0.0702,
-              "log_loss": 2.0533
+              "log_loss": 2.0513
             }
           },
           "MARKET_BASELINE": {
             "engine_name": "MARKET_BASELINE",
-            "total_races": 504,
+            "total_races": 505,
             "hit_rates": {
-              "top1_win_rate_pct": 28.37,
-              "winner_in_top3_pct": 61.11,
-              "winner_in_top8_pct": 93.06,
-              "at_least_one_base_placed_pct": 80.75,
-              "both_bases_placed_pct": 27.78,
-              "tierce_in_top8_pct": 69.84,
-              "quarte_in_top8_pct": 57.34,
-              "quinte_in_top8_pct": 45.63,
-              "outsider_placed_pct": 14.48
+              "top1_win_rate_pct": 28.51,
+              "winner_in_top3_pct": 61.19,
+              "winner_in_top8_pct": 93.07,
+              "at_least_one_base_placed_pct": 80.79,
+              "both_bases_placed_pct": 27.72,
+              "tierce_in_top8_pct": 69.9,
+              "quarte_in_top8_pct": 57.43,
+              "quinte_in_top8_pct": 45.74,
+              "outsider_placed_pct": 14.46
             },
             "financial_performance": {
               "simple_gagnant": {
-                "total_staked_eur": 504.0,
-                "total_returned_eur": 427.0,
-                "net_profit_eur": -77.0,
-                "roi_pct": -15.28,
+                "total_staked_eur": 505.0,
+                "total_returned_eur": 429.0,
+                "net_profit_eur": -76.0,
+                "roi_pct": -15.05,
                 "max_drawdown_eur": 106.9
               },
               "simple_place": {
-                "total_staked_eur": 1008.0,
-                "total_returned_eur": 921.55,
-                "net_profit_eur": -86.45,
-                "roi_pct": -8.58,
-                "max_drawdown_eur": 95.7
+                "total_staked_eur": 1010.0,
+                "total_returned_eur": 922.6,
+                "net_profit_eur": -87.4,
+                "roi_pct": -8.65,
+                "max_drawdown_eur": 96.35
               }
             },
             "statistical_calibration": {
               "brier_score": 0.0698,
-              "log_loss": 2.0258
+              "log_loss": 2.0238
             }
           },
           "RADAR_V4": {
             "engine_name": "RADAR_V4",
-            "total_races": 504,
+            "total_races": 505,
             "hit_rates": {
-              "top1_win_rate_pct": 27.98,
-              "winner_in_top3_pct": 57.34,
-              "winner_in_top8_pct": 91.07,
-              "at_least_one_base_placed_pct": 76.98,
-              "both_bases_placed_pct": 22.22,
-              "tierce_in_top8_pct": 65.48,
-              "quarte_in_top8_pct": 52.18,
-              "quinte_in_top8_pct": 40.67,
-              "outsider_placed_pct": 13.89
+              "top1_win_rate_pct": 28.12,
+              "winner_in_top3_pct": 57.43,
+              "winner_in_top8_pct": 91.09,
+              "at_least_one_base_placed_pct": 77.03,
+              "both_bases_placed_pct": 22.38,
+              "tierce_in_top8_pct": 65.54,
+              "quarte_in_top8_pct": 52.28,
+              "quinte_in_top8_pct": 40.79,
+              "outsider_placed_pct": 13.86
             },
             "financial_performance": {
               "simple_gagnant": {
-                "total_staked_eur": 504.0,
-                "total_returned_eur": 489.3,
-                "net_profit_eur": -14.7,
-                "roi_pct": -2.92,
+                "total_staked_eur": 505.0,
+                "total_returned_eur": 491.3,
+                "net_profit_eur": -13.7,
+                "roi_pct": -2.71,
                 "max_drawdown_eur": 84.7
               },
               "simple_place": {
-                "total_staked_eur": 1008.0,
-                "total_returned_eur": 891.55,
-                "net_profit_eur": -116.45,
-                "roi_pct": -11.55,
+                "total_staked_eur": 1010.0,
+                "total_returned_eur": 893.9,
+                "net_profit_eur": -116.1,
+                "roi_pct": -11.5,
                 "max_drawdown_eur": 121.55
               }
             },
             "statistical_calibration": {
               "brier_score": 0.0707,
-              "log_loss": 2.0976
+              "log_loss": 2.0962
             }
           }
         }
       },
       "T15": {
-        "courses": 504,
+        "courses": 505,
         "metriques": {
           "NEW_VALUE_ENGINE": {
             "engine_name": "NEW_VALUE_ENGINE",
-            "total_races": 504,
+            "total_races": 505,
             "hit_rates": {
-              "top1_win_rate_pct": 28.57,
-              "winner_in_top3_pct": 59.52,
-              "winner_in_top8_pct": 93.65,
-              "at_least_one_base_placed_pct": 80.36,
-              "both_bases_placed_pct": 28.17,
-              "tierce_in_top8_pct": 68.85,
-              "quarte_in_top8_pct": 56.94,
-              "quinte_in_top8_pct": 44.05,
-              "outsider_placed_pct": 8.73
+              "top1_win_rate_pct": 28.71,
+              "winner_in_top3_pct": 59.6,
+              "winner_in_top8_pct": 93.66,
+              "at_least_one_base_placed_pct": 80.4,
+              "both_bases_placed_pct": 28.12,
+              "tierce_in_top8_pct": 68.91,
+              "quarte_in_top8_pct": 57.03,
+              "quinte_in_top8_pct": 44.16,
+              "outsider_placed_pct": 8.71
             },
             "financial_performance": {
               "simple_gagnant": {
-                "total_staked_eur": 504.0,
-                "total_returned_eur": 437.7,
-                "net_profit_eur": -66.3,
-                "roi_pct": -13.15,
+                "total_staked_eur": 505.0,
+                "total_returned_eur": 439.7,
+                "net_profit_eur": -65.3,
+                "roi_pct": -12.93,
                 "max_drawdown_eur": 89.6
               },
               "simple_place": {
-                "total_staked_eur": 1008.0,
-                "total_returned_eur": 909.75,
-                "net_profit_eur": -98.25,
-                "roi_pct": -9.75,
-                "max_drawdown_eur": 98.55
+                "total_staked_eur": 1010.0,
+                "total_returned_eur": 910.8,
+                "net_profit_eur": -99.2,
+                "roi_pct": -9.82,
+                "max_drawdown_eur": 99.2
               }
             },
             "statistical_calibration": {
               "brier_score": 0.0702,
-              "log_loss": 2.0422
+              "log_loss": 2.0399
             }
           },
           "MARKET_BASELINE": {
             "engine_name": "MARKET_BASELINE",
-            "total_races": 504,
+            "total_races": 505,
             "hit_rates": {
-              "top1_win_rate_pct": 28.57,
-              "winner_in_top3_pct": 63.1,
-              "winner_in_top8_pct": 94.25,
-              "at_least_one_base_placed_pct": 80.16,
-              "both_bases_placed_pct": 28.37,
-              "tierce_in_top8_pct": 71.23,
-              "quarte_in_top8_pct": 58.33,
-              "quinte_in_top8_pct": 46.23,
-              "outsider_placed_pct": 16.07
+              "top1_win_rate_pct": 28.71,
+              "winner_in_top3_pct": 63.17,
+              "winner_in_top8_pct": 94.26,
+              "at_least_one_base_placed_pct": 80.2,
+              "both_bases_placed_pct": 28.32,
+              "tierce_in_top8_pct": 71.29,
+              "quarte_in_top8_pct": 58.42,
+              "quinte_in_top8_pct": 46.34,
+              "outsider_placed_pct": 16.04
             },
             "financial_performance": {
               "simple_gagnant": {
-                "total_staked_eur": 504.0,
-                "total_returned_eur": 436.9,
-                "net_profit_eur": -67.1,
-                "roi_pct": -13.31,
+                "total_staked_eur": 505.0,
+                "total_returned_eur": 438.9,
+                "net_profit_eur": -66.1,
+                "roi_pct": -13.09,
                 "max_drawdown_eur": 88.0
               },
               "simple_place": {
-                "total_staked_eur": 1008.0,
-                "total_returned_eur": 905.15,
-                "net_profit_eur": -102.85,
-                "roi_pct": -10.2,
-                "max_drawdown_eur": 103.15
+                "total_staked_eur": 1010.0,
+                "total_returned_eur": 906.2,
+                "net_profit_eur": -103.8,
+                "roi_pct": -10.28,
+                "max_drawdown_eur": 103.8
               }
             },
             "statistical_calibration": {
               "brier_score": 0.07,
-              "log_loss": 2.0165
+              "log_loss": 2.0142
             }
           },
           "RADAR_V4": {
             "engine_name": "RADAR_V4",
-            "total_races": 504,
+            "total_races": 505,
             "hit_rates": {
-              "top1_win_rate_pct": 27.98,
-              "winner_in_top3_pct": 57.54,
-              "winner_in_top8_pct": 91.07,
-              "at_least_one_base_placed_pct": 76.98,
-              "both_bases_placed_pct": 22.22,
-              "tierce_in_top8_pct": 65.48,
-              "quarte_in_top8_pct": 52.18,
-              "quinte_in_top8_pct": 40.87,
-              "outsider_placed_pct": 13.69
+              "top1_win_rate_pct": 28.12,
+              "winner_in_top3_pct": 57.62,
+              "winner_in_top8_pct": 91.09,
+              "at_least_one_base_placed_pct": 77.03,
+              "both_bases_placed_pct": 22.38,
+              "tierce_in_top8_pct": 65.54,
+              "quarte_in_top8_pct": 52.28,
+              "quinte_in_top8_pct": 40.99,
+              "outsider_placed_pct": 13.66
             },
             "financial_performance": {
               "simple_gagnant": {
-                "total_staked_eur": 504.0,
-                "total_returned_eur": 489.3,
-                "net_profit_eur": -14.7,
-                "roi_pct": -2.92,
+                "total_staked_eur": 505.0,
+                "total_returned_eur": 491.3,
+                "net_profit_eur": -13.7,
+                "roi_pct": -2.71,
                 "max_drawdown_eur": 84.7
               },
               "simple_place": {
-                "total_staked_eur": 1008.0,
-                "total_returned_eur": 891.55,
-                "net_profit_eur": -116.45,
-                "roi_pct": -11.55,
+                "total_staked_eur": 1010.0,
+                "total_returned_eur": 893.9,
+                "net_profit_eur": -116.1,
+                "roi_pct": -11.5,
                 "max_drawdown_eur": 121.55
               }
             },
             "statistical_calibration": {
               "brier_score": 0.0708,
-              "log_loss": 2.0957
+              "log_loss": 2.0943
             }
           }
         }
       },
       "TOUS": {
-        "courses": 504,
+        "courses": 505,
         "metriques": {
           "NEW_VALUE_ENGINE": {
             "engine_name": "NEW_VALUE_ENGINE",
-            "total_races": 504,
+            "total_races": 505,
             "hit_rates": {
-              "top1_win_rate_pct": 28.57,
-              "winner_in_top3_pct": 59.52,
-              "winner_in_top8_pct": 93.65,
-              "at_least_one_base_placed_pct": 80.36,
-              "both_bases_placed_pct": 28.17,
-              "tierce_in_top8_pct": 68.85,
-              "quarte_in_top8_pct": 56.94,
-              "quinte_in_top8_pct": 44.05,
-              "outsider_placed_pct": 8.73
+              "top1_win_rate_pct": 28.71,
+              "winner_in_top3_pct": 59.6,
+              "winner_in_top8_pct": 93.66,
+              "at_least_one_base_placed_pct": 80.4,
+              "both_bases_placed_pct": 28.12,
+              "tierce_in_top8_pct": 68.91,
+              "quarte_in_top8_pct": 57.03,
+              "quinte_in_top8_pct": 44.16,
+              "outsider_placed_pct": 8.71
             },
             "financial_performance": {
               "simple_gagnant": {
-                "total_staked_eur": 504.0,
-                "total_returned_eur": 437.7,
-                "net_profit_eur": -66.3,
-                "roi_pct": -13.15,
+                "total_staked_eur": 505.0,
+                "total_returned_eur": 439.7,
+                "net_profit_eur": -65.3,
+                "roi_pct": -12.93,
                 "max_drawdown_eur": 89.6
               },
               "simple_place": {
-                "total_staked_eur": 1008.0,
-                "total_returned_eur": 909.75,
-                "net_profit_eur": -98.25,
-                "roi_pct": -9.75,
-                "max_drawdown_eur": 98.55
+                "total_staked_eur": 1010.0,
+                "total_returned_eur": 910.8,
+                "net_profit_eur": -99.2,
+                "roi_pct": -9.82,
+                "max_drawdown_eur": 99.2
               }
             },
             "statistical_calibration": {
               "brier_score": 0.0702,
-              "log_loss": 2.0422
+              "log_loss": 2.0399
             }
           },
           "MARKET_BASELINE": {
             "engine_name": "MARKET_BASELINE",
-            "total_races": 504,
+            "total_races": 505,
             "hit_rates": {
-              "top1_win_rate_pct": 28.57,
-              "winner_in_top3_pct": 63.1,
-              "winner_in_top8_pct": 94.25,
-              "at_least_one_base_placed_pct": 80.16,
-              "both_bases_placed_pct": 28.37,
-              "tierce_in_top8_pct": 71.23,
-              "quarte_in_top8_pct": 58.33,
-              "quinte_in_top8_pct": 46.23,
-              "outsider_placed_pct": 16.07
+              "top1_win_rate_pct": 28.71,
+              "winner_in_top3_pct": 63.17,
+              "winner_in_top8_pct": 94.26,
+              "at_least_one_base_placed_pct": 80.2,
+              "both_bases_placed_pct": 28.32,
+              "tierce_in_top8_pct": 71.29,
+              "quarte_in_top8_pct": 58.42,
+              "quinte_in_top8_pct": 46.34,
+              "outsider_placed_pct": 16.04
             },
             "financial_performance": {
               "simple_gagnant": {
-                "total_staked_eur": 504.0,
-                "total_returned_eur": 436.9,
-                "net_profit_eur": -67.1,
-                "roi_pct": -13.31,
+                "total_staked_eur": 505.0,
+                "total_returned_eur": 438.9,
+                "net_profit_eur": -66.1,
+                "roi_pct": -13.09,
                 "max_drawdown_eur": 88.0
               },
               "simple_place": {
-                "total_staked_eur": 1008.0,
-                "total_returned_eur": 905.15,
-                "net_profit_eur": -102.85,
-                "roi_pct": -10.2,
-                "max_drawdown_eur": 103.15
+                "total_staked_eur": 1010.0,
+                "total_returned_eur": 906.2,
+                "net_profit_eur": -103.8,
+                "roi_pct": -10.28,
+                "max_drawdown_eur": 103.8
               }
             },
             "statistical_calibration": {
               "brier_score": 0.07,
-              "log_loss": 2.0165
+              "log_loss": 2.0142
             }
           },
           "RADAR_V4": {
             "engine_name": "RADAR_V4",
-            "total_races": 504,
+            "total_races": 505,
             "hit_rates": {
-              "top1_win_rate_pct": 27.98,
-              "winner_in_top3_pct": 57.54,
-              "winner_in_top8_pct": 91.07,
-              "at_least_one_base_placed_pct": 76.98,
-              "both_bases_placed_pct": 22.22,
-              "tierce_in_top8_pct": 65.48,
-              "quarte_in_top8_pct": 52.18,
-              "quinte_in_top8_pct": 40.87,
-              "outsider_placed_pct": 13.69
+              "top1_win_rate_pct": 28.12,
+              "winner_in_top3_pct": 57.62,
+              "winner_in_top8_pct": 91.09,
+              "at_least_one_base_placed_pct": 77.03,
+              "both_bases_placed_pct": 22.38,
+              "tierce_in_top8_pct": 65.54,
+              "quarte_in_top8_pct": 52.28,
+              "quinte_in_top8_pct": 40.99,
+              "outsider_placed_pct": 13.66
             },
             "financial_performance": {
               "simple_gagnant": {
-                "total_staked_eur": 504.0,
-                "total_returned_eur": 489.3,
-                "net_profit_eur": -14.7,
-                "roi_pct": -2.92,
+                "total_staked_eur": 505.0,
+                "total_returned_eur": 491.3,
+                "net_profit_eur": -13.7,
+                "roi_pct": -2.71,
                 "max_drawdown_eur": 84.7
               },
               "simple_place": {
-                "total_staked_eur": 1008.0,
-                "total_returned_eur": 891.55,
-                "net_profit_eur": -116.45,
-                "roi_pct": -11.55,
+                "total_staked_eur": 1010.0,
+                "total_returned_eur": 893.9,
+                "net_profit_eur": -116.1,
+                "roi_pct": -11.5,
                 "max_drawdown_eur": 121.55
               }
             },
             "statistical_calibration": {
               "brier_score": 0.0708,
-              "log_loss": 2.0957
+              "log_loss": 2.0943
             }
           }
         }
@@ -1911,7 +1911,7 @@
           "draw": 16,
           "music": "2a1a2a4a4a1a7aDa8a(25)",
           "morning_odds": 34.0,
-          "live_odds": 2.6,
+          "live_odds": 2.8,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -1929,7 +1929,7 @@
           "draw": 14,
           "music": "3a5aDa4a8a3a4a2a5a(25)",
           "morning_odds": 1.5,
-          "live_odds": 19.0,
+          "live_odds": 20.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -1947,7 +1947,7 @@
           "draw": 12,
           "music": "7a1aDm1a3aDmDm(25)7aDa",
           "morning_odds": 19.0,
-          "live_odds": 9.3,
+          "live_odds": 9.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -1965,7 +1965,7 @@
           "draw": 7,
           "music": "1aDa1a7a(24)Da9a2a3a1a",
           "morning_odds": 34.0,
-          "live_odds": 9.1,
+          "live_odds": 9.2,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -2001,7 +2001,7 @@
           "draw": 8,
           "music": "Da2a1a2a0a2a4a3a6a(25)",
           "morning_odds": 34.0,
-          "live_odds": 41.0,
+          "live_odds": 43.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -2019,7 +2019,7 @@
           "draw": 13,
           "music": "6aDaDa9a5a(25)4a8aDa0a",
           "morning_odds": 7.4,
-          "live_odds": 19.0,
+          "live_odds": 16.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -2037,7 +2037,7 @@
           "draw": 15,
           "music": "1a9a0a1a(25)3a1a4a6a4a",
           "morning_odds": 25.0,
-          "live_odds": 6.0,
+          "live_odds": 5.7,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -2055,7 +2055,7 @@
           "draw": 4,
           "music": "Da2a6aDa2aDa6a2aDa(25)",
           "morning_odds": 25.0,
-          "live_odds": 55.0,
+          "live_odds": 56.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -2073,7 +2073,7 @@
           "draw": 2,
           "music": "DaDmDa1a6aDa5a4a5a0a",
           "morning_odds": 25.0,
-          "live_odds": 15.0,
+          "live_odds": 17.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -2091,7 +2091,7 @@
           "draw": 6,
           "music": "1a6a2a8a6a0a1a3aDa5a",
           "morning_odds": 79.0,
-          "live_odds": 66.0,
+          "live_odds": 61.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -2127,7 +2127,7 @@
           "draw": 1,
           "music": "DaDa3a2aDaDm7a0a0a4a",
           "morning_odds": 20.0,
-          "live_odds": 23.0,
+          "live_odds": 22.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -2145,7 +2145,7 @@
           "draw": 5,
           "music": "3a0a7a(25)5a3a5a1a5a8a",
           "morning_odds": 30.0,
-          "live_odds": 41.0,
+          "live_odds": 39.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -2163,7 +2163,7 @@
           "draw": 9,
           "music": "7a1aDa0a4a1a3aDa0a5a",
           "morning_odds": 36.0,
-          "live_odds": 73.0,
+          "live_odds": 76.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -2181,7 +2181,7 @@
           "draw": 11,
           "music": "0a5aDaDaDa5a3a1a(25)Da",
           "morning_odds": 57.0,
-          "live_odds": 54.0,
+          "live_odds": 53.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -2401,7 +2401,7 @@
           "draw": 7,
           "music": "Da0a3m1m2m0a(25)1m2mDa",
           "morning_odds": 1.7,
-          "live_odds": 4.3,
+          "live_odds": 4.4,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -2437,7 +2437,7 @@
           "draw": 8,
           "music": "2m4aDm7a9a4m2m(25)1mDm",
           "morning_odds": 8.5,
-          "live_odds": 7.6,
+          "live_odds": 6.9,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -2455,7 +2455,7 @@
           "draw": 10,
           "music": "7a5m5a3a8a0a0a(25)2m3a",
           "morning_odds": 4.5,
-          "live_odds": 12.0,
+          "live_odds": 11.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -2473,7 +2473,7 @@
           "draw": 2,
           "music": "Dm3m4m1m1m0aDmDm(25)Dm",
           "morning_odds": 1.7,
-          "live_odds": 8.6,
+          "live_odds": 8.7,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -2491,7 +2491,7 @@
           "draw": 5,
           "music": "DmDaDmDm(25)2m1m1m2m3m",
           "morning_odds": 10.0,
-          "live_odds": 8.1,
+          "live_odds": 8.4,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -2509,7 +2509,7 @@
           "draw": 6,
           "music": "3m4m1m4m8mDm7m(25)Dm6m",
           "morning_odds": 4.2,
-          "live_odds": 7.7,
+          "live_odds": 8.1,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -2527,7 +2527,7 @@
           "draw": 1,
           "music": "9mAm6m1m5m6m4m7m8a3a",
           "morning_odds": 76.0,
-          "live_odds": 24.0,
+          "live_odds": 25.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -2563,7 +2563,7 @@
           "draw": 9,
           "music": "1m5m5m9m0mDm0a0a7m5m",
           "morning_odds": 20.0,
-          "live_odds": 32.0,
+          "live_odds": 34.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -2783,7 +2783,7 @@
           "draw": 9,
           "music": "Da4a3a4aDa1a8a(25)1a1a",
           "morning_odds": 2.1,
-          "live_odds": 9.3,
+          "live_odds": 9.9,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -2819,7 +2819,7 @@
           "draw": 12,
           "music": "2a3a1a2a0a(25)0a2aDaDa",
           "morning_odds": 6.0,
-          "live_odds": 10.0,
+          "live_odds": 9.6,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -2837,7 +2837,7 @@
           "draw": 7,
           "music": "4a2a0a0a(25)Dm7a1m5m5a",
           "morning_odds": 14.0,
-          "live_odds": 8.3,
+          "live_odds": 8.6,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -2855,7 +2855,7 @@
           "draw": 14,
           "music": "1a5a2a1aDa4a1a2a3a(25)",
           "morning_odds": 9.4,
-          "live_odds": 13.0,
+          "live_odds": 14.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -2873,7 +2873,7 @@
           "draw": 6,
           "music": "5a2a3aDmDa8a4a1aDa2a",
           "morning_odds": 4.2,
-          "live_odds": 14.0,
+          "live_odds": 15.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -2927,7 +2927,7 @@
           "draw": 1,
           "music": "5a2aDa1aDa4aDa1a6m1a",
           "morning_odds": 119.0,
-          "live_odds": 98.0,
+          "live_odds": 100.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -2945,7 +2945,7 @@
           "draw": 3,
           "music": "Da6aDm2a6a4aDaDaDaDa",
           "morning_odds": 28.0,
-          "live_odds": 20.0,
+          "live_odds": 21.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -2963,7 +2963,7 @@
           "draw": 10,
           "music": "2a4a6a5a0a8aDa7a7a1a",
           "morning_odds": 86.0,
-          "live_odds": 25.0,
+          "live_odds": 27.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -2981,7 +2981,7 @@
           "draw": 4,
           "music": "Da3a3aDa3a1a5a7a6a2a",
           "morning_odds": 8.5,
-          "live_odds": 64.0,
+          "live_odds": 63.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -2999,7 +2999,7 @@
           "draw": 5,
           "music": "1a3a3a4aDaDa8a8a(25)6m",
           "morning_odds": 128.0,
-          "live_odds": 25.0,
+          "live_odds": 20.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -3017,7 +3017,7 @@
           "draw": 2,
           "music": "9aDm2a5a6a9aDm4aDa4a",
           "morning_odds": 86.0,
-          "live_odds": 88.0,
+          "live_odds": 78.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -3237,7 +3237,7 @@
           "draw": 18,
           "music": "0a1aDaDa1a0a0a4aDaDa",
           "morning_odds": 8.7,
-          "live_odds": 5.3,
+          "live_odds": 5.5,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -3255,7 +3255,7 @@
           "draw": 9,
           "music": "2a1a0a4a3a5a3a0a6a(25)",
           "morning_odds": 13.0,
-          "live_odds": 6.2,
+          "live_odds": 6.1,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -3381,7 +3381,7 @@
           "draw": 10,
           "music": "0a1a2a1a1a4a1a8a7a9a",
           "morning_odds": 59.0,
-          "live_odds": 27.0,
+          "live_odds": 28.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -3417,7 +3417,7 @@
           "draw": 2,
           "music": "Dm4a3aDa1a2aDa5a9a0a",
           "morning_odds": 29.0,
-          "live_odds": 28.0,
+          "live_odds": 27.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -3471,7 +3471,7 @@
           "draw": 3,
           "music": "9a0a4a1a6a6a6aDa0a9a",
           "morning_odds": 27.0,
-          "live_odds": 30.0,
+          "live_odds": 31.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -3489,7 +3489,7 @@
           "draw": 16,
           "music": "1a7a3a2a2a4aDa0a4a0a",
           "morning_odds": 59.0,
-          "live_odds": 39.0,
+          "live_odds": 41.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -3507,7 +3507,7 @@
           "draw": 5,
           "music": "6a0a6a0a6a2a3aDm6a0a",
           "morning_odds": 41.0,
-          "live_odds": 71.0,
+          "live_odds": 72.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -3525,7 +3525,7 @@
           "draw": 1,
           "music": "6a3a8m7a8a1a0a1a0a7a",
           "morning_odds": 8.2,
-          "live_odds": 76.0,
+          "live_odds": 78.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -3751,7 +3751,7 @@
           "draw": 13,
           "music": "4a0aDa4aDa2a4aDa6a6a",
           "morning_odds": 1.1,
-          "live_odds": 8.4,
+          "live_odds": 8.5,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -3805,7 +3805,7 @@
           "draw": 14,
           "music": "1a4a2aDa0a2a4a5a9a7a",
           "morning_odds": 12.0,
-          "live_odds": 14.0,
+          "live_odds": 13.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -3823,7 +3823,7 @@
           "draw": 1,
           "music": "9aDaDaDa4a3a5a(25)3a8a",
           "morning_odds": 9.0,
-          "live_odds": 23.0,
+          "live_odds": 24.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -3877,7 +3877,7 @@
           "draw": 6,
           "music": "2a3aDa1a4a(25)6a5a0a2a",
           "morning_odds": 28.0,
-          "live_odds": 41.0,
+          "live_odds": 42.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -3895,7 +3895,7 @@
           "draw": 9,
           "music": "2aDa9a5aDa(25)2a4a5a1a",
           "morning_odds": 9.0,
-          "live_odds": 24.0,
+          "live_odds": 23.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -4150,7 +4150,7 @@
           "draw": 5,
           "music": "7a6aDa4a4aDa0a3a5a3a",
           "morning_odds": 8.5,
-          "live_odds": 9.4,
+          "live_odds": 9.6,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -4168,7 +4168,7 @@
           "draw": 2,
           "music": "3a8a3a2a(25)DmDa",
           "morning_odds": 25.0,
-          "live_odds": 9.0,
+          "live_odds": 9.1,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -4186,7 +4186,7 @@
           "draw": 8,
           "music": "5a1aDa3a2aDaDa6a3a1a",
           "morning_odds": 1.2,
-          "live_odds": 4.3,
+          "live_odds": 4.1,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -4455,7 +4455,7 @@
           "draw": 4,
           "music": "Da1a1a4a3a6a4a(25)1a2a",
           "morning_odds": 1.7,
-          "live_odds": 3.7,
+          "live_odds": 3.6,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -4473,7 +4473,7 @@
           "draw": 3,
           "music": "1a1a1a1a1a(25)1a",
           "morning_odds": 1.7,
-          "live_odds": 1.2,
+          "live_odds": 1.3,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -4527,7 +4527,7 @@
           "draw": 6,
           "music": "9a5a8aDa4a7a8aDa5a(25)",
           "morning_odds": 3.1,
-          "live_odds": 84.0,
+          "live_odds": 80.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -4545,7 +4545,7 @@
           "draw": 2,
           "music": "Da4a4a7aDa5a5a5aDa5a",
           "morning_odds": 11.0,
-          "live_odds": 54.0,
+          "live_odds": 53.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -4563,7 +4563,7 @@
           "draw": 7,
           "music": "DaDa1a(25)1a2a1a",
           "morning_odds": 28.0,
-          "live_odds": 59.0,
+          "live_odds": 52.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -4783,7 +4783,7 @@
           "draw": 7,
           "music": "1a3a4a2a3a8a7a7a3a(25)",
           "morning_odds": 3.3,
-          "live_odds": 8.3,
+          "live_odds": 7.9,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -4801,7 +4801,7 @@
           "draw": 8,
           "music": "1a1aDa2a(25)2a3aDa",
           "morning_odds": 13.0,
-          "live_odds": 8.8,
+          "live_odds": 9.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -4819,7 +4819,7 @@
           "draw": 11,
           "music": "2a1a1aDa2aAa",
           "morning_odds": 3.8,
-          "live_odds": 6.4,
+          "live_odds": 6.3,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -4837,7 +4837,7 @@
           "draw": 6,
           "music": "7a2a1a(25)7a5a1a",
           "morning_odds": 4.7,
-          "live_odds": 9.8,
+          "live_odds": 10.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -4855,7 +4855,7 @@
           "draw": 5,
           "music": "1aDaDa4a2aDa1a",
           "morning_odds": 16.0,
-          "live_odds": 11.0,
+          "live_odds": 12.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -4873,7 +4873,7 @@
           "draw": 10,
           "music": "2a2a7a1aDa5a6aDaDa2a",
           "morning_odds": 11.0,
-          "live_odds": 6.4,
+          "live_odds": 5.5,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -4891,7 +4891,7 @@
           "draw": 2,
           "music": "1a2a1a",
           "morning_odds": 4.7,
-          "live_odds": 8.6,
+          "live_odds": 9.1,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -4909,7 +4909,7 @@
           "draw": 9,
           "music": "3a5a8a4a3a5a2a2a9aDa",
           "morning_odds": 1.9,
-          "live_odds": 5.7,
+          "live_odds": 5.9,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -4927,7 +4927,7 @@
           "draw": 4,
           "music": "4a3a5aDa3a1a2a9a4a0a",
           "morning_odds": 1.1,
-          "live_odds": 13.0,
+          "live_odds": 15.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -4945,7 +4945,7 @@
           "draw": 1,
           "music": "2a6m4a2a6a3a3a3aDm8a",
           "morning_odds": 21.0,
-          "live_odds": 42.0,
+          "live_odds": 45.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -4963,7 +4963,7 @@
           "draw": 3,
           "music": "4a4m1aDa4a1aDa6mDaDa",
           "morning_odds": 85.0,
-          "live_odds": 21.0,
+          "live_odds": 22.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -5183,7 +5183,7 @@
           "draw": 11,
           "music": "Dm9a4m2m6a2m3a7a",
           "morning_odds": 3.0,
-          "live_odds": 3.5,
+          "live_odds": 3.6,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -5201,7 +5201,7 @@
           "draw": 10,
           "music": "1mDm1m",
           "morning_odds": 1.2,
-          "live_odds": 6.9,
+          "live_odds": 7.2,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -5219,7 +5219,7 @@
           "draw": 12,
           "music": "2m7a3a9aDaDa3a3a",
           "morning_odds": 6.9,
-          "live_odds": 14.0,
+          "live_odds": 12.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -5237,7 +5237,7 @@
           "draw": 4,
           "music": "4a5a6a4a7aDa",
           "morning_odds": 22.0,
-          "live_odds": 12.0,
+          "live_odds": 11.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -5255,7 +5255,7 @@
           "draw": 14,
           "music": "4m3m1m4m5m6a",
           "morning_odds": 22.0,
-          "live_odds": 14.0,
+          "live_odds": 12.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -5273,7 +5273,7 @@
           "draw": 9,
           "music": "5aDa1a5a3a",
           "morning_odds": 6.8,
-          "live_odds": 13.0,
+          "live_odds": 14.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -5291,7 +5291,7 @@
           "draw": 15,
           "music": "7mDmDa1mDaDa3a2a(25)9a",
           "morning_odds": 37.0,
-          "live_odds": 19.0,
+          "live_odds": 21.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -5327,7 +5327,7 @@
           "draw": 8,
           "music": "8a1mDa9a(25)Dm2a9a3a",
           "morning_odds": 2.4,
-          "live_odds": 8.1,
+          "live_odds": 8.8,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -5345,7 +5345,7 @@
           "draw": 2,
           "music": "4mDa8aDa",
           "morning_odds": 2.8,
-          "live_odds": 52.0,
+          "live_odds": 54.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -5363,7 +5363,7 @@
           "draw": 13,
           "music": "5m1mDa2m2m",
           "morning_odds": 8.3,
-          "live_odds": 9.0,
+          "live_odds": 9.2,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -5381,7 +5381,7 @@
           "draw": 6,
           "music": "1mDa6aDm5m(25)DmDaDaDa",
           "morning_odds": 26.0,
-          "live_odds": 29.0,
+          "live_odds": 30.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -5399,7 +5399,7 @@
           "draw": 3,
           "music": "DaAmDm5m(25)DmDa",
           "morning_odds": 93.0,
-          "live_odds": 35.0,
+          "live_odds": 34.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -5417,7 +5417,7 @@
           "draw": 1,
           "music": "0aDaDa",
           "morning_odds": 26.0,
-          "live_odds": 72.0,
+          "live_odds": 38.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -5435,7 +5435,7 @@
           "draw": 7,
           "music": "2mDa7a5aDaDaDaDaDa8a",
           "morning_odds": 52.0,
-          "live_odds": 37.0,
+          "live_odds": 32.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -5875,8 +5875,8 @@
       "rope": "DROITE",
       "autostart": false,
       "scheduled_start_time": "09:30 GMT (11:30 Paris)",
-      "is_finished": false,
-      "status": "PARTIE",
+      "is_finished": true,
+      "status": "TERMINÉE",
       "is_cancelled": false,
       "is_started": true,
       "start_time_utc": "2026-09-25T09:30:00Z",
@@ -6027,14 +6027,20 @@
       "common_count": 8,
       "fav_presse": "-",
       "fav_marche": 6,
-      "arrivee": "En attente",
-      "arrival_list": [],
-      "couv_moteur": "0/5",
-      "couv_moteur_count": 0,
-      "couv_marche": "0/5",
-      "couv_marche_count": 0,
-      "couverture_label": "Course partie",
-      "decision": "Bases: 6 - 2",
+      "arrivee": "6-1-4-2-8",
+      "arrival_list": [
+        6,
+        1,
+        4,
+        2,
+        8
+      ],
+      "couv_moteur": "5/5",
+      "couv_moteur_count": 5,
+      "couv_marche": "5/5",
+      "couv_marche_count": 5,
+      "couverture_label": "Moteur 5/5 · Marché 5/5",
+      "decision": "Bases: 6 (1e 🟢) - 2 (4e)",
       "decision_badge": "badge-base",
       "runners": [
         {
@@ -6191,7 +6197,7 @@
       "provisoire_reason": null,
       "publishable": true,
       "publication_reason": "OK",
-      "display_horizon": "T30",
+      "display_horizon": "T15",
       "editions_moteur": {
         "T_MATIN": {
           "sel": "7-3-5-2-6-1-4-8",
@@ -6211,6 +6217,13 @@
           "sel": "3-7-5-2-1-4-8-6",
           "nominal": false,
           "lock": "09:30",
+          "priced_ratio": 1.0,
+          "odds_real": true
+        },
+        "T15": {
+          "sel": "7-3-5-1-2-4-8-6",
+          "nominal": false,
+          "lock": "09:45",
           "priced_ratio": 1.0,
           "odds_real": true
         }
@@ -6236,6 +6249,13 @@
           "lock": "09:30",
           "priced_ratio": 1.0,
           "odds_real": true
+        },
+        "T15": {
+          "sel": "7-3-5-4-1-2-8-6",
+          "nominal": false,
+          "lock": "09:45",
+          "priced_ratio": 1.0,
+          "odds_real": true
         }
       },
       "date": "2026-09-25",
@@ -6257,20 +6277,20 @@
       "is_no_bet": false,
       "is_master": true,
       "np_nums": [],
-      "sel_moteur": "3-7-5-2-1-4-8-6",
+      "sel_moteur": "7-3-5-1-2-4-8-6",
       "sel_moteur_list": [
-        3,
         7,
+        3,
         5,
-        2,
         1,
+        2,
         4,
         8,
         6
       ],
       "bases": [
-        3,
-        7
+        7,
+        3
       ],
       "outsider_num": 9,
       "regrets": [
@@ -6284,12 +6304,12 @@
             "produit": "COUPLE_GAGNANT",
             "libelle": "Couplé Maître du jour (Gagnant & Placé)",
             "chevaux": [
-              3,
-              7
+              7,
+              3
             ],
             "bases": [
-              3,
-              7
+              7,
+              3
             ],
             "associes": [],
             "combinaisons": 1,
@@ -6297,19 +6317,19 @@
             "cout_total_eur": 2.0,
             "eligible": true,
             "motif_ineligibilite": null,
-            "texte": "3 - 7"
+            "texte": "7 - 3"
           },
           {
             "produit": "TRIO",
             "libelle": "Trio (Couplé Gagnant)",
             "chevaux": [
-              3,
               7,
+              3,
               9
             ],
             "bases": [
-              3,
-              7
+              7,
+              3
             ],
             "associes": [
               9
@@ -6319,27 +6339,27 @@
             "cout_total_eur": 2.0,
             "eligible": true,
             "motif_ineligibilite": null,
-            "texte": "3 - 7 - 9"
+            "texte": "7 - 3 - 9"
           },
           {
             "produit": "QUINTE_PLUS",
             "libelle": "Quinté+ champ réduit",
             "chevaux": [
-              3,
               7,
+              3,
               5,
-              2,
               1,
+              2,
               4
             ],
             "bases": [
-              3,
-              7
+              7,
+              3
             ],
             "associes": [
               5,
-              2,
               1,
+              2,
               4
             ],
             "combinaisons": 4,
@@ -6347,59 +6367,59 @@
             "cout_total_eur": null,
             "eligible": false,
             "motif_ineligibilite": "PARI_NON_OUVERT",
-            "texte": "3 - 7 - X - X - X / 5, 2, 1, 4"
+            "texte": "7 - 3 - X - X - X / 5, 1, 2, 4"
           }
         ],
         "ticket_securite": {
           "pari": "Couplé Maître du jour (Gagnant & Placé)",
           "chevaux": [
-            3,
-            7
+            7,
+            3
           ],
-          "formule": "3 - 7",
+          "formule": "7 - 3",
           "mise_base_eur": 2.0
         },
         "ticket_trio": {
           "pari": "Trio (Couplé Gagnant)",
           "chevaux": [
-            3,
             7,
+            3,
             9
           ],
-          "formule": "3 - 7 - 9",
+          "formule": "7 - 3 - 9",
           "mise_base_eur": 2.0
         },
         "quinte_champ_reduit": {
           "pari": "Quinté+ champ réduit",
           "bases_fixes": [
-            3,
-            7
+            7,
+            3
           ],
           "associes": [
             5,
-            2,
             1,
+            2,
             4
           ],
-          "formule": "3 - 7 - X - X - X / 5, 2, 1, 4",
+          "formule": "7 - 3 - X - X - X / 5, 1, 2, 4",
           "combinaisons": 4,
           "budget_conseille_eur": null
         }
       },
-      "sel_marche": "3-7-5-1-2-4-8-6",
+      "sel_marche": "7-3-5-4-1-2-8-6",
       "sel_marche_list": [
-        3,
         7,
+        3,
         5,
+        4,
         1,
         2,
-        4,
         8,
         6
       ],
       "common_count": 8,
       "fav_presse": "-",
-      "fav_marche": 3,
+      "fav_marche": 7,
       "arrivee": "En attente",
       "arrival_list": [],
       "couv_moteur": "0/5",
@@ -6407,27 +6427,9 @@
       "couv_marche": "0/5",
       "couv_marche_count": 0,
       "couverture_label": "Course à venir",
-      "decision": "⭐ COUPLE MAITRE: 3 - 7",
+      "decision": "⭐ COUPLE MAITRE: 7 - 3",
       "decision_badge": "badge-master",
       "runners": [
-        {
-          "num": 3,
-          "name": "BAILA NAK",
-          "driver": "H.BESNIER",
-          "shoeing": "FERRE",
-          "draw": 9,
-          "music": "2p",
-          "morning_odds": 7.1,
-          "live_odds": 2.7,
-          "o_t90": 3.7,
-          "o_t30": 2.7,
-          "o_t15": null,
-          "prob_pct": 31.3,
-          "value_index": 0.85,
-          "smart_signal": "FORTE_BAISSE_INSIDER",
-          "is_np": false,
-          "odds_real": true
-        },
         {
           "num": 7,
           "name": "HODAYA",
@@ -6436,13 +6438,31 @@
           "draw": 5,
           "music": "3p",
           "morning_odds": 3.1,
-          "live_odds": 3.4,
+          "live_odds": 2.5,
           "o_t90": 3.7,
           "o_t30": 3.4,
-          "o_t15": null,
-          "prob_pct": 24.0,
+          "o_t15": 2.5,
+          "prob_pct": 32.7,
           "value_index": 0.82,
-          "smart_signal": "STABLE",
+          "smart_signal": "BAISSE_CONFIRMEE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 3,
+          "name": "BAILA NAK",
+          "driver": "H.BESNIER",
+          "shoeing": "FERRE",
+          "draw": 9,
+          "music": "2p",
+          "morning_odds": 7.1,
+          "live_odds": 2.6,
+          "o_t90": 3.7,
+          "o_t30": 2.7,
+          "o_t15": 2.6,
+          "prob_pct": 32.4,
+          "value_index": 0.84,
+          "smart_signal": "FORTE_BAISSE_INSIDER",
           "is_np": false,
           "odds_real": true
         },
@@ -6457,7 +6477,7 @@
           "live_odds": 6.7,
           "o_t90": 4.5,
           "o_t30": 6.7,
-          "o_t15": null,
+          "o_t15": 6.7,
           "prob_pct": 12.6,
           "value_index": 0.85,
           "smart_signal": "STABLE",
@@ -6472,13 +6492,13 @@
           "draw": 1,
           "music": "5p3p7p",
           "morning_odds": 17.0,
-          "live_odds": 12.0,
+          "live_odds": 17.0,
           "o_t90": 9.4,
           "o_t30": 12.0,
-          "o_t15": null,
-          "prob_pct": 7.6,
+          "o_t15": 17.0,
+          "prob_pct": 5.3,
           "value_index": 0.91,
-          "smart_signal": "BAISSE_CONFIRMEE",
+          "smart_signal": "STABLE",
           "is_np": false,
           "odds_real": true
         },
@@ -6490,12 +6510,12 @@
           "draw": 2,
           "music": "1p0p0p8p",
           "morning_odds": 29.0,
-          "live_odds": 12.0,
+          "live_odds": 19.0,
           "o_t90": 13.0,
           "o_t30": 12.0,
-          "o_t15": null,
-          "prob_pct": 7.6,
-          "value_index": 0.91,
+          "o_t15": 19.0,
+          "prob_pct": 5.2,
+          "value_index": 0.99,
           "smart_signal": "FORTE_BAISSE_INSIDER",
           "is_np": false,
           "odds_real": true
@@ -6508,12 +6528,12 @@
           "draw": 8,
           "music": "5p0p",
           "morning_odds": 6.1,
-          "live_odds": 12.0,
+          "live_odds": 16.0,
           "o_t90": 10.0,
           "o_t30": 12.0,
-          "o_t15": null,
-          "prob_pct": 6.7,
-          "value_index": 0.8,
+          "o_t15": 16.0,
+          "prob_pct": 5.1,
+          "value_index": 0.81,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -6526,12 +6546,12 @@
           "draw": 7,
           "music": "",
           "morning_odds": 1.7,
-          "live_odds": 20.0,
+          "live_odds": 32.0,
           "o_t90": 20.0,
           "o_t30": 20.0,
-          "o_t15": null,
-          "prob_pct": 4.2,
-          "value_index": 0.83,
+          "o_t15": 32.0,
+          "prob_pct": 2.7,
+          "value_index": 0.87,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -6544,12 +6564,12 @@
           "draw": 6,
           "music": "0p",
           "morning_odds": 14.0,
-          "live_odds": 24.0,
+          "live_odds": 40.0,
           "o_t90": 19.0,
           "o_t30": 24.0,
-          "o_t15": null,
-          "prob_pct": 3.4,
-          "value_index": 0.82,
+          "o_t15": 40.0,
+          "prob_pct": 2.1,
+          "value_index": 0.86,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -6562,12 +6582,12 @@
           "draw": 4,
           "music": "",
           "morning_odds": 2.3,
-          "live_odds": 35.0,
+          "live_odds": 61.0,
           "o_t90": 28.0,
           "o_t30": 35.0,
-          "o_t15": null,
-          "prob_pct": 2.6,
-          "value_index": 0.92,
+          "o_t15": 61.0,
+          "prob_pct": 1.7,
+          "value_index": 1.04,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -6796,7 +6816,7 @@
           "draw": 7,
           "music": "0p4p2p4p6p7p(25)7p5p5p",
           "morning_odds": 22.0,
-          "live_odds": 7.7,
+          "live_odds": 8.8,
           "o_t90": 6.2,
           "o_t30": null,
           "o_t15": null,
@@ -6814,7 +6834,7 @@
           "draw": 1,
           "music": "2p9p8p4p5p2p(25)8p2p0p",
           "morning_odds": 1.6,
-          "live_odds": 7.0,
+          "live_odds": 6.8,
           "o_t90": 6.1,
           "o_t30": null,
           "o_t15": null,
@@ -6832,7 +6852,7 @@
           "draw": 2,
           "music": "1p5p9p9p9p(25)4p5p2p1p",
           "morning_odds": 6.5,
-          "live_odds": 5.8,
+          "live_odds": 6.4,
           "o_t90": 7.8,
           "o_t30": null,
           "o_t15": null,
@@ -6850,7 +6870,7 @@
           "draw": 3,
           "music": "8p2p3p0p6p6p0p3p7p0p",
           "morning_odds": 1.1,
-          "live_odds": 7.6,
+          "live_odds": 5.4,
           "o_t90": 7.8,
           "o_t30": null,
           "o_t15": null,
@@ -6868,7 +6888,7 @@
           "draw": 10,
           "music": "3p0p7p0p6p6p9p7p(25)7p",
           "morning_odds": 6.5,
-          "live_odds": 6.7,
+          "live_odds": 6.5,
           "o_t90": 7.9,
           "o_t30": null,
           "o_t15": null,
@@ -6886,7 +6906,7 @@
           "draw": 11,
           "music": "7p5p5p0p2p3p6p5p0p",
           "morning_odds": 5.7,
-          "live_odds": 9.5,
+          "live_odds": 9.6,
           "o_t90": 8.4,
           "o_t30": null,
           "o_t15": null,
@@ -6904,7 +6924,7 @@
           "draw": 6,
           "music": "0p8p8p6p4p5p7p8p6p8p",
           "morning_odds": 13.0,
-          "live_odds": 11.0,
+          "live_odds": 13.0,
           "o_t90": 11.0,
           "o_t30": null,
           "o_t15": null,
@@ -6958,7 +6978,7 @@
           "draw": 9,
           "music": "0p0p0p0p(25)3p3p8p9p9p",
           "morning_odds": 12.0,
-          "live_odds": 15.0,
+          "live_odds": 18.0,
           "o_t90": 16.0,
           "o_t30": null,
           "o_t15": null,
@@ -6976,7 +6996,7 @@
           "draw": 8,
           "music": "8p7h4hAh6h9p6h(25)4hJh",
           "morning_odds": 6.5,
-          "live_odds": 19.0,
+          "live_odds": 21.0,
           "o_t90": 20.0,
           "o_t30": null,
           "o_t15": null,
@@ -7210,7 +7230,7 @@
           "draw": 2,
           "music": "6p3p6p5p0p0p0p9p8p0p",
           "morning_odds": 3.9,
-          "live_odds": 4.2,
+          "live_odds": 4.6,
           "o_t90": 4.2,
           "o_t30": null,
           "o_t15": null,
@@ -7228,7 +7248,7 @@
           "draw": 6,
           "music": "2p6p3p2p5p2p2p3p2p0p",
           "morning_odds": 1.1,
-          "live_odds": 7.0,
+          "live_odds": 6.3,
           "o_t90": 7.0,
           "o_t30": null,
           "o_t15": null,
@@ -7246,7 +7266,7 @@
           "draw": 9,
           "music": "2p5p0p1p2p9p6p5p2p6p",
           "morning_odds": 16.0,
-          "live_odds": 9.0,
+          "live_odds": 8.4,
           "o_t90": 9.0,
           "o_t30": null,
           "o_t15": null,
@@ -7264,7 +7284,7 @@
           "draw": 12,
           "music": "7p2p3p5p0p3p4p3p4p6p",
           "morning_odds": 11.0,
-          "live_odds": 8.9,
+          "live_odds": 8.2,
           "o_t90": 8.9,
           "o_t30": null,
           "o_t15": null,
@@ -7282,7 +7302,7 @@
           "draw": 1,
           "music": "0p6p2p7p0p0p5p6p9p",
           "morning_odds": 42.0,
-          "live_odds": 8.9,
+          "live_odds": 9.8,
           "o_t90": 8.9,
           "o_t30": null,
           "o_t15": null,
@@ -7300,7 +7320,7 @@
           "draw": 3,
           "music": "6p0p4p0p8p0p5p5p(25)6p",
           "morning_odds": 11.0,
-          "live_odds": 10.0,
+          "live_odds": 9.5,
           "o_t90": 10.0,
           "o_t30": null,
           "o_t15": null,
@@ -7318,7 +7338,7 @@
           "draw": 4,
           "music": "Ap6p6p3p1p0p9p0p9p0p",
           "morning_odds": 3.8,
-          "live_odds": 10.0,
+          "live_odds": 11.0,
           "o_t90": 10.0,
           "o_t30": null,
           "o_t15": null,
@@ -7354,7 +7374,7 @@
           "draw": 5,
           "music": "0p6p2p8p1p4p5p3p5p1p",
           "morning_odds": 14.0,
-          "live_odds": 15.0,
+          "live_odds": 14.0,
           "o_t90": 15.0,
           "o_t30": null,
           "o_t15": null,
@@ -7390,7 +7410,7 @@
           "draw": 7,
           "music": "9p9p0p0p(25)5p6p5p5p2p",
           "morning_odds": 9.4,
-          "live_odds": 22.0,
+          "live_odds": 24.0,
           "o_t90": 22.0,
           "o_t30": null,
           "o_t15": null,
@@ -7408,7 +7428,7 @@
           "draw": 10,
           "music": "9p5p6p0p0p0p(25)6p0p8p",
           "morning_odds": 52.0,
-          "live_odds": 36.0,
+          "live_odds": 39.0,
           "o_t90": 36.0,
           "o_t30": null,
           "o_t15": null,
@@ -7621,7 +7641,7 @@
           "draw": 1,
           "music": "4p6p1p3p",
           "morning_odds": 5.0,
-          "live_odds": 2.5,
+          "live_odds": 1.9,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -7639,7 +7659,7 @@
           "draw": 3,
           "music": "5p4p6p(25)4p1p1p9p",
           "morning_odds": 1.7,
-          "live_odds": 5.0,
+          "live_odds": 4.2,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -7657,7 +7677,7 @@
           "draw": 2,
           "music": "4p4p3p1p2p2p1p7p8p",
           "morning_odds": 1.5,
-          "live_odds": 6.6,
+          "live_odds": 8.9,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -7675,7 +7695,7 @@
           "draw": 4,
           "music": "0p8p",
           "morning_odds": 42.0,
-          "live_odds": 9.1,
+          "live_odds": 12.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -7693,7 +7713,7 @@
           "draw": 5,
           "music": "9p8p1p3p4p1p6p5p2p6p",
           "morning_odds": 7.4,
-          "live_odds": 5.3,
+          "live_odds": 7.2,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -7711,7 +7731,7 @@
           "draw": 6,
           "music": "0p6p6p5p0p3p7p4p6p",
           "morning_odds": 1.1,
-          "live_odds": 8.1,
+          "live_odds": 10.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -7919,7 +7939,7 @@
           "draw": 4,
           "music": "3p",
           "morning_odds": 16.0,
-          "live_odds": 4.8,
+          "live_odds": 5.5,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -7937,7 +7957,7 @@
           "draw": 3,
           "music": "2p4p1p6p",
           "morning_odds": 1.1,
-          "live_odds": 3.3,
+          "live_odds": 4.4,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -7955,7 +7975,7 @@
           "draw": 2,
           "music": "1p3p2p2p",
           "morning_odds": 3.6,
-          "live_odds": 2.1,
+          "live_odds": 1.6,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -7973,7 +7993,7 @@
           "draw": 1,
           "music": "2p8p5p",
           "morning_odds": 1.1,
-          "live_odds": 10.0,
+          "live_odds": 14.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -7991,7 +8011,7 @@
           "draw": 5,
           "music": "6p",
           "morning_odds": 7.3,
-          "live_odds": 10.0,
+          "live_odds": 13.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -8222,7 +8242,7 @@
           "draw": 1,
           "music": "4p2p3p(25)5p2p4p2p",
           "morning_odds": 1.1,
-          "live_odds": 3.6,
+          "live_odds": 3.5,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -8276,7 +8296,7 @@
           "draw": 4,
           "music": "9p",
           "morning_odds": 3.5,
-          "live_odds": 18.0,
+          "live_odds": 17.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -8294,7 +8314,7 @@
           "draw": 3,
           "music": "",
           "morning_odds": 70.0,
-          "live_odds": 2.8,
+          "live_odds": 2.9,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -8796,8 +8816,8 @@
       "priced_ratio": 1.0,
       "edition_provisoire": false,
       "provisoire_reason": null,
-      "publishable": true,
-      "publication_reason": "OK",
+      "publishable": false,
+      "publication_reason": "RACE_STARTED",
       "display_horizon": "T15",
       "editions_moteur": {
         "T_MATIN": {
@@ -8868,9 +8888,9 @@
       "autostart": false,
       "scheduled_start_time": "09:46 GMT (11:46 Paris)",
       "is_finished": false,
-      "status": "PROGRAMMÉE",
+      "status": "PARTIE",
       "is_cancelled": false,
-      "is_started": false,
+      "is_started": true,
       "start_time_utc": "2026-09-25T09:46:00Z",
       "contract_recorded": true,
       "confidence_stars": 3,
@@ -9028,7 +9048,7 @@
       "couv_moteur_count": 0,
       "couv_marche": "0/5",
       "couv_marche_count": 0,
-      "couverture_label": "Course à venir",
+      "couverture_label": "Course partie",
       "decision": "Bases: 9 - 3",
       "decision_badge": "badge-base",
       "runners": [
@@ -9294,7 +9314,7 @@
       "provisoire_reason": null,
       "publishable": true,
       "publication_reason": "OK",
-      "display_horizon": "T90",
+      "display_horizon": "T30",
       "editions_moteur": {
         "T_MATIN": {
           "sel": "10-2-13-5-7-3-9-11",
@@ -9307,6 +9327,13 @@
           "sel": "10-2-13-5-7-8-11-3",
           "nominal": false,
           "lock": "08:45",
+          "priced_ratio": 1.0,
+          "odds_real": true
+        },
+        "T30": {
+          "sel": "13-10-2-7-5-8-3-11",
+          "nominal": false,
+          "lock": "09:45",
           "priced_ratio": 1.0,
           "odds_real": true
         }
@@ -9323,6 +9350,13 @@
           "sel": "10-2-13-5-7-8-3-1",
           "nominal": false,
           "lock": "08:45",
+          "priced_ratio": 1.0,
+          "odds_real": true
+        },
+        "T30": {
+          "sel": "13-10-2-5-7-8-1-3",
+          "nominal": false,
+          "lock": "09:45",
           "priced_ratio": 1.0,
           "odds_real": true
         }
@@ -9344,42 +9378,42 @@
       "confidence_stars": 3,
       "confidence_label": "⭐⭐⭐ (Course Ouverte - Équilibre Favoris / Outsiders)",
       "is_no_bet": false,
-      "is_master": false,
+      "is_master": true,
       "np_nums": [],
-      "sel_moteur": "10-2-13-5-7-8-11-3",
+      "sel_moteur": "13-10-2-7-5-8-3-11",
       "sel_moteur_list": [
+        13,
         10,
         2,
-        13,
-        5,
         7,
+        5,
         8,
-        11,
-        3
+        3,
+        11
       ],
       "bases": [
-        10,
-        2
+        13,
+        10
       ],
       "outsider_num": 4,
       "regrets": [
         1,
-        9
+        6
       ],
       "smart_tickets": {
         "contract": 2,
         "no_bet": false,
         "tickets": [
           {
-            "produit": "COUPLE_PLACE",
-            "libelle": "Couplé Placé (ou 2sur4)",
+            "produit": "COUPLE_GAGNANT",
+            "libelle": "Couplé Maître du jour (Gagnant & Placé)",
             "chevaux": [
-              10,
-              2
+              13,
+              10
             ],
             "bases": [
-              10,
-              2
+              13,
+              10
             ],
             "associes": [],
             "combinaisons": 1,
@@ -9387,19 +9421,19 @@
             "cout_total_eur": 2.0,
             "eligible": true,
             "motif_ineligibilite": null,
-            "texte": "10 - 2"
+            "texte": "13 - 10"
           },
           {
             "produit": "TRIO",
             "libelle": "Trio (Couplé Gagnant)",
             "chevaux": [
+              13,
               10,
-              2,
               4
             ],
             "bases": [
-              10,
-              2
+              13,
+              10
             ],
             "associes": [
               4
@@ -9409,27 +9443,27 @@
             "cout_total_eur": 2.0,
             "eligible": true,
             "motif_ineligibilite": null,
-            "texte": "10 - 2 - 4"
+            "texte": "13 - 10 - 4"
           },
           {
             "produit": "QUINTE_PLUS",
             "libelle": "Quinté+ champ réduit",
             "chevaux": [
+              13,
               10,
               2,
-              13,
-              5,
               7,
+              5,
               8
             ],
             "bases": [
-              10,
-              2
+              13,
+              10
             ],
             "associes": [
-              13,
-              5,
+              2,
               7,
+              5,
               8
             ],
             "combinaisons": 4,
@@ -9437,59 +9471,59 @@
             "cout_total_eur": null,
             "eligible": false,
             "motif_ineligibilite": "PARI_NON_OUVERT",
-            "texte": "10 - 2 - X - X - X / 13, 5, 7, 8"
+            "texte": "13 - 10 - X - X - X / 2, 7, 5, 8"
           }
         ],
         "ticket_securite": {
-          "pari": "Couplé Placé (ou 2sur4)",
+          "pari": "Couplé Maître du jour (Gagnant & Placé)",
           "chevaux": [
-            10,
-            2
+            13,
+            10
           ],
-          "formule": "10 - 2",
+          "formule": "13 - 10",
           "mise_base_eur": 2.0
         },
         "ticket_trio": {
           "pari": "Trio (Couplé Gagnant)",
           "chevaux": [
+            13,
             10,
-            2,
             4
           ],
-          "formule": "10 - 2 - 4",
+          "formule": "13 - 10 - 4",
           "mise_base_eur": 2.0
         },
         "quinte_champ_reduit": {
           "pari": "Quinté+ champ réduit",
           "bases_fixes": [
-            10,
-            2
+            13,
+            10
           ],
           "associes": [
-            13,
-            5,
+            2,
             7,
+            5,
             8
           ],
-          "formule": "10 - 2 - X - X - X / 13, 5, 7, 8",
+          "formule": "13 - 10 - X - X - X / 2, 7, 5, 8",
           "combinaisons": 4,
           "budget_conseille_eur": null
         }
       },
-      "sel_marche": "10-2-13-5-7-8-3-1",
+      "sel_marche": "13-10-2-5-7-8-1-3",
       "sel_marche_list": [
+        13,
         10,
         2,
-        13,
         5,
         7,
         8,
-        3,
-        1
+        1,
+        3
       ],
       "common_count": 7,
       "fav_presse": "-",
-      "fav_marche": 10,
+      "fav_marche": 13,
       "arrivee": "En attente",
       "arrival_list": [],
       "couv_moteur": "0/5",
@@ -9497,9 +9531,27 @@
       "couv_marche": "0/5",
       "couv_marche_count": 0,
       "couverture_label": "Course à venir",
-      "decision": "Bases: 10 - 2",
-      "decision_badge": "badge-base",
+      "decision": "⭐ COUPLE MAITRE: 13 - 10",
+      "decision_badge": "badge-master",
       "runners": [
+        {
+          "num": 13,
+          "name": "MADAME DELO",
+          "driver": "JULIEN RAFFESTIN",
+          "shoeing": "FERRE",
+          "draw": 13,
+          "music": "1a1aDa4aDa7aDa2a(25)4a",
+          "morning_odds": 2.6,
+          "live_odds": 3.3,
+          "o_t90": 5.9,
+          "o_t30": 3.3,
+          "o_t15": null,
+          "prob_pct": 23.4,
+          "value_index": 0.77,
+          "smart_signal": "LEGERE_HAUSSE",
+          "is_np": false,
+          "odds_real": true
+        },
         {
           "num": 10,
           "name": "MOSTRA DU TRIO",
@@ -9508,13 +9560,13 @@
           "draw": 10,
           "music": "0a3a3a6a5a1a3a(25)4a1a",
           "morning_odds": 5.5,
-          "live_odds": 3.8,
+          "live_odds": 4.6,
           "o_t90": 4.2,
-          "o_t30": null,
+          "o_t30": 4.6,
           "o_t15": null,
-          "prob_pct": 20.9,
-          "value_index": 0.88,
-          "smart_signal": "BAISSE_CONFIRMEE",
+          "prob_pct": 18.7,
+          "value_index": 0.86,
+          "smart_signal": "STABLE",
           "is_np": false,
           "odds_real": true
         },
@@ -9526,49 +9578,13 @@
           "draw": 2,
           "music": "DaDa3a1a6m5m1m3mDaDa",
           "morning_odds": 22.0,
-          "live_odds": 7.3,
+          "live_odds": 7.4,
           "o_t90": 5.9,
-          "o_t30": null,
+          "o_t30": 7.4,
           "o_t15": null,
-          "prob_pct": 13.7,
-          "value_index": 0.81,
-          "smart_signal": "FORTE_BAISSE_INSIDER",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 13,
-          "name": "MADAME DELO",
-          "driver": "JULIEN RAFFESTIN",
-          "shoeing": "FERRE",
-          "draw": 13,
-          "music": "1a1aDa4aDa7aDa2a(25)4a",
-          "morning_odds": 2.6,
-          "live_odds": 4.8,
-          "o_t90": 5.9,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 13.2,
-          "value_index": 0.78,
-          "smart_signal": "FORTE_HAUSSE_DELAISSE",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 5,
-          "name": "MEISINGA PHEDO",
-          "driver": "P.PH. PLOQUIN",
-          "shoeing": "FERRE",
-          "draw": 5,
-          "music": "2a3a0a1aDa0a0aDaDa6a",
-          "morning_odds": 8.1,
-          "live_odds": 9.6,
-          "o_t90": 8.3,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 9.9,
+          "prob_pct": 11.1,
           "value_index": 0.82,
-          "smart_signal": "STABLE",
+          "smart_signal": "FORTE_BAISSE_INSIDER",
           "is_np": false,
           "odds_real": true
         },
@@ -9580,12 +9596,30 @@
           "draw": 7,
           "music": "4a1a3aDa4aDa2a2a3a6a",
           "morning_odds": 11.0,
-          "live_odds": 13.0,
+          "live_odds": 11.0,
           "o_t90": 13.0,
-          "o_t30": null,
+          "o_t30": 11.0,
           "o_t15": null,
-          "prob_pct": 6.6,
-          "value_index": 0.86,
+          "prob_pct": 7.9,
+          "value_index": 0.87,
+          "smart_signal": "STABLE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 5,
+          "name": "MEISINGA PHEDO",
+          "driver": "P.PH. PLOQUIN",
+          "shoeing": "FERRE",
+          "draw": 5,
+          "music": "2a3a0a1aDa0a0aDaDa6a",
+          "morning_odds": 8.1,
+          "live_odds": 11.0,
+          "o_t90": 8.3,
+          "o_t30": 11.0,
+          "o_t15": null,
+          "prob_pct": 7.5,
+          "value_index": 0.83,
           "smart_signal": "LEGERE_HAUSSE",
           "is_np": false,
           "odds_real": true
@@ -9598,12 +9632,30 @@
           "draw": 8,
           "music": "6a4a9a8mDa1a4a3a(25)9a",
           "morning_odds": 4.7,
-          "live_odds": 13.0,
+          "live_odds": 15.0,
           "o_t90": 13.0,
-          "o_t30": null,
+          "o_t30": 15.0,
           "o_t15": null,
-          "prob_pct": 6.5,
-          "value_index": 0.84,
+          "prob_pct": 5.8,
+          "value_index": 0.86,
+          "smart_signal": "FORTE_HAUSSE_DELAISSE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 3,
+          "name": "MARACANA BEACH",
+          "driver": "TH. RAFFIN",
+          "shoeing": "FERRE",
+          "draw": 3,
+          "music": "1a6a4a3a0a2a2a(25)2a7a",
+          "morning_odds": 1.7,
+          "live_odds": 16.0,
+          "o_t90": 14.0,
+          "o_t30": 16.0,
+          "o_t15": null,
+          "prob_pct": 5.3,
+          "value_index": 0.85,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -9616,31 +9668,13 @@
           "draw": 11,
           "music": "Da4a3m6a0a9a(25)2a4a2a",
           "morning_odds": 21.0,
-          "live_odds": 19.0,
+          "live_odds": 21.0,
           "o_t90": 17.0,
-          "o_t30": null,
+          "o_t30": 21.0,
           "o_t15": null,
-          "prob_pct": 6.1,
-          "value_index": 1.04,
-          "smart_signal": "BAISSE_CONFIRMEE",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 3,
-          "name": "MARACANA BEACH",
-          "driver": "TH. RAFFIN",
-          "shoeing": "FERRE",
-          "draw": 3,
-          "music": "1a6a4a3a0a2a2a(25)2a7a",
-          "morning_odds": 1.7,
-          "live_odds": 15.0,
-          "o_t90": 14.0,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 5.9,
-          "value_index": 0.83,
-          "smart_signal": "FORTE_HAUSSE_DELAISSE",
+          "prob_pct": 4.9,
+          "value_index": 1.02,
+          "smart_signal": "STABLE",
           "is_np": false,
           "odds_real": true
         },
@@ -9652,30 +9686,12 @@
           "draw": 1,
           "music": "DaDaDaDa5aDa0a0a(25)Da",
           "morning_odds": 1.7,
-          "live_odds": 15.0,
+          "live_odds": 16.0,
           "o_t90": 15.0,
-          "o_t30": null,
+          "o_t30": 16.0,
           "o_t15": null,
-          "prob_pct": 5.1,
+          "prob_pct": 4.8,
           "value_index": 0.77,
-          "smart_signal": "FORTE_HAUSSE_DELAISSE",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 9,
-          "name": "MADE IN WIND",
-          "driver": "G. PRAT",
-          "shoeing": "D4",
-          "draw": 9,
-          "music": "Dm4aDm8a2m8a2m1aDa7m",
-          "morning_odds": 5.3,
-          "live_odds": 26.0,
-          "o_t90": 22.0,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 3.9,
-          "value_index": 0.85,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -9688,12 +9704,30 @@
           "draw": 6,
           "music": "6a5a1a1aDa6a2a(25)4a5a",
           "morning_odds": 8.1,
-          "live_odds": 23.0,
+          "live_odds": 25.0,
           "o_t90": 26.0,
-          "o_t30": null,
+          "o_t30": 25.0,
           "o_t15": null,
-          "prob_pct": 3.3,
+          "prob_pct": 3.5,
           "value_index": 0.87,
+          "smart_signal": "FORTE_HAUSSE_DELAISSE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 9,
+          "name": "MADE IN WIND",
+          "driver": "G. PRAT",
+          "shoeing": "D4",
+          "draw": 9,
+          "music": "Dm4aDm8a2m8a2m1aDa7m",
+          "morning_odds": 5.3,
+          "live_odds": 31.0,
+          "o_t90": 22.0,
+          "o_t30": 31.0,
+          "o_t15": null,
+          "prob_pct": 2.9,
+          "value_index": 0.9,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -9706,12 +9740,12 @@
           "draw": 12,
           "music": "Da8a3a3a7a2a2a5aDa4a",
           "morning_odds": 70.0,
-          "live_odds": 36.0,
+          "live_odds": 42.0,
           "o_t90": 34.0,
-          "o_t30": null,
+          "o_t30": 42.0,
           "o_t15": null,
-          "prob_pct": 2.8,
-          "value_index": 0.96,
+          "prob_pct": 2.5,
+          "value_index": 1.03,
           "smart_signal": "FORTE_BAISSE_INSIDER",
           "is_np": false,
           "odds_real": true
@@ -9724,12 +9758,12 @@
           "draw": 4,
           "music": "8a3m1m6a(25)1mDa3a6m",
           "morning_odds": 1.8,
-          "live_odds": 59.0,
+          "live_odds": 66.0,
           "o_t90": 51.0,
-          "o_t30": null,
+          "o_t30": 66.0,
           "o_t15": null,
-          "prob_pct": 2.0,
-          "value_index": 1.04,
+          "prob_pct": 1.8,
+          "value_index": 1.16,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -9958,7 +9992,7 @@
           "draw": 7,
           "music": "5a0a6a5a6aAa1a2aDaDa",
           "morning_odds": 6.0,
-          "live_odds": 4.9,
+          "live_odds": 5.1,
           "o_t90": 4.4,
           "o_t30": null,
           "o_t15": null,
@@ -9976,7 +10010,7 @@
           "draw": 2,
           "music": "5a3a6aDa6aDa(25)3a2aDa",
           "morning_odds": 1.7,
-          "live_odds": 5.0,
+          "live_odds": 5.2,
           "o_t90": 5.4,
           "o_t30": null,
           "o_t15": null,
@@ -9994,7 +10028,7 @@
           "draw": 6,
           "music": "Da3a1a1a3a6a(25)0a8a3a",
           "morning_odds": 25.0,
-          "live_odds": 6.5,
+          "live_odds": 6.8,
           "o_t90": 6.7,
           "o_t30": null,
           "o_t15": null,
@@ -10012,7 +10046,7 @@
           "draw": 5,
           "music": "7a7a1aDa3a(25)2aDa1a",
           "morning_odds": 1.1,
-          "live_odds": 6.4,
+          "live_odds": 5.8,
           "o_t90": 7.2,
           "o_t30": null,
           "o_t15": null,
@@ -10030,7 +10064,7 @@
           "draw": 1,
           "music": "2a3a1a6a6a2a4a4a6a3a",
           "morning_odds": 25.0,
-          "live_odds": 10.0,
+          "live_odds": 11.0,
           "o_t90": 10.0,
           "o_t30": null,
           "o_t15": null,
@@ -10048,7 +10082,7 @@
           "draw": 10,
           "music": "8a2a2a2aDa0a(25)7a5a1a",
           "morning_odds": 25.0,
-          "live_odds": 13.0,
+          "live_odds": 11.0,
           "o_t90": 14.0,
           "o_t30": null,
           "o_t15": null,
@@ -10066,7 +10100,7 @@
           "draw": 9,
           "music": "6a6a0aDa7a8aDa6a9a(25)",
           "morning_odds": 1.5,
-          "live_odds": 14.0,
+          "live_odds": 15.0,
           "o_t90": 12.0,
           "o_t30": null,
           "o_t15": null,
@@ -10084,7 +10118,7 @@
           "draw": 12,
           "music": "3aDa2aDaDm4aDaDa(25)2a",
           "morning_odds": 25.0,
-          "live_odds": 19.0,
+          "live_odds": 17.0,
           "o_t90": 18.0,
           "o_t30": null,
           "o_t15": null,
@@ -10102,7 +10136,7 @@
           "draw": 3,
           "music": "6a1a7aDa2a1aDa(25)0a2a",
           "morning_odds": 12.0,
-          "live_odds": 23.0,
+          "live_odds": 24.0,
           "o_t90": 21.0,
           "o_t30": null,
           "o_t15": null,
@@ -10138,7 +10172,7 @@
           "draw": 11,
           "music": "5a6aAa2a8a2a5a2a(25)5a",
           "morning_odds": 5.6,
-          "live_odds": 31.0,
+          "live_odds": 33.0,
           "o_t90": 26.0,
           "o_t30": null,
           "o_t15": null,
@@ -10156,7 +10190,7 @@
           "draw": 8,
           "music": "5a1a7a3a2a5a3a(25)6a3a",
           "morning_odds": 48.0,
-          "live_odds": 34.0,
+          "live_odds": 30.0,
           "o_t90": 42.0,
           "o_t30": null,
           "o_t15": null,
@@ -10174,7 +10208,7 @@
           "draw": 13,
           "music": "6a1a1a4a1a5a4a9aDa(25)",
           "morning_odds": 118.0,
-          "live_odds": 45.0,
+          "live_odds": 46.0,
           "o_t90": 47.0,
           "o_t30": null,
           "o_t15": null,
@@ -10194,12 +10228,19 @@
       "provisoire_reason": null,
       "publishable": true,
       "publication_reason": "OK",
-      "display_horizon": "T_MATIN",
+      "display_horizon": "T90",
       "editions_moteur": {
         "T_MATIN": {
           "sel": "13-5-11-4-3-15-1-12",
           "nominal": false,
           "lock": "06:30",
+          "priced_ratio": 1.0,
+          "odds_real": true
+        },
+        "T90": {
+          "sel": "13-3-5-11-6-15-4-1",
+          "nominal": false,
+          "lock": "09:45",
           "priced_ratio": 1.0,
           "odds_real": true
         }
@@ -10209,6 +10250,13 @@
           "sel": "13-5-11-4-1-15-3-12",
           "nominal": false,
           "lock": "06:30",
+          "priced_ratio": 1.0,
+          "odds_real": true
+        },
+        "T90": {
+          "sel": "13-3-5-11-6-15-1-4",
+          "nominal": false,
+          "lock": "09:45",
           "priced_ratio": 1.0,
           "odds_real": true
         }
@@ -10227,30 +10275,30 @@
       "is_started": false,
       "start_time_utc": "2026-09-25T11:25:00Z",
       "contract_recorded": true,
-      "confidence_stars": 2,
-      "confidence_label": "⭐⭐ (Course Spéculative - Privilégier les champs réduits)",
+      "confidence_stars": 3,
+      "confidence_label": "⭐⭐⭐ (Course Ouverte - Équilibre Favoris / Outsiders)",
       "is_no_bet": false,
       "is_master": false,
       "np_nums": [],
-      "sel_moteur": "13-5-11-4-3-15-1-12",
+      "sel_moteur": "13-3-5-11-6-15-4-1",
       "sel_moteur_list": [
         13,
+        3,
         5,
         11,
-        4,
-        3,
+        6,
         15,
-        1,
-        12
+        4,
+        1
       ],
       "bases": [
         13,
-        5
+        3
       ],
-      "outsider_num": 3,
+      "outsider_num": 7,
       "regrets": [
-        14,
-        10
+        12,
+        7
       ],
       "smart_tickets": {
         "contract": 2,
@@ -10261,11 +10309,11 @@
             "libelle": "Couplé Placé (ou 2sur4)",
             "chevaux": [
               13,
-              5
+              3
             ],
             "bases": [
               13,
-              5
+              3
             ],
             "associes": [],
             "combinaisons": 1,
@@ -10273,49 +10321,49 @@
             "cout_total_eur": 2.0,
             "eligible": true,
             "motif_ineligibilite": null,
-            "texte": "13 - 5"
+            "texte": "13 - 3"
           },
           {
             "produit": "TRIO",
             "libelle": "Trio (Couplé Gagnant)",
             "chevaux": [
               13,
-              5,
-              3
+              3,
+              7
             ],
             "bases": [
               13,
-              5
+              3
             ],
             "associes": [
-              3
+              7
             ],
             "combinaisons": 1,
             "mise_unitaire_eur": 2.0,
             "cout_total_eur": 2.0,
             "eligible": true,
             "motif_ineligibilite": null,
-            "texte": "13 - 5 - 3"
+            "texte": "13 - 3 - 7"
           },
           {
             "produit": "QUINTE_PLUS",
             "libelle": "Quinté+ champ réduit",
             "chevaux": [
               13,
+              3,
               5,
               11,
-              4,
-              3,
+              6,
               15
             ],
             "bases": [
               13,
-              5
+              3
             ],
             "associes": [
+              5,
               11,
-              4,
-              3,
+              6,
               15
             ],
             "combinaisons": 4,
@@ -10323,55 +10371,55 @@
             "cout_total_eur": null,
             "eligible": false,
             "motif_ineligibilite": "PARI_NON_OUVERT",
-            "texte": "13 - 5 - X - X - X / 11, 4, 3, 15"
+            "texte": "13 - 3 - X - X - X / 5, 11, 6, 15"
           }
         ],
         "ticket_securite": {
           "pari": "Couplé Placé (ou 2sur4)",
           "chevaux": [
             13,
-            5
+            3
           ],
-          "formule": "13 - 5",
+          "formule": "13 - 3",
           "mise_base_eur": 2.0
         },
         "ticket_trio": {
           "pari": "Trio (Couplé Gagnant)",
           "chevaux": [
             13,
-            5,
-            3
+            3,
+            7
           ],
-          "formule": "13 - 5 - 3",
+          "formule": "13 - 3 - 7",
           "mise_base_eur": 2.0
         },
         "quinte_champ_reduit": {
           "pari": "Quinté+ champ réduit",
           "bases_fixes": [
             13,
-            5
+            3
           ],
           "associes": [
+            5,
             11,
-            4,
-            3,
+            6,
             15
           ],
-          "formule": "13 - 5 - X - X - X / 11, 4, 3, 15",
+          "formule": "13 - 3 - X - X - X / 5, 11, 6, 15",
           "combinaisons": 4,
           "budget_conseille_eur": null
         }
       },
-      "sel_marche": "13-5-11-4-1-15-3-12",
+      "sel_marche": "13-3-5-11-6-15-1-4",
       "sel_marche_list": [
         13,
+        3,
         5,
         11,
-        4,
-        1,
+        6,
         15,
-        3,
-        12
+        1,
+        4
       ],
       "common_count": 8,
       "fav_presse": "-",
@@ -10383,7 +10431,7 @@
       "couv_marche": "0/5",
       "couv_marche_count": 0,
       "couverture_label": "Course à venir",
-      "decision": "Bases: 13 - 5",
+      "decision": "Bases: 13 - 3",
       "decision_badge": "badge-base",
       "runners": [
         {
@@ -10394,67 +10442,13 @@
           "draw": 13,
           "music": "8a2aDa3a7a2a5aDa8aAa",
           "morning_odds": 1.1,
-          "live_odds": 3.7,
-          "o_t90": null,
+          "live_odds": 3.6,
+          "o_t90": 3.6,
           "o_t30": null,
           "o_t15": null,
-          "prob_pct": 16.1,
+          "prob_pct": 21.3,
           "value_index": 0.77,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 5,
-          "name": "ICI MACHECOUL",
-          "driver": "W. DERSOIR-HABIB",
-          "shoeing": "DP",
-          "draw": 5,
-          "music": "2a2a5a2a1a7aDa6a6a7a",
-          "morning_odds": 10.0,
-          "live_odds": 6.9,
-          "o_t90": null,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 14.4,
-          "value_index": 0.89,
-          "smart_signal": "FORTE_BAISSE_INSIDER",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 11,
-          "name": "JACOB DE MIENNAIS",
-          "driver": "Mlle L. PLANCHENAULT",
-          "shoeing": "D4",
-          "draw": 11,
-          "music": "7a6a7m0a2a6aDmDa(25)3m",
-          "morning_odds": 14.0,
-          "live_odds": 7.4,
-          "o_t90": null,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 11.8,
-          "value_index": 0.84,
-          "smart_signal": "FORTE_BAISSE_INSIDER",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 4,
-          "name": "JUDICY DE VIVE",
-          "driver": "P.PH. PLOQUIN",
-          "shoeing": "D4",
-          "draw": 4,
-          "music": "8a8a1a0m3a8aDa0m0a1a",
-          "morning_odds": 14.0,
-          "live_odds": 19.0,
-          "o_t90": null,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 6.7,
-          "value_index": 0.93,
-          "smart_signal": "STABLE",
           "is_np": false,
           "odds_real": true
         },
@@ -10467,120 +10461,48 @@
           "music": "2m4mDm3m6m0aDa7a6a5a",
           "morning_odds": 66.0,
           "live_odds": 6.5,
-          "o_t90": null,
+          "o_t90": 6.5,
           "o_t30": null,
           "o_t15": null,
-          "prob_pct": 6.3,
-          "value_index": 1.02,
+          "prob_pct": 13.4,
+          "value_index": 0.87,
           "smart_signal": "FORTE_BAISSE_INSIDER",
           "is_np": false,
           "odds_real": true
         },
         {
-          "num": 15,
-          "name": "IAGO DE SENOVILLE",
-          "driver": "A. ANDRE",
-          "shoeing": "D4",
-          "draw": 15,
-          "music": "8a7m4m3m7m7a4m8a8a9m",
-          "morning_odds": 14.0,
-          "live_odds": 15.0,
-          "o_t90": null,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 5.9,
-          "value_index": 0.88,
-          "smart_signal": "STABLE",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 1,
-          "name": "JADORE GIRL",
-          "driver": "CL. FRECELLE",
-          "shoeing": "FERRE",
-          "draw": 1,
-          "music": "3m0a7mDm5m5m0aDaDm6m",
-          "morning_odds": 7.2,
-          "live_odds": 17.0,
-          "o_t90": null,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 5.2,
-          "value_index": 0.78,
-          "smart_signal": "FORTE_HAUSSE_DELAISSE",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 12,
-          "name": "ICARE DU TRESOR",
-          "driver": "M. CHAMPENOIS",
-          "shoeing": "FERRE",
-          "draw": 12,
-          "music": "Dm0m0aDa(25)2m7a0a9m(24)",
-          "morning_odds": 14.0,
-          "live_odds": 24.0,
-          "o_t90": null,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 4.6,
-          "value_index": 0.77,
-          "smart_signal": "LEGERE_HAUSSE",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 14,
-          "name": "IDEAL DU GAZON",
-          "driver": "M. POTIER",
-          "shoeing": "D4",
-          "draw": 14,
-          "music": "7m3m6m5m5m2m5m4m1m(25)",
-          "morning_odds": 14.0,
-          "live_odds": 47.0,
-          "o_t90": null,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 4.4,
-          "value_index": 0.88,
-          "smart_signal": "LEGERE_HAUSSE",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 10,
-          "name": "HARMONIE CLEFOISE",
-          "driver": "M. DURVILLE",
+          "num": 5,
+          "name": "ICI MACHECOUL",
+          "driver": "W. DERSOIR-HABIB",
           "shoeing": "DP",
-          "draw": 10,
-          "music": "6m9m0a0a(25)Dm8a(24)3m1m",
-          "morning_odds": 14.0,
-          "live_odds": 33.0,
-          "o_t90": null,
+          "draw": 5,
+          "music": "2a2a5a2a1a7aDa6a6a7a",
+          "morning_odds": 10.0,
+          "live_odds": 6.9,
+          "o_t90": 6.9,
           "o_t30": null,
           "o_t15": null,
-          "prob_pct": 4.0,
-          "value_index": 0.8,
-          "smart_signal": "LEGERE_HAUSSE",
+          "prob_pct": 12.9,
+          "value_index": 0.89,
+          "smart_signal": "BAISSE_CONFIRMEE",
           "is_np": false,
           "odds_real": true
         },
         {
-          "num": 9,
-          "name": "IRPIEU DE VARVILLE",
-          "driver": "Mlle AURIANE MEUNIER",
+          "num": 11,
+          "name": "JACOB DE MIENNAIS",
+          "driver": "Mlle L. PLANCHENAULT",
           "shoeing": "D4",
-          "draw": 9,
-          "music": "0m5m5m3m3m3m7m5m(25)4m",
+          "draw": 11,
+          "music": "7a6a7m0a2a6aDmDa(25)3m",
           "morning_odds": 14.0,
-          "live_odds": 43.0,
-          "o_t90": null,
+          "live_odds": 7.8,
+          "o_t90": 7.8,
           "o_t30": null,
           "o_t15": null,
-          "prob_pct": 3.9,
-          "value_index": 0.89,
-          "smart_signal": "FORTE_HAUSSE_DELAISSE",
+          "prob_pct": 10.9,
+          "value_index": 0.85,
+          "smart_signal": "FORTE_BAISSE_INSIDER",
           "is_np": false,
           "odds_real": true
         },
@@ -10593,11 +10515,173 @@
           "music": "DaDaDaDa7a7aDaDaDa(25)",
           "morning_odds": 14.0,
           "live_odds": 10.0,
-          "o_t90": null,
+          "o_t90": 10.0,
           "o_t30": null,
           "o_t15": null,
-          "prob_pct": 3.5,
+          "prob_pct": 7.8,
           "value_index": 0.78,
+          "smart_signal": "BAISSE_CONFIRMEE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 15,
+          "name": "IAGO DE SENOVILLE",
+          "driver": "A. ANDRE",
+          "shoeing": "D4",
+          "draw": 15,
+          "music": "8a7m4m3m7m7a4m8a8a9m",
+          "morning_odds": 14.0,
+          "live_odds": 15.0,
+          "o_t90": 15.0,
+          "o_t30": null,
+          "o_t15": null,
+          "prob_pct": 5.9,
+          "value_index": 0.89,
+          "smart_signal": "STABLE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 4,
+          "name": "JUDICY DE VIVE",
+          "driver": "P.PH. PLOQUIN",
+          "shoeing": "D4",
+          "draw": 4,
+          "music": "8a8a1a0m3a8aDa0m0a1a",
+          "morning_odds": 14.0,
+          "live_odds": 20.0,
+          "o_t90": 20.0,
+          "o_t30": null,
+          "o_t15": null,
+          "prob_pct": 4.8,
+          "value_index": 0.97,
+          "smart_signal": "LEGERE_HAUSSE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 1,
+          "name": "JADORE GIRL",
+          "driver": "CL. FRECELLE",
+          "shoeing": "FERRE",
+          "draw": 1,
+          "music": "3m0a7mDm5m5m0aDaDm6m",
+          "morning_odds": 7.2,
+          "live_odds": 18.0,
+          "o_t90": 18.0,
+          "o_t30": null,
+          "o_t15": null,
+          "prob_pct": 4.4,
+          "value_index": 0.79,
+          "smart_signal": "FORTE_HAUSSE_DELAISSE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 12,
+          "name": "ICARE DU TRESOR",
+          "driver": "M. CHAMPENOIS",
+          "shoeing": "FERRE",
+          "draw": 12,
+          "music": "Dm0m0aDa(25)2m7a0a9m(24)",
+          "morning_odds": 14.0,
+          "live_odds": 21.0,
+          "o_t90": 21.0,
+          "o_t30": null,
+          "o_t15": null,
+          "prob_pct": 3.7,
+          "value_index": 0.78,
+          "smart_signal": "LEGERE_HAUSSE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 7,
+          "name": "JEWEL OF SEBHA",
+          "driver": "Mme L. THORAVAL",
+          "shoeing": "D4",
+          "draw": 7,
+          "music": "5a8a2a7a4a1a1a4a3a5a",
+          "morning_odds": 7.2,
+          "live_odds": 42.0,
+          "o_t90": 42.0,
+          "o_t30": null,
+          "o_t15": null,
+          "prob_pct": 2.6,
+          "value_index": 1.1,
+          "smart_signal": "FORTE_HAUSSE_DELAISSE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 10,
+          "name": "HARMONIE CLEFOISE",
+          "driver": "M. DURVILLE",
+          "shoeing": "DP",
+          "draw": 10,
+          "music": "6m9m0a0a(25)Dm8a(24)3m1m",
+          "morning_odds": 14.0,
+          "live_odds": 32.0,
+          "o_t90": 32.0,
+          "o_t30": null,
+          "o_t15": null,
+          "prob_pct": 2.5,
+          "value_index": 0.81,
+          "smart_signal": "FORTE_HAUSSE_DELAISSE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 9,
+          "name": "IRPIEU DE VARVILLE",
+          "driver": "Mlle AURIANE MEUNIER",
+          "shoeing": "D4",
+          "draw": 9,
+          "music": "0m5m5m3m3m3m7m5m(25)4m",
+          "morning_odds": 14.0,
+          "live_odds": 46.0,
+          "o_t90": 46.0,
+          "o_t30": null,
+          "o_t15": null,
+          "prob_pct": 2.3,
+          "value_index": 1.04,
+          "smart_signal": "FORTE_HAUSSE_DELAISSE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 14,
+          "name": "IDEAL DU GAZON",
+          "driver": "M. POTIER",
+          "shoeing": "D4",
+          "draw": 14,
+          "music": "7m3m6m5m5m2m5m4m1m(25)",
+          "morning_odds": 14.0,
+          "live_odds": 41.0,
+          "o_t90": 41.0,
+          "o_t30": null,
+          "o_t15": null,
+          "prob_pct": 2.3,
+          "value_index": 0.96,
+          "smart_signal": "FORTE_HAUSSE_DELAISSE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 16,
+          "name": "IZZIE D'ERONVILLE",
+          "driver": "J. FERRON",
+          "shoeing": "D4",
+          "draw": 16,
+          "music": "0a0a8m9a7a3m8a8a8a6a",
+          "morning_odds": 14.0,
+          "live_odds": 46.0,
+          "o_t90": 46.0,
+          "o_t30": null,
+          "o_t15": null,
+          "prob_pct": 2.0,
+          "value_index": 0.94,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -10611,47 +10695,11 @@
           "music": "Da7aDa2aDa8a3aDaDa4a",
           "morning_odds": 14.0,
           "live_odds": 52.0,
-          "o_t90": null,
+          "o_t90": 52.0,
           "o_t30": null,
           "o_t15": null,
-          "prob_pct": 3.4,
-          "value_index": 0.78,
-          "smart_signal": "FORTE_HAUSSE_DELAISSE",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 16,
-          "name": "IZZIE D'ERONVILLE",
-          "driver": "J. FERRON",
-          "shoeing": "D4",
-          "draw": 16,
-          "music": "0a0a8m9a7a3m8a8a8a6a",
-          "morning_odds": 14.0,
-          "live_odds": 49.0,
-          "o_t90": null,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 3.4,
-          "value_index": 0.85,
-          "smart_signal": "FORTE_HAUSSE_DELAISSE",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 7,
-          "name": "JEWEL OF SEBHA",
-          "driver": "Mme L. THORAVAL",
-          "shoeing": "D4",
-          "draw": 7,
-          "music": "5a8a2a7a4a1a1a4a3a5a",
-          "morning_odds": 7.2,
-          "live_odds": 43.0,
-          "o_t90": null,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 3.3,
-          "value_index": 0.99,
+          "prob_pct": 1.5,
+          "value_index": 0.8,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -10664,12 +10712,12 @@
           "draw": 2,
           "music": "4m5mDa0aDa0m5a4m4a0a",
           "morning_odds": 14.0,
-          "live_odds": 67.0,
-          "o_t90": null,
+          "live_odds": 68.0,
+          "o_t90": 68.0,
           "o_t30": null,
           "o_t15": null,
-          "prob_pct": 3.2,
-          "value_index": 0.83,
+          "prob_pct": 1.4,
+          "value_index": 0.95,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -10884,7 +10932,7 @@
           "draw": 13,
           "music": "2m3a4m4m3aDa9m9a7m(25)",
           "morning_odds": 23.0,
-          "live_odds": 9.9,
+          "live_odds": 8.6,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -10902,7 +10950,7 @@
           "draw": 11,
           "music": "Da1a2a3aDaDaDaDa1a1a",
           "morning_odds": 9.8,
-          "live_odds": 2.8,
+          "live_odds": 2.6,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -10920,7 +10968,7 @@
           "draw": 10,
           "music": "9a3a0a1a4a7a(25)8a2a7a",
           "morning_odds": 7.0,
-          "live_odds": 7.8,
+          "live_odds": 8.6,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -10938,7 +10986,7 @@
           "draw": 6,
           "music": "4a0a5aDa6aDa3a7aDa(25)",
           "morning_odds": 2.5,
-          "live_odds": 22.0,
+          "live_odds": 23.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -10956,7 +11004,7 @@
           "draw": 7,
           "music": "0aDa5a8aDa6a5aDa7aDa",
           "morning_odds": 3.9,
-          "live_odds": 20.0,
+          "live_odds": 23.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -10974,7 +11022,7 @@
           "draw": 16,
           "music": "Da1a7a5a1aDa2a0a(25)Da",
           "morning_odds": 1.1,
-          "live_odds": 10.0,
+          "live_odds": 11.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -10992,7 +11040,7 @@
           "draw": 1,
           "music": "2a5a5a1a8a7a6aDa3aDa",
           "morning_odds": 35.0,
-          "live_odds": 12.0,
+          "live_odds": 13.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11010,7 +11058,7 @@
           "draw": 12,
           "music": "7a6a0a5a9a1a3a1aDm(25)",
           "morning_odds": 4.9,
-          "live_odds": 14.0,
+          "live_odds": 13.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11028,7 +11076,7 @@
           "draw": 2,
           "music": "1aDa5aDa9aDaDaDaDaDa",
           "morning_odds": 55.0,
-          "live_odds": 20.0,
+          "live_odds": 24.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11046,7 +11094,7 @@
           "draw": 14,
           "music": "6a1a4a(25)5a2a4a4a2a1a",
           "morning_odds": 18.0,
-          "live_odds": 46.0,
+          "live_odds": 51.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11064,7 +11112,7 @@
           "draw": 4,
           "music": "8a5a9a0aDaDaDaDa1a6a",
           "morning_odds": 17.0,
-          "live_odds": 37.0,
+          "live_odds": 39.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11082,7 +11130,7 @@
           "draw": 8,
           "music": "2a5a6a4a8a7a9a3a6aDa",
           "morning_odds": 12.0,
-          "live_odds": 24.0,
+          "live_odds": 26.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11100,7 +11148,7 @@
           "draw": 15,
           "music": "4aDa1a4m3mDa6a3a6m4m",
           "morning_odds": 1.7,
-          "live_odds": 20.0,
+          "live_odds": 22.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11118,7 +11166,7 @@
           "draw": 3,
           "music": "8a2a7a0a8m0aDaDm5a3m",
           "morning_odds": 17.0,
-          "live_odds": 23.0,
+          "live_odds": 26.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11136,7 +11184,7 @@
           "draw": 9,
           "music": "7a(25)1a7a4a6a7a3a(24)4a",
           "morning_odds": 3.4,
-          "live_odds": 70.0,
+          "live_odds": 73.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11154,7 +11202,7 @@
           "draw": 5,
           "music": "6aDa6a7a3a3a7a8aAa6a",
           "morning_odds": 70.0,
-          "live_odds": 117.0,
+          "live_odds": 128.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11374,7 +11422,7 @@
           "draw": 14,
           "music": "2a1a3a1a1a3aDa1aDa(25)",
           "morning_odds": 2.5,
-          "live_odds": 2.0,
+          "live_odds": 1.9,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11392,7 +11440,7 @@
           "draw": 12,
           "music": "Da3a8a5a0a1a6a9a5a5a",
           "morning_odds": 2.5,
-          "live_odds": 5.1,
+          "live_odds": 5.4,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11410,7 +11458,7 @@
           "draw": 15,
           "music": "4a4a2a1a4a3a4a3aDa2a",
           "morning_odds": 34.0,
-          "live_odds": 21.0,
+          "live_odds": 22.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11428,7 +11476,7 @@
           "draw": 8,
           "music": "Da2a2a1aDa3a4a2a8a3a",
           "morning_odds": 22.0,
-          "live_odds": 9.1,
+          "live_odds": 9.3,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11464,7 +11512,7 @@
           "draw": 2,
           "music": "3a5a7aDa7a4a6aDa3a1a",
           "morning_odds": 8.9,
-          "live_odds": 26.0,
+          "live_odds": 30.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11482,7 +11530,7 @@
           "draw": 7,
           "music": "5aDa1a1a3a3a2a8a1aDa",
           "morning_odds": 22.0,
-          "live_odds": 17.0,
+          "live_odds": 15.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11500,7 +11548,7 @@
           "draw": 1,
           "music": "3a7a5a7aDaDa1a1a(25)Da",
           "morning_odds": 69.0,
-          "live_odds": 25.0,
+          "live_odds": 27.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11536,7 +11584,7 @@
           "draw": 3,
           "music": "DaDmDaDaDa1a3a9aDa(25)",
           "morning_odds": 6.8,
-          "live_odds": 43.0,
+          "live_odds": 50.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11554,7 +11602,7 @@
           "draw": 5,
           "music": "8a2a4a7a4a8a1a0a8aDa",
           "morning_odds": 46.0,
-          "live_odds": 119.0,
+          "live_odds": 55.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11572,7 +11620,7 @@
           "draw": 9,
           "music": "4m0a0a0aDm5a2m(25)4mDm",
           "morning_odds": 33.0,
-          "live_odds": 47.0,
+          "live_odds": 49.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11590,7 +11638,7 @@
           "draw": 6,
           "music": "DaDaDaDaDa(25)Dm1a2a1a",
           "morning_odds": 22.0,
-          "live_odds": 35.0,
+          "live_odds": 32.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11608,7 +11656,7 @@
           "draw": 4,
           "music": "(25)7m7m5m1m2m3m1m(24)4m",
           "morning_odds": 34.0,
-          "live_odds": 64.0,
+          "live_odds": 71.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11626,7 +11674,7 @@
           "draw": 13,
           "music": "(25)8m0m9mDm0a6m2m(24)1m",
           "morning_odds": 134.0,
-          "live_odds": 94.0,
+          "live_odds": 107.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11846,7 +11894,7 @@
           "draw": 16,
           "music": "1aDa1aDa1aDaDa0a(25)1a",
           "morning_odds": 1.1,
-          "live_odds": 2.1,
+          "live_odds": 2.2,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11864,7 +11912,7 @@
           "draw": 12,
           "music": "1a2a6a4aDaDa2a2a(25)3a",
           "morning_odds": 1.7,
-          "live_odds": 7.7,
+          "live_odds": 7.3,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11882,7 +11930,7 @@
           "draw": 10,
           "music": "Da1aDa1a3a2a1a1a1a2a",
           "morning_odds": 22.0,
-          "live_odds": 9.9,
+          "live_odds": 9.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11918,7 +11966,7 @@
           "draw": 14,
           "music": "9aDa7a4aDa6aDa5a5a0a",
           "morning_odds": 9.7,
-          "live_odds": 10.0,
+          "live_odds": 11.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11936,7 +11984,7 @@
           "draw": 11,
           "music": "1a4aDa(25)Da3a1a2a0a9a",
           "morning_odds": 14.0,
-          "live_odds": 56.0,
+          "live_odds": 52.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11954,7 +12002,7 @@
           "draw": 1,
           "music": "4a4a5a7a2a5a4a8a7a6a",
           "morning_odds": 33.0,
-          "live_odds": 32.0,
+          "live_odds": 35.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11972,7 +12020,7 @@
           "draw": 13,
           "music": "0a0a9a4a6a4a0aDaDa5a",
           "morning_odds": 1.1,
-          "live_odds": 24.0,
+          "live_odds": 18.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -11990,7 +12038,7 @@
           "draw": 8,
           "music": "1a7a0aDa1a4a1a2a0a1a",
           "morning_odds": 22.0,
-          "live_odds": 20.0,
+          "live_odds": 21.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -12008,7 +12056,7 @@
           "draw": 6,
           "music": "9aDa6a5a4a6a7a6a7a2a",
           "morning_odds": 45.0,
-          "live_odds": 34.0,
+          "live_odds": 37.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -12026,7 +12074,7 @@
           "draw": 7,
           "music": "Da3aDa5a1aDa0aDa0aDa",
           "morning_odds": 48.0,
-          "live_odds": 16.0,
+          "live_odds": 17.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -12044,7 +12092,7 @@
           "draw": 9,
           "music": "8a8aDa3a9a0aDa9a7a5a",
           "morning_odds": 22.0,
-          "live_odds": 101.0,
+          "live_odds": 104.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -12080,7 +12128,7 @@
           "draw": 4,
           "music": "5a0aDa7a0a2a0a6a5a0a",
           "morning_odds": 14.0,
-          "live_odds": 59.0,
+          "live_odds": 55.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -12098,7 +12146,7 @@
           "draw": 15,
           "music": "0a0a0a7a9a1a3a(25)3a1a",
           "morning_odds": 152.0,
-          "live_odds": 61.0,
+          "live_odds": 58.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -12116,7 +12164,7 @@
           "draw": 5,
           "music": "8aDa6a0aDa8a(25)5a1a4a",
           "morning_odds": 152.0,
-          "live_odds": 23.0,
+          "live_odds": 25.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -12329,7 +12377,7 @@
           "draw": 3,
           "music": "1p7p0p6p3p3p1p2p3p2p",
           "morning_odds": 1.4,
-          "live_odds": 4.9,
+          "live_odds": 5.4,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -12347,7 +12395,7 @@
           "draw": 6,
           "music": "9p2p0p7p1p(25)4p",
           "morning_odds": 1.1,
-          "live_odds": 1.5,
+          "live_odds": 1.4,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -12365,7 +12413,7 @@
           "draw": 5,
           "music": "4p2p4p0p4p(25)Ap",
           "morning_odds": 29.0,
-          "live_odds": 8.0,
+          "live_odds": 9.3,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -12383,7 +12431,7 @@
           "draw": 4,
           "music": "0p3p0p3p3p2p3p6p1p",
           "morning_odds": 35.0,
-          "live_odds": 13.0,
+          "live_odds": 14.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -12419,7 +12467,7 @@
           "draw": 1,
           "music": "Ah8h7h0p",
           "morning_odds": 29.0,
-          "live_odds": 23.0,
+          "live_odds": 27.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -12634,7 +12682,7 @@
           "draw": 7,
           "music": "1p6p3p2p5p1p6p",
           "morning_odds": 2.2,
-          "live_odds": 6.2,
+          "live_odds": 6.6,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -12652,7 +12700,7 @@
           "draw": 6,
           "music": "5p3p1p4p4p4p3p(25)7p1p",
           "morning_odds": 9.4,
-          "live_odds": 6.0,
+          "live_odds": 6.1,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -12688,7 +12736,7 @@
           "draw": 4,
           "music": "3p8p4p1p2p2p(25)3p3p0p",
           "morning_odds": 14.0,
-          "live_odds": 5.9,
+          "live_odds": 6.2,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -12706,7 +12754,7 @@
           "draw": 3,
           "music": "Ap1p1p2p2p3p4p7p",
           "morning_odds": 1.3,
-          "live_odds": 7.3,
+          "live_odds": 6.9,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -12724,7 +12772,7 @@
           "draw": 1,
           "music": "5p6p1p2p4p3p(25)2p4p3p",
           "morning_odds": 14.0,
-          "live_odds": 10.0,
+          "live_odds": 9.6,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -12742,7 +12790,7 @@
           "draw": 2,
           "music": "1p3p1p2p5p",
           "morning_odds": 4.2,
-          "live_odds": 2.9,
+          "live_odds": 2.8,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -12955,7 +13003,7 @@
           "draw": 5,
           "music": "5p4p4p4p5p(25)1p2p7p",
           "morning_odds": 3.8,
-          "live_odds": 2.4,
+          "live_odds": 1.5,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -12973,7 +13021,7 @@
           "draw": 2,
           "music": "1p6p1p8p3p(25)2p2p2p3p",
           "morning_odds": 11.0,
-          "live_odds": 3.2,
+          "live_odds": 4.4,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -12991,7 +13039,7 @@
           "draw": 6,
           "music": "2p2p2p3p6p(25)1p3p1p",
           "morning_odds": 1.7,
-          "live_odds": 5.7,
+          "live_odds": 9.1,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -13009,7 +13057,7 @@
           "draw": 3,
           "music": "7p0p0p0p0p4p(25)3p7p3p",
           "morning_odds": 2.5,
-          "live_odds": 15.0,
+          "live_odds": 25.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -13027,7 +13075,7 @@
           "draw": 1,
           "music": "3p7p3p5p4p6p7p0p",
           "morning_odds": 2.5,
-          "live_odds": 9.8,
+          "live_odds": 16.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -13045,7 +13093,7 @@
           "draw": 4,
           "music": "4p0p(25)1p3p",
           "morning_odds": 1.1,
-          "live_odds": 10.0,
+          "live_odds": 15.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -13264,7 +13312,7 @@
           "draw": 7,
           "music": "2p2p",
           "morning_odds": 8.5,
-          "live_odds": 3.5,
+          "live_odds": 3.9,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -13300,7 +13348,7 @@
           "draw": 1,
           "music": "5p1p",
           "morning_odds": 1.1,
-          "live_odds": 3.1,
+          "live_odds": 2.9,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -13318,7 +13366,7 @@
           "draw": 5,
           "music": "1p2p5p3p",
           "morning_odds": 16.0,
-          "live_odds": 8.7,
+          "live_odds": 8.8,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -13354,7 +13402,7 @@
           "draw": 3,
           "music": "6p6p8p1p7p",
           "morning_odds": 13.0,
-          "live_odds": 9.3,
+          "live_odds": 10.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -13372,7 +13420,7 @@
           "draw": 6,
           "music": "3p4p7p",
           "morning_odds": 8.7,
-          "live_odds": 18.0,
+          "live_odds": 15.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -13648,7 +13696,7 @@
           "draw": 7,
           "music": "6p4p4p",
           "morning_odds": 18.0,
-          "live_odds": 13.0,
+          "live_odds": 15.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -13666,7 +13714,7 @@
           "draw": 11,
           "music": "2p7p4p4p",
           "morning_odds": 18.0,
-          "live_odds": 2.3,
+          "live_odds": 1.8,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -13684,7 +13732,7 @@
           "draw": 5,
           "music": "8p0p9p",
           "morning_odds": 1.1,
-          "live_odds": 6.1,
+          "live_odds": 7.4,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -13702,7 +13750,7 @@
           "draw": 9,
           "music": "3p5p1p6p4p5p",
           "morning_odds": 39.0,
-          "live_odds": 15.0,
+          "live_odds": 16.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -13720,7 +13768,7 @@
           "draw": 10,
           "music": "5p2p2p5p2p",
           "morning_odds": 9.7,
-          "live_odds": 10.0,
+          "live_odds": 12.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -13738,7 +13786,7 @@
           "draw": 1,
           "music": "5p3p8p",
           "morning_odds": 2.1,
-          "live_odds": 12.0,
+          "live_odds": 13.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -13756,7 +13804,7 @@
           "draw": 8,
           "music": "6p4p8p8p",
           "morning_odds": 6.3,
-          "live_odds": 17.0,
+          "live_odds": 20.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -13774,7 +13822,7 @@
           "draw": 2,
           "music": "5p5p2p",
           "morning_odds": 55.0,
-          "live_odds": 15.0,
+          "live_odds": 17.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -13792,7 +13840,7 @@
           "draw": 3,
           "music": "2p3p9p6p3p2p6p",
           "morning_odds": 39.0,
-          "live_odds": 11.0,
+          "live_odds": 13.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -13810,7 +13858,7 @@
           "draw": 6,
           "music": "4p5p6p3p",
           "morning_odds": 118.0,
-          "live_odds": 22.0,
+          "live_odds": 26.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -14030,7 +14078,7 @@
           "draw": 6,
           "music": "3p3p0p3p6p4p2p2p9p9p",
           "morning_odds": 6.4,
-          "live_odds": 9.8,
+          "live_odds": 10.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -14048,7 +14096,7 @@
           "draw": 9,
           "music": "1p3p0p0p0p(25)8p8p9p6p",
           "morning_odds": 10.0,
-          "live_odds": 11.0,
+          "live_odds": 12.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -14066,7 +14114,7 @@
           "draw": 2,
           "music": "2p9p3p4p4p5p1p4p5p",
           "morning_odds": 1.1,
-          "live_odds": 4.9,
+          "live_odds": 5.1,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -14102,7 +14150,7 @@
           "draw": 8,
           "music": "3p9p6p7p0p0p(25)0p0p0p",
           "morning_odds": 7.4,
-          "live_odds": 7.2,
+          "live_odds": 6.6,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -14120,7 +14168,7 @@
           "draw": 1,
           "music": "7p2p2p7p7p3p3p4p7p2p",
           "morning_odds": 19.0,
-          "live_odds": 8.6,
+          "live_odds": 8.8,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -14174,7 +14222,7 @@
           "draw": 15,
           "music": "6p0p9p6p5p(25)9p8p0p2p",
           "morning_odds": 5.7,
-          "live_odds": 21.0,
+          "live_odds": 20.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -14192,7 +14240,7 @@
           "draw": 4,
           "music": "9p5p4p8p7p0p0p0p9p",
           "morning_odds": 87.0,
-          "live_odds": 13.0,
+          "live_odds": 14.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -14210,7 +14258,7 @@
           "draw": 16,
           "music": "0p5p4p4p8p0p7p0p0p0p",
           "morning_odds": 95.0,
-          "live_odds": 19.0,
+          "live_odds": 20.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -14264,7 +14312,7 @@
           "draw": 3,
           "music": "8p4p7pAs9pTp9p0p(25)0p",
           "morning_odds": 77.0,
-          "live_odds": 64.0,
+          "live_odds": 63.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -14300,7 +14348,7 @@
           "draw": 7,
           "music": "(25)0p0p(24)As8s2s5sAh6h",
           "morning_odds": 77.0,
-          "live_odds": 66.0,
+          "live_odds": 65.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -14420,7 +14468,7 @@
           "draw": 6,
           "music": "4p3p1p1p3p6p6p7p8p9p",
           "morning_odds": 2.5,
-          "live_odds": 8.0,
+          "live_odds": 8.3,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -14456,7 +14504,7 @@
           "draw": 10,
           "music": "6p5p0p4p4p8p1p1p5p3p",
           "morning_odds": 11.0,
-          "live_odds": 7.4,
+          "live_odds": 7.6,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -14528,7 +14576,7 @@
           "draw": 16,
           "music": "0p6p4p0p9p7p8p0p0p",
           "morning_odds": 20.0,
-          "live_odds": 17.0,
+          "live_odds": 16.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -14546,7 +14594,7 @@
           "draw": 3,
           "music": "8p7p6p4p0p9p2p(25)6p4p",
           "morning_odds": 19.0,
-          "live_odds": 19.0,
+          "live_odds": 20.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -14582,7 +14630,7 @@
           "draw": 5,
           "music": "5p6p7p0p2p(25)0p5p",
           "morning_odds": 49.0,
-          "live_odds": 13.0,
+          "live_odds": 12.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -14600,7 +14648,7 @@
           "draw": 4,
           "music": "7p0p8p0p4p0p(25)0p4p0p",
           "morning_odds": 23.0,
-          "live_odds": 17.0,
+          "live_odds": 19.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -14618,7 +14666,7 @@
           "draw": 13,
           "music": "0p(25)3p2p0p0p0p0p0p4p",
           "morning_odds": 101.0,
-          "live_odds": 37.0,
+          "live_odds": 39.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -14654,7 +14702,7 @@
           "draw": 7,
           "music": "0p2p2p6p7p(25)0p4p3p3p",
           "morning_odds": 6.5,
-          "live_odds": 7.7,
+          "live_odds": 8.1,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -14672,7 +14720,7 @@
           "draw": 14,
           "music": "3p7p4p1p0p0p5p0p4p",
           "morning_odds": 37.0,
-          "live_odds": 14.0,
+          "live_odds": 12.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -14910,7 +14958,7 @@
           "draw": 15,
           "music": "0p2p7p7p3p(25)2p1p3p4p",
           "morning_odds": 3.0,
-          "live_odds": 7.6,
+          "live_odds": 7.9,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -14928,7 +14976,7 @@
           "draw": 7,
           "music": "3p0p2p2p2p2p7p7p9p3p",
           "morning_odds": 9.3,
-          "live_odds": 5.0,
+          "live_odds": 5.1,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -14946,7 +14994,7 @@
           "draw": 8,
           "music": "3p2p1p8p1p9p8p4p5p",
           "morning_odds": 1.1,
-          "live_odds": 5.7,
+          "live_odds": 5.8,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -14964,7 +15012,7 @@
           "draw": 5,
           "music": "7p6p0p1p1p0p0p8p1p0p",
           "morning_odds": 14.0,
-          "live_odds": 12.0,
+          "live_odds": 11.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -14982,7 +15030,7 @@
           "draw": 9,
           "music": "5p7p3p1p6p0p0p0p(25)6p",
           "morning_odds": 9.1,
-          "live_odds": 11.0,
+          "live_odds": 10.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -15000,7 +15048,7 @@
           "draw": 3,
           "music": "8p2p0p1p(25)2p4p",
           "morning_odds": 9.3,
-          "live_odds": 18.0,
+          "live_odds": 17.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -15036,7 +15084,7 @@
           "draw": 13,
           "music": "(25)8p1p2p(24)9p5p1p2p4p",
           "morning_odds": 21.0,
-          "live_odds": 31.0,
+          "live_odds": 33.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -15072,7 +15120,7 @@
           "draw": 4,
           "music": "6p0p0p0p2p(25)0p5p2p2p",
           "morning_odds": 19.0,
-          "live_odds": 31.0,
+          "live_odds": 28.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -15090,7 +15138,7 @@
           "draw": 1,
           "music": "9p4p5p2p1p1p2p2p(25)3p",
           "morning_odds": 10.0,
-          "live_odds": 18.0,
+          "live_odds": 17.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -15108,7 +15156,7 @@
           "draw": 10,
           "music": "6p4p1p2p8p4p0p3p3p5p",
           "morning_odds": 48.0,
-          "live_odds": 26.0,
+          "live_odds": 24.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -15126,7 +15174,7 @@
           "draw": 11,
           "music": "9p8p4p3p8p0p7p(25)8p1p",
           "morning_odds": 10.0,
-          "live_odds": 33.0,
+          "live_odds": 35.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -15144,7 +15192,7 @@
           "draw": 2,
           "music": "7p4p1p1pRp4p(25)3p6p9p",
           "morning_odds": 19.0,
-          "live_odds": 24.0,
+          "live_odds": 22.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -15180,7 +15228,7 @@
           "draw": 6,
           "music": "8p6p4pJp8p6p7p1p(25)9p",
           "morning_odds": 32.0,
-          "live_odds": 29.0,
+          "live_odds": 28.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -15400,7 +15448,7 @@
           "draw": 12,
           "music": "2a0a5aDa0a(25)Da5aDa3a",
           "morning_odds": 12.0,
-          "live_odds": 7.6,
+          "live_odds": 8.1,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -15418,7 +15466,7 @@
           "draw": 5,
           "music": "2a2a0a8a7a4a5a2a7a7a",
           "morning_odds": 1.9,
-          "live_odds": 4.7,
+          "live_odds": 4.3,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -15436,7 +15484,7 @@
           "draw": 3,
           "music": "3a6a7a6a9aDa6aDa9a3a",
           "morning_odds": 8.2,
-          "live_odds": 23.0,
+          "live_odds": 25.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -15454,7 +15502,7 @@
           "draw": 6,
           "music": "7a2a3a2a2a2a5aDa2a8a",
           "morning_odds": 1.1,
-          "live_odds": 5.3,
+          "live_odds": 5.1,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -15472,7 +15520,7 @@
           "draw": 10,
           "music": "1a0a1a1aDa0a0a0a8a(25)",
           "morning_odds": 2.2,
-          "live_odds": 8.0,
+          "live_odds": 8.6,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -15490,7 +15538,7 @@
           "draw": 8,
           "music": "3a5a5a9a3a3a8a3a9a(25)",
           "morning_odds": 2.9,
-          "live_odds": 21.0,
+          "live_odds": 22.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -15526,7 +15574,7 @@
           "draw": 7,
           "music": "9a0a0aDa9aDa7a8a2a0a",
           "morning_odds": 90.0,
-          "live_odds": 27.0,
+          "live_odds": 29.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -15544,7 +15592,7 @@
           "draw": 1,
           "music": "6a9a0a6a6aDa1a3a0a9a",
           "morning_odds": 8.7,
-          "live_odds": 6.6,
+          "live_odds": 6.7,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -15580,7 +15628,7 @@
           "draw": 2,
           "music": "Dm4m0a7m4m3m4mDa2a2a",
           "morning_odds": 19.0,
-          "live_odds": 21.0,
+          "live_odds": 22.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -15598,7 +15646,7 @@
           "draw": 11,
           "music": "4a3a9aDa3a7aDa9a2a4a",
           "morning_odds": 8.2,
-          "live_odds": 21.0,
+          "live_odds": 20.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -15818,7 +15866,7 @@
           "draw": 6,
           "music": "1a1a1a1a",
           "morning_odds": 1.6,
-          "live_odds": 3.0,
+          "live_odds": 2.8,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -15854,7 +15902,7 @@
           "draw": 4,
           "music": "1a7a5a(25)2a1aDa1a",
           "morning_odds": 8.2,
-          "live_odds": 7.1,
+          "live_odds": 7.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -15872,7 +15920,7 @@
           "draw": 10,
           "music": "Da1a3a0aDaDa1aDaDa5m",
           "morning_odds": 19.0,
-          "live_odds": 6.1,
+          "live_odds": 6.3,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -15890,7 +15938,7 @@
           "draw": 2,
           "music": "4a1a1aDa5a4a(25)5a",
           "morning_odds": 3.3,
-          "live_odds": 8.8,
+          "live_odds": 9.3,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -15908,7 +15956,7 @@
           "draw": 9,
           "music": "8a6a9a7a(25)DaDa1a4a1a",
           "morning_odds": 9.7,
-          "live_odds": 14.0,
+          "live_odds": 15.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -15980,7 +16028,7 @@
           "draw": 5,
           "music": "4a5a4a4a1a3a(25)Da1a2a",
           "morning_odds": 47.0,
-          "live_odds": 20.0,
+          "live_odds": 21.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16180,7 +16228,7 @@
           "draw": 7,
           "music": "2a5a5a2a4a4a",
           "morning_odds": 1.2,
-          "live_odds": 9.5,
+          "live_odds": 9.4,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16216,7 +16264,7 @@
           "draw": 8,
           "music": "4a4a1a9a2a4a0a0a4a3a",
           "morning_odds": 6.5,
-          "live_odds": 5.7,
+          "live_odds": 5.4,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16252,7 +16300,7 @@
           "draw": 1,
           "music": "2a1a8m1a0a6a(25)Da0a1a",
           "morning_odds": 18.0,
-          "live_odds": 85.0,
+          "live_odds": 75.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16270,7 +16318,7 @@
           "draw": 4,
           "music": "4a3a1a5a2a3a9a2a(25)Da",
           "morning_odds": 10.0,
-          "live_odds": 47.0,
+          "live_odds": 45.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16288,7 +16336,7 @@
           "draw": 3,
           "music": "6m4aDa7a7a6aDa2aDa5a",
           "morning_odds": 41.0,
-          "live_odds": 25.0,
+          "live_odds": 26.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16306,7 +16354,7 @@
           "draw": 2,
           "music": "Dm1m1mDaDa2m3m0a4m(25)",
           "morning_odds": 596.0,
-          "live_odds": 52.0,
+          "live_odds": 51.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16527,7 +16575,7 @@
           "draw": 10,
           "music": "1a6a2a1aDa4a1a(25)9aDa",
           "morning_odds": 1.1,
-          "live_odds": 2.4,
+          "live_odds": 2.6,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16545,7 +16593,7 @@
           "draw": 3,
           "music": "1a7a1a0a7a3a4a2a4aDa",
           "morning_odds": 12.0,
-          "live_odds": 17.0,
+          "live_odds": 16.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16563,7 +16611,7 @@
           "draw": 7,
           "music": "6a5a3a6a4a6a5a4a8a4a",
           "morning_odds": 29.0,
-          "live_odds": 10.0,
+          "live_odds": 9.6,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16581,7 +16629,7 @@
           "draw": 12,
           "music": "Da5a1a5a1a0a7a4a4a4a",
           "morning_odds": 25.0,
-          "live_odds": 9.5,
+          "live_odds": 9.3,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16617,7 +16665,7 @@
           "draw": 6,
           "music": "2a7a1a3a6a6a(25)8a3a6a",
           "morning_odds": 87.0,
-          "live_odds": 30.0,
+          "live_odds": 27.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16635,7 +16683,7 @@
           "draw": 9,
           "music": "3a1a8a1a4a5a7a2m5a5a",
           "morning_odds": 3.0,
-          "live_odds": 16.0,
+          "live_odds": 15.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16653,7 +16701,7 @@
           "draw": 1,
           "music": "5a7aDa5a3a0a3a(25)2aAa",
           "morning_odds": 144.0,
-          "live_odds": 35.0,
+          "live_odds": 30.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16925,7 +16973,7 @@
           "draw": 5,
           "music": "3a6a2a1a5a2a1aDa7a1a",
           "morning_odds": 82.0,
-          "live_odds": 42.0,
+          "live_odds": 38.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16943,7 +16991,7 @@
           "draw": 4,
           "music": "6a7a2a9a2a4a0a1a4a7a",
           "morning_odds": 20.0,
-          "live_odds": 38.0,
+          "live_odds": 37.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16979,7 +17027,7 @@
           "draw": 1,
           "music": "5a1a4a4a9aDaDa5a(25)3a",
           "morning_odds": 18.0,
-          "live_odds": 50.0,
+          "live_odds": 48.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16997,7 +17045,7 @@
           "draw": 7,
           "music": "5a(25)1a1a7a1a2aDa1a1a",
           "morning_odds": 20.0,
-          "live_odds": 13.0,
+          "live_odds": 12.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -17015,7 +17063,7 @@
           "draw": 3,
           "music": "5a3a1a7aDa3aDa3a4a(25)",
           "morning_odds": 207.0,
-          "live_odds": 80.0,
+          "live_odds": 74.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -17033,7 +17081,7 @@
           "draw": 2,
           "music": "Da5aDaDaDa0a3a2a1a2a",
           "morning_odds": 69.0,
-          "live_odds": 91.0,
+          "live_odds": 74.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -17236,7 +17284,7 @@
           "draw": 8,
           "music": "2a7a1m1mDa4mDa1m(25)1m",
           "morning_odds": 3.0,
-          "live_odds": 1.6,
+          "live_odds": 1.7,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -17254,7 +17302,7 @@
           "draw": 3,
           "music": "0m9a5m1m0a4m8a7a6a8a",
           "morning_odds": 1.7,
-          "live_odds": 55.0,
+          "live_odds": 26.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -17290,7 +17338,7 @@
           "draw": 4,
           "music": "Da6a5a3a8a5aDa0a7a3a",
           "morning_odds": 6.0,
-          "live_odds": 24.0,
+          "live_odds": 23.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -17344,7 +17392,7 @@
           "draw": 10,
           "music": "6m4m2m4m3m2m4m4mDm0m",
           "morning_odds": 8.5,
-          "live_odds": 9.2,
+          "live_odds": 9.5,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -17362,7 +17410,7 @@
           "draw": 2,
           "music": "6m7m6m5m6m3m6m(25)8m8m",
           "morning_odds": 58.0,
-          "live_odds": 50.0,
+          "live_odds": 45.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -17380,7 +17428,7 @@
           "draw": 5,
           "music": "6a0a2a0a0a7a8a9a(25)2a",
           "morning_odds": 43.0,
-          "live_odds": 64.0,
+          "live_odds": 47.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -17398,7 +17446,7 @@
           "draw": 1,
           "music": "DmDa8m7m0aAmDmDmDm(25)",
           "morning_odds": 77.0,
-          "live_odds": 138.0,
+          "live_odds": 98.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -17619,7 +17667,7 @@
           "draw": 12,
           "music": "3a(25)6a6a5a1a1aDa4a1a",
           "morning_odds": 1.1,
-          "live_odds": 4.1,
+          "live_odds": 4.4,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -17655,7 +17703,7 @@
           "draw": 6,
           "music": "6a7a6a3aDa8aDa5a7aDa",
           "morning_odds": 53.0,
-          "live_odds": 7.6,
+          "live_odds": 8.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -17673,7 +17721,7 @@
           "draw": 4,
           "music": "4a8a0a2a5a6a6a2a7a6a",
           "morning_odds": 20.0,
-          "live_odds": 16.0,
+          "live_odds": 13.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -17691,7 +17739,7 @@
           "draw": 7,
           "music": "8aDa0a7a7a(25)2a1a3a5a",
           "morning_odds": 26.0,
-          "live_odds": 9.4,
+          "live_odds": 10.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -17709,7 +17757,7 @@
           "draw": 15,
           "music": "7a2m1mDa0a(25)DaDaDaDa",
           "morning_odds": 16.0,
-          "live_odds": 18.0,
+          "live_odds": 19.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -17745,7 +17793,7 @@
           "draw": 5,
           "music": "Aa0a2a6a6aDa8aDa2a5a",
           "morning_odds": 26.0,
-          "live_odds": 23.0,
+          "live_odds": 18.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -17763,7 +17811,7 @@
           "draw": 1,
           "music": "Da0a5a5a9a5a9a5a3a6a",
           "morning_odds": 19.0,
-          "live_odds": 20.0,
+          "live_odds": 21.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -17781,7 +17829,7 @@
           "draw": 8,
           "music": "0a9aDa0a3a8a5a0a6a2a",
           "morning_odds": 58.0,
-          "live_odds": 33.0,
+          "live_odds": 25.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -17799,7 +17847,7 @@
           "draw": 11,
           "music": "DaDa(25)2a4aDaDa5a1a9a",
           "morning_odds": 20.0,
-          "live_odds": 31.0,
+          "live_odds": 32.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -17817,7 +17865,7 @@
           "draw": 16,
           "music": "5aDaDa2a0aDa7a0a0a(25)",
           "morning_odds": 71.0,
-          "live_odds": 18.0,
+          "live_odds": 19.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -17835,7 +17883,7 @@
           "draw": 13,
           "music": "3aDm7a(25)Da7a6a1aDaDa",
           "morning_odds": 128.0,
-          "live_odds": 15.0,
+          "live_odds": 13.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -17871,7 +17919,7 @@
           "draw": 14,
           "music": "DaDaDa4aDaDm7a(25)Da8a",
           "morning_odds": 71.0,
-          "live_odds": 33.0,
+          "live_odds": 30.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -17889,7 +17937,7 @@
           "draw": 9,
           "music": "3aGaDa4aDaDa7a0aDa2a",
           "morning_odds": 58.0,
-          "live_odds": 22.0,
+          "live_odds": 24.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -18092,7 +18140,7 @@
           "draw": 2,
           "music": "4a5a5a6a2a2a8a3aDa9a",
           "morning_odds": 1.1,
-          "live_odds": 5.8,
+          "live_odds": 6.2,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -18110,7 +18158,7 @@
           "draw": 12,
           "music": "5a6m6a4m8a8a0a4a3a8a",
           "morning_odds": 5.9,
-          "live_odds": 15.0,
+          "live_odds": 16.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -18128,7 +18176,7 @@
           "draw": 13,
           "music": "2a6a4aDa6a6a6a(25)DaDa",
           "morning_odds": 37.0,
-          "live_odds": 31.0,
+          "live_odds": 34.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -18146,7 +18194,7 @@
           "draw": 5,
           "music": "3a5a3aDa8aDa0a3aDa4a",
           "morning_odds": 4.6,
-          "live_odds": 14.0,
+          "live_odds": 9.3,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -18164,7 +18212,7 @@
           "draw": 7,
           "music": "2a6aDa3a7aDa8a(25)1a4a",
           "morning_odds": 2.5,
-          "live_odds": 10.0,
+          "live_odds": 11.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -18182,7 +18230,7 @@
           "draw": 11,
           "music": "5a8a3aDa4a4a9a6a9a2a",
           "morning_odds": 6.0,
-          "live_odds": 27.0,
+          "live_odds": 21.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -18200,7 +18248,7 @@
           "draw": 4,
           "music": "1a1a3aDa6a5aDa(25)8a5a",
           "morning_odds": 6.0,
-          "live_odds": 4.0,
+          "live_odds": 4.2,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -18218,7 +18266,7 @@
           "draw": 14,
           "music": "6a8a0a9aDa6a2a(25)0aDa",
           "morning_odds": 9.4,
-          "live_odds": 16.0,
+          "live_odds": 17.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -18236,7 +18284,7 @@
           "draw": 16,
           "music": "4a5a7a6aDa(25)4a7aDaDm",
           "morning_odds": 41.0,
-          "live_odds": 20.0,
+          "live_odds": 22.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -18254,7 +18302,7 @@
           "draw": 8,
           "music": "5a3a4aDa6a6aDaDa7aDa",
           "morning_odds": 9.4,
-          "live_odds": 6.9,
+          "live_odds": 7.1,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -18308,7 +18356,7 @@
           "draw": 3,
           "music": "9a2a7a5aDaDa5a4a2a5a",
           "morning_odds": 68.0,
-          "live_odds": 29.0,
+          "live_odds": 26.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -18326,7 +18374,7 @@
           "draw": 9,
           "music": "7aDm6m4m0a0a9a6a0a9a",
           "morning_odds": 37.0,
-          "live_odds": 109.0,
+          "live_odds": 120.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -18344,7 +18392,7 @@
           "draw": 10,
           "music": "DaDaDa8mDa6a2aDa0a(25)",
           "morning_odds": 80.0,
-          "live_odds": 87.0,
+          "live_odds": 68.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -18362,7 +18410,7 @@
           "draw": 1,
           "music": "DaDa9aDaDaDa4a0aDa(25)",
           "morning_odds": 14.0,
-          "live_odds": 21.0,
+          "live_odds": 24.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
