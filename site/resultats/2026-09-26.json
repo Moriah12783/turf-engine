@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "db2ba83f8e24039d6847d607eacf8fb5127d353f",
-  "run_id": "36239071512",
+  "commit": "8f10898cf6a94f82725f64f5eb677b7d836bb63e",
+  "run_id": "36239837792",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-26",
- "genere_le_utc": "2026-09-26T11:32:05Z",
+ "genere_le_utc": "2026-09-26T11:46:57Z",
  "nb_courses": 25,
  "compte_par_statut": {
-  "EN_ATTENTE": 21,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 20,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 4,
   "ANNULEE": 0
  },
- "empreinte_sha256": "d9295015399b7609ed8356a9bccc616b6cfb219cb93f7d3cb6cdd7243adecffc",
+ "empreinte_sha256": "12b2d27e84a171c134eae410e84ac6a06a804d1e42a7a059704ddea562ce56bf",
  "courses": [
   {
    "course_id": "R1C1_26092026_AUTEUIL",
@@ -29,9 +29,9 @@
     "libelle": "PRIX DUC D'ALBUQUERQUE - CHALLENGE DE L'OBSTACLE EQUINAXY",
     "discipline": "OBSTACLE_STEEPLE",
     "distance_m": 4400,
-    "heure_depart_utc": "2026-09-26T11:58:00Z",
+    "heure_depart_utc": "2026-09-26T12:00:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "11:58 GMT (13:58 Paris)",
+    "heure_depart_affichee": "12:00 GMT (14:00 Paris)",
     "partants_declares": 8,
     "partants_actifs": 8
    },
@@ -563,7 +563,7 @@
     "verifiee_le_utc": "2026-09-26T09:46:16Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-26T09:46:16Z",
-    "derniere_verification_utc": "2026-09-26T11:31:21Z"
+    "derniere_verification_utc": "2026-09-26T11:46:12Z"
    },
    "correction": {
     "version": 1,
@@ -691,7 +691,7 @@
     "verifiee_le_utc": "2026-09-26T10:16:17Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-26T10:16:17Z",
-    "derniere_verification_utc": "2026-09-26T11:31:21Z"
+    "derniere_verification_utc": "2026-09-26T11:46:12Z"
    },
    "correction": {
     "version": 1,
@@ -863,7 +863,7 @@
     "verifiee_le_utc": "2026-09-26T10:51:14Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-26T10:51:14Z",
-    "derniere_verification_utc": "2026-09-26T11:31:21Z"
+    "derniere_verification_utc": "2026-09-26T11:46:12Z"
    },
    "correction": {
     "version": 2,
@@ -1015,7 +1015,7 @@
     "verifiee_le_utc": "2026-09-26T11:31:21Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-26T11:31:21Z",
-    "derniere_verification_utc": "2026-09-26T11:31:21Z"
+    "derniere_verification_utc": "2026-09-26T11:46:12Z"
    },
    "correction": {
     "version": 2,
@@ -1070,14 +1070,44 @@
     "partants_actifs": 9
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 4,
+     "nom": "AURORA BEAU REAL",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 2,
+     "nom": "ZARLAND",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 6,
+     "nom": "SAYULITA",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 8,
+     "nom": "NOUS TROIS",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    4,
+    2,
+    6,
+    8
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
@@ -1090,21 +1120,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/26092026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-09-26T11:46:12Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-09-26T11:46:12Z",
+    "derniere_verification_utc": "2026-09-26T11:46:12Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-09-26T11:46:12Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       4,
+       2,
+       6,
+       8
+      ]
+     }
+    ]
    }
   },
   {
