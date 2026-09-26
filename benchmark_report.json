@@ -6049,8 +6049,8 @@
       "priced_ratio": 1.0,
       "edition_provisoire": false,
       "provisoire_reason": null,
-      "publishable": true,
-      "publication_reason": "OK",
+      "publishable": false,
+      "publication_reason": "RACE_STARTED",
       "display_horizon": "T15",
       "editions_moteur": {
         "T_MATIN": {
@@ -6121,9 +6121,9 @@
       "autostart": false,
       "scheduled_start_time": "11:06 GMT (13:06 Paris)",
       "is_finished": false,
-      "status": "PROGRAMMÉE",
+      "status": "PARTIE",
       "is_cancelled": false,
-      "is_started": false,
+      "is_started": true,
       "start_time_utc": "2026-09-26T11:06:00Z",
       "contract_recorded": true,
       "confidence_stars": 5,
@@ -6274,7 +6274,7 @@
       "couv_moteur_count": 0,
       "couv_marche": "0/5",
       "couv_marche_count": 0,
-      "couverture_label": "Course à venir",
+      "couverture_label": "Course partie",
       "decision": "Bases: 3 - 2",
       "decision_badge": "badge-base",
       "runners": [
@@ -6396,7 +6396,7 @@
       "provisoire_reason": null,
       "publishable": true,
       "publication_reason": "OK",
-      "display_horizon": "T90",
+      "display_horizon": "T30",
       "editions_moteur": {
         "T_MATIN": {
           "sel": "4-2-8-7-6-1-3-5",
@@ -6409,6 +6409,13 @@
           "sel": "4-2-8-1-7-6-3-9",
           "nominal": false,
           "lock": "10:01",
+          "priced_ratio": 1.0,
+          "odds_real": true
+        },
+        "T30": {
+          "sel": "4-2-8-1-7-6-3-9",
+          "nominal": false,
+          "lock": "11:06",
           "priced_ratio": 1.0,
           "odds_real": true
         }
@@ -6425,6 +6432,13 @@
           "sel": "4-2-1-7-8-6-3-9",
           "nominal": false,
           "lock": "10:01",
+          "priced_ratio": 1.0,
+          "odds_real": true
+        },
+        "T30": {
+          "sel": "4-2-8-1-7-6-3-9",
+          "nominal": false,
+          "lock": "11:06",
           "priced_ratio": 1.0,
           "odds_real": true
         }
@@ -6463,7 +6477,7 @@
         4,
         2
       ],
-      "outsider_num": 5,
+      "outsider_num": 9,
       "regrets": [
         5
       ],
@@ -6496,21 +6510,21 @@
             "chevaux": [
               4,
               2,
-              5
+              9
             ],
             "bases": [
               4,
               2
             ],
             "associes": [
-              5
+              9
             ],
             "combinaisons": 1,
             "mise_unitaire_eur": 2.0,
             "cout_total_eur": 2.0,
             "eligible": true,
             "motif_ineligibilite": null,
-            "texte": "4 - 2 - 5"
+            "texte": "4 - 2 - 9"
           },
           {
             "produit": "QUINTE_PLUS",
@@ -6555,9 +6569,9 @@
           "chevaux": [
             4,
             2,
-            5
+            9
           ],
-          "formule": "4 - 2 - 5",
+          "formule": "4 - 2 - 9",
           "mise_base_eur": 2.0
         },
         "quinte_champ_reduit": {
@@ -6577,13 +6591,13 @@
           "budget_conseille_eur": null
         }
       },
-      "sel_marche": "4-2-1-7-8-6-3-9",
+      "sel_marche": "4-2-8-1-7-6-3-9",
       "sel_marche_list": [
         4,
         2,
+        8,
         1,
         7,
-        8,
         6,
         3,
         9
@@ -6611,11 +6625,11 @@
           "morning_odds": 1.1,
           "live_odds": 1.2,
           "o_t90": 1.5,
-          "o_t30": null,
+          "o_t30": 1.2,
           "o_t15": null,
-          "prob_pct": 52.3,
-          "value_index": 0.79,
-          "smart_signal": "LEGERE_HAUSSE",
+          "prob_pct": 64.5,
+          "value_index": 0.77,
+          "smart_signal": "STABLE",
           "is_np": false,
           "odds_real": true
         },
@@ -6629,10 +6643,10 @@
           "morning_odds": 3.5,
           "live_odds": 8.0,
           "o_t90": 6.6,
-          "o_t30": null,
+          "o_t30": 8.0,
           "o_t15": null,
-          "prob_pct": 12.1,
-          "value_index": 0.8,
+          "prob_pct": 9.9,
+          "value_index": 0.79,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -6647,10 +6661,10 @@
           "morning_odds": 34.0,
           "live_odds": 19.0,
           "o_t90": 14.0,
-          "o_t30": null,
+          "o_t30": 19.0,
           "o_t15": null,
-          "prob_pct": 7.3,
-          "value_index": 1.02,
+          "prob_pct": 5.8,
+          "value_index": 1.1,
           "smart_signal": "FORTE_BAISSE_INSIDER",
           "is_np": false,
           "odds_real": true
@@ -6665,11 +6679,11 @@
           "morning_odds": 30.0,
           "live_odds": 21.0,
           "o_t90": 14.0,
-          "o_t30": null,
+          "o_t30": 21.0,
           "o_t15": null,
-          "prob_pct": 6.5,
-          "value_index": 0.91,
-          "smart_signal": "FORTE_BAISSE_INSIDER",
+          "prob_pct": 4.5,
+          "value_index": 0.95,
+          "smart_signal": "BAISSE_CONFIRMEE",
           "is_np": false,
           "odds_real": true
         },
@@ -6683,10 +6697,28 @@
           "morning_odds": 8.1,
           "live_odds": 21.0,
           "o_t90": 14.0,
-          "o_t30": null,
+          "o_t30": 21.0,
           "o_t15": null,
-          "prob_pct": 5.9,
-          "value_index": 0.83,
+          "prob_pct": 4.1,
+          "value_index": 0.86,
+          "smart_signal": "FORTE_HAUSSE_DELAISSE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 6,
+          "name": "SAYULITA",
+          "driver": "M.GRANDIN",
+          "shoeing": "FERRE",
+          "draw": 1,
+          "music": "8p6p",
+          "morning_odds": 4.9,
+          "live_odds": 23.0,
+          "o_t90": 16.0,
+          "o_t30": 23.0,
+          "o_t15": null,
+          "prob_pct": 3.8,
+          "value_index": 0.87,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -6701,29 +6733,11 @@
           "morning_odds": 59.0,
           "live_odds": 33.0,
           "o_t90": 19.0,
-          "o_t30": null,
+          "o_t30": 33.0,
           "o_t15": null,
-          "prob_pct": 5.2,
-          "value_index": 0.98,
+          "prob_pct": 3.5,
+          "value_index": 1.17,
           "smart_signal": "FORTE_BAISSE_INSIDER",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 6,
-          "name": "SAYULITA",
-          "driver": "M.GRANDIN",
-          "shoeing": "FERRE",
-          "draw": 1,
-          "music": "8p6p",
-          "morning_odds": 4.9,
-          "live_odds": 23.0,
-          "o_t90": 16.0,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 5.2,
-          "value_index": 0.84,
-          "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
         },
@@ -6737,10 +6751,10 @@
           "morning_odds": 588.0,
           "live_odds": 64.0,
           "o_t90": 42.0,
-          "o_t30": null,
+          "o_t30": 64.0,
           "o_t15": null,
-          "prob_pct": 2.9,
-          "value_index": 1.21,
+          "prob_pct": 2.2,
+          "value_index": 1.43,
           "smart_signal": "FORTE_BAISSE_INSIDER",
           "is_np": false,
           "odds_real": true
@@ -6755,11 +6769,11 @@
           "morning_odds": 88.0,
           "live_odds": 75.0,
           "o_t90": 49.0,
-          "o_t30": null,
+          "o_t30": 75.0,
           "o_t15": null,
-          "prob_pct": 2.5,
-          "value_index": 1.25,
-          "smart_signal": "FORTE_BAISSE_INSIDER",
+          "prob_pct": 1.6,
+          "value_index": 1.21,
+          "smart_signal": "STABLE",
           "is_np": false,
           "odds_real": true
         }
