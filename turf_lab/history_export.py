@@ -1,18 +1,25 @@
 """Export de l'historique Radar (Supabase) vers R2 — phase 1 du plan Benter.
 
 Source : base « Radar Elite Predictive », rôle ``lecteur_benter`` (lecture
-seule, 5 tables, 2 connexions, 120 s par requête), chaîne de connexion dans
+seule, 6 tables, 2 connexions, 120 s par requête, transaction inactive
+fermée après 60 s : d'où l'autocommit), chaîne de connexion dans
 le secret ``RADAR_HISTORY_DSN``. Cible : ``history/turf_history.db`` sur R2,
 distinct de la base en direct (``turf_bench.db``) — la production n'est
 jamais touchée.
 
-Règles convenues avec le dev Radar (27/09/2026) :
+Règles convenues avec le dev Radar (27-28/09/2026) :
   - pagination PAR DATE (jamais de requête unique sur 186 000 lignes) ;
-  - créneau 00h00–05h00 UTC (``--force-hors-creneau`` pour un run manuel) ;
-  - lecture seule, aucune écriture côté Radar ;
-  - rapports antérieurs au 20/07/2026 : attendre leur ligne de fin de
-    reprise (~02/10), puis relancer avec ``--start 2025-07-17 --end
-    2026-07-19 --tables rapports_definitifs``.
+  - créneau 00h00–05h00 UTC, arrêt STRICT : aucune requête après 04h55
+    (``--force-hors-creneau`` pour un run manuel) ;
+  - lecture seule, aucune écriture côté Radar.
+
+Garanties d'écriture données par le Radar (28/09/2026) :
+  - chaque date de la reprise des rapports est écrite en une seule fois :
+    une date est visible complète ou pas du tout ;
+  - ``rapports_definitifs`` ne fait que s'enrichir (arrivée le lendemain à
+    74 %, jusqu'à 17 jours en reprise) ; les 5 autres tables ne sont écrites
+    que le jour même de la course ;
+  - tout changement de ce mode d'écriture est annoncé par ligne datée.
 
 Le fichier local est un MIROIR PAR DATE : chaque date exportée est
 remplacée en entier (idempotent), et consignée dans ``export_log`` avec son
@@ -20,9 +27,10 @@ nombre de lignes. Chaque nuit, une date est (ré)exportée si elle est
 nouvelle, si son nombre de lignes a changé côté Radar (reprise, correction)
 ou si elle fait partie des 3 derniers jours (données encore mouvantes).
 
-Verrou « reprise des rapports » : sans ``--start`` explicite, les rapports
-antérieurs au 20/07/2026 ne sont jamais lus (reprise Radar en cours). La
-relance manuelle après la ligne de fin de reprise lève le verrou.
+La reprise des rapports arrive donc toute seule, date par date : une date
+absente n'est pas lue ; dès qu'elle est écrite (complète), le comptage la
+détecte et la nuit suivante la lit ; un ajout tardif change le comptage et
+la fait relire. Aucun horodatage (``captured_at``) n'est utilisé.
 
 Mises en garde de données (voir docs/HISTORIQUE_RADAR.md) :
   - ``participants.cote_reference`` est réécrite au fil de la journée :
@@ -81,15 +89,17 @@ TABLES: Dict[str, Tuple[str, ...]] = {
     "rapports_definitifs": (
         "date_course", "num_reunion", "num_course", "type_pari", "libelle", "combinaison",
         "dividende_pour_1e", "nombre_gagnants", "rembourse", "captured_at"),
+    # Journal des changements de cote (depuis le 15/09/2026) : la seule
+    # source de la cote à un instant donné, clé de l'étape 2 du plan Benter.
+    "participants_cotes_hist": (
+        "id", "changed_at", "date_course", "num_reunion", "num_course", "num_pmu", "operation",
+        "cote_reference_avant", "cote_reference_apres", "cote_direct_avant", "cote_direct_apres"),
 }
 ORDER_BY = {
     "rapports_definitifs": "num_reunion, num_course, type_pari, libelle, combinaison",
 }
-# Reprise Radar des rapports en cours (fin prévue ~02/10) : sans --start
-# explicite, aucun rapport antérieur à cette date n'est lu.
-RAPPORTS_COMPLETS_DEPUIS = "2026-07-20"
-PLANCHERS = {"rapports_definitifs": RAPPORTS_COMPLETS_DEPUIS}
 CRENEAU_UTC = (0, 5)            # [00h, 05h[
+MARGE_FIN_CRENEAU = timedelta(minutes=5)   # dernière requête au plus tard à 04h55
 MAX_DROP_RATIO = 0.01           # refus d'envoi si le miroir perd > 1 % de lignes
 
 
@@ -125,8 +135,9 @@ class PgSource:
 
     def __init__(self, dsn: str):
         import psycopg
-        # prepare_threshold=None : aucune instruction préparée côté serveur,
-        # compatible avec le pooler Supabase quel que soit son mode.
+        # autocommit OBLIGATOIRE : le rôle ferme toute transaction inactive
+        # plus de 60 s. prepare_threshold=None : aucune instruction préparée
+        # côté serveur, compatible avec le pooler Supabase quel que soit son mode.
         self.conn = psycopg.connect(dsn, autocommit=True, connect_timeout=30,
                                     application_name="turf-engine-history")
         self.conn.prepare_threshold = None
@@ -203,20 +214,17 @@ def in_window(now: datetime) -> bool:
 
 
 def plan_dates(source_counts: Dict[str, int], exported: Dict[str, int], today: str, refresh_days: int,
-               start: Optional[str] = None, end: Optional[str] = None,
-               floor: Optional[str] = None) -> List[str]:
+               start: Optional[str] = None, end: Optional[str] = None) -> List[str]:
     """Dates à (ré)exporter, les plus anciennes d'abord.
 
     Plage forcée (start/end) : toutes les dates de la plage. Sinon : dates
     jamais exportées, dates dont le nombre de lignes a changé côté source, et
     les ``refresh_days`` derniers jours (données encore mouvantes). La date du
-    jour n'est jamais exportée (journée en cours). ``floor`` : aucune date
-    antérieure, sauf si ``start`` est donné explicitement."""
+    jour n'est jamais exportée (journée en cours)."""
     refresh_from = (date.fromisoformat(today) - timedelta(days=refresh_days)).isoformat()
-    lower = start or floor
     chosen = []
     for d in sorted(source_counts):
-        if d >= today or (lower and d < lower) or (end and d > end):
+        if d >= today or (start and d < start) or (end and d > end):
             continue
         if start or end or exported.get(d) != source_counts[d] or d >= refresh_from:
             chosen.append(d)
@@ -232,8 +240,10 @@ def run_export(source, db: HistoryDB, tables: Sequence[str], today: str, refresh
     stamp = now_utc or (lambda: datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"))
     report = {"tables": {}, "interrompu": False}
     for table in tables:
-        todo = plan_dates(source.date_counts(table), db.exported(table), today, refresh_days,
-                          start, end, PLANCHERS.get(table))
+        if clock() - started > max_seconds:          # aucune requête, même de comptage
+            report["interrompu"] = True
+            break
+        todo = plan_dates(source.date_counts(table), db.exported(table), today, refresh_days, start, end)
         done = rows = 0
         for day in todo:
             if clock() - started > max_seconds:
@@ -357,12 +367,12 @@ def main(argv: Optional[List[str]] = None, source_factory=PgSource, client_facto
 
     budget = args.max_minutes * 60
     if not args.force_hors_creneau:
-        if not in_window(now):
-            _log("HISTORY_HORS_CRENEAU", {"heure_utc": now.strftime("%H:%M"), "creneau": "00:00-05:00 UTC"})
-            return 0
-        # Le budget ne déborde jamais du créneau convenu avec le Radar.
-        fin = now.replace(hour=CRENEAU_UTC[1], minute=0, second=0, microsecond=0)
+        # Arrêt strict demandé par le Radar : dernière requête à 04h55 au plus tard.
+        fin = now.replace(hour=CRENEAU_UTC[1], minute=0, second=0, microsecond=0) - MARGE_FIN_CRENEAU
         budget = min(budget, (fin - now).total_seconds())
+        if not in_window(now) or budget <= 0:
+            _log("HISTORY_HORS_CRENEAU", {"heure_utc": now.strftime("%H:%M"), "creneau": "00:00-04:55 UTC"})
+            return 0
 
     try:
         previous = pull_history(client, cfg["bucket"], args.db)
