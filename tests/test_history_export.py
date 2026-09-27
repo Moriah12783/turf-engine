@@ -38,12 +38,14 @@ class FakeSource:
     def __init__(self, data):
         self.data = data            # {table: {date: [rows]}}
         self.fetches = []
+        self.counted = []
         self.closed = False
 
     def whoami(self):
         return {"current_user": "lecteur_benter", "courses": sum(len(r) for r in self.data.get("courses", {}).values())}
 
     def date_counts(self, table):
+        self.counted.append(table)
         return {d: len(rows) for d, rows in self.data.get(table, {}).items()}
 
     def fetch(self, table, day):
@@ -104,14 +106,42 @@ def test_plan_detecte_une_date_modifiee_cote_radar():
     assert plan_dates({"2026-08-01": 973}, {"2026-08-01": 40}, AUJOURDHUI, 3) == ["2026-08-01"]
 
 
-def test_plan_plage_forcee_et_plancher():
+def test_plan_plage_forcee():
     source = {"2025-07-17": 1, "2026-07-19": 1, "2026-07-20": 1, "2026-09-01": 1}
-    exported = dict(source)
-    # Plancher des rapports : rien avant le 20/07/2026 sans --start explicite.
-    assert plan_dates(source, {}, AUJOURDHUI, 3, floor="2026-07-20") == ["2026-07-20", "2026-09-01"]
-    # Relance après la ligne de fin de reprise : --start lève le plancher, tout est réexporté.
-    assert plan_dates(source, exported, AUJOURDHUI, 3, start="2025-07-17", end="2026-07-19",
-                      floor="2026-07-20") == ["2025-07-17", "2026-07-19"]
+    # Plage forcée : tout est relu dans la plage, même inchangé.
+    assert plan_dates(source, dict(source), AUJOURDHUI, 3, start="2025-07-17",
+                      end="2026-07-19") == ["2025-07-17", "2026-07-19"]
+
+
+def test_reprise_des_rapports_arrive_date_par_date(workdir):
+    # Radar : chaque date reprise est écrite en une fois ; une date absente n'est pas lue.
+    data = {"rapports_definitifs": {d: [_row("rapports_definitifs", d, i) for i in range(3)]
+                                    for d in ("2026-07-21", "2026-07-22")}}
+    source = FakeSource(data)
+    db = HistoryDB("h.db")
+    run_export(source, db, ["rapports_definitifs"], AUJOURDHUI)
+    assert ("rapports_definitifs", "2026-07-20") not in source.fetches
+    # Nuit suivante : la reprise a écrit le 20 et le 19/07 ; un rapport tardif s'ajoute au 22/07.
+    for d in ("2026-07-19", "2026-07-20"):
+        data["rapports_definitifs"][d] = [_row("rapports_definitifs", d, i) for i in range(3)]
+    data["rapports_definitifs"]["2026-07-22"].append(_row("rapports_definitifs", "2026-07-22", 9))
+    source.fetches.clear()
+    run_export(source, db, ["rapports_definitifs"], AUJOURDHUI)
+    assert source.fetches == [("rapports_definitifs", "2026-07-19"), ("rapports_definitifs", "2026-07-20"),
+                              ("rapports_definitifs", "2026-07-22")]
+    assert db.counts()["rapports_definitifs"] == 13
+    db.close()
+
+
+def test_budget_epuise_aucune_requete_meme_de_comptage(workdir):
+    source = FakeSource(_data(["2026-08-01"], tables=("courses", "participants")))
+    db = HistoryDB("h.db")
+    ticks = iter([0, 1, 2, 10, 11])      # le budget (5 s) s'épuise pendant la 1re table
+    report = run_export(source, db, ["courses", "participants"], AUJOURDHUI, max_seconds=5,
+                        clock=lambda: next(ticks))
+    assert report["interrompu"] is True
+    assert source.counted == ["courses"]                                 # participants jamais interrogée
+    db.close()
 
 
 # ── Miroir local ────────────────────────────────────────────────────────
@@ -148,9 +178,9 @@ def test_run_export_s_arrete_au_budget_et_reprend(workdir):
     ticks = iter(range(100))
     report = run_export(source, db, ["courses"], AUJOURDHUI, max_seconds=3, clock=lambda: next(ticks))
     assert report["interrompu"] is True
-    assert report["tables"]["courses"]["dates_exportees"] == 3
+    assert report["tables"]["courses"]["dates_exportees"] == 2
     report = run_export(source, db, ["courses"], AUJOURDHUI)
-    assert report["tables"]["courses"]["dates_prevues"] == 7      # reprise là où la nuit s'est arrêtée
+    assert report["tables"]["courses"]["dates_prevues"] == 8      # reprise là où la nuit s'est arrêtée
     assert db.counts()["courses"] == 20
     db.close()
 
@@ -230,7 +260,15 @@ def test_main_budget_borne_par_fin_du_creneau(env_ok, monkeypatch):
     monkeypatch.setattr(hx, "run_export", spy)
     tard = datetime(2026, 9, 28, 4, 50, tzinfo=timezone.utc)
     assert _main(["run"], FakeSource({}), FakeS3(), now=tard) == 0
-    assert seen["max_seconds"] == 600                                   # 10 min restantes, pas 45
+    assert seen["max_seconds"] == 300                                   # arrêt à 04h55, pas 45 min
+
+
+def test_main_apres_04h55_ne_lit_rien(env_ok, capsys):
+    source = FakeSource(_data(["2026-09-01"]))
+    trop_tard = datetime(2026, 9, 28, 4, 56, tzinfo=timezone.utc)
+    assert _main(["run"], source, FakeS3(), now=trop_tard) == 0
+    assert "HISTORY_HORS_CRENEAU" in capsys.readouterr().out
+    assert source.counted == [] and source.fetches == []
 
 
 def test_main_run_complet_puis_status(env_ok, capsys):
@@ -239,7 +277,8 @@ def test_main_run_complet_puis_status(env_ok, capsys):
     data["rapports_definitifs"]["2026-07-01"] = [_row("rapports_definitifs", "2026-07-01", 0)]
     source = FakeSource(data)
     assert _main(["run"], source, s3) == 0
-    assert ("rapports_definitifs", "2026-07-01") not in source.fetches   # verrou reprise respecté
+    assert ("rapports_definitifs", "2026-07-01") in source.fetches       # date reprise : lue dès qu'écrite
+    assert ("participants_cotes_hist", "2026-09-26") in source.fetches   # 6e table exportée
     assert "HISTORY_EXPORT_OK" in capsys.readouterr().out
     conn = sqlite3.connect("turf_history.db")
     assert conn.execute("SELECT COUNT(*) FROM participants").fetchone()[0] == 4
