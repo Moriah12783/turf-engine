@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "f7f8504aec0cf52eb411f3803dd40d987acc7cb6",
-  "run_id": "36308020839",
+  "commit": "46e00cc18d01218eebc85464daf6063c06dd405c",
+  "run_id": "36308813377",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-27",
- "genere_le_utc": "2026-09-27T09:02:28Z",
+ "genere_le_utc": "2026-09-27T09:16:53Z",
  "nb_courses": 54,
  "compte_par_statut": {
-  "EN_ATTENTE": 54,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 53,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 0,
   "ANNULEE": 0
  },
- "empreinte_sha256": "28c82f4fbe49f46a1a91c00e527d1eaf6827fd32cf358faacb8c242b738bfe11",
+ "empreinte_sha256": "1292f767481cb27c37bc1e37b3374bce86a6d7e3c9dfa88549e2d2eceec4b591",
  "courses": [
   {
    "course_id": "R1C1_27092026_VINCENNES",
@@ -536,15 +536,51 @@
     "partants_actifs": 11
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_CONFIRME"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 8,
+     "nom": "APRIL FLOWER",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 1,
+     "nom": "MAIMIX",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 5,
+     "nom": "MAESTRANZO",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 10,
+     "nom": "MASTER DORE",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    8,
+    1,
+    5,
+    10
+   ],
+   "non_classes": [
+    {
+     "num": 7,
+     "nom": "LUNA NOSTRA",
+     "incident": "DEROBE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": false,
@@ -556,21 +592,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/27092026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-09-27T09:16:08Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-09-27T09:16:08Z",
+    "derniere_verification_utc": "2026-09-27T09:16:08Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-09-27T09:16:08Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       8,
+       1,
+       5,
+       10
+      ]
+     }
+    ]
    }
   },
   {
@@ -595,7 +645,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
