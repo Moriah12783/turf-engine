@@ -251,11 +251,13 @@ class DailySyncManager:
                 due.append(horizon)
         return due
 
-    def _lock_horizon(self, race_data: Dict[str, Any], runners: List[Dict[str, Any]], horizon: str) -> int:
+    def _lock_horizon(self, race_data: Dict[str, Any], runners: List[Dict[str, Any]], horizon: str,
+                      now_utc: Optional[datetime] = None) -> int:
         """Verrouille les 4 moteurs pour un horizon donné, UNE SEULE FOIS.
         Retourne le nombre de verrous réellement posés (0 si déjà verrouillé).
         Le pronostic est calculé avec les cotes du moment => chaque horizon
-        capture un état de marché différent, sans jamais écraser le précédent."""
+        capture un état de marché différent, sans jamais écraser le précédent.
+        `now_utc` n'est fourni que par les tests (défaut : l'heure réelle)."""
         race_id = race_data["race_id"]
         if self.db.has_prediction(race_id, "NEW_VALUE_ENGINE", horizon):
             return 0
@@ -271,7 +273,8 @@ class DailySyncManager:
         #    can_publish la refuse (PRICED_RATIO_LOW / ODDS_DEFAULT).
         # La règle 06h30 de due_horizons() reste le PLANCHER horaire.
         ratio = priced_ratio(runners)
-        now_utc = datetime.utcnow()
+        if now_utc is None:
+            now_utc = datetime.utcnow()
         if ratio < MIN_LOCK_RATIO:
             self.gate_refused += 1
             print("GATE_REFUSED " + json.dumps({
@@ -318,6 +321,18 @@ class DailySyncManager:
         # Photographie des cotes au moment du verrouillage (historique permanent)
         odds_map = {r["num"]: r.get("odds_t15", r.get("final_odds")) for r in runners}
         self.db.save_odds_snapshots(race_id, horizon, odds_map)
+
+        # Décision de la porte de diffusion à l'instant du verrou (28/09/2026) :
+        # table publication_decisions, ajout seul. Enregistrement pur, APRÈS le
+        # verrou : une erreur ici est journalisée et n'annule jamais le verrou.
+        try:
+            from turf_lab.publication_gate import record_decision_at_lock
+            decision = record_decision_at_lock(self.db, race_id, horizon, now_utc)
+            print("PUBLICATION_DECISION " + json.dumps(decision, ensure_ascii=False))
+        except Exception as exc:
+            print("PUBLICATION_DECISION_ERROR " + json.dumps({
+                "race_id": race_id, "horizon": horizon, "error": str(exc)[:200]
+            }, ensure_ascii=False))
         return 1
 
     def _lock_radar(self, race_data: Dict[str, Any], runners: List[Dict[str, Any]], horizon: str,

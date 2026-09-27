@@ -250,6 +250,36 @@ class TurfDatabase:
             """)
             cursor.execute("CREATE INDEX IF NOT EXISTS idx_results_history_race ON race_results_history (race_id)")
 
+            # Décisions de la PORTE DE DIFFUSION au verrouillage (28/09/2026,
+            # demande de Bases) : une ligne par course et par horizon, écrite à
+            # l'instant où l'horizon est verrouillé (moteur NEW_VALUE_ENGINE).
+            # AJOUT SEUL, garanti par la base : UPDATE et DELETE sont refusés.
+            # gate_version change à chaque modification des règles de la porte
+            # (turf_lab.publication_gate.GATE_VERSION). Voir docs/PUBLICATION_DECISIONS.md.
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS publication_decisions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                race_id TEXT NOT NULL,
+                horizon TEXT NOT NULL,
+                publishable INTEGER NOT NULL CHECK (publishable IN (0, 1)),
+                reason TEXT NOT NULL,
+                decided_at_utc TEXT NOT NULL,
+                gate_version TEXT NOT NULL,
+                UNIQUE(race_id, horizon)
+            )
+            """)
+            cursor.execute("CREATE INDEX IF NOT EXISTS idx_pubdec_race ON publication_decisions (race_id)")
+            cursor.execute("""
+            CREATE TRIGGER IF NOT EXISTS publication_decisions_no_update
+            BEFORE UPDATE ON publication_decisions
+            BEGIN SELECT RAISE(ABORT, 'publication_decisions : ajout seul, modification interdite'); END
+            """)
+            cursor.execute("""
+            CREATE TRIGGER IF NOT EXISTS publication_decisions_no_delete
+            BEFORE DELETE ON publication_decisions
+            BEGIN SELECT RAISE(ABORT, 'publication_decisions : ajout seul, suppression interdite'); END
+            """)
+
             # Reprise idempotente des lignes antérieures au versionnage : le
             # classement plat devient un classement structuré (rangs 1..n, sans
             # dead-heat connu), statut DEFINITIVE (c'est ainsi que le banc les a
@@ -719,6 +749,30 @@ class TurfDatabase:
                 (race_id, engine_name, horizon)
             )
             return cursor.fetchone() is not None
+
+    def save_publication_decision(self, race_id: str, horizon: str, publishable: bool, reason: str,
+                                  decided_at_utc: str, gate_version: str) -> bool:
+        """Enregistre la décision de la porte de diffusion prise au verrouillage
+        d'un horizon. INSERT OR IGNORE : la première décision d'un couple
+        (course, horizon) est définitive. Retourne True si une ligne a été ajoutée."""
+        with self.transaction() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+            INSERT OR IGNORE INTO publication_decisions
+                (race_id, horizon, publishable, reason, decided_at_utc, gate_version)
+            VALUES (?, ?, ?, ?, ?, ?)
+            """, (race_id, horizon, 1 if publishable else 0, reason, decided_at_utc, gate_version))
+            return cursor.rowcount == 1
+
+    def get_publication_decisions(self, race_id: Optional[str] = None) -> List[Dict[str, Any]]:
+        """Décisions de la porte (toutes, ou pour une course), dans l'ordre d'écriture."""
+        with self.transaction() as conn:
+            cursor = conn.cursor()
+            if race_id is None:
+                cursor.execute("SELECT * FROM publication_decisions ORDER BY id")
+            else:
+                cursor.execute("SELECT * FROM publication_decisions WHERE race_id = ? ORDER BY id", (race_id,))
+            return [dict(row) for row in cursor.fetchall()]
 
     def save_odds_snapshots(self, race_id: str, horizon: str, odds_map: Dict[int, float]):
         """Persist the odds of every runner at a given horizon (T_MATIN/T90/T30/T15).

@@ -41,6 +41,21 @@ ENGINE_NAME = "NEW_VALUE_ENGINE"
 MORNING_FLOOR_HOUR = 6
 MORNING_FLOOR_MINUTE = 30
 
+# ── VERSION DES RÈGLES DE LA PORTE (28/09/2026) ─────────────────────────
+# Écrite avec chaque décision dans la table publication_decisions.
+# GATE_FINGERPRINT est l'empreinte des règles (constantes + code des fonctions
+# qui décident, commentaires et docstrings exclus) : le test
+# test_empreinte_de_la_porte échoue dès qu'une règle change sans que la
+# version soit incrémentée. Procédure : nouvelle GATE_VERSION, nouvelle
+# GATE_FINGERPRINT (valeur donnée par le test), ligne datée annoncée AVANT
+# publication, ligne ajoutée à l'historique ci-dessous.
+#   PG1  28/09/2026  règles en vigueur à cette date, inchangées : diffusion à
+#                    90 % de partants cotés, plancher 06h30 GMT, preuve du
+#                    verrou (odds_real, priced_ratio, lock_time_utc), cotes
+#                    capturées depuis ≤ 90 min.
+GATE_VERSION = "PG1"
+GATE_FINGERPRINT = "1c543d493df43d44"
+
 REASON_LABELS = {
     "RACE_UNKNOWN": "course inconnue",
     "RACE_STARTED": "course partie — aucune diffusion rétroactive",
@@ -79,7 +94,8 @@ def _minutes_to_start(race: Dict[str, Any], now_utc: datetime) -> Optional[float
     start_utc = _parse_iso(race.get("start_time_utc"))
     if start_utc is not None:
         return (start_utc - now_utc).total_seconds() / 60.0
-    # Import local : évite tout cycle (daily_sync n'importe jamais ce module).
+    # Import local : évite tout cycle (daily_sync n'importe ce module que
+    # localement, après un verrou posé, pour enregistrer la décision).
     from turf_lab.daily_sync import DailySyncManager
     return DailySyncManager.minutes_to_start(
         race.get("scheduled_start_time", ""), race.get("date", ""), now_utc
@@ -176,6 +192,77 @@ def decisions_for_date(db: TurfDatabase, date_db: str, horizon: str = "T_MATIN",
         out.append({"race_id": rid, "horizon": horizon, "publishable": ok, "reason": reason,
                     "label": REASON_LABELS.get(reason, reason)})
     return out
+
+
+def record_decision_at_lock(db: TurfDatabase, race_id: str, horizon: str, lock_utc: datetime) -> Dict[str, Any]:
+    """Décision de la porte évaluée À L'INSTANT DU VERROU et enregistrée dans
+    publication_decisions (ajout seul, une ligne par course et par horizon).
+    Lecture pure pour la porte (log=False) : aucun effet sur le verrou, le
+    site ni les messages. Appelée par daily_sync juste après un verrou posé.
+    Ce n'est PAS l'état d'affichage ultérieur : plus tard dans la journée,
+    can_publish peut répondre autrement (STALE_ODDS, RACE_STARTED)."""
+    ok, reason = can_publish(db, race_id, horizon, now_utc=lock_utc, log=False)
+    decided_at = lock_utc.isoformat()
+    inserted = db.save_publication_decision(race_id, horizon, ok, reason, decided_at, GATE_VERSION)
+    return {"race_id": race_id, "horizon": horizon, "publishable": ok, "reason": reason,
+            "decided_at_utc": decided_at, "gate_version": GATE_VERSION, "inserted": inserted}
+
+
+# ── Empreinte des règles ────────────────────────────────────────────────
+def _gate_constants() -> Dict[str, Any]:
+    from turf_lab import odds_quality as oq
+    return {
+        "ENGINE_NAME": ENGINE_NAME,
+        "MORNING_FLOOR": [MORNING_FLOOR_HOUR, MORNING_FLOOR_MINUTE],
+        "MIN_PRICED_RATIO": oq.MIN_PRICED_RATIO,
+        "MAX_ODDS_AGE_MINUTES": oq.MAX_ODDS_AGE_MINUTES,
+        "MIN_VALID_ODDS": oq.MIN_VALID_ODDS,
+        "MAX_VALID_ODDS": oq.MAX_VALID_ODDS,
+        "DEFAULT_ODDS": oq.DEFAULT_ODDS,
+        "ODDS_FIELDS": list(oq.ODDS_FIELDS),
+        "REASONS": sorted(REASON_LABELS),
+    }
+
+
+def _normalized_source(func: Any) -> str:
+    """Code d'une fonction réduit à ses jetons : commentaires, docstring,
+    lignes vides et mise en forme exclus (stable d'une version de Python à
+    l'autre pour du code sans f-string)."""
+    import ast
+    import inspect
+    import io
+    import textwrap
+    import tokenize
+    src = textwrap.dedent(inspect.getsource(func))
+    node = ast.parse(src).body[0]
+    doc_lines = set()
+    first = node.body[0] if getattr(node, "body", None) else None
+    if isinstance(first, ast.Expr) and isinstance(getattr(first, "value", None), ast.Constant) \
+            and isinstance(first.value.value, str):
+        doc_lines = set(range(first.lineno, first.end_lineno + 1))
+    skip = {tokenize.COMMENT, tokenize.NL, tokenize.ENCODING, tokenize.ENDMARKER}
+    mark = {tokenize.NEWLINE: ";", tokenize.INDENT: "{", tokenize.DEDENT: "}"}
+    out = []
+    for tok in tokenize.generate_tokens(io.StringIO(src).readline):
+        if tok.type in skip or tok.start[0] in doc_lines:
+            continue
+        out.append(mark.get(tok.type, tok.string))
+    return " ".join(out)
+
+
+def gate_fingerprint() -> str:
+    """Empreinte (16 hex) des règles de la porte : constantes + code des
+    fonctions qui décident, y compris la mesure des cotes et le repli sur
+    l'heure affichée. Toute modification de règle la change."""
+    import hashlib
+    from turf_lab import odds_quality as oq
+    from turf_lab.daily_sync import DailySyncManager
+    funcs = [can_publish, _minutes_to_start, _floor_datetime, _parse_iso,
+             oq.priced_ratio, oq.active_runners, oq.all_default_odds, oq.is_valid_odds,
+             oq.odds_age_minutes, DailySyncManager.minutes_to_start]
+    parts = [json.dumps(_gate_constants(), sort_keys=True)]
+    parts += [f.__qualname__ + ":" + _normalized_source(f) for f in funcs]
+    return hashlib.sha256("\n".join(parts).encode("utf-8")).hexdigest()[:16]
 
 
 def main(argv: Optional[List[str]] = None) -> int:

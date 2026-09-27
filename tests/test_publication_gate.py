@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from turf_lab.database import TurfDatabase
 from turf_lab.daily_sync import DailySyncManager
 from turf_lab.odds_quality import DEFAULT_ODDS, MIN_LOCK_RATIO, MIN_PRICED_RATIO, neutralize_odds, priced_ratio
-from turf_lab.publication_gate import can_publish
+from turf_lab.publication_gate import GATE_FINGERPRINT, GATE_VERSION, REASON_LABELS, can_publish, gate_fingerprint
 
 RACE_DATE = "2026-09-07"
 RACE_ID = "R1C1_07092026_TESTVILLE"
@@ -223,6 +223,123 @@ def test_verrou_refuse_puis_pose_a_la_passe_suivante():
     db.save_runners(RACE_ID, runners)
     assert _lock(mgr, race, runners) == 1
     assert can_publish(db, RACE_ID, "T_MATIN", now_utc=NOON, log=False) == (True, "OK")
+
+
+# ── Table publication_decisions (28/09/2026) ─────────────────────────────
+
+def _decisions(db):
+    return db.get_publication_decisions(RACE_ID)
+
+
+def test_decision_enregistree_au_verrou_diffusable():
+    """Verrou à 100 % : une ligne, décision OK, version de la porte, instant = lock_time_utc."""
+    db, mgr, race, runners = _setup(priced=10)
+    assert mgr._lock_horizon(race, runners, "T_MATIN", now_utc=NOON) == 1
+    rows = _decisions(db)
+    assert len(rows) == 1
+    row = rows[0]
+    assert (row["horizon"], row["publishable"], row["reason"]) == ("T_MATIN", 1, "OK")
+    assert row["gate_version"] == GATE_VERSION
+    pred = [p for p in db.get_predictions(RACE_ID) if p["engine_name"] == "NEW_VALUE_ENGINE"][0]
+    assert row["decided_at_utc"] == pred["lock_time_utc"] == NOON.isoformat()
+
+
+def test_decision_marche_partiel_non_diffusable():
+    """Verrou à 80 % : la ligne dit PRICED_RATIO_LOW, avec le vocabulaire de can_publish."""
+    db, mgr, race, runners = _setup(priced=8)
+    assert mgr._lock_horizon(race, runners, "T_MATIN", now_utc=NOON) == 1
+    rows = _decisions(db)
+    assert [(r["publishable"], r["reason"]) for r in rows] == [(0, "PRICED_RATIO_LOW")]
+    assert rows[0]["reason"] in REASON_LABELS
+
+
+def test_pas_de_decision_sans_verrou():
+    """Verrou refusé (40 %) : aucun horizon posé, donc aucune ligne."""
+    db, mgr, race, runners = _setup(priced=4)
+    assert mgr._lock_horizon(race, runners, "T_MATIN", now_utc=NOON) == 0
+    assert _decisions(db) == []
+
+
+def test_une_ligne_par_course_et_par_horizon():
+    """Une passe suivante ne réécrit rien ; chaque nouvel horizon ajoute sa ligne."""
+    db, mgr, race, runners = _setup(priced=10)
+    assert mgr._lock_horizon(race, runners, "T_MATIN", now_utc=NOON) == 1
+    assert mgr._lock_horizon(race, runners, "T_MATIN", now_utc=NOON + timedelta(minutes=15)) == 0
+    assert mgr._lock_horizon(race, runners, "T90", now_utc=NOON + timedelta(minutes=30)) == 1
+    rows = _decisions(db)
+    assert [(r["horizon"], r["decided_at_utc"]) for r in rows] == [
+        ("T_MATIN", NOON.isoformat()), ("T90", (NOON + timedelta(minutes=30)).isoformat())]
+    # Doublon direct refusé sans erreur (INSERT OR IGNORE) : la première décision est définitive
+    assert db.save_publication_decision(RACE_ID, "T_MATIN", False, "STALE_ODDS", "x", GATE_VERSION) is False
+    assert len(_decisions(db)) == 2
+
+
+def test_table_en_ajout_seul():
+    """UPDATE et DELETE sont refusés par la base elle-même."""
+    import sqlite3
+    db, mgr, race, runners = _setup(priced=10)
+    mgr._lock_horizon(race, runners, "T_MATIN", now_utc=NOON)
+    for sql in ("UPDATE publication_decisions SET publishable = 0",
+                "DELETE FROM publication_decisions"):
+        try:
+            with db.transaction() as conn:
+                conn.execute(sql)
+            raise AssertionError("modification acceptée : " + sql)
+        except sqlite3.DatabaseError as exc:
+            assert "ajout seul" in str(exc)
+    assert len(_decisions(db)) == 1
+
+
+def test_erreur_d_enregistrement_n_annule_pas_le_verrou():
+    """Si l'écriture de la décision échoue, le verrou reste posé et l'erreur est journalisée."""
+    import contextlib
+    import io
+    db, mgr, race, runners = _setup(priced=10)
+
+    def boom(*args, **kwargs):
+        raise RuntimeError("disque plein")
+
+    db.save_publication_decision = boom
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        assert mgr._lock_horizon(race, runners, "T_MATIN", now_utc=NOON) == 1
+    assert db.get_locked_horizons(RACE_ID) == ["T_MATIN"]
+    assert "PUBLICATION_DECISION_ERROR" in buf.getvalue()
+
+
+def test_empreinte_de_la_porte():
+    """Toute modification des règles de la porte doit changer GATE_VERSION."""
+    fp = gate_fingerprint()
+    assert fp == GATE_FINGERPRINT, (
+        "Règles de la porte modifiées (empreinte " + fp + ") : incrémenter GATE_VERSION, "
+        "remplacer GATE_FINGERPRINT par cette empreinte et annoncer le changement par ligne datée "
+        "AVANT publication (engagement jusqu'au 20/10/2026).")
+
+
+def _f_a(x):
+    """Docstring A."""
+    # commentaire
+    return x + 1
+
+
+def _f_b(x):
+    """Autre docstring, plus longue."""
+
+    return x + 1  # autre commentaire
+
+
+def test_empreinte_ignore_commentaires_mais_pas_les_seuils():
+    from turf_lab import odds_quality
+    from turf_lab.publication_gate import _normalized_source
+    assert _normalized_source(_f_a).replace("_f_a", "_f_b") == _normalized_source(_f_b)
+    before = gate_fingerprint()
+    saved = odds_quality.MIN_PRICED_RATIO
+    try:
+        odds_quality.MIN_PRICED_RATIO = 0.85
+        assert gate_fingerprint() != before
+    finally:
+        odds_quality.MIN_PRICED_RATIO = saved
+    assert gate_fingerprint() == before
 
 
 def main():
