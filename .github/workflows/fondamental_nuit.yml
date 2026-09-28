@@ -1,0 +1,89 @@
+name: Fondamental de nuit (ombre NVE)
+
+# Règle arrêtée avec le dev NVE le 28/09/2026 : ombre APRÈS le 06/10, rien
+# avant — ce fichier n'est fusionné que sur décision écrite de Steph (les
+# crons ne tournent que sur la branche principale).
+# Nuit : miroir historique (R2 privé, lecture seule) + programme PMU du jour
+# -> table fundamental_probs de turf_bench.db, entre le pull et le push R2.
+# Aucune écriture après 06h20 UTC ni pour une course déjà verrouillée, aucun
+# push après 06h28 (verrou du matin : 06h30). Le passage de 05h50 refait le
+# calcul (historique le plus frais) et remplace celui de 05h05.
+# Sur une PR : parité PMU <-> Radar et essai sur le programme du lendemain,
+# dans une COPIE locale de la base (lecture seule, jamais renvoyée).
+# Dépôt public : journal = agrégats seulement ; aucun artefact, aucun commit.
+# Voir turf_lab/fondamental_nuit.py.
+
+on:
+  schedule:
+    - cron: '5 5 * * *'
+    - cron: '50 5 * * *'      # secours : les crons GitHub sautent parfois
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "parite | essai | nuit"
+        required: false
+        default: "parite"
+  pull_request:
+    paths:
+      - "turf_lab/fondamental_nuit.py"
+      - ".github/workflows/fondamental_nuit.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fondamental-nuit
+  cancel-in-progress: false
+
+jobs:
+  nuit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      PYTHONUNBUFFERED: "1"
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET: ${{ secrets.R2_BUCKET }}
+      ACTION: ${{ github.event_name == 'schedule' && 'nuit' || (github.event_name == 'pull_request' && 'controle' || github.event.inputs.action) }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -q "numpy>=1.26,<3" "boto3>=1.36,<2"
+
+      - name: Fetch the private history mirror from R2 (read-only)
+        run: python -m turf_lab.history_export fetch --db turf_history.db
+
+      - name: Parity PMU programme <-> Radar mirror (read-only)
+        if: env.ACTION == 'parite' || env.ACTION == 'controle'
+        run: python -m turf_lab.fondamental_nuit parite --historique turf_history.db
+
+      - name: Trial on tomorrow's programme, local copy of the bench (never pushed)
+        if: env.ACTION == 'essai' || env.ACTION == 'controle'
+        run: |
+          python -m turf_lab.r2_store fetch --db copie_banc.db
+          python -m turf_lab.fondamental_nuit essai --historique turf_history.db --banc copie_banc.db --jour demain
+
+      - name: Pull the bench from R2 (night only)
+        if: env.ACTION == 'nuit'
+        run: python -m turf_lab.r2_store pull --db turf_bench.db
+
+      - name: Compute and write fundamental_probs (night only)
+        if: env.ACTION == 'nuit' && env.R2_MODE == 'r2'
+        run: python -m turf_lab.fondamental_nuit nuit --historique turf_history.db --banc turf_bench.db
+
+      - name: Push the bench to R2 (night only, before 06:28 UTC)
+        if: env.ACTION == 'nuit' && env.R2_MODE == 'r2'
+        run: |
+          if (( 10#$(date -u +%H%M) >= 628 )); then
+            echo "PUSH_REFUSE_HEURE : trop près du verrou du matin (06h30 UTC), rien n'est envoyé."
+            exit 1
+          fi
+          python -m turf_lab.r2_store push --db turf_bench.db
