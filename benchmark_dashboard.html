@@ -54,6 +54,16 @@
         .kpi-card .value.green { color: var(--green); }
         .kpi-card .value.blue { color: var(--blue); }
         .kpi-card .value.amber { color: var(--amber); }
+        /* Mobile : KPI sur 2 colonnes (au lieu d'une pile de 5) pour que le
+           cockpit du jour remonte dans le premier écran ; carte seule en fin
+           de grille sur toute la largeur. */
+        @media (max-width: 600px) {
+            .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+            .kpi-card { padding: 12px 10px; display: flex; flex-direction: column; justify-content: space-between; }
+            .kpi-card .title { font-size: 0.72rem; letter-spacing: 0.3px; }
+            .kpi-card .value { font-size: 1.4rem; }
+            .kpi-card:last-child:nth-child(odd) { grid-column: 1 / -1; }
+        }
         
         .strategy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; margin-bottom: 25px; }
         .strategy-card { background: #111a2e; border: 1px solid var(--border); border-radius: 12px; padding: 18px; border-left: 4px solid var(--blue); }
