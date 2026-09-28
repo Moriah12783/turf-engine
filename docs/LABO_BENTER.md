@@ -95,6 +95,32 @@ En pari mutuel, on mise **avant** le départ mais on est payé à la cote
 - Kelly **décidé aux cotes de T-x**, **réglé au rapport final** ; témoin sur
   le marché de T-x seul.
 
+## Résultats du 28/09/2026 (miroir au 27/09, 15 282 courses)
+
+| Test | Courses | Gain ll/course vs marché recalibré (IC 95 %) | β fondamental | Mises (ROI mise fixe, IC 95 %) |
+|---|---:|---|---:|---|
+| Clôture (`cote_direct`) | 7 971 | **−0,00015** [−0,00036 ; +0,00005] | ≈ 0 | 65 paris, −4,8 % [−36 % ; +33 %] |
+| Cote de référence (plus ancienne) | 6 940 | **+0,0045** [+0,0023 ; +0,0067] | > 0 | — |
+| T-30 | 390 | +0,0067 [−0,012 ; +0,025] | 0,32 | 279 paris, −17 % [−41 % ; +12 %] |
+| T-15 | 455 | −0,0006 [−0,012 ; +0,010] | 0,23 | 169 paris, −15 % [−63 % ; +54 %] |
+| T-5 | 492 | +0,0053 [−0,008 ; +0,018] | 0,28 | 219 paris, **−33 %** [−59 % ; −1 %] |
+
+Lecture :
+
+- **Le marché de clôture du PMU est très efficace** (pseudo-R² ≈ 0,21, contre
+  0,12 pour le fondamental). Nos 30 variables publiques n'y ajoutent rien.
+- **Le marché apprend beaucoup dans les dernières minutes** : la clôture
+  gagne +0,11 de log-vraisemblance par course sur T-30 et +0,08 sur T-5.
+  Le fondamental apporte de l'information aux cotes anciennes (référence,
+  T-30 : β ≈ 0,3), mais cette information arrive dans le marché avant le
+  départ.
+- **Parier à T-x sur nos « value » perd** (−15 % à −33 %) : le prélèvement
+  (≈ 16 %) et les mouvements tardifs, qui vont contre nos paris, l'emportent.
+- Le premier passage (PR #8) affichait +0,020 : c'était un artefact
+  (`cote_reference` prise à tort pour la clôture).
+- Photos de cotes : environ 900 courses par horizon seulement (captures
+  Radar espacées de 5 à 15 min) ; échantillons T-x encore petits.
+
 ## Confidentialité (dépôt public)
 
 - Le journal n'affiche que des **agrégats par mois** : nombres de courses,
