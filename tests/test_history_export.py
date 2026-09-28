@@ -408,7 +408,35 @@ def test_controle_qualite_trous_et_annulations(workdir):
     db.replace_date("arrivees", "2026-09-04", [_row("arrivees", "2026-09-04", 1)], "t")
     # 28/07 : aucune arrivée côté Radar (date jamais dans export_log) -> détectée quand même.
     assert db.quality_check("t") == {"arrivee_absente": {"courses": 1, "dates": 1},
-                                     "annulee_incoherente": {"courses": 1, "dates": 1}}
+                                     "annulee_incoherente": {"courses": 1, "dates": 1},
+                                     "courses_courues": 1}
     assert db.conn.execute("SELECT date_course, anomalie FROM anomalies ORDER BY 1").fetchall() == [
         ("2026-07-28", "arrivee_absente"), ("2026-09-04", "annulee_incoherente")]
     db.close()
+
+
+def test_vue_courses_courues_regle_officielle_radar(workdir):
+    db = HistoryDB("h.db")
+    j = "2026-08-01"
+    courses = [_course(j, 1, 1, "ARRIVEE_DEFINITIVE_COMPLETE", 0),   # arrivée : courue
+               _course(j, 1, 2, "FIN_COURSE", 0),                    # ordre_arrivee seul (cas du 28/07) : courue
+               _course(j, 1, 3, "ARRIVEE_DEFINITIVE_COMPLETE", 0),   # trou de capture : ni arrivée ni ordre
+               _course(j, 1, 4, "COURSE_ANNULEE", 0),                # annulee faux, statut fait foi
+               _course(j, 1, 5, "PROGRAMMEE", 0),                    # La Teste 25/06 : non courue
+               _course(j, 1, 6, "ARRIVEE_DEFINITIVE", 0)]            # autre statut ARRIVEE : courue
+    db.replace_date("courses", j, courses, "t")
+    arrivee = dict(zip(TABLES["arrivees"], _row("arrivees", j, 0)))
+    arrivees = []
+    for num in (1, 4, 6):                                            # une arrivée parasite sur l'annulée
+        arrivee.update(num_reunion=1, num_course=num)
+        arrivees.append(tuple(arrivee[c] for c in TABLES["arrivees"]))
+    db.replace_date("arrivees", j, arrivees, "t")
+    partant = dict(zip(TABLES["participants"], _row("participants", j, 0)))
+    partant.update(num_reunion=1, num_course=2, ordre_arrivee=1)
+    db.replace_date("participants", j, [tuple(partant[c] for c in TABLES["participants"])], "t")
+    rows = db.conn.execute("SELECT num_course, a_arrivee, partants_avec_ordre FROM courses_courues "
+                           "ORDER BY num_course").fetchall()
+    assert rows == [(1, 1, 0), (2, 0, 1), (6, 1, 0)]
+    db.close()
+    # La vue suit le code : recréée à chaque ouverture, sans erreur sur un miroir existant.
+    HistoryDB("h.db").close()

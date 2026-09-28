@@ -45,6 +45,10 @@ Après chaque export, un contrôle qualité local (aucune requête Radar)
 remplit la table ``anomalies`` du miroir : courses courues sans arrivée,
 courses annulées dont le champ ``annulee`` est faux.
 
+Vue ``courses_courues`` : la règle officielle du Radar (28/09/2026) pour
+savoir si une course a été courue, à utiliser par tous les consommateurs du
+miroir (``annulee`` n'est pas fiable, ``statut`` fait foi).
+
 Mises en garde de données (voir docs/HISTORIQUE_RADAR.md) :
   - ``participants.cote_reference`` est réécrite au fil de la journée :
     jamais une cote à un instant donné (prendre ``cotes_snapshots``) ;
@@ -197,6 +201,25 @@ class PgSource:
 
 
 # ── Miroir SQLite local ─────────────────────────────────────────────────
+# Règle officielle du Radar (28/09/2026) : une course est courue si son
+# statut commence par ARRIVEE ou vaut FIN_COURSE, ET si elle a une ligne
+# dans arrivees ou au moins un participants.ordre_arrivee. Le champ annulee
+# n'est pas fiable sur toute la période. Exclut d'office les annulations,
+# La Teste du 25/06/2026 (non courue) et les trous de capture du Radar
+# (30/11/2025 R15C7, 07/05/2026 R1C7 : ni partants, ni arrivée, ni rapports).
+_MEME_COURSE = ("{t}.date_course = c.date_course AND {t}.num_reunion = c.num_reunion "
+                "AND {t}.num_course = c.num_course")
+COURSES_COURUES_SQL = f"""
+CREATE VIEW courses_courues AS
+SELECT c.*,
+       EXISTS (SELECT 1 FROM arrivees a WHERE {_MEME_COURSE.format(t='a')}) AS a_arrivee,
+       (SELECT COUNT(*) FROM participants p
+         WHERE {_MEME_COURSE.format(t='p')} AND p.ordre_arrivee IS NOT NULL) AS partants_avec_ordre
+  FROM courses c
+ WHERE (c.statut LIKE 'ARRIVEE%' OR c.statut = 'FIN_COURSE')
+   AND (EXISTS (SELECT 1 FROM arrivees a WHERE {_MEME_COURSE.format(t='a')})
+        OR EXISTS (SELECT 1 FROM participants p
+                    WHERE {_MEME_COURSE.format(t='p')} AND p.ordre_arrivee IS NOT NULL))"""
 class HistoryDB:
     def __init__(self, path: str):
         self.path = path
@@ -214,6 +237,12 @@ class HistoryDB:
         self.conn.execute("""CREATE TABLE IF NOT EXISTS anomalies (
             date_course TEXT, num_reunion INTEGER, num_course INTEGER, statut TEXT,
             anomalie TEXT, partants_avec_ordre INTEGER, detecte_le_utc TEXT)""")
+        for table in ("participants", "arrivees"):
+            self.conn.execute(f"CREATE INDEX IF NOT EXISTS idx_{table}_course "
+                              f"ON {table}(date_course, num_reunion, num_course)")
+        # Recréée à chaque ouverture : la définition suit toujours le code.
+        self.conn.execute("DROP VIEW IF EXISTS courses_courues")
+        self.conn.execute(COURSES_COURUES_SQL)
         self.conn.commit()
 
     def exported(self, table: str) -> Dict[str, int]:
@@ -261,10 +290,11 @@ class HistoryDB:
                 INSERT INTO anomalies
                 SELECT date_course, num_reunion, num_course, statut, 'annulee_incoherente', NULL, ?
                   FROM courses WHERE statut = 'COURSE_ANNULEE' AND annulee = 0""", (now,))
-        out = {}
+        out: Dict[str, Any] = {}
         for kind, n, nd in self.conn.execute(
                 "SELECT anomalie, COUNT(*), COUNT(DISTINCT date_course) FROM anomalies GROUP BY 1"):
             out[kind] = {"courses": n, "dates": nd}
+        out["courses_courues"] = int(self.conn.execute("SELECT COUNT(*) FROM courses_courues").fetchone()[0])
         return out
 
     def counts(self) -> Dict[str, int]:
