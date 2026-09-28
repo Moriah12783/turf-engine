@@ -3,10 +3,11 @@ Full 4-Horizon Continuum (T-Matin, T-90 Abonnés, T-30 Live, T-15 Clôture, Clô
 Direct Horizon Tags in Table, Interactive Copyable Smart Tickets, and 1-Click Deep Race Inspector Modal.
 """
 
+import html as html_lib
 import json
 import os
-from datetime import datetime, timedelta
-from typing import Any, Dict, List, Tuple
+import re
+from typing import Any, Dict, List
 
 # Favicon 32×32 (PNG, 2972 caractères base64) : fer à cheval or (#f59e0b) sur
 # fond nuit (#0b1120), généré depuis site/favicon.svg. Embarqué dans la page pour
@@ -46,43 +47,93 @@ FAVICON_PNG_B64 = (
 )
 
 
-def export_site_archives(report_data: Dict[str, Any], site_dir: str, recent_days: int = 21) -> Tuple[List[Dict[str, Any]], Dict[str, int]]:
+SITE_URL = "https://prono.elite-turf.fr/"
+PAGE_TITLE = "Pronostics PMU du jour vérifiés — Elite Turf"
+PAGE_DESCRIPTION = (
+    "Pronostics PMU du jour, course par course : sélections verrouillées avant le départ "
+    "puis confrontées à l'arrivée officielle. Historique complet vérifiable."
+)
+# Visuel de partage 1200×630 (site/og-image.png, fichier statique du site).
+OG_IMAGE_URL = SITE_URL + "og-image.png"
+
+# Mentions légales (LCEN, art. 6-III). Seuls des faits vérifiables sont
+# renseignés : l'identité juridique de l'éditeur et du directeur de la
+# publication est à compléter par le titulaire du site, jamais inventée par
+# le générateur. Une valeur None n'est pas affichée.
+MENTIONS_LEGALES = {
+    "Éditeur": "Elite Turf — elite-turf.fr",
+    "Directeur de la publication": None,
+    "Contact": None,
+    "Hébergeur": "Cloudflare, Inc., 101 Townsend St, San Francisco, CA 94107, États-Unis — cloudflare.com",
+    "Données": "programmes, cotes et arrivées issus du flux public PMU ; horaires en GMT (Abidjan).",
+}
+
+# Champs d'une course lus par le tableau du cockpit (renderTable, onglets,
+# recherche). index.html n'embarque que ces champs, pour le jour courant ; le
+# détail complet (partants, éditions, tickets) est lu dans
+# site/archive/AAAA-MM-JJ.json à l'ouverture de la fiche.
+CHAMPS_LIGNE_COCKPIT = (
+    "race_id", "date", "course", "scheduled_start_time", "start_time_utc", "status",
+    "is_finished", "is_cancelled", "is_started", "display_horizon",
+    "market_odds_available", "edition_provisoire",
+    "sel_moteur", "sel_marche", "arrivee",
+    "couv_moteur_count", "couverture_label", "decision", "decision_badge",
+)
+
+_JOUR_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+
+
+def ligne_cockpit(log: Dict[str, Any]) -> Dict[str, Any]:
+    """Projection exacte d'une course sur les champs du tableau : aucune
+    valeur recalculée, une clé absente reste absente."""
+    return {k: log[k] for k in CHAMPS_LIGNE_COCKPIT if k in log}
+
+
+def export_site_archives(report_data: Dict[str, Any], site_dir: str) -> Dict[str, int]:
     """Persistance « pour toujours » de l'historique des courses.
 
-    Les courses des `recent_days` derniers jours restent embarquées dans
-    index.html (affichage instantané). Tout le reste est archivé dans des
-    fichiers mensuels statiques `site/archive/AAAA-MM.json`, chargés à la
-    demande par le navigateur (recherche dans tout l'historique).
+    Une archive statique par journée, ``site/archive/AAAA-MM-JJ.json`` : les
+    courses complètes du banc, dans leur ordre, sans aucune transformation.
+    Le navigateur les charge à la demande (fiche d'une course, onglet d'une
+    journée, recherche dans l'historique) ; index.html n'embarque plus que
+    le jour courant.
 
-    Retourne (logs_recents, manifeste {mois: nb_courses}).
+    Retourne le manifeste {journée: nb_courses} de TOUTES les archives
+    journalières présentes, écrites à cette passe ou antérieurement :
+    l'historique publié ne rétrécit jamais.
     """
-    logs = report_data.get("historical_logs", [])
-    if not logs:
-        return [], {}
-
-    latest_date = max((l.get("date", "") for l in logs if l.get("date")), default=datetime.utcnow().strftime("%Y-%m-%d"))
-    try:
-        cutoff = (datetime.strptime(latest_date, "%Y-%m-%d") - timedelta(days=recent_days)).strftime("%Y-%m-%d")
-    except Exception:
-        cutoff = "0000-00-00"
-
-    recent = [l for l in logs if l.get("date", "") >= cutoff]
-    older = [l for l in logs if l.get("date", "") < cutoff]
-
-    months: Dict[str, List[Dict[str, Any]]] = {}
-    for l in older:
-        months.setdefault(str(l.get("date", "0000-00"))[:7], []).append(l)
-
     archive_dir = os.path.join(site_dir, "archive")
     os.makedirs(archive_dir, exist_ok=True)
 
-    manifest: Dict[str, int] = {}
-    for m, items in sorted(months.items(), reverse=True):
-        with open(os.path.join(archive_dir, f"{m}.json"), "w", encoding="utf-8") as f:
-            json.dump(items, f, ensure_ascii=False)
-        manifest[m] = len(items)
+    days: Dict[str, List[Dict[str, Any]]] = {}
+    for l in report_data.get("historical_logs", []):
+        day = str(l.get("date") or "")
+        if _JOUR_RE.match(day):
+            days.setdefault(day, []).append(l)
 
-    return recent, manifest
+    manifest: Dict[str, int] = {}
+    for day, items in days.items():
+        with open(os.path.join(archive_dir, f"{day}.json"), "w", encoding="utf-8") as f:
+            json.dump(items, f, ensure_ascii=False)
+        manifest[day] = len(items)
+
+    for fname in os.listdir(archive_dir):
+        day = fname[:-5]
+        if not fname.endswith(".json") or not _JOUR_RE.match(day) or day in manifest:
+            continue
+        try:
+            with open(os.path.join(archive_dir, fname), "r", encoding="utf-8") as f:
+                manifest[day] = len(json.load(f))
+        except Exception:
+            continue
+
+    return dict(sorted(manifest.items(), reverse=True))
+
+
+def _json_script(obj: Any) -> str:
+    """JSON embarqué dans un <script> : « </ » est échappé pour qu'aucune
+    chaîne du flux (course, cheval…) ne puisse fermer la balise."""
+    return json.dumps(obj, ensure_ascii=False).replace("</", "<\\/")
 
 
 def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "benchmark_dashboard.html") -> str:
@@ -329,16 +380,47 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
     )
     cc_sub_html = "".join("<th>Brier</th><th>Top 1</th><th>Gagnant Top 3</th><th>Gagnant Top 8</th>" for _ in cc_engines)
 
-    logs_json = json.dumps(historical_logs, ensure_ascii=False)
-    archive_manifest = report_data.get("archive_manifest", {})
-    manifest_json = json.dumps(archive_manifest, ensure_ascii=False)
+    # Jour courant = dernière journée de l'historique. Seules ses lignes de
+    # tableau sont embarquées (page légère) ; toutes les journées, y compris
+    # celle-ci en détail complet, sont lues dans site/archive/ à la demande.
+    current_day = max((str(l["date"]) for l in historical_logs if l.get("date")), default="")
+    today_rows = [ligne_cockpit(l) for l in historical_logs if l.get("date") == current_day]
+    archive_manifest = dict(report_data.get("archive_manifest") or {})
+    if current_day:
+        archive_manifest.setdefault(current_day, len(today_rows))
+    today_rows_json = _json_script(today_rows)
+    manifest_json = _json_script(archive_manifest)
+    current_day_json = _json_script(current_day)
+
+    esc = lambda s: html_lib.escape(s, quote=True)
+    mentions_html = "\n".join(
+        f"                <p><strong>{esc(k)} :</strong> {esc(v)}</p>"
+        for k, v in MENTIONS_LEGALES.items() if v
+    )
 
     html = f"""<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Banc de Mesure - Moteur Prédictif Turf & Cockpit des Résultats</title>
+    <title>{esc(PAGE_TITLE)}</title>
+    <meta name="description" content="{esc(PAGE_DESCRIPTION)}">
+    <link rel="canonical" href="{SITE_URL}">
+    <!-- Partage (Open Graph / Twitter) : WhatsApp, Facebook, X, Telegram. -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Elite Turf">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:url" content="{SITE_URL}">
+    <meta property="og:title" content="{esc(PAGE_TITLE)}">
+    <meta property="og:description" content="{esc(PAGE_DESCRIPTION)}">
+    <meta property="og:image" content="{OG_IMAGE_URL}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Elite Turf — pronostics PMU du jour vérifiés">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{esc(PAGE_TITLE)}">
+    <meta name="twitter:description" content="{esc(PAGE_DESCRIPTION)}">
+    <meta name="twitter:image" content="{OG_IMAGE_URL}">
     <!-- Favicon Elite Turf (fer à cheval or sur nuit) : PNG 32 px embarqué pour
          tous les navigateurs, SVG vectoriel (site/favicon.svg) pour ceux qui le
          préfèrent ; couleur de barre d'adresse sur mobile. -->
@@ -382,6 +464,9 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
         .strategy-card .badge-rec {{ display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 0.78rem; font-weight: 600; background: rgba(59, 130, 246, 0.2); color: #60a5fa; }}
 
         .card {{ background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 22px; margin-bottom: 25px; overflow-x: auto; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }}
+        /* Tableaux du banc, sous le cockpit : leur mise en page est différée tant
+           qu'ils sont hors écran (rendu mobile : le layout des tables domine). */
+        .card-banc {{ content-visibility: auto; contain-intrinsic-size: auto 720px; }}
         .card-header {{ margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }}
         .card-header h2 {{ font-size: 1.3rem; font-weight: 700; color: #fff; }}
         
@@ -478,14 +563,23 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
 
         @keyframes fadeIn {{ from {{ opacity: 0; transform: translateY(10px); }} to {{ opacity: 1; transform: translateY(0); }} }}
 
-        footer {{ text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-top: 30px; }}
+        .site-footer {{ color: var(--text-muted); font-size: 0.85rem; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); }}
+        .jeu-responsable {{ display: flex; gap: 14px; align-items: flex-start; background: #111a2e; border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 14px; }}
+        .jeu-responsable p {{ margin-bottom: 4px; }}
+        .jeu-responsable strong {{ color: var(--text-main); }}
+        .jeu-responsable a {{ color: var(--amber); white-space: nowrap; }}
+        .badge-18 {{ flex: none; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--red); color: #f87171; font-weight: 800; }}
+        .mentions-legales {{ margin-bottom: 12px; }}
+        .mentions-legales summary {{ cursor: pointer; font-weight: 600; color: var(--text-main); }}
+        .mentions-legales p {{ margin-top: 6px; }}
+        .footer-sign {{ text-align: center; }}
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Banc de Mesure & Évaluation Prédictive Turf</h1>
-            <p>Cockpit comparatif • Arbitrage de valeur vs Consensus de Marché • Horaires GMT (Abidjan)</p>
+            <h1>Pronostics PMU du jour vérifiés</h1>
+            <p>Sélections verrouillées avant le départ, confrontées à l'arrivée • Banc de mesure vs Consensus de Marché • Horaires GMT (Abidjan)</p>
         </header>
 
         <div class="kpi-grid">
@@ -511,182 +605,7 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
             </div>
         </div>
 
-        <div class="strategy-grid">
-            <div class="strategy-card green">
-                <h3>🛡️ Formule Sécurité Abonnés</h3>
-                <p><strong>Pari recommandé :</strong> Couplé Placé ou 2sur4</p>
-                <p>Jeu direct sur les 2 Bases solides avec filtration des forfaits (NP).</p>
-                <span class="badge-rec">ROI Banc : {new_sp_roi:+.1f}%</span>
-            </div>
-            <div class="strategy-card amber">
-                <h3>⭐ Couplé Maître / Spéculatif</h3>
-                <p><strong>Pari recommandé :</strong> Couplé Gagnant & Trio combiné</p>
-                <p>Détection automatique des duos dominants et des outsiders <em>Smart Money</em>.</p>
-                <span class="badge-rec">Alerte Prioritaire</span>
-            </div>
-            <div class="strategy-card">
-                <h3>👑 Formule Quinté+ Champ Réduit</h3>
-                <p><strong>Pari recommandé :</strong> 2 Bases Fixes + 4 Associés (X-X-X)</p>
-                <p>Optimisation du budget pour viser l'Ordre et le Désordre.</p>
-                <span class="badge-rec">Budget conseillé : 12 €</span>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <h2>Tableau Comparatif des Moteurs</h2>
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 32%;">Métrique d'Évaluation</th>
-                        <th><span class="badge badge-primary">Nouveau Moteur (Value)</span></th>
-                        <th><span class="badge badge-secondary">ETPE (Heuristique)</span></th>
-                        <th><span class="badge badge-neutral">Favoris Marché (PMU)</span></th>
-                        <th><span class="badge badge-secondary">Radar v4 (labo)</span></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {''.join(table_rows_html)}
-                </tbody>
-            </table>
-            <p style="margin-top:10px; font-size:0.78rem; color:var(--text-muted);">
-                🧪 Radar v4 : probabilités scellées le matin (07h35) ou le soir par le laboratoire Radar,
-                jugées aux cotes de chaque horizon. Moteur de banc uniquement — jamais une sélection publiée.
-                Comparaison loyale : voir « Courses communes » plus bas.
-            </p>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <h2>Répartition des Performances par Discipline — Moteur vs Marché</h2>
-                <span class="badge-count">Conseillez vos abonnés chiffres en main : Tiercé, Quarté, Quinté par discipline</span>
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 20%;">Discipline</th>
-                        <th style="text-align:left;">Source</th>
-                        <th>Courses</th>
-                        <th>Gagnant dans les 8</th>
-                        <th>Tiercé dans les 8</th>
-                        <th>Quarté dans les 8</th>
-                        <th>Quinté dans les 8</th>
-                        <th>Base dans Top 3</th>
-                        <th>ROI Gagnant</th>
-                        <th>ROI Placé</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {''.join(discipline_rows_html)}
-                </tbody>
-            </table>
-            <p style="margin-top:10px; font-size:0.78rem; color:var(--text-muted);">
-                📵 Les courses des réunions étrangères sans cotes PMU sont incluses dans ces totaux :
-                la ligne « Marché » y est purement nominale (aucune cote réelle) et le moteur y travaille
-                sur ses capteurs hors marché uniquement. Ces courses sont signalées individuellement
-                dans le cockpit ci-dessous.
-            </p>
-        </div>
-
-        <!-- Section 2bis (F3): Banc de mesure par horizon de verrouillage -->
-        <div class="card">
-            <div class="card-header">
-                <h2>Banc de Mesure par Horizon — Quelle édition rapporte le plus ?</h2>
-                <span class="badge-count">La preuve chiffrée de la valeur du T-15, édition par édition</span>
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 20%;">Horizon de verrouillage</th>
-                        <th style="text-align:left;">Source</th>
-                        <th>Courses</th>
-                        <th>Gagnant dans les 8</th>
-                        <th>Tiercé dans les 8</th>
-                        <th>Quarté dans les 8</th>
-                        <th>Quinté dans les 8</th>
-                        <th>Base dans Top 3</th>
-                        <th>ROI Gagnant</th>
-                        <th>ROI Placé</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {''.join(horizon_rows_html)}
-                </tbody>
-            </table>
-            <p style="margin-top:10px; font-size:0.78rem; color:var(--text-muted);">
-                ⏱️ Chaque ligne mesure l'édition telle qu'elle a été verrouillée à cet horizon — jamais
-                recalculée après coup. Banc démarré le {horizon_bench_start} (réforme des éditions
-                immuables) : avant cette date, les quatre horizons étaient posés simultanément et ne
-                peuvent être comparés honnêtement. Les effectifs par horizon diffèrent : une course dont
-                le programme est chargé tard n'a pas d'édition Matin, et les passes rattrapent parfois
-                T-90/T-30/T-15 en un seul verrouillage. Ligne « Marché » : une édition verrouillée sans
-                cotes PMU réelles (cotes non ouvertes ou partielles) n'est pas un pronostic du marché —
-                elle est exclue du banc et affichée « — » ({market_nominal_editions} éditions concernées
-                dans l'archive).
-            </p>
-        </div>
-
-        <!-- Tableau de score « Benter » : gain d'information face au marché (protocole commun) -->
-        <div class="card">
-            <div class="card-header">
-                <h2>Tableau de score — Gain d'information face au marché (méthode Benter)</h2>
-                <span class="badge-count">Une seule métrique de pilotage : Δ log-vraisemblance par course, hors échantillon</span>
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 18%;">Horizon</th>
-                        <th>Courses communes</th>
-                        <th>Marché recalibré</th>
-                        <th>Marché + Moteur pur</th>
-                        <th>Marché + Radar</th>
-                        <th>Marché + Moteur pur + Radar</th>
-                        <th>Poids appris (3 sources)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {''.join(benter_rows_html)}
-                </tbody>
-            </table>
-            <p style="margin-top:10px; font-size:0.78rem; color:var(--text-muted);">
-                📐 Δ = moyenne sur les courses de test de [ log p(gagnant) de la combinaison − log p(gagnant) du marché ],
-                en nats par course. Coefficients appris par logit conditionnel sur les 60 % de courses les plus
-                anciennes, jugés sur les 40 % les plus récentes, jamais vues. Marché = cotes du verrou (éditions à
-                cotes réelles) ; Moteur pur = probabilités fondamentales sans marché ; Radar = probabilités scellées.
-                Succès du protocole : Δ &gt; 0 avec une borne basse de l'IC95 &gt; 0 sur au moins 1 000 courses de test.
-                Une ligne grisée signale des verrous non simultanés entre le Radar et la ligne de base marché :
-                le gain affiché peut n'être que de la fraîcheur de cotes, il n'est pas comparable.
-            </p>
-        </div>
-
-        <!-- Section 2ter (pont RADAR_V4) : courses communes, la seule comparaison loyale -->
-        <div class="card">
-            <div class="card-header">
-                <h2>Courses Communes — Moteur vs Marché vs Radar v4, aux mêmes cotes, aux mêmes instants</h2>
-                <span class="badge-count">Seules les courses où les trois cerveaux ont un verrou à l'horizon comptent</span>
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th rowspan="2" style="width: 18%;">Horizon</th>
-                        <th rowspan="2">Courses communes</th>
-                        {cc_head_html}
-                    </tr>
-                    <tr>{cc_sub_html}</tr>
-                </thead>
-                <tbody>
-                    {''.join(cc_rows_html)}
-                </tbody>
-            </table>
-            <p style="margin-top:10px; font-size:0.78rem; color:var(--text-muted);">
-                🧪 Radar v4 : probabilités scellées le matin (07h35) ou le soir, jugées aux cotes de chaque horizon.
-                Brier plus bas = mieux calibré. Lecture décisionnelle réservée à l'échéance du pré-enregistrement
-                (clé project_memory.preregistration_pont_radar_v4) : rien n'est promis avant.
-            </p>
-        </div>
-
-        <!-- Section 3: Interactive Results Cockpit with 1-Click Modal Inspector -->
+        <!-- Cockpit du jour (pronostics) en tête : c'est le rendu utile de la page -->
         <div class="card">
             <div class="card-header">
                 <h2>Cockpit des Résultats par Course (Cliquez sur une course pour voir l'analyse complète)</h2>
@@ -723,190 +642,92 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
             </div>
         </div>
 
-        <footer>
-            <p>Turf Prediction Engine • 1-Click Race Inspector & Cockpit Lab • elite-turf.fr</p>
-        </footer>
-    </div>
-
-    <!-- 1-Click Deep Race Analysis Modal -->
-    <div id="race-modal" class="modal-overlay" onclick="closeModalOnOverlay(event)">
-        <div class="modal-card">
-            <button class="modal-close" onclick="closeModal()">✕</button>
-            
-            <div class="modal-header">
-                <h2 id="modal-title">Analyse Détaillée de la Course</h2>
-                <p id="modal-subtitle">⏰ Départ : --:-- GMT • Hippodrome • Discipline • Distance</p>
-            </div>
-
-            <!-- Confidence & 4-Horizon Banner -->
-            <div style="background:#0e1726; border:1px solid var(--border); border-radius:10px; padding:14px 18px; margin-bottom:18px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
-                <div>
-                    <span style="color:var(--text-muted); font-size:0.85rem; font-weight:600; text-transform:uppercase;">Indice de Confiance :</span>
-                    <strong id="modal-confidence" style="font-size:1.05rem; margin-left:8px; color:#60a5fa;">⭐⭐⭐</strong>
-                </div>
-                <div style="display:flex; align-items:center; gap:8px;">
-                    <span id="modal-horizon-badge" class="badge-horizon">📢 Édition Abonnés (T-90)</span>
-                    <div id="modal-badge-container">
-                        <span class="badge-master">⭐ COUPLE MAITRE</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Horizon Context Alert -->
-            <div id="modal-horizon-info" style="background:#111b2e; border:1px solid #233554; border-radius:8px; padding:10px 14px; margin-bottom:18px; font-size:0.85rem; color:#93c5fd;">
-                ℹ️ <strong>État du pronostic :</strong> <span id="horizon-info-text">Édition Abonnés (T-90) : calibrée pour prise de jeu en kiosque. Cotes stabilisées et Non-Partants purgés.</span>
-            </div>
-
-            <!-- Top Selection Cards -->
-            <div class="modal-boxes-grid">
-                <div class="modal-box">
-                    <h4>🛡️ Les 2 Bases Incontournables</h4>
-                    <div id="modal-bases" class="num-highlight">N/A</div>
-                    <small style="color:var(--text-muted);">Priorité Couplé Placé & 2sur4</small>
-                </div>
-                <div class="modal-box">
-                    <h4>🔥 Tocard / Outsider Value</h4>
-                    <div id="modal-outsider" class="num-highlight amber">N/A</div>
-                    <small style="color:var(--text-muted);">Forte espérance de gain</small>
-                </div>
-                <div class="modal-box">
-                    <h4>⚠️ Les Regrets (9e & 10e)</h4>
-                    <div id="modal-regrets" class="num-highlight purple">N/A</div>
-                    <small style="color:var(--text-muted);">Remplaçants prioritaires</small>
-                </div>
-            </div>
-
-            <!-- Dual Top 8 Comparison -->
-            <div style="background:#0e1726; border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:20px;">
-                <div style="display:flex; justify-content:space-between; margin-bottom:10px; flex-wrap:wrap; gap:10px;">
-                    <div>
-                        <span style="color:var(--text-muted); font-size:0.85rem; font-weight:600;">SÉLECTION 8 DU MOTEUR :</span>
-                        <div id="modal-sel-moteur" style="font-size:1.3rem; font-weight:800; font-family:monospace; color:#60a5fa;">-</div>
-                    </div>
-                    <div>
-                        <span style="color:var(--text-muted); font-size:0.85rem; font-weight:600;">TOP 8 DU MARCHÉ (PMU) :</span>
-                        <div id="modal-sel-marche" style="font-size:1.3rem; font-weight:700; font-family:monospace; color:#94a3b8;">-</div>
-                    </div>
-                </div>
-                <div id="modal-arrival-row" style="border-top:1px solid var(--border); padding-top:10px; margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
-                    <div>
-                        <span style="color:var(--text-muted); font-size:0.85rem;">Arrivée Officielle :</span>
-                        <strong id="modal-arrival" style="font-family:monospace; font-size:1.15rem; color:#fff; margin-left:8px;">-</strong>
-                    </div>
-                    <div id="modal-coverage-badge">
-                        <span class="couv-tag couv-4">Couverture 4/5</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Éditions verrouillées : preuve d'immuabilité, horizon par horizon -->
-            <div style="background:#0e1726; border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:20px;">
-                <h3 style="font-size:1.02rem; color:#fff; margin-bottom:4px;">🔒 Éditions verrouillées (immuables)</h3>
-                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:10px;">Chaque édition est figée à l'heure indiquée et ne peut plus jamais changer. « — » : passe non exécutée avant le départ, l'édition n'existe pas. « Cotes réelles » : part des partants cotés par le PMU au moment du verrou — aucune édition n'est posée sous 90 % (verrou de fraîcheur).</p>
-                <div style="overflow-x:auto;">
-                    <table class="runner-table">
-                        <thead>
-                            <tr><th style="text-align:left;">Édition</th><th>Verrou (GMT)</th><th>Cotes réelles</th><th style="text-align:left;">Moteur 8</th><th style="text-align:left;">Marché 8 (PMU)</th></tr>
-                        </thead>
-                        <tbody id="modal-editions-tbody"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Tickets structurés (contrat v2) : rendus depuis la base, jamais reconstruits -->
-            <div style="margin-bottom:22px;">
-                <h3 style="font-size:1.1rem; color:#fff; margin-bottom:12px;">🎟️ Formules de jeu <span id="tickets-state" style="font-size:0.8rem; color:var(--text-muted); font-weight:500;"></span></h3>
-                <div id="tickets-container"></div>
-            </div>
-
-            <!-- Full Runners Table -->
-            <h3 style="font-size:1.1rem; color:#fff; margin-bottom:8px;">📋 Grille Complète des Partants & Probabilités Calibrées</h3>
-            <div style="overflow-x:auto;">
-                <table class="runner-table">
-                    <thead>
-                        <tr>
-                            <th>N°</th>
-                            <th>Cheval</th>
-                            <th>Driver / Jockey</th>
-                            <th>Ferrure</th>
-                            <th>Corde</th>
-                            <th>Musique</th>
-                            <th>Matin</th>
-                            <th>T-90</th>
-                            <th>T-30</th>
-                            <th>T-15</th>
-                            <th id="modal-odds-header">Cote Finale</th>
-                            <th>Signal</th>
-                            <th>Proba %</th>
-                            <th>Indice Value</th>
-                        </tr>
-                    </thead>
-                    <tbody id="modal-runners-tbody">
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <div id="toast" class="toast-notify">✓ Ticket copié dans le presse-papier !</div>
-
-    <script>
-        let allLogs = {logs_json};
+        <script>
+        // Page légère : seules les lignes de tableau du jour courant sont
+        // embarquées. Le détail complet de chaque journée (partants, éditions,
+        // tickets) vit dans archive/AAAA-MM-JJ.json, chargé à la demande.
+        const currentDay = {current_day_json};
         const archiveManifest = {manifest_json};
-        const loadedMonths = new Set();
-        const knownRaceIds = new Set(allLogs.map(item => item.race_id));
-        let selectedDate = "ALL";
+        let allLogs = {today_rows_json};
+        const dayRequests = new Map();   // journée -> Promise<bool> (requête en cours ou aboutie)
+        const loadedDays = new Set();    // journées dont le détail complet est chargé
+        let selectedDate = currentDay;
         let searchQuery = "";
         let currentPage = 1;
         const pageSize = 15;
+        const DAY_TABS = 14;             // journées en onglets ; au-delà, boutons mensuels
 
-        // ---- Archives mensuelles (historique permanent, chargé à la demande) ----
-        async function ensureMonthLoaded(month) {{
-            if (loadedMonths.has(month)) return true;
-            try {{
-                const resp = await fetch(`archive/${{month}}.json`, {{ cache: "no-cache" }});
-                if (!resp.ok) throw new Error(`HTTP ${{resp.status}}`);
-                const items = await resp.json();
-                items.forEach(item => {{
-                    if (!knownRaceIds.has(item.race_id)) {{
-                        knownRaceIds.add(item.race_id);
-                        allLogs.push(item);
-                    }}
-                }});
-                loadedMonths.add(month);
-                return true;
-            }} catch (e) {{
-                showToast(`⚠️ Archive ${{month}} indisponible`);
-                return false;
+        // ---- Archives journalières (historique permanent, chargé à la demande) ----
+        // Le fichier d'une journée remplace EN BLOC les lignes de cette date :
+        // la page affiche exactement le contenu publié, dans son ordre.
+        function loadDay(day) {{
+            if (!dayRequests.has(day)) {{
+                const req = fetch(`archive/${{day}}.json`, {{ cache: "no-cache" }})
+                    .then(resp => {{
+                        if (!resp.ok) throw new Error(`HTTP ${{resp.status}}`);
+                        return resp.json();
+                    }})
+                    .then(items => {{
+                        allLogs = allLogs.filter(item => item.date !== day).concat(items);
+                        loadedDays.add(day);
+                        return true;
+                    }})
+                    .catch(() => {{
+                        dayRequests.delete(day);   // nouvel essai possible au prochain clic
+                        return false;
+                    }});
+                dayRequests.set(day, req);
             }}
+            return dayRequests.get(day);
+        }}
+
+        // Plusieurs journées par lots de 6 requêtes parallèles.
+        async function loadDays(days, btnElement) {{
+            const originalText = btnElement.textContent;
+            let done = 0, allOk = true;
+            for (let i = 0; i < days.length; i += 6) {{
+                const res = await Promise.all(days.slice(i, i + 6).map(loadDay));
+                allOk = allOk && res.every(Boolean);
+                done += res.length;
+                btnElement.textContent = `⏳ ${{done}}/${{days.length}} jours...`;
+            }}
+            btnElement.textContent = originalText;
+            if (!allOk) showToast("⚠️ Certaines journées d'archive sont indisponibles");
+            return allOk;
+        }}
+
+        function activateTab(btnElement) {{
+            document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+            if (btnElement) btnElement.classList.add("active");
+        }}
+
+        async function selectDay(day, btnElement) {{
+            if (day !== currentDay) {{
+                const originalText = btnElement.textContent;
+                btnElement.textContent = "⏳ Chargement...";
+                const ok = await loadDay(day);
+                btnElement.textContent = originalText;
+                if (!ok) {{ showToast(`⚠️ Journée ${{day}} indisponible`); return; }}
+            }}
+            selectedDate = day;
+            currentPage = 1;
+            activateTab(btnElement);
+            renderTable();
         }}
 
         async function selectArchiveMonth(month, btnElement) {{
-            const originalText = btnElement.textContent;
-            btnElement.textContent = "⏳ Chargement...";
-            const ok = await ensureMonthLoaded(month);
-            btnElement.textContent = originalText;
-            if (!ok) return;
+            await loadDays(Object.keys(archiveManifest).filter(d => d.startsWith(month)), btnElement);
             selectedDate = "M:" + month;
             currentPage = 1;
-            document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-            btnElement.classList.add("active");
+            activateTab(btnElement);
             renderTable();
         }}
 
         async function loadFullHistory(btnElement) {{
-            const months = Object.keys(archiveManifest);
-            const originalText = btnElement.textContent;
-            let done = 0;
-            for (const m of months) {{
-                btnElement.textContent = `⏳ Archives ${{++done}}/${{months.length}}...`;
-                await ensureMonthLoaded(m);
-            }}
-            btnElement.textContent = originalText;
+            await loadDays(Object.keys(archiveManifest), btnElement);
             selectedDate = "ALL";
             currentPage = 1;
-            document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-            btnElement.classList.add("active");
+            activateTab(btnElement);
             renderTable();
         }}
 
@@ -951,68 +772,50 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
             return {{ code: "AUCUN", label: "⏳ Édition à venir", badgeClass: "couv-2", header: "Cote", fullText: "⏳ Aucune édition verrouillée pour l'instant", info: "L'édition du matin sera posée à partir de 06h30 GMT, puis T-90, T-30 et T-15 à l'approche du départ." }};
         }}
 
+        // Jour J±n en GMT (heure d'Abidjan) pour les libellés « Aujourd'hui » / « Hier ».
+        function gmtDay(offset) {{
+            const d = new Date();
+            d.setUTCDate(d.getUTCDate() + offset);
+            return d.toISOString().slice(0, 10);
+        }}
+
         function initDateTabs() {{
-            const datesSet = new Set(allLogs.map(item => item.date));
-            const sortedDates = Array.from(datesSet).sort().reverse();
-            
+            const days = Object.keys(archiveManifest).sort().reverse();
             const container = document.getElementById("date-tabs-container");
             container.innerHTML = "";
+            const today = gmtDay(0), yesterday = gmtDay(-1);
 
-            const allBtn = document.createElement("button");
-            allBtn.className = "tab-btn active";
-            allBtn.textContent = `Toutes les dates (${{allLogs.length}})`;
-            allBtn.onclick = () => selectDate("ALL", allBtn);
-            container.appendChild(allBtn);
-
-            sortedDates.forEach((dStr, idx) => {{
+            days.slice(0, DAY_TABS).forEach(dStr => {{
                 const btn = document.createElement("button");
-                btn.className = "tab-btn";
-                
-                const count = allLogs.filter(item => item.date === dStr).length;
-                let label = dStr;
-                
-                if (idx === 0) {{
-                    label = `Aujourd'hui (${{dStr.slice(5)}})`;
-                }} else if (idx === 1) {{
-                    label = `Hier (${{dStr.slice(5)}})`;
-                }} else {{
-                    label = `${{dStr.slice(5)}}`;
-                }}
-                
-                btn.textContent = `${{label}} [${{count}}]`;
-                btn.onclick = () => selectDate(dStr, btn);
+                btn.className = "tab-btn" + (dStr === selectedDate ? " active" : "");
+                const md = dStr.slice(5);
+                const label = dStr === today ? `Aujourd'hui (${{md}})` : (dStr === yesterday ? `Hier (${{md}})` : md);
+                btn.textContent = `${{label}} [${{archiveManifest[dStr]}}]`;
+                btn.onclick = () => selectDay(dStr, btn);
                 container.appendChild(btn);
             }});
 
-            // Boutons d'archives mensuelles (historique permanent)
-            const months = Object.keys(archiveManifest).sort().reverse();
+            // Boutons mensuels et historique complet (archives journalières)
+            const months = Array.from(new Set(days.map(d => d.slice(0, 7))));
             months.forEach(m => {{
+                const count = days.filter(d => d.startsWith(m)).reduce((s, d) => s + archiveManifest[d], 0);
                 const btn = document.createElement("button");
                 btn.className = "tab-btn";
                 btn.style.borderColor = "#8b5cf6";
-                btn.textContent = `📚 ${{m}} [${{archiveManifest[m]}}]`;
+                btn.textContent = `📚 ${{m}} [${{count}}]`;
                 btn.onclick = () => selectArchiveMonth(m, btn);
                 container.appendChild(btn);
             }});
 
-            if (months.length > 0) {{
+            if (days.length > 1) {{
+                const total = days.reduce((s, d) => s + archiveManifest[d], 0);
                 const btnAll = document.createElement("button");
                 btnAll.className = "tab-btn";
                 btnAll.style.borderColor = "#f59e0b";
-                btnAll.textContent = `📚 Tout l'historique`;
+                btnAll.textContent = `📚 Tout l'historique [${{total}}]`;
                 btnAll.onclick = () => loadFullHistory(btnAll);
                 container.appendChild(btnAll);
             }}
-        }}
-
-        function selectDate(dateStr, btnElement) {{
-            selectedDate = dateStr;
-            currentPage = 1;
-            
-            document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-            if (btnElement) btnElement.classList.add("active");
-            
-            renderTable();
         }}
 
         function applyFilters() {{
@@ -1039,6 +842,9 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                 );
                 return matchDate && matchSearch;
             }});
+            // Journées les plus récentes d'abord ; l'ordre du banc est conservé
+            // à l'intérieur d'une journée (tri stable).
+            filtered.sort((a, b) => (a.date < b.date) - (a.date > b.date));
 
             document.getElementById("matching-count").textContent = `${{filtered.length}} courses affichées`;
 
@@ -1113,9 +919,20 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
         }}
 
         // Modal Inspector Functions
-        function openRaceModal(raceId) {{
-            const item = allLogs.find(r => r.race_id === raceId);
+        async function openRaceModal(raceId) {{
+            let item = allLogs.find(r => r.race_id === raceId);
             if (!item) return;
+            // Fiche = enregistrement complet de l'archive du jour, jamais la
+            // ligne légère du tableau : sans détail chargé, pas de fiche.
+            if (!loadedDays.has(item.date)) {{
+                showToast("⏳ Chargement de la fiche...");
+                const ok = await loadDay(item.date);
+                item = allLogs.find(r => r.race_id === raceId);
+                if (!ok || !item) {{
+                    showToast("⚠️ Détail de la course indisponible — réessayez");
+                    return;
+                }}
+            }}
 
             const timeInfo = item.scheduled_start_time || "12:00 GMT";
 
@@ -1414,11 +1231,335 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
             if (e.key === "Escape") closeModal();
         }});
 
-        window.addEventListener("DOMContentLoaded", () => {{
-            initDateTabs();
-            renderTable();
+        // Rendu immédiat : ce script suit le balisage du cockpit, sans attendre
+        // le parsing des tableaux du banc placés plus bas.
+        initDateTabs();
+        renderTable();
+
+        // Détail du jour courant préchargé quand la page est au repos : la
+        // première fiche ouverte s'affiche sans attendre le réseau.
+        window.addEventListener("load", () => {{
+            if (!currentDay) return;
+            const idle = window.requestIdleCallback || (cb => setTimeout(cb, 300));
+            idle(() => loadDay(currentDay).then(ok => {{
+                if (ok && selectedDate === currentDay) renderTable();
+            }}));
         }});
-    </script>
+        </script>
+
+        <div class="strategy-grid">
+            <div class="strategy-card green">
+                <h3>🛡️ Formule Sécurité Abonnés</h3>
+                <p><strong>Pari recommandé :</strong> Couplé Placé ou 2sur4</p>
+                <p>Jeu direct sur les 2 Bases solides avec filtration des forfaits (NP).</p>
+                <span class="badge-rec">ROI Banc : {new_sp_roi:+.1f}%</span>
+            </div>
+            <div class="strategy-card amber">
+                <h3>⭐ Couplé Maître / Spéculatif</h3>
+                <p><strong>Pari recommandé :</strong> Couplé Gagnant & Trio combiné</p>
+                <p>Détection automatique des duos dominants et des outsiders <em>Smart Money</em>.</p>
+                <span class="badge-rec">Alerte Prioritaire</span>
+            </div>
+            <div class="strategy-card">
+                <h3>👑 Formule Quinté+ Champ Réduit</h3>
+                <p><strong>Pari recommandé :</strong> 2 Bases Fixes + 4 Associés (X-X-X)</p>
+                <p>Optimisation du budget pour viser l'Ordre et le Désordre.</p>
+                <span class="badge-rec">Budget conseillé : 12 €</span>
+            </div>
+        </div>
+
+        <div class="card card-banc">
+            <div class="card-header">
+                <h2>Tableau Comparatif des Moteurs</h2>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 32%;">Métrique d'Évaluation</th>
+                        <th><span class="badge badge-primary">Nouveau Moteur (Value)</span></th>
+                        <th><span class="badge badge-secondary">ETPE (Heuristique)</span></th>
+                        <th><span class="badge badge-neutral">Favoris Marché (PMU)</span></th>
+                        <th><span class="badge badge-secondary">Radar v4 (labo)</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {''.join(table_rows_html)}
+                </tbody>
+            </table>
+            <p style="margin-top:10px; font-size:0.78rem; color:var(--text-muted);">
+                🧪 Radar v4 : probabilités scellées le matin (07h35) ou le soir par le laboratoire Radar,
+                jugées aux cotes de chaque horizon. Moteur de banc uniquement — jamais une sélection publiée.
+                Comparaison loyale : voir « Courses communes » plus bas.
+            </p>
+        </div>
+
+        <div class="card card-banc">
+            <div class="card-header">
+                <h2>Répartition des Performances par Discipline — Moteur vs Marché</h2>
+                <span class="badge-count">Conseillez vos abonnés chiffres en main : Tiercé, Quarté, Quinté par discipline</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 20%;">Discipline</th>
+                        <th style="text-align:left;">Source</th>
+                        <th>Courses</th>
+                        <th>Gagnant dans les 8</th>
+                        <th>Tiercé dans les 8</th>
+                        <th>Quarté dans les 8</th>
+                        <th>Quinté dans les 8</th>
+                        <th>Base dans Top 3</th>
+                        <th>ROI Gagnant</th>
+                        <th>ROI Placé</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {''.join(discipline_rows_html)}
+                </tbody>
+            </table>
+            <p style="margin-top:10px; font-size:0.78rem; color:var(--text-muted);">
+                📵 Les courses des réunions étrangères sans cotes PMU sont incluses dans ces totaux :
+                la ligne « Marché » y est purement nominale (aucune cote réelle) et le moteur y travaille
+                sur ses capteurs hors marché uniquement. Ces courses sont signalées individuellement
+                dans le cockpit ci-dessus.
+            </p>
+        </div>
+
+        <!-- Section 2bis (F3): Banc de mesure par horizon de verrouillage -->
+        <div class="card card-banc">
+            <div class="card-header">
+                <h2>Banc de Mesure par Horizon — Quelle édition rapporte le plus ?</h2>
+                <span class="badge-count">La preuve chiffrée de la valeur du T-15, édition par édition</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 20%;">Horizon de verrouillage</th>
+                        <th style="text-align:left;">Source</th>
+                        <th>Courses</th>
+                        <th>Gagnant dans les 8</th>
+                        <th>Tiercé dans les 8</th>
+                        <th>Quarté dans les 8</th>
+                        <th>Quinté dans les 8</th>
+                        <th>Base dans Top 3</th>
+                        <th>ROI Gagnant</th>
+                        <th>ROI Placé</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {''.join(horizon_rows_html)}
+                </tbody>
+            </table>
+            <p style="margin-top:10px; font-size:0.78rem; color:var(--text-muted);">
+                ⏱️ Chaque ligne mesure l'édition telle qu'elle a été verrouillée à cet horizon — jamais
+                recalculée après coup. Banc démarré le {horizon_bench_start} (réforme des éditions
+                immuables) : avant cette date, les quatre horizons étaient posés simultanément et ne
+                peuvent être comparés honnêtement. Les effectifs par horizon diffèrent : une course dont
+                le programme est chargé tard n'a pas d'édition Matin, et les passes rattrapent parfois
+                T-90/T-30/T-15 en un seul verrouillage. Ligne « Marché » : une édition verrouillée sans
+                cotes PMU réelles (cotes non ouvertes ou partielles) n'est pas un pronostic du marché —
+                elle est exclue du banc et affichée « — » ({market_nominal_editions} éditions concernées
+                dans l'archive).
+            </p>
+        </div>
+
+        <!-- Tableau de score « Benter » : gain d'information face au marché (protocole commun) -->
+        <div class="card card-banc">
+            <div class="card-header">
+                <h2>Tableau de score — Gain d'information face au marché (méthode Benter)</h2>
+                <span class="badge-count">Une seule métrique de pilotage : Δ log-vraisemblance par course, hors échantillon</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 18%;">Horizon</th>
+                        <th>Courses communes</th>
+                        <th>Marché recalibré</th>
+                        <th>Marché + Moteur pur</th>
+                        <th>Marché + Radar</th>
+                        <th>Marché + Moteur pur + Radar</th>
+                        <th>Poids appris (3 sources)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {''.join(benter_rows_html)}
+                </tbody>
+            </table>
+            <p style="margin-top:10px; font-size:0.78rem; color:var(--text-muted);">
+                📐 Δ = moyenne sur les courses de test de [ log p(gagnant) de la combinaison − log p(gagnant) du marché ],
+                en nats par course. Coefficients appris par logit conditionnel sur les 60 % de courses les plus
+                anciennes, jugés sur les 40 % les plus récentes, jamais vues. Marché = cotes du verrou (éditions à
+                cotes réelles) ; Moteur pur = probabilités fondamentales sans marché ; Radar = probabilités scellées.
+                Succès du protocole : Δ &gt; 0 avec une borne basse de l'IC95 &gt; 0 sur au moins 1 000 courses de test.
+                Une ligne grisée signale des verrous non simultanés entre le Radar et la ligne de base marché :
+                le gain affiché peut n'être que de la fraîcheur de cotes, il n'est pas comparable.
+            </p>
+        </div>
+
+        <!-- Section 2ter (pont RADAR_V4) : courses communes, la seule comparaison loyale -->
+        <div class="card card-banc">
+            <div class="card-header">
+                <h2>Courses Communes — Moteur vs Marché vs Radar v4, aux mêmes cotes, aux mêmes instants</h2>
+                <span class="badge-count">Seules les courses où les trois cerveaux ont un verrou à l'horizon comptent</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th rowspan="2" style="width: 18%;">Horizon</th>
+                        <th rowspan="2">Courses communes</th>
+                        {cc_head_html}
+                    </tr>
+                    <tr>{cc_sub_html}</tr>
+                </thead>
+                <tbody>
+                    {''.join(cc_rows_html)}
+                </tbody>
+            </table>
+            <p style="margin-top:10px; font-size:0.78rem; color:var(--text-muted);">
+                🧪 Radar v4 : probabilités scellées le matin (07h35) ou le soir, jugées aux cotes de chaque horizon.
+                Brier plus bas = mieux calibré. Lecture décisionnelle réservée à l'échéance du pré-enregistrement
+                (clé project_memory.preregistration_pont_radar_v4) : rien n'est promis avant.
+            </p>
+        </div>
+
+        <footer class="site-footer">
+            <div class="jeu-responsable" role="note">
+                <span class="badge-18" title="Interdit aux moins de 18 ans">18+</span>
+                <div>
+                    <p><strong>Jouer comporte des risques : endettement, isolement, dépendance. Pour être aidé, appelez le <a href="tel:+33974751313">09 74 75 13 13</a> (appel non surtaxé).</strong></p>
+                    <p>Les paris hippiques sont interdits aux mineurs. Les pronostics sont publiés à titre d'information et ne garantissent aucun gain.</p>
+                </div>
+            </div>
+            <details id="mentions-legales" class="mentions-legales">
+                <summary>Mentions légales</summary>
+{mentions_html}
+            </details>
+            <p class="footer-sign">Turf Prediction Engine • 1-Click Race Inspector & Cockpit Lab • elite-turf.fr</p>
+        </footer>
+    </div>
+
+    <!-- 1-Click Deep Race Analysis Modal -->
+    <div id="race-modal" class="modal-overlay" onclick="closeModalOnOverlay(event)">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            
+            <div class="modal-header">
+                <h2 id="modal-title">Analyse Détaillée de la Course</h2>
+                <p id="modal-subtitle">⏰ Départ : --:-- GMT • Hippodrome • Discipline • Distance</p>
+            </div>
+
+            <!-- Confidence & 4-Horizon Banner -->
+            <div style="background:#0e1726; border:1px solid var(--border); border-radius:10px; padding:14px 18px; margin-bottom:18px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+                <div>
+                    <span style="color:var(--text-muted); font-size:0.85rem; font-weight:600; text-transform:uppercase;">Indice de Confiance :</span>
+                    <strong id="modal-confidence" style="font-size:1.05rem; margin-left:8px; color:#60a5fa;">⭐⭐⭐</strong>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span id="modal-horizon-badge" class="badge-horizon">📢 Édition Abonnés (T-90)</span>
+                    <div id="modal-badge-container">
+                        <span class="badge-master">⭐ COUPLE MAITRE</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Horizon Context Alert -->
+            <div id="modal-horizon-info" style="background:#111b2e; border:1px solid #233554; border-radius:8px; padding:10px 14px; margin-bottom:18px; font-size:0.85rem; color:#93c5fd;">
+                ℹ️ <strong>État du pronostic :</strong> <span id="horizon-info-text">Édition Abonnés (T-90) : calibrée pour prise de jeu en kiosque. Cotes stabilisées et Non-Partants purgés.</span>
+            </div>
+
+            <!-- Top Selection Cards -->
+            <div class="modal-boxes-grid">
+                <div class="modal-box">
+                    <h4>🛡️ Les 2 Bases Incontournables</h4>
+                    <div id="modal-bases" class="num-highlight">N/A</div>
+                    <small style="color:var(--text-muted);">Priorité Couplé Placé & 2sur4</small>
+                </div>
+                <div class="modal-box">
+                    <h4>🔥 Tocard / Outsider Value</h4>
+                    <div id="modal-outsider" class="num-highlight amber">N/A</div>
+                    <small style="color:var(--text-muted);">Forte espérance de gain</small>
+                </div>
+                <div class="modal-box">
+                    <h4>⚠️ Les Regrets (9e & 10e)</h4>
+                    <div id="modal-regrets" class="num-highlight purple">N/A</div>
+                    <small style="color:var(--text-muted);">Remplaçants prioritaires</small>
+                </div>
+            </div>
+
+            <!-- Dual Top 8 Comparison -->
+            <div style="background:#0e1726; border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:20px;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px; flex-wrap:wrap; gap:10px;">
+                    <div>
+                        <span style="color:var(--text-muted); font-size:0.85rem; font-weight:600;">SÉLECTION 8 DU MOTEUR :</span>
+                        <div id="modal-sel-moteur" style="font-size:1.3rem; font-weight:800; font-family:monospace; color:#60a5fa;">-</div>
+                    </div>
+                    <div>
+                        <span style="color:var(--text-muted); font-size:0.85rem; font-weight:600;">TOP 8 DU MARCHÉ (PMU) :</span>
+                        <div id="modal-sel-marche" style="font-size:1.3rem; font-weight:700; font-family:monospace; color:#94a3b8;">-</div>
+                    </div>
+                </div>
+                <div id="modal-arrival-row" style="border-top:1px solid var(--border); padding-top:10px; margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <span style="color:var(--text-muted); font-size:0.85rem;">Arrivée Officielle :</span>
+                        <strong id="modal-arrival" style="font-family:monospace; font-size:1.15rem; color:#fff; margin-left:8px;">-</strong>
+                    </div>
+                    <div id="modal-coverage-badge">
+                        <span class="couv-tag couv-4">Couverture 4/5</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Éditions verrouillées : preuve d'immuabilité, horizon par horizon -->
+            <div style="background:#0e1726; border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:20px;">
+                <h3 style="font-size:1.02rem; color:#fff; margin-bottom:4px;">🔒 Éditions verrouillées (immuables)</h3>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:10px;">Chaque édition est figée à l'heure indiquée et ne peut plus jamais changer. « — » : passe non exécutée avant le départ, l'édition n'existe pas. « Cotes réelles » : part des partants cotés par le PMU au moment du verrou — aucune édition n'est posée sous 90 % (verrou de fraîcheur).</p>
+                <div style="overflow-x:auto;">
+                    <table class="runner-table">
+                        <thead>
+                            <tr><th style="text-align:left;">Édition</th><th>Verrou (GMT)</th><th>Cotes réelles</th><th style="text-align:left;">Moteur 8</th><th style="text-align:left;">Marché 8 (PMU)</th></tr>
+                        </thead>
+                        <tbody id="modal-editions-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tickets structurés (contrat v2) : rendus depuis la base, jamais reconstruits -->
+            <div style="margin-bottom:22px;">
+                <h3 style="font-size:1.1rem; color:#fff; margin-bottom:12px;">🎟️ Formules de jeu <span id="tickets-state" style="font-size:0.8rem; color:var(--text-muted); font-weight:500;"></span></h3>
+                <div id="tickets-container"></div>
+            </div>
+
+            <!-- Full Runners Table -->
+            <h3 style="font-size:1.1rem; color:#fff; margin-bottom:8px;">📋 Grille Complète des Partants & Probabilités Calibrées</h3>
+            <div style="overflow-x:auto;">
+                <table class="runner-table">
+                    <thead>
+                        <tr>
+                            <th>N°</th>
+                            <th>Cheval</th>
+                            <th>Driver / Jockey</th>
+                            <th>Ferrure</th>
+                            <th>Corde</th>
+                            <th>Musique</th>
+                            <th>Matin</th>
+                            <th>T-90</th>
+                            <th>T-30</th>
+                            <th>T-15</th>
+                            <th id="modal-odds-header">Cote Finale</th>
+                            <th>Signal</th>
+                            <th>Proba %</th>
+                            <th>Indice Value</th>
+                        </tr>
+                    </thead>
+                    <tbody id="modal-runners-tbody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast-notify">✓ Ticket copié dans le presse-papier !</div>
+
 </body>
 </html>"""
 

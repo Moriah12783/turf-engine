@@ -73,7 +73,7 @@ class CloudflarePagesDeployer:
         }
 
         try:
-            # Collecte de TOUS les fichiers du site (index.html + archives mensuelles
+            # Collecte de TOUS les fichiers du site (index.html + archives journalières
             # site/archive/*.json) pour un déploiement complet de l'historique.
             manifest = {}
             assets = []
