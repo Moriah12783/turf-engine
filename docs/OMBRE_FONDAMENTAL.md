@@ -123,8 +123,28 @@ Elle se trouve dans les métadonnées de l'édition du matin, sous la clé
 | `fondamental` | les probabilités fondamentales renormalisées sur les partants valides (pour concevoir une recette B sans rien recalculer) |
 
 **Confidentialité.** L'archive reste dans la base privée sur R2. Ni le banc, ni
-le site, ni `benchmark_report.json` ne lisent `ombre_fondamental`. Rien de
-l'ombre n'est donc visible publiquement avant la lecture.
+le site, ni `benchmark_report.json` ne lisent `ombre_fondamental` : le rapport
+public ne lit que deux champs des métadonnées (`value_indices` et
+`smart_signals`), ce qui a été vérifié dans le code le 28/09. Rien de l'ombre
+n'est donc visible publiquement avant la lecture.
+
+**Lecteurs de la base sur R2 (lecture seule)**, recensés le 28/09 :
+
+- **le labo** : seul le lecteur scellé lit l'archive, et il ne rend que le
+  compteur avant la lecture ;
+- **Bases** (`bases-engine`, jeton `bases-engine-ro`) : il voit l'archive, mais
+  s'engage à ne jamais reproduire `ombre_fondamental` jusqu'à la lecture, ni
+  dans ses exports, ni dans ses pages, ni dans ses journaux, ni dans ses
+  fixtures. Toute fixture tirée d'une base postérieure au 08/10 est expurgée
+  de cette clé ;
+- **la répétition** (PC de Steph, jeton en lecture seule qui expire le
+  08/10) : elle ne lit qu'une copie antérieure à l'ombre.
+
+Tout nouveau lecteur est ajouté à cette liste, avec le même engagement, avant
+d'accéder à la base. **Garde-fou automatique** : un test du dépôt
+(`tests/test_ombre_confidentialite.py`) échoue si un autre code que le lecteur
+scellé, l'outil de répétition et le moteur (qui écrit l'archive) cite la clé,
+ou si le site public la contient.
 
 ## Recette
 
