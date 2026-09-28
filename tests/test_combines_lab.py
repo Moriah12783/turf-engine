@@ -35,6 +35,31 @@ def test_harville_exact_sur_petit_champ():
     assert abs(sum(sets.values()) - 1.0) < 1e-12 and abs(sets[(0, 1, 2)] - cl.set_prob(p, (0, 1, 2))) < 1e-12
 
 
+def test_harville_escompte_et_exposants_retrouves():
+    p = np.array([0.4, 0.3, 0.2, 0.1])
+    lam = (1.0, 0.7, 0.5, 0.5)
+    for k in (2, 3, 4):
+        t = cl.ordered_tensor(p, k, lam)
+        assert abs(t.sum() - 1.0) < 1e-12
+        assert abs(t[tuple(range(k))] - cl.seq_prob(p, tuple(range(k)), lam)) < 1e-12
+    assert abs(cl.seq_prob(p, (0, 1), (1.0, 1.0)) - cl.seq_prob(p, (0, 1))) < 1e-12
+    # Arrivées tirées d'un Harville escompté connu : les exposants sont retrouvés.
+    rng = np.random.default_rng(3)
+    true = (1.0, 0.75, 0.55, 0.45, 0.4)
+    logps, orders = [], []
+    for _ in range(3000):
+        q = rng.dirichlet(np.full(10, 0.8))
+        remaining, order = list(range(10)), []
+        for pos in range(5):
+            w = np.power(q[remaining], true[pos])
+            order.append(remaining.pop(int(rng.choice(len(remaining), p=w / w.sum()))))
+        logps.append(np.log(q))
+        orders.append(order)
+    logp, orders = np.array(logps), np.array(orders)
+    for pos in range(1, 5):
+        assert abs(cl.fit_lambda(logp, orders, pos) - true[pos]) < 0.08
+
+
 def test_classement_des_paris():
     assert cl.classify("SIMPLE_GAGNANT", "Simple gagnant") == "WIN"
     assert cl.classify("E_COUPLE_GAGNANT", "Couplé gagnant") == "PAIR_FIRST2"
@@ -72,7 +97,7 @@ def _add_exotics(path):
         _, pair = cl.in_top_k(p, 3)
         for x, y in itertools.combinations((a, b, t), 2):
             rows.append((d, r, c, "COUPLE_PLACE", "Couplé placé", f"{nums[x]}-{nums[y]}", 0.75 / pair[x, y]))
-        if i == 500:                                                   # course de février (trois modèles)
+        if i == 1000:                                                  # course de mars (exposants appris)
             rows[-1] = rows[-1][:5] + ("99-98", 5.0)                   # ligne discordante
         rows.append((d, r, c, "QUINTE_PLUS", "Bonus 4", "1-2-3-4", 3.0))
     conn.executemany("INSERT INTO rapports_definitifs (date_course, num_reunion, num_course, type_pari, libelle, "
@@ -85,7 +110,7 @@ def _add_exotics(path):
 @pytest.fixture(scope="module")
 def mirror():
     with tempfile.TemporaryDirectory() as d:
-        path = make_mirror(os.path.join(d, "h.db"))
+        path = make_mirror(os.path.join(d, "h.db"), days=260)       # modèle combiné : février à avril
         _add_exotics(path)
         yield path
 
@@ -107,10 +132,19 @@ def test_bout_en_bout_controles_exacts(mirror):
     inventaire = {(e["pari"], e["libelle"]): e for e in report["inventaire"]}
     assert inventaire[("QUINTE_PLUS", "Bonus 4")]["evenement"] is None
     assert set(inventaire[("COUPLE_GAGNANT", "Couplé gagnant")]["formats"]) == {"N-N"}
-    for key in ("roi_top_marche", "roi_top_combine"):
+    for key in ("roi_top_marche", "roi_top_combine", "roi_top_combine_esc"):
         assert set(couple[key]) == {"1", "3", "6", "10"}
-    assert "delta_G_combine_vs_marche" in couple and isinstance(couple["bat_la_masse_combine"], bool)
+    assert "delta_G_combine_vs_marche" in couple and isinstance(couple["bat_la_masse"], list)
+    # Version 2 : dans ce miroir, les places 2 à 8 sont tirées au hasard. Les
+    # exposants appris aux places d'honneur sont donc proches de 0, et Harville
+    # escompté prévoit mieux les couplés que Harville simple (mêmes courses).
+    lam = report["exposants"]["marche"]
+    assert lam and all(v[0] == 1.0 and v[1] < 0.5 for v in lam.values())
+    for res_key in ("COUPLE_GAGNANT|Couplé gagnant", "COUPLE_PLACE|Couplé placé"):
+        e = res[res_key]
+        assert e["delta_G_marche_esc_vs_marche"] > 0 and e["ic95_delta_G_marche_esc_vs_marche"][0] > 0
+    assert abs(win["G_marche_esc"] - win["G_marche"]) < 1e-12             # la 1re place n'est pas escomptée
     logs = out.getvalue()
     assert "CHEVAL" not in logs and "JOC" not in logs                     # dépôt public
     assert {line.split(" ")[0] for line in logs.strip().splitlines()} <= {
-        "COMBINES_INVENTAIRE", "COMBINES_DONNEES", "COMBINES_RESULTAT"}
+        "COMBINES_INVENTAIRE", "COMBINES_DONNEES", "COMBINES_EXPOSANTS", "COMBINES_RESULTAT"}
