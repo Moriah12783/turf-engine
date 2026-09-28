@@ -157,6 +157,52 @@ ETPE_ENGINE ne publie que des sélections (pas de probabilités) : non mesuré.
   justesse pour la base marché, pas pour NVE).
 - RADAR_V4 : aucun apport mesurable (échantillon plus court).
 
+### Découpages demandés par le dev NVE (28/09/2026)
+
+Gain apparié de gagnants en tête (même course, combiné − moteur) et IC 95 %.
+Éditions NVE de production (`market_calibration.applied` et poids 0,9) :
+combinaison apprise sur toutes les éditions NVE passées, jugée sur les seules
+éditions de production (345 au matin : trop récentes pour 300 courses
+d'apprentissage).
+
+| Ligne | Jugées | Gain ll (IC 95 %) | Gain gagnant en tête (IC 95 %) |
+|---|---:|---|---|
+| NVE matin, toutes (37 % sans marché, 33 % poids 0,70, 30 % poids 0,90) | 718 | **+0,070** [+0,036 ; +0,104] | +3,2 pts [+0,1 ; +6,4] |
+| **NVE matin, production poids 0,9** | 345 | +0,036 [−0,010 ; +0,082] | +2,9 pts [−1,4 ; +7,0] |
+| NVE T90, production poids 0,9 | 385 | −0,011 [−0,040 ; +0,019] | +3,1 pts [−0,3 ; +6,5] |
+| NVE T30, production poids 0,9 | 388 | −0,009 [−0,038 ; +0,018] | +2,1 pts [−1,3 ; +5,4] |
+| Marché matin, informatives (172 nominales exclues) | 597 | **+0,051** [+0,029 ; +0,074] | **+3,2 pts** [+0,5 ; +6,0] |
+| Marché T90, informatives | 648 | +0,003 [−0,011 ; +0,017] | +0,9 pt [−1,1 ; +2,9] |
+| Marché T30, informatives | 651 | +0,002 [−0,011 ; +0,015] | +1,1 pt [−0,9 ; +3,1] |
+
+**Fondamental seul face au NVE pur** (`model_probs`, matin, mêmes courses) :
+
+| Découpage | Courses | Écart ll (IC 95 %) | Gagnant en tête : NVE pur → fondamental |
+|---|---:|---|---|
+| Toutes | 886 | **+0,259** [+0,203 ; +0,316] | 15,9 % → **23,9 %** (+8,0 pts [+4,9 ; +11,3]) |
+| Production poids 0,9 | 345 | **+0,193** [+0,103 ; +0,280] | 15,1 % → **24,1 %** (+9,0 pts [+3,8 ; +14,2]) |
+
+Le NVE pur a une log-vraisemblance (−2,40 à −2,43) de l'ordre du tirage au
+sort (−2,41) : la valeur du NVE vient presque entièrement de son mélange avec
+le marché.
+
+**Robustesse « état connu au matin »** : fondamental réentraîné sans les
+variables qui peuvent changer dans la journée (driver, changement de driver,
+œillères). Gains réduits d'environ un tiers : NVE matin toutes +0,046
+[+0,020 ; +0,073] (démontré), production +0,025 [−0,010 ; +0,060] (non
+démontré), marché informatives +0,033 [+0,016 ; +0,050] (démontré), fondamental
+seul face au NVE pur +0,209 [+0,156 ; +0,263].
+
+Variables et heure de publication : les champs de carrière du programme
+(courses, victoires, places, gains, musique) sont figés avant la course
+(vérifié : +1,016 victoire à la course suivante d'un gagnant) ; corde et
+poids sont connus à la déclaration ; historique cheval, jockey et entraîneur
+arrêtés à la veille au soir. Le miroir Radar ne garde que l'état final des
+partants (lignes réécrites dans la journée) : l'état exact de 06h30 n'est pas
+rejouable depuis lui, d'où le test de robustesse ci-dessus. Les partants non
+partants tardifs sont exclus des deux côtés (moteur et fondamental
+renormalisés sur les partants au départ).
+
 ## Confidentialité (dépôt public)
 
 - Le journal n'affiche que des **agrégats par mois** : nombres de courses,
