@@ -77,6 +77,22 @@ marché ; sa valeur se mesure une fois **combiné** au marché.
   cote. Le chiffre qui compte viendra de l'étape suivante : décider à T-30 ou
   T-15 avec les cotes de ce moment, régler au rapport final.
 
+## Horizon réel de pari : T-30 et T-15 (`BENTER_TX`)
+
+En pari mutuel, on mise **avant** le départ mais on est payé à la cote
+**finale**. Le test réaliste :
+
+- cotes de la dernière photo `cotes_snapshots` prise **au moins H minutes**
+  avant le départ, et au plus H+10 (sinon, pas de cote à cet horizon) ;
+- combinaison `p ∝ exp(α·log q_T + β·log p_fondamental)` apprise **semaine
+  par semaine** sur les semaines précédentes (au moins 400 courses) : les
+  photos n'existent que depuis le 15/07/2026 ;
+- juge : gain de log-vraisemblance face au marché de T-x recalibré, avec IC
+  95 % ; `gain_ll_cloture_vs_T` mesure l'information qui arrive entre T-x et
+  le départ ;
+- Kelly **décidé aux cotes de T-x**, **réglé au rapport final** ; témoin sur
+  le marché de T-x seul.
+
 ## Confidentialité (dépôt public)
 
 - Le journal n'affiche que des **agrégats par mois** : nombres de courses,

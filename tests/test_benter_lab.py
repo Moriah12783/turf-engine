@@ -35,7 +35,7 @@ def make_mirror(path, days=200, races_per_day=18, runners=8, seed=7, leak=False,
     db = HistoryDB(path)
     for d in range(days):
         day = (start + timedelta(days=d)).isoformat()
-        courses, parts, arrs, raps = [], [], [], []
+        courses, parts, arrs, raps, snaps = [], [], [], [], []
         pool = rng.sample(horses, races_per_day * runners)
         for rc in range(races_per_day):
             field = pool[rc * runners:(rc + 1) * runners]
@@ -52,10 +52,20 @@ def make_mirror(path, days=200, races_per_day=18, runners=8, seed=7, leak=False,
             arrs.append(_tuple("arrivees", {"id": d * 100 + rc, "date_course": day, "num_reunion": 1,
                                             "num_course": rc + 1,
                                             "ordre_arrivee": json.dumps([[order[0] + 1], [order[1] + 1]])}))
-            noisy = [np.exp(h["ability"] + rng.gauss(0, 0.8)) for h in field]       # clôture
-            early = [np.exp(h["ability"] + rng.gauss(0, 1.5)) for h in field]       # référence, moins informée
+            base = [h["ability"] + rng.gauss(0, 0.8) for h in field]              # ce que sait la clôture
+            extra = [rng.gauss(0, 1.2) for _ in field]                             # bruit résorbé avant le départ
+            noisy = [np.exp(b) for b in base]                                      # clôture
+            early = [np.exp(b + e) for b, e in zip(base, extra)]                   # référence, moins informée
             total, total_early = sum(noisy), sum(early)
             close = [max(1.1, round(total / x * 0.85, 1)) for x in noisy]         # prélèvement 15 %
+            for minute in (45, 32, 17, 2):                 # photos : de la référence vers la clôture
+                mixed = [np.exp(b + e * minute / 60.0) for b, e in zip(base, extra)]  # T-x : entre les deux
+                tot = sum(mixed)
+                for i, x in enumerate(mixed):
+                    snaps.append(_tuple("cotes_snapshots", {
+                        "id": len(snaps) + d * 100000 + rc * 1000, "date_course": day, "num_reunion": 1,
+                        "num_course": rc + 1, "num_pmu": i + 1, "cote": max(1.1, round(tot / x * 0.85, 1)),
+                        "minutes_avant_depart": minute}))
             raps.append(_tuple("rapports_definitifs", {
                 "date_course": day, "num_reunion": 1, "num_course": rc + 1, "type_pari": "SIMPLE_GAGNANT",
                 "libelle": "Simple gagnant", "combinaison": str(winner + 1),
@@ -82,6 +92,8 @@ def make_mirror(path, days=200, races_per_day=18, runners=8, seed=7, leak=False,
         db.replace_date("courses", day, courses, "t")
         db.replace_date("arrivees", day, arrs, "t")
         db.replace_date("participants", day, parts, "t")
+        if d >= days - 60:                               # photos de cotes : les 60 derniers jours
+            db.replace_date("cotes_snapshots", day, snaps, "t")
         if d % 2 == 0:                                   # rapports officiels : un jour sur deux
             db.replace_date("rapports_definitifs", day, raps, "t")
     db.close()
@@ -186,7 +198,13 @@ def test_rapport_complet_sans_fuite_dans_le_journal(mirror):
         assert secret not in logs
     assert {line.split(" ")[0] for line in logs.strip().splitlines()} <= {
         "BENTER_DONNEES", "BENTER_AUDIT_FUITE", "BENTER_PLI", "BENTER_RESULTAT", "BENTER_RESULTAT_REFERENCE",
-        "BENTER_KELLY", "BENTER_KELLY_TEMOIN"}
+        "BENTER_KELLY", "BENTER_KELLY_TEMOIN", "BENTER_TX"}
+    for h in ("T30", "T15"):
+        tx = report["horizons_de_pari"][h]
+        assert tx["courses_jugees"] > 0 and tx["ic95"][0] <= tx["delta_ll_vs_marche_T_recalibre"] <= tx["ic95"][1]
+        # Les cotes glissent vers la clôture : l'information tardive est positive.
+        assert tx["gain_ll_cloture_vs_T"] > 0
+        assert "paris" in tx["kelly"] and "paris" in tx["kelly_temoin_marche_seul"]
     assert "_comb" not in report and "_recal" not in report                # probabilités par course : jamais
 
 
@@ -237,3 +255,20 @@ def test_simulation_sans_esperance_ne_mise_rien():
     fair = 1 / race.odds / (1 / race.odds).sum()                         # le marché lui-même, sans avantage
     out = lab.simulate_kelly([race], {race.key: fair})
     assert out["paris"] == 0 and out["roi_mise_fixe"] is None
+
+
+def test_choix_de_la_photo_de_cotes():
+    assert lab.pick_snapshot([45, 32, 17, 2], 30) == 32
+    assert lab.pick_snapshot([45, 32, 17, 2], 15) == 17
+    assert lab.pick_snapshot([45, 3], 30) is None                         # 45 min : trop ancienne pour T-30
+    assert lab.pick_snapshot([29, 3], 30) is None                         # jamais une photo prise après T-30
+
+
+def test_kelly_decide_a_T_regle_au_rapport_final():
+    race = _race("2026-08-01", [1.6, 3.2, 6.4], winner=2, dividend=9.0)
+    race.odds_tx = {30: np.array([2.0, 3.0, 12.0])}                       # cotes à T-30
+    probs = {race.key: np.array([0.40, 0.35, 0.25])}
+    # À T-30 : 0.25·12 − 1 = +2.0 ; 0.35·3 − 1 = +0.05 (pas > 5 %) ; 0.40·2 − 1 = −0.2 → un seul pari.
+    out = lab.simulate_kelly([race], probs, lambda r: r.odds_tx.get(30))
+    assert out["paris"] == 1 and out["roi_mise_fixe"] == round(9.0 - 1, 4)   # payé 9,0 (final), pas 12
+    assert out["roi_par_cote"]["cote_5-15"]["paris"] == 1                  # tranche selon la cote de décision
