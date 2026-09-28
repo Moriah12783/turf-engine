@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "8f0677bbd1882cea3e2ec768f1c585768386c3fd",
-  "run_id": "36392691208",
+  "commit": "7b4d993b1e6a06defba036bfbacfb6c42aafa77b",
+  "run_id": "36393371184",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-28",
- "genere_le_utc": "2026-09-28T07:39:15Z",
+ "genere_le_utc": "2026-09-28T07:46:37Z",
  "nb_courses": 39,
  "compte_par_statut": {
   "EN_ATTENTE": 37,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 1,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "8b41befbdbf2bfe02ddb0482b0f0687529f18943a2453d322ce8d4b702c3fb25",
+ "empreinte_sha256": "075675a087d97a2a5decc6640b001b81ad0656b96d449c4ba2fdb8b5f2e11f2e",
  "courses": [
   {
    "course_id": "R1C1_28092026_ENGHIEN",
@@ -1964,7 +1964,7 @@
     "verifiee_le_utc": "2026-09-28T07:15:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-28T07:15:24Z",
-    "derniere_verification_utc": "2026-09-28T07:38:03Z"
+    "derniere_verification_utc": "2026-09-28T07:45:26Z"
    },
    "correction": {
     "version": 1,
@@ -2014,11 +2014,11 @@
     "partants_actifs": 16
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -2038,12 +2038,54 @@
      "num": 8,
      "nom": "NONANT EFBE",
      "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 15,
+     "nom": "NO LIMIT TOR",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 13,
+     "nom": "NINJA DU HOULME",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 14,
+     "nom": "NAVARRIN DU ROYAL",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 9,
+     "nom": "NUAGE DU GUIBEL",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 10,
+     "nom": "NICLOVE PHIL",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 4,
+     "nom": "NOUKAT PARC",
+     "dead_heat": false
     }
    ],
    "arrivee": [
     6,
     1,
-    8
+    8,
+    15,
+    13,
+    14,
+    9,
+    10,
+    4
    ],
    "non_classes": [
     {
@@ -2059,6 +2101,11 @@
     {
      "num": 7,
      "nom": "NATIF DU CHAILLOU",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 11,
+     "nom": "NICE BOY BODENSEE",
      "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
     },
     {
@@ -2088,11 +2135,33 @@
     }
    ],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "6": 6.4
+    },
+    "simple_place": {
+     "6": 3.1,
+     "1": 17.3,
+     "8": 17.3
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "6-1-8",
+      "dividende_pour_1_eur": 3.4
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -2102,14 +2171,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-09-28T07:38:03Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-09-28T07:45:26Z",
+    "verifiee_le_utc": "2026-09-28T07:45:26Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-09-28T07:38:03Z",
-    "derniere_verification_utc": "2026-09-28T07:38:03Z"
+    "derniere_modification_utc": "2026-09-28T07:45:26Z",
+    "derniere_verification_utc": "2026-09-28T07:45:26Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -2122,6 +2191,24 @@
        6,
        1,
        8
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-09-28T07:45:26Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       6,
+       1,
+       8,
+       15,
+       13,
+       14,
+       9,
+       10,
+       4
       ]
      }
     ]
@@ -2149,7 +2236,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
