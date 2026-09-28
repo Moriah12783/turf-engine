@@ -53,13 +53,15 @@ def _log(tag: str, payload: Dict[str, Any]) -> None:
 
 
 def code(raw: Any) -> str:
-    """Valeur brute du flux -> code court (même lecture que daily_sync, plus « protégé »)."""
+    """Valeur brute du flux -> code court. Le flux mêle déferrage et
+    protection (« PROTEGE_ANTERIEURS_DEFERRRE_POSTERIEURS », sic, ou
+    « DEFERRE_ANTERIEURS_PROTEGE_POSTERIEURS ») : les pieds déferrés priment."""
     s = str(raw or "").upper()
     if s == "DEFERRE_ANTERIEURS_POSTERIEURS":
         return "D4"
-    if s == "DEFERRE_ANTERIEURS":
+    if s.startswith("DEFERRE_ANTERIEURS"):
         return "DA"
-    if s == "DEFERRE_POSTERIEURS":
+    if s == "DEFERRE_POSTERIEURS" or ("DEFERR" in s and s.endswith("POSTERIEURS")):
         return "DP"
     if s.startswith("PROTEGE"):
         return "PROTEGE"

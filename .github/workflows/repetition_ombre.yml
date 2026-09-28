@@ -1,0 +1,63 @@
+name: Répétition générale de l'ombre (01-06/10)
+
+# GO de Steph du 28/09 : répétition générale de l'ombre du fondamental, du
+# jeudi 01/10 au mardi 06/10, aux horaires réels de l'ombre (05h05 UTC,
+# secours 05h50). AUCUN effet sur la production :
+#   - copie en lecture seule de la base (turf_bench.db sur R2) ;
+#   - calcul de nuit du jour dans cette copie ;
+#   - envoi sur une clé privée distincte (lab/repetition/turf_bench.db).
+# Les devs NVE et daily_sync récupèrent la copie, enchaînent chez eux le
+# verrou du matin et le moteur, puis lancent le diagnostic de la chaîne.
+# Hors de la fenêtre, le script refuse. Sur une PR : contrôle du circuit sur
+# le programme du lendemain. Dépôt public : journal = agrégats seulement.
+# Voir turf_lab/repetition.py et docs/OMBRE_FONDAMENTAL.md.
+
+on:
+  schedule:
+    - cron: "5 5 1-6 10 *"
+    - cron: "50 5 1-6 10 *"
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "turf_lab/repetition.py"
+      - ".github/workflows/repetition_ombre.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: repetition-ombre
+  cancel-in-progress: false
+
+jobs:
+  repetition:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      PYTHONUNBUFFERED: "1"
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET: ${{ secrets.R2_BUCKET }}
+      PREVU: ${{ github.event.schedule == '50 5 1-6 10 *' && '05:50' || '05:05' }}
+      CONTROLE: ${{ github.event_name == 'pull_request' && '--controle' || '' }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -q --retries 10 --timeout 60 "numpy>=1.26,<3" "boto3>=1.36,<2"
+
+      - name: Fetch the private history mirror from R2 (read-only)
+        run: python -m turf_lab.history_export fetch --db turf_history.db
+
+      - name: Read-only copy of the production bench
+        run: python -m turf_lab.r2_store fetch --db repetition.db
+
+      - name: Night calculation into the copy, sent to the private rehearsal key
+        run: python -m turf_lab.repetition nuit --historique turf_history.db --copie repetition.db --prevu "$PREVU" $CONTROLE

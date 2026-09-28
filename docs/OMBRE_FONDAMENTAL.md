@@ -6,7 +6,11 @@
 - les décisions de Steph du 28/09 : ombre limitée à l'édition du matin, gel de
   NVE limité à 5 semaines ;
 - les précisions du dev NVE du 28/09 sur ces deux points et sur les clés de
-  l'archive.
+  l'archive ;
+- les cinq corrections demandées par le dev NVE du 28/09 après sa relecture
+  du lecteur scellé : courses à moins de 8 partants, horloge ancrée sur
+  `DEBUT_OMBRE`, lecture le 36e jour, étiquette des dead-heats, clause sur la
+  chaîne de verrouillage.
 
 La règle sera **gelée** au plus tard la veille du premier jour d'ombre, dans un
 commit daté qui inscrira la date du gel et le premier jour d'ombre
@@ -14,8 +18,9 @@ commit daté qui inscrira la date du gel et le premier jour d'ombre
 ne change plus. Seule une coquille sans effet sur la règle peut encore être
 corrigée, avec une justification dans le commit.
 
-Rien ne tourne avant le 06/10. Le passage à l'ombre se fait sur la décision
-écrite de Steph et avec le feu vert du dev NVE.
+L'ombre ne tourne pas avant le 06/10. Seule la répétition générale, sans
+effet sur la production, tourne du 01 au 06/10. Le passage à l'ombre se fait
+sur la décision écrite de Steph et avec le feu vert du dev NVE.
 
 Deux verrous tiennent jusqu'au gel :
 
@@ -23,6 +28,45 @@ Deux verrous tiennent jusqu'au gel :
   commit de gel ajoute les deux horaires de nuit.
 - **Aucune écriture.** Le calcul de nuit refuse d'écrire tant que `DEBUT_OMBRE`
   n'est pas inscrit (`OMBRE_PAS_OUVERTE`), même lancé à la main.
+
+## Calendrier (accepté par Steph le 28/09)
+
+| Étape | Date |
+|---|---|
+| Répétition générale | du jeudi 01/10 au mardi 06/10 |
+| Publication du gel : règle, horaires de nuit, partie moteur | mercredi 07/10 |
+| Premier jour d'ombre (`DEBUT_OMBRE`) | jeudi 08/10 |
+| 35e jour | mercredi 11/11 |
+| Lecture unique, au plus tard | jeudi 12/11 |
+
+Au rythme observé (environ 29 éditions éligibles par jour), les 1 000 éditions
+arrivent vers le 35e jour : la lecture tombe vers le 12/11 quel que soit le
+critère atteint en premier.
+
+## Répétition générale (01-06/10)
+
+- **But** : faire tourner toute la chaîne avant le premier jour d'ombre, sans
+  toucher à la production. Un bug trouvé après `DEBUT_OMBRE` remettrait
+  l'horloge à zéro.
+- **Nuit** : chaque matin à 05h05 UTC (secours à 05h50), le workflow
+  `repetition_ombre.yml` fait une copie en lecture seule de la base, y calcule
+  le fondamental du jour et l'envoie sur la clé privée
+  `lab/repetition/turf_bench.db`, jamais sur la base de production.
+- **Matin** : les devs NVE et daily_sync récupèrent la copie
+  (`python -m turf_lab.repetition fetch`) et y enchaînent le verrou du matin et
+  le moteur avec l'ombre. Ils lancent ensuite le diagnostic
+  (`python -m turf_lab.repetition diagnostic --jour AAAA-MM-JJ`).
+- **Confidentialité** : le diagnostic ne compare jamais l'ombre à l'édition
+  publiée. Après le 06/10, l'outil refuse tout.
+- **Critères de réussite, chaque jour** :
+  - calcul fini avant 06h20 UTC et copie envoyée avant 06h28 ;
+  - probabilités fondamentales d'une seule version, de somme 1 par course ;
+  - toutes les éditions du matin éligibles portent une ombre complète, avec
+    une seule clé et la recette A ;
+  - aucun écart sur ce qui est publié (contrôle du dev NVE).
+- **Suites** : un écart est corrigé avant le gel, sans effet sur la règle. Si
+  le retard de déclenchement des horaires GitHub menace la limite de 06h20, le
+  commit de gel avance les horaires de nuit.
 
 ## Ce qui tourne
 
@@ -72,7 +116,7 @@ Elle se trouve dans les métadonnées de l'édition du matin, sous la clé
 | `nve_version` | la constante `NVE_VERSION` de `engine.py`, figée pendant l'ombre |
 | `train_until` | la dernière journée d'historique du modèle |
 | `probabilities` | les probabilités de l'ombre, arrondies à 4 décimales, avec les mêmes clés que `probabilities_json` |
-| `selection` | les 10 chevaux de l'ombre, calculés par le même code et avec le même départage que la production |
+| `selection` | les 10 chevaux de l'ombre (tous les partants s'il y en a moins), calculés par le même code et avec le même départage que la production |
 | `fondamental` | les probabilités fondamentales renormalisées sur les partants valides (pour concevoir une recette B sans rien recalculer) |
 
 **Confidentialité.** L'archive reste dans la base privée sur R2. Ni le banc, ni
@@ -107,7 +151,10 @@ l'ombre n'est donc visible publiquement avant la lecture.
   (`market_calibration.applied`, poids marché 0,90).
 - **Probabilités** : celles archivées au verrou, sans renormalisation.
 - **Gagnant** : arrivée définitive. En cas de dead-heat pour la première place,
-  la course est exclue et comptée.
+  la course est exclue, hors couverture, et comptée sous sa propre étiquette
+  (`dead_heat_premiere_place`).
+- **Petits champs** : une course à moins de 8 partants compte comme les
+  autres. Sa sélection d'ombre contient tous ses partants.
 - **Intervalle** : apparié, par bootstrap de **réunions** entières (4 000
   tirages, graine fixe).
 
@@ -118,8 +165,16 @@ l'ombre n'est donc visible publiquement avant la lecture.
     verrous, au plus tôt le lendemain de la 1 000e ;
   - ou, si les 1 000 ne sont pas atteintes au bout de **35 jours**, toutes les
     éditions des 35 premiers jours, à partir du 36e jour.
+- **Horloge.** Le jour 1 est `DEBUT_OMBRE`. Les nuits manquées des premiers
+  jours comptent donc dans la couverture et n'allongent pas le gel. Après un
+  correctif de bug bloquant seulement, l'horloge repart de la première
+  édition de la version corrigée.
 - **Aucune lecture intermédiaire.** Avant, le script de lecture ne rend que le
   compteur. Une lecture rendue ne change plus.
+- **Archivage.** La lecture est lancée une seule fois, le jour prévu. Sa
+  sortie complète est archivée dans la base privée sur R2, avec son empreinte
+  (SHA-256 des courses retenues et de leurs écarts). Une relance ne sert qu'à
+  vérifier l'empreinte.
 - **Éditions retenues** : seulement celles qui portent les mêmes
   `model_version`, `nve_version` et recette.
 - **Passage en production**, pour l'édition du matin seulement et sur décision
@@ -146,7 +201,8 @@ l'ombre n'est donc visible publiquement avant la lecture.
 ## Couverture
 
 La couverture est la part des éditions éligibles, avec arrivée définitive, qui
-portent une ombre complète. Elle est journalisée. Si elle passe **sous 90 %**
+portent une ombre complète, depuis le jour 1 de l'horloge. Elle est
+journalisée. Si elle passe **sous 90 %**
 au moment de la lecture, la lecture est rendue mais **la décision est
 suspendue** jusqu'à explication. Un trou non aléatoire, par exemple une réunion
 entière manquante, biaiserait l'échantillon.
@@ -163,6 +219,19 @@ entière manquante, biaiserait l'échantillon.
   - du fondamental, avec un nouveau `model_version` (empreinte du seul code du
     modèle) ;
   - ou de NVE, avec une nouvelle `NVE_VERSION`.
+- **Code du modèle.** Le code couvert par `model_version` (chargement,
+  variables, apprentissage, conversion du programme) est gelé comme NVE. Un
+  ajout au fondamental, par exemple le déferrage, se fait avant le gel ou
+  après la lecture.
+- **Chaîne de verrouillage.** Pendant l'ombre, aucun changement de la chaîne
+  qui produit l'édition du matin : daily_sync, verrou, filtres,
+  enrichissement, stockage. Sont visés en particulier l'étape 2 de la
+  migration R2, le filtre de fraîcheur et la ligne d'enrichissement. Ces
+  changements sont faits avant le gel ou reportés après la lecture. Si l'un
+  d'eux devient inévitable (bug bloquant), il est annoncé et daté dans cette
+  règle, et `NVE_VERSION` change dans le même déploiement. Le compteur et
+  l'horloge repartent alors à zéro, et on ne mesure jamais deux régimes
+  mélangés.
 - **Traçabilité.** Chaque ligne porte `train_until`, pour que tout calcul
   puisse être rejoué.
 
