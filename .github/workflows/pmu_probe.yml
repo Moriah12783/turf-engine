@@ -1,0 +1,53 @@
+name: Sonde PMU (rapports probables des paris combinés)
+
+# Sonde ponctuelle de l'API publique PMU : n'écrit que la FORME des réponses
+# (statut, clés, tailles), jamais leur contenu. Aucun secret, aucune requête
+# au Radar, aucun effet sur la production. Voir turf_lab/pmu_probe.py.
+
+on:
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "Date JJMMAAAA (vide = aujourd'hui, heure de Paris)"
+        required: false
+        default: ""
+      reunion:
+        description: "Numéro de réunion (vide = prochaine course)"
+        required: false
+        default: ""
+      course:
+        description: "Numéro de course (vide = prochaine course)"
+        required: false
+        default: ""
+  pull_request:
+    paths:
+      - "turf_lab/pmu_probe.py"
+      - ".github/workflows/pmu_probe.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  sonde:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Probe PMU probable payouts endpoints
+        env:
+          PYTHONUNBUFFERED: "1"
+          IN_DATE: ${{ github.event.inputs.date }}
+          IN_REUNION: ${{ github.event.inputs.reunion }}
+          IN_COURSE: ${{ github.event.inputs.course }}
+        run: |
+          ARGS=()
+          [ -n "$IN_DATE" ] && ARGS+=(--date "$IN_DATE")
+          [ -n "$IN_REUNION" ] && [ -n "$IN_COURSE" ] && ARGS+=(--reunion "$IN_REUNION" --course "$IN_COURSE")
+          python -m turf_lab.pmu_probe "${ARGS[@]}"
