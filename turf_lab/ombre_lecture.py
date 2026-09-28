@@ -199,6 +199,17 @@ def read(bench_path: str, debut: Optional[str] = None, today: Optional[str] = No
     if not correctif:
         start = 0
     clock = matin[start]["day"] if correctif else debut
+    # Règle fixée d'avance : une seule remise à zéro, et seulement si la
+    # version corrigée démarre dans les 14 premiers jours. Sinon, l'ombre se
+    # termine sans passage en production : aucune lecture.
+    remises = sum(1 for (_, a), (_, b) in zip(shadows, shadows[1:]) if a["cle"] != b["cle"])
+    limite = (date.fromisoformat(debut) + timedelta(days=ombre.DELAI_REMISE_JOURS - 1)).isoformat()
+    if remises > ombre.REMISES_MAX or (correctif and clock > limite):
+        out = {"debut": debut, "remises_a_zero": remises, "depart_version_courante": clock,
+               "limite_remise": limite, "motif": "REMISE_A_ZERO_HORS_REGLE",
+               "decision": "FIN_SANS_PREUVE_NVE_DEGELE"}
+        _log("OMBRE_ARRET", out)
+        return out
     fin = (date.fromisoformat(clock) + timedelta(days=ombre.DUREE_MAX_JOURS - 1)).isoformat()      # 35e jour
     lecture_max = (date.fromisoformat(clock) + timedelta(days=ombre.DUREE_MAX_JOURS)).isoformat()  # 36e jour
     rows, excl, seen = [], defaultdict(int), 0

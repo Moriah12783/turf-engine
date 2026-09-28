@@ -100,11 +100,12 @@ def test_nuit_hors_delai_a_expliquer(mirror, tmp_path, fenetre_miroir):
     assert not rep["envoi_avant_06h28"] and rep["verdict"] == "A_EXPLIQUER"
 
 
-def _add_fundamental(path, version="fond-v1"):
+def _add_fundamental(path, version="fond-v1", create=True):
     """Table fundamental_probs tirée de la clé ``fondamental`` des archives."""
     conn = sqlite3.connect(path)
-    conn.execute("CREATE TABLE fundamental_probs (race_id TEXT, num INTEGER, p REAL, model_version TEXT, "
-                 "computed_at TEXT, train_until TEXT)")
+    if create:
+        conn.execute("CREATE TABLE fundamental_probs (race_id TEXT, num INTEGER, p REAL, model_version TEXT, "
+                     "computed_at TEXT, train_until TEXT)")
     for race_id, meta in conn.execute("SELECT race_id, metadata_json FROM predictions").fetchall():
         arch = json.loads(meta).get("ombre_fondamental") or {}
         fond = arch.get("fondamental") or {str(n): 0.1 for n in range(1, 11)}
@@ -131,3 +132,17 @@ def test_diagnostic_de_la_chaine(tmp_path, monkeypatch):
     assert ko["archive_absente"] == 6 and ko["verdict"] == "A_EXPLIQUER"
     hors, _ = _quiet(repetition.diagnostic, ok_path, "2026-10-09")
     assert hors["refus"] == "HORS_FENETRE"
+    # Cas relevé par le dev NVE : une course qui somme à 1,2 et deux versions.
+    conn = sqlite3.connect(ok_path)
+    race = conn.execute("SELECT race_id FROM fundamental_probs LIMIT 1").fetchone()[0]
+    conn.execute("UPDATE fundamental_probs SET p = p * 1.2 WHERE race_id = ?", (race,))
+    conn.commit()
+    conn.close()
+    somme, _ = _quiet(repetition.diagnostic, ok_path, "2026-10-07")
+    assert somme["ecart_somme_max"] > 0.19 and somme["verdict"] == "A_EXPLIQUER"
+    deux = make_bench(str(tmp_path / "deux.db"), 30)
+    _add_fundamental(deux)
+    _add_fundamental(deux, version="fond-v0", create=False)
+    v2, _ = _quiet(repetition.diagnostic, deux, "2026-10-07")
+    assert v2["versions_fondamental"] == ["fond-v0", "fond-v1"] and v2["verdict"] == "A_EXPLIQUER"
+

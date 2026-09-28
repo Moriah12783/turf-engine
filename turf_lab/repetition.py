@@ -42,6 +42,7 @@ from turf_lab import fondamental_nuit, ombre, ombre_lecture, r2_store
 FENETRE = ("2026-10-01", "2026-10-06")          # répétition : du jeudi 01/10 au mardi 06/10
 REPETITION_KEY = "lab/repetition/turf_bench.db"  # clé privée distincte de la base de production
 LIMITE_ENVOI_UTC = (6, 28)                       # comme la nuit de l'ombre : aucun envoi après 06h28
+TOLERANCE_SOMME = 1e-4                           # probabilités fondamentales : somme 1 par course
 
 
 class RepetitionRefus(RuntimeError):
@@ -172,7 +173,8 @@ def diagnostic(copie_path: str, jour: str) -> Dict[str, Any]:
             compte["archive_incomplete"] += 1
     cles_list = [list(c) for c in sorted(cles, key=str)]
     ok = (bool(eligibles) and compte["avec_ombre_complete"] == len(eligibles) and len(cles) == 1
-          and all(c[0] in versions and c[2] == ombre.RECETTE for c in cles))
+          and all(c[0] in versions and c[2] == ombre.RECETTE for c in cles)
+          and len(versions) == 1 and ecart is not None and ecart <= TOLERANCE_SOMME)
     out = {"jour": jour, "courses_fondamental": len(fond), "versions_fondamental": versions,
            "ecart_somme_max": None if ecart is None else round(ecart, 6),
            "editions_matin": len(matin), "editions_eligibles": len(eligibles), **dict(compte),
