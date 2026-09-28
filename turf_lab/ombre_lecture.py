@@ -9,13 +9,16 @@ UNE SEULE lecture, à l'édition du matin :
   - ou, si les 1 000 ne sont pas atteintes, sur toutes les éditions des
     35 premiers jours, à partir du 36e jour.
 Avant : seul le COMPTEUR est rendu. Seules comptent les éditions portant les
-mêmes ``model_version``, ``nve_version`` et recette ; un changement de code
-(bug bloquant seulement) remet à zéro le compteur ET l'horloge des 35 jours.
+mêmes ``model_version``, ``nve_version`` et recette. L'horloge part de
+DEBUT_OMBRE (jour 1) ; un changement de code (bug bloquant seulement) remet
+à zéro le compteur ET l'horloge, qui repart de la première édition de la
+version corrigée.
 
 Usage : python -m turf_lab.ombre_lecture --banc copie_turf_bench.db
 """
 
 import argparse
+import hashlib
 import json
 import math
 import re
@@ -79,6 +82,7 @@ def load(bench_path: str, debut: str) -> Tuple[Dict[str, Dict[str, Dict[str, Any
         firsts = [int(r["num"]) for r in ranking if int(r.get("rang") or 0) == 1]
         top3 = [int(r["num"]) for r in ranking if 1 <= int(r.get("rang") or 0) <= 3]
         results[row["race_id"]] = {"gagnant": firsts[0] if len(firsts) == 1 else None,
+                                   "dead_heat": len(firsts) > 1,
                                    "tierce": top3 if len(top3) >= 3 else None}
     conn.close()
     return editions, results
@@ -93,8 +97,9 @@ def is_eligible(ed: Dict[str, Any]) -> bool:
 def shadow_of(ed: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     """Ombre archivée et complète : une probabilité (arrondie à 4 décimales,
     mêmes clés que ``probabilities_json``) par partant publié, et la sélection
-    de l'ombre (10 chevaux, même code et même départage que la production).
-    Sinon : pas d'ombre pour cette édition (jamais d'ombre partielle)."""
+    de l'ombre (10 chevaux, tous les partants s'il y en a moins ; même code
+    et même départage que la production). Sinon : pas d'ombre pour cette
+    édition (jamais d'ombre partielle)."""
     sh = ed["meta"].get(META_OMBRE)
     if not isinstance(sh, dict):
         return None
@@ -105,7 +110,7 @@ def shadow_of(ed: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         return None
     if not probs or set(probs) != set(ed["probs"]) or any(v < 0 for v in probs.values()) or sum(probs.values()) <= 0:
         return None
-    if len(selection) < 8 or not set(selection) <= set(probs):
+    if len(selection) < min(8, len(probs)) or not set(selection) <= set(probs):
         return None
     return {"probs": probs, "selection": selection,
             "cle": (sh.get("model_version"), sh.get("nve_version"), sh.get("recette"))}
@@ -156,11 +161,14 @@ def reading(sample: List[Dict[str, Any]], coverage: float, results, mode: str) -
         decision = "PASSAGE_BLOQUE_CRITERE_SECONDAIRE"
     else:
         decision = "FIN_SANS_PREUVE_NVE_DEGELE"
+    # Empreinte des courses retenues et de leurs écarts : la sortie archivée
+    # de la lecture unique reste vérifiable par une relance.
+    empreinte = hashlib.sha256(json.dumps([[r["race_id"], round(r["delta"], 6)] for r in sample]).encode()).hexdigest()
     return {"mode": mode, "editions": len(sample), "reunions": len(set(clusters)), "couverture": round(coverage, 4),
             "premier_jour": sample[0]["day"], "dernier_jour": sample[-1]["day"],
             "delta_ll": round(float(np.mean(deltas)), 5), "ic95": [round(lo, 5), round(hi, 5)],
             "ic95_inutilite": [round(lo_i, 5), round(hi_i, 5)], "criteres_secondaires": secondary,
-            "echecs_secondaires": failures, "decision": decision}
+            "echecs_secondaires": failures, "decision": decision, "empreinte": empreinte}
 
 
 def read(bench_path: str, debut: Optional[str] = None, today: Optional[str] = None) -> Dict[str, Any]:
@@ -178,22 +186,34 @@ def read(bench_path: str, debut: Optional[str] = None, today: Optional[str] = No
         out = {"debut": debut, "editions_eligibles": len(matin), "editions_avec_ombre": 0}
         _log("OMBRE_COMPTEUR", out)
         return out
-    # Compteur ET horloge repartent de la première édition portant la clé
-    # courante (model_version, nve_version, recette).
-    key, start = shadows[-1][1]["cle"], shadows[-1][0]
+    # Clé courante (model_version, nve_version, recette). Première version :
+    # compteur, couverture et horloge partent de DEBUT_OMBRE (les nuits
+    # manquées comptent). Après un correctif (nouvelle clé) : de la première
+    # édition de la version corrigée.
+    key, start, correctif = shadows[-1][1]["cle"], shadows[-1][0], False
     for i, sh in reversed(shadows):
         if sh["cle"] != key:
+            correctif = True
             break
         start = i
-    clock = max(debut, matin[start]["day"])
-    deadline = (date.fromisoformat(clock) + timedelta(days=ombre.DUREE_MAX_JOURS)).isoformat()
+    if not correctif:
+        start = 0
+    clock = matin[start]["day"] if correctif else debut
+    fin = (date.fromisoformat(clock) + timedelta(days=ombre.DUREE_MAX_JOURS - 1)).isoformat()      # 35e jour
+    lecture_max = (date.fromisoformat(clock) + timedelta(days=ombre.DUREE_MAX_JOURS)).isoformat()  # 36e jour
     rows, excl, seen = [], defaultdict(int), 0
     for ed in matin[start:]:
-        if ed["day"] >= deadline:
+        if ed["day"] > fin:
             break
         res = results.get(ed["race_id"])
-        if res is None or res["gagnant"] is None:
+        if res is None:
             excl["sans_arrivee_definitive"] += 1
+            continue
+        if res["dead_heat"]:
+            excl["dead_heat_premiere_place"] += 1
+            continue
+        if res["gagnant"] is None:
+            excl["arrivee_sans_gagnant"] += 1
             continue
         seen += 1
         sh = shadow_of(ed)
@@ -212,17 +232,18 @@ def read(bench_path: str, debut: Optional[str] = None, today: Optional[str] = No
                      "selection_ombre": sh["selection"],
                      "delta": math.log(max(sh["probs"][w], ombre.PLANCHER))
                      - math.log(max(ed["probs"][w], ombre.PLANCHER))})
-    out: Dict[str, Any] = {"debut": debut, "horloge_depart": clock, "fin_des_35_jours": deadline,
+    out: Dict[str, Any] = {"debut": debut, "horloge_depart": clock, "fin_des_35_jours": fin,
+                           "lecture_au_plus_tard": lecture_max,
                            "model_version": key[0], "nve_version": key[1], "recette": key[2],
                            "editions_eligibles": seen, "editions_avec_ombre": len(rows), "exclusions": dict(excl)}
     n = ombre.LECTURE
     if len(rows) >= n and today > rows[n - 1]["day"]:
         out["lecture"] = reading(rows[:n], n / rows[n - 1]["rang_eligible"], results, "1000_editions")
-    elif len(rows) < n and today > deadline and rows:
+    elif len(rows) < n and today >= lecture_max and rows:
         out["lecture"] = reading(rows, len(rows) / max(seen, 1), results, "35_jours")
     else:
-        out["prochaine_lecture"] = (f"à {n} éditions ou à partir du {deadline} (fin des {ombre.DUREE_MAX_JOURS} "
-                                    "jours) ; aucune lecture intermédiaire")
+        out["prochaine_lecture"] = (f"le lendemain de la {n}e édition, ou le {lecture_max} au plus tard "
+                                    f"({ombre.DUREE_MAX_JOURS + 1}e jour) ; aucune lecture intermédiaire")
     _log("OMBRE_LECTURE" if "lecture" in out else "OMBRE_COMPTEUR", out)
     return out
 

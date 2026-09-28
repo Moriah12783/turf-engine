@@ -55,7 +55,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install -q "numpy>=1.26,<3" "boto3>=1.36,<2"
+        run: pip install -q --retries 10 --timeout 60 "numpy>=1.26,<3" "boto3>=1.36,<2"
 
       - name: Fetch the private history mirror from R2 (read-only)
         run: python -m turf_lab.history_export fetch --db turf_history.db
