@@ -63,7 +63,10 @@ critère atteint en premier.
   - probabilités fondamentales d'une seule version, de somme 1 par course ;
   - toutes les éditions du matin éligibles portent une ombre complète, avec
     une seule clé et la recette A ;
-  - aucun écart sur ce qui est publié (contrôle du dev NVE).
+  - aucun écart sur ce qui est publié (contrôle du dev NVE : pour chaque
+    course du matin, empreinte des champs publiés sur la copie et en
+    production). Sur la semaine, au moins 20 courses à cotes du verrou
+    identiques, toutes avec la même empreinte.
 - **Suites** : un écart est corrigé avant le gel, sans effet sur la règle. Si
   le retard de déclenchement des horaires GitHub menace la limite de 06h20, le
   commit de gel avance les horaires de nuit.
@@ -213,6 +216,13 @@ entière manquante, biaiserait l'échantillon.
   aussi** : poids marché 0,90, capteurs, sélection.
 - **Durée.** Le gel dure **5 semaines au plus** (décision de Steph du 28/09).
   Le prolonger demande l'accord écrit de Steph.
+- **Remise à zéro : une seule, fixée d'avance** (décision de Steph). Un
+  correctif de bug bloquant ne remet le compteur et l'horloge à zéro que
+  s'il est le premier, et si la version corrigée démarre dans les
+  **14 premiers jours** de l'ombre. Sinon, l'ombre se termine sans passage
+  en production et NVE est dégelé ; toute reprise est une nouvelle
+  expérience. Le gel de NVE dure donc au plus 14 + 35 jours, sans qu'aucune
+  prolongation reste à décider pendant l'ombre.
 - **Changements de code.** Pendant l'ombre, un changement de code n'est permis
   **que pour un bug bloquant**. Il remet à zéro **le compteur et l'horloge des
   35 jours**, que le changement vienne :
@@ -229,8 +239,10 @@ entière manquante, biaiserait l'échantillon.
   migration R2, le filtre de fraîcheur et la ligne d'enrichissement. Ces
   changements sont faits avant le gel ou reportés après la lecture. Si l'un
   d'eux devient inévitable (bug bloquant), il est annoncé et daté dans cette
-  règle, et `NVE_VERSION` change dans le même déploiement. Le compteur et
-  l'horloge repartent alors à zéro, et on ne mesure jamais deux régimes
+  règle, et `NVE_VERSION` change dans le même déploiement : c'est le dev
+  NVE qui publie ce changement de version, avec le correctif du dev
+  daily_sync. Le compteur et l'horloge repartent alors à zéro (dans la limite
+  de la règle de remise à zéro), et on ne mesure jamais deux régimes
   mélangés.
 - **Traçabilité.** Chaque ligne porte `train_until`, pour que tout calcul
   puisse être rejoué.
@@ -258,6 +270,8 @@ entière manquante, biaiserait l'échantillon.
 | COUVERTURE_MIN | 0.90 |
 | SEUIL_NON_DEGRADATION | -0.02 |
 | HORIZONS_SECONDAIRES | T_MATIN |
+| REMISES_MAX | 1 |
+| DELAI_REMISE_JOURS | 14 |
 | BOOTSTRAP_TIRAGES | 4000 |
 | GRAINE | 20260928 |
 | HEURE_LIMITE_UTC | 06:20 |

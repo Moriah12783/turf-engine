@@ -33,6 +33,7 @@ def test_constantes_identiques_au_document():
     assert float(rows["COUVERTURE_MIN"]) == ombre.COUVERTURE_MIN
     assert float(rows["SEUIL_NON_DEGRADATION"]) == ombre.SEUIL_NON_DEGRADATION
     assert tuple(rows["HORIZONS_SECONDAIRES"].split(", ")) == ombre.HORIZONS_SECONDAIRES == ("T_MATIN",)
+    assert int(rows["REMISES_MAX"]) == ombre.REMISES_MAX and int(rows["DELAI_REMISE_JOURS"]) == ombre.DELAI_REMISE_JOURS
     assert int(rows["BOOTSTRAP_TIRAGES"]) == ombre.BOOTSTRAP_TIRAGES and int(rows["GRAINE"]) == ombre.GRAINE
     assert tuple(int(x) for x in rows["HEURE_LIMITE_UTC"].split(":")) == fondamental_nuit.HEURE_LIMITE_UTC
     assert int(rows["RETARD_MAX_JOURS"]) == fondamental_nuit.RETARD_MAX_JOURS
@@ -50,7 +51,8 @@ def _softmax(x):
 
 
 def make_bench(path, n, per_day=30, shadow="meilleure", missing_every=None, switch_at=None, bad_selection=False,
-               no_selection=False, seed=3, small_every=None, missing_first=0, dead_heat_every=None):
+               no_selection=False, seed=3, small_every=None, missing_first=0, dead_heat_every=None,
+               switch2_at=None):
     """n courses de 10 partants (7 une course sur ``small_every``), réunions
     de 10 courses ; édition publiée bruitée, ombre plus proche de la vérité
     (ou inversée). L'archive porte les clés convenues avec le dev NVE, dont
@@ -72,6 +74,8 @@ def make_bench(path, n, per_day=30, shadow="meilleure", missing_every=None, swit
         pub = _softmax(0.5 * s + rng.normal(0, 0.9, m))
         sh = _softmax(0.95 * s + rng.normal(0, 0.3, m)) if shadow == "meilleure" else _softmax(-s)
         version = "fond-v1" if switch_at is None or i < switch_at else "fond-v2"
+        if switch2_at is not None and i >= switch2_at:
+            version = "fond-v3"
         meta = {"market_calibration": {"applied": True, "market_weight": 0.9}}
         sel_ombre = [nums[j] for j in np.argsort(-sh)]
         if bad_selection:                                      # l'ombre écarte le gagnant de ses 8
@@ -194,3 +198,14 @@ def test_horloge_et_couverture_partent_de_debut_ombre(tmp_path):
 def test_dead_heat_a_sa_propre_etiquette(tmp_path):
     rep, _ = _read(make_bench(str(tmp_path / "b.db"), 300, dead_heat_every=50), today="2026-10-10")
     assert rep["exclusions"] == {"dead_heat_premiere_place": 6} and rep["editions_eligibles"] == 294
+
+
+def test_une_seule_remise_a_zero_dans_les_14_premiers_jours(tmp_path):
+    # Seconde remise à zéro : l'ombre se termine sans lecture.
+    second, logs = _read(make_bench(str(tmp_path / "a.db"), 1100, switch_at=90, switch2_at=300))
+    assert second["remises_a_zero"] == 2 and second["decision"] == "FIN_SANS_PREUVE_NVE_DEGELE"
+    assert "lecture" not in second and logs.startswith("OMBRE_ARRET ") and "delta" not in logs
+    # Version corrigée démarrée le 15e jour : trop tard.
+    tardive, _ = _read(make_bench(str(tmp_path / "b.db"), 1100, switch_at=420))
+    assert tardive["depart_version_courante"] == "2026-10-21" and tardive["limite_remise"] == "2026-10-20"
+    assert tardive["motif"] == "REMISE_A_ZERO_HORS_REGLE" and "lecture" not in tardive
