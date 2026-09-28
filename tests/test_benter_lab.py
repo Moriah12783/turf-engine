@@ -272,3 +272,42 @@ def test_kelly_decide_a_T_regle_au_rapport_final():
     out = lab.simulate_kelly([race], probs, lambda r: r.odds_tx.get(30))
     assert out["paris"] == 1 and out["roi_mise_fixe"] == round(9.0 - 1, 4)   # payé 9,0 (final), pas 12
     assert out["roi_par_cote"]["cote_5-15"]["paris"] == 1                  # tranche selon la cote de décision
+
+
+def _bench(path, races, engine_probs):
+    """Base de banc minimale : table predictions au format de turf_bench.db."""
+    import sqlite3
+    conn = sqlite3.connect(path)
+    conn.execute("CREATE TABLE predictions (prediction_id TEXT, race_id TEXT, engine_name TEXT, horizon TEXT, "
+                 "probabilities_json TEXT)")
+    for r in races:
+        d = date.fromisoformat(r.day)
+        race_id = f"R{r.key[1]}C{r.key[2]}_{d.strftime('%d%m%Y')}_SYNTH"
+        for (engine, horizon), fn in engine_probs.items():
+            probs = fn(r)
+            if probs is not None:
+                conn.execute("INSERT INTO predictions VALUES (?, ?, ?, ?, ?)",
+                             (f"{race_id}_{engine}_{horizon}", race_id, engine, horizon, json.dumps(probs)))
+    conn.commit()
+    conn.close()
+
+
+def test_apport_du_fondamental_aux_moteurs_du_banc(mirror):
+    races, _ = lab.load_races(mirror)
+    lab.build_features(races)
+    wf = lab.fundamental_walk_forward(races, list(lab.FEATURES))
+    recent = [r for r in races if r.day >= "2026-01-01"]
+    with tempfile.TemporaryDirectory() as d:
+        path = os.path.join(d, "turf_bench.db")
+        _bench(path, recent, {
+            # Moteur sans information (uniforme) : le fondamental doit beaucoup lui apporter.
+            ("NEW_VALUE_ENGINE", "T30"): lambda r: {str(x["num_pmu"]): 1.0 for x in r.runners},
+            # Moteur qui publie une probabilité manquante : course écartée.
+            ("ETPE_ENGINE", "T_MATIN"): lambda r: {str(x["num_pmu"]): 0.1 for x in r.runners[1:]},
+        })
+        report = lab.evaluate_bench(races, wf["oos"], lab.load_bench(path))
+    nve = report["NEW_VALUE_ENGINE_T30"]
+    assert nve["courses_jugees"] > 0 and nve["apport_demontre"] is True
+    assert nve["delta_ll_vs_moteur_recalibre"] > 0.05 and nve["beta_fondamental_moyen"] > 0
+    assert report["ETPE_ENGINE_T_MATIN"]["courses"] == 0
+    assert report["MARKET_BASELINE_T_MATIN"]["courses"] == 0                 # moteur absent du banc

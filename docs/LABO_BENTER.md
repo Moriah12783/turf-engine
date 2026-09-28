@@ -95,6 +95,23 @@ En pari mutuel, on mise **avant** le départ mais on est payé à la cote
 - Kelly **décidé aux cotes de T-x**, **réglé au rapport final** ; témoin sur
   le marché de T-x seul.
 
+## Apport au produit : les moteurs publiés + le fondamental (`BENTER_BANC`)
+
+Question : le fondamental améliore-t-il les probabilités que **nos moteurs
+publient** (base du banc `turf_bench.db`, lue sur R2 en lecture seule) à
+l'**édition du matin** (`T_MATIN`) et à **T-30** (l'horizon envoyé aux
+abonnés) ?
+
+- Pour chaque moteur (`MARKET_BASELINE`, `NEW_VALUE_ENGINE`,
+  `ETPE_ENGINE`, `RADAR_V4`) et chaque horizon : combinaison
+  `p ∝ exp(a·log p_moteur + b·log p_fondamental)` apprise semaine par
+  semaine sur les semaines précédentes (au moins 300 courses).
+- Juge : gain de log-vraisemblance face au moteur seul recalibré, avec IC
+  95 % ; taux de gagnant en tête (moteur contre combinaison).
+- Un gain démontré ici se traduit directement en pronostics plus justes
+  pour les abonnés : c'est la voie « produit » décidée le 28/09. Intégration
+  dans le moteur de production après le 06/10, avec le dev concerné.
+
 ## Résultats du 28/09/2026 (miroir au 27/09, 15 282 courses)
 
 | Test | Courses | Gain ll/course vs marché recalibré (IC 95 %) | β fondamental | Mises (ROI mise fixe, IC 95 %) |

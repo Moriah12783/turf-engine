@@ -46,5 +46,8 @@ jobs:
       - name: Fetch the private history mirror from R2
         run: python -m turf_lab.history_export fetch --db turf_history.db
 
+      - name: Fetch the bench database from R2 (read-only, fingerprint verified)
+        run: python -m turf_lab.r2_store fetch --db turf_bench.db
+
       - name: Run the Benter lab (report goes to private R2 only)
-        run: python -m turf_lab.benter_lab --db turf_history.db
+        run: python -m turf_lab.benter_lab --db turf_history.db --banc turf_bench.db

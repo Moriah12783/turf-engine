@@ -21,6 +21,9 @@ Méthode (docs/LABO_BENTER.md, métrique unique de docs/PROTOCOLE_MOTEURS.md) :
      combinées, réglées au rapport officiel. Décision aux cotes finales :
      BORNE HAUTE (en pari mutuel, la cote finale n'est connue qu'au départ).
      Témoin : la même stratégie sur le marché seul ne doit presque rien miser.
+  7. Apport au PRODUIT : sur les courses du banc (``turf_bench.db``), le
+     fondamental améliore-t-il les probabilités publiées par chaque moteur à
+     l'édition du matin et à T-30 ? Combinaison apprise semaine par semaine.
   6. Horizon réel de pari (T-30, T-15) : cotes de la dernière photo
      ``cotes_snapshots`` prise au moins H minutes avant le départ (au plus
      H+10) ; combinaison apprise semaine par semaine sur les semaines
@@ -64,6 +67,10 @@ KELLY_FRACTION = 0.25           # quart de Kelly
 EV_MIN = 0.05                   # espérance minimale d'un pari (+5 %)
 MAX_RACE_EXPOSURE = 0.05        # au plus 5 % de la bankroll par course
 TX_HORIZONS = (30, 15, 5)       # minutes avant le départ
+BENCH_ENGINES = ("MARKET_BASELINE", "NEW_VALUE_ENGINE", "ETPE_ENGINE", "RADAR_V4")
+BENCH_HORIZONS = ("T_MATIN", "T30")
+BENCH_MIN_PRIOR = 300
+_RACE_ID = re.compile(r"^R(\d+)C(\d+)_(\d{2})(\d{2})(\d{4})")
 TX_MAX_STALENESS = 10           # la photo doit dater d'au plus H+10 minutes
 TX_MIN_PRIOR = 400              # courses minimales pour apprendre la combinaison à T-x
 ODDS_BUCKETS = (("cote_<5", 1.0, 5.0), ("cote_5-15", 5.0, 15.0), ("cote_>15", 15.0, float("inf")))
@@ -594,6 +601,89 @@ def evaluate_tx(races: Sequence[Race], oos: Dict, horizon: int) -> Dict[str, Any
     return out
 
 
+# ── Apport au produit : moteurs du banc + fondamental ────────────────────
+def load_bench(path: str) -> Dict[Tuple[str, str], Dict[Tuple[str, int, int], Dict[int, float]]]:
+    """(moteur, horizon) -> course -> {numéro PMU: probabilité publiée}."""
+    out: Dict[Tuple[str, str], Dict[Tuple[str, int, int], Dict[int, float]]] = defaultdict(dict)
+    conn = sqlite3.connect(path)
+    marks = ",".join("?" * len(BENCH_ENGINES)), ",".join("?" * len(BENCH_HORIZONS))
+    for race_id, engine, horizon, probs in conn.execute(
+            f"SELECT race_id, engine_name, horizon, probabilities_json FROM predictions "
+            f"WHERE engine_name IN ({marks[0]}) AND horizon IN ({marks[1]})", (*BENCH_ENGINES, *BENCH_HORIZONS)):
+        m = _RACE_ID.match(str(race_id or ""))
+        if not m or not probs:
+            continue
+        try:
+            parsed = {int(k): float(v) for k, v in json.loads(probs).items()}
+        except (TypeError, ValueError):
+            continue
+        key = (f"{m.group(5)}-{m.group(4)}-{m.group(3)}", int(m.group(1)), int(m.group(2)))
+        out[(engine, horizon)][key] = parsed
+    conn.close()
+    return out
+
+
+def _engine_probs(race: Race, published: Dict[int, float]) -> Optional[np.ndarray]:
+    """Probabilités du moteur alignées sur les partants ; il en faut pour tous."""
+    vals = [published.get(int(r["num_pmu"])) for r in race.runners]
+    if any(v is None or v <= 0 for v in vals):
+        return None
+    arr = np.array(vals, dtype=float)
+    return arr / arr.sum()
+
+
+def evaluate_bench(races: Sequence[Race], oos: Dict, bench: Dict) -> Dict[str, Any]:
+    """Pour chaque moteur et horizon du banc : gain de log-vraisemblance si l'on
+    combine ses probabilités publiées avec le fondamental, face au moteur seul
+    recalibré ; combinaison apprise semaine par semaine sur le passé."""
+    results: Dict[str, Any] = {}
+    for engine in BENCH_ENGINES:
+        for horizon in BENCH_HORIZONS:
+            published = bench.get((engine, horizon)) or {}
+            probs: Dict[Tuple[str, int, int], np.ndarray] = {}
+            for r in races:
+                if r.key in published and r.key in oos:
+                    arr = _engine_probs(r, published[r.key])
+                    if arr is not None:
+                        probs[r.key] = arr
+            pool = [r for r in races if r.key in probs]
+            by_week: Dict[Tuple[int, int], List[Race]] = defaultdict(list)
+            for r in pool:
+                by_week[date.fromisoformat(r.day).isocalendar()[:2]].append(r)
+            market_of = lambda r, probs=probs: probs[r.key]                          # noqa: E731
+            deltas, betas, ll_eng, top_eng, top_comb = [], [], [], [], []
+            history: List[Race] = []
+            for week in sorted(by_week):
+                test = by_week[week]
+                if len(history) >= BENCH_MIN_PRIOR:
+                    gamma = fit_clogit(_combo_packed(history, oos, False, market_of), ridge=1e-3)
+                    ab = fit_clogit(_combo_packed(history, oos, True, market_of), ridge=1e-3)
+                    betas.append(float(ab[1]))
+                    recal_pack = _combo_packed(test, oos, False, market_of)
+                    comb_pack = _combo_packed(test, oos, True, market_of)
+                    ll_r, ll_c = _race_ll(recal_pack, gamma), _race_ll(comb_pack, ab)
+                    deltas.extend((ll_c - ll_r).tolist())
+                    pc = comb_pack.probs(ab)
+                    for r, start in zip(test, comb_pack.starts):
+                        ll_eng.append(math.log(max(probs[r.key][r.winner], FLOOR)))
+                        top_eng.append(int(np.argmax(probs[r.key]) == r.winner))
+                        top_comb.append(int(np.argmax(pc[start:start + len(r.runners)]) == r.winner))
+                history.extend(test)
+            entry: Dict[str, Any] = {"moteur": engine, "horizon": horizon, "courses": len(pool),
+                                     "courses_jugees": len(deltas)}
+            if deltas:
+                arr = np.array(deltas)
+                lo, hi = bootstrap_ci(arr)
+                entry.update({"ll_moteur": round(float(np.mean(ll_eng)), 4),
+                              "delta_ll_vs_moteur_recalibre": round(float(arr.mean()), 5),
+                              "ic95": [round(lo, 5), round(hi, 5)], "apport_demontre": lo > 0,
+                              "beta_fondamental_moyen": round(float(np.mean(betas)), 4),
+                              "top1_moteur": round(float(np.mean(top_eng)), 4),
+                              "top1_combine": round(float(np.mean(top_comb)), 4)})
+            results[f"{engine}_{horizon}"] = entry
+    return results
+
+
 # ── Étape 3 simulée : Kelly fractionné ───────────────────────────────────
 def _roi(staked: float, returned: float) -> Optional[float]:
     return round(returned / staked - 1.0, 4) if staked else None
@@ -673,7 +763,7 @@ def simulate_kelly(races: Sequence[Race], probs: Dict[Tuple[str, int, int], np.n
 
 
 # ── Rapport et envoi sur R2 privé ────────────────────────────────────────
-def run(db_path: str) -> Dict[str, Any]:
+def run(db_path: str, bench_path: Optional[str] = None) -> Dict[str, Any]:
     races, data_stats = load_races(db_path)
     _log("BENTER_DONNEES", data_stats)
     audit = build_features(races)
@@ -704,6 +794,11 @@ def run(db_path: str) -> Dict[str, Any]:
                                                                   "ic95_roi_mise_fixe", "kelly_bankroll_finale",
                                                                   "kelly_drawdown_max")},
                            "temoin": tx.get("kelly_temoin_marche_seul")})
+    bench_report = None
+    if bench_path and os.path.exists(bench_path):
+        bench_report = evaluate_bench(races, wf["oos"], load_bench(bench_path))
+        for entry in bench_report.values():
+            _log("BENTER_BANC", entry)
     return {
         "genere_le_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "methode": {"apprentissage_depuis": TRAIN_START, "premier_mois_test": FIRST_TEST_MONTH,
@@ -718,6 +813,7 @@ def run(db_path: str) -> Dict[str, Any]:
         "plis_marche_reference": ev_ref["plis"],
         "kelly": kelly, "kelly_temoin_marche_seul": temoin,
         "horizons_de_pari": horizons,
+        "apport_aux_moteurs_du_banc": bench_report,
     }
 
 
@@ -742,11 +838,12 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser.add_argument("--db", default="turf_history.db")
     parser.add_argument("--sortie")
     parser.add_argument("--sans-envoi", action="store_true")
+    parser.add_argument("--banc", help="turf_bench.db : mesure l'apport du fondamental aux moteurs publiés")
     args = parser.parse_args(argv)
     if not os.path.exists(args.db):
         _log("BENTER_ERREUR", {"erreur": "miroir absent", "chemin": args.db})
         return 2
-    report = run(args.db)
+    report = run(args.db, args.banc)
     if args.sortie:
         with open(args.sortie, "w", encoding="utf-8") as f:
             json.dump(report, f, ensure_ascii=False, indent=1)
