@@ -2,11 +2,15 @@
 
 Règle pré-enregistrée : docs/OMBRE_FONDAMENTAL.md (datée, committée avant
 le premier jour d'ombre). Ce script en reprend les constantes (turf_lab/
-ombre.py, vérifiées par un test) et refuse toute lecture intermédiaire :
-tant que 1 000 éditions éligibles ne portent pas d'ombre, seul le COMPTEUR
-est rendu. Les lectures portent toujours sur les 1 000 puis 2 300 PREMIÈRES
-éditions (dans l'ordre des verrous) : relancer le script plus tard ne
-change rien à une lecture déjà rendue.
+ombre.py, vérifiées par un test) et refuse toute lecture intermédiaire.
+UNE SEULE lecture, à l'édition du matin :
+  - sur les 1 000 PREMIÈRES éditions éligibles portant l'ombre (dans l'ordre
+    des verrous), au plus tôt le lendemain de la 1 000e ;
+  - ou, si les 1 000 ne sont pas atteintes, sur toutes les éditions des
+    35 premiers jours, à partir du 36e jour.
+Avant : seul le COMPTEUR est rendu. Seules comptent les éditions portant les
+mêmes ``model_version``, ``nve_version`` et recette ; un changement de code
+(bug bloquant seulement) remet à zéro le compteur ET l'horloge des 35 jours.
 
 Usage : python -m turf_lab.ombre_lecture --banc copie_turf_bench.db
 """
@@ -18,13 +22,14 @@ import re
 import sqlite3
 import sys
 from collections import defaultdict
+from datetime import date, datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
 from turf_lab import ombre
 
-META_OMBRE = "ombre_fondamental"        # métadonnées NVE : {recette, model_version, nve_version, train_until, probabilities}
+META_OMBRE = "ombre_fondamental"        # {recette, model_version, nve_version, train_until, probabilities, selection, fondamental}
 DEBUT_OMBRE: Optional[str] = None       # premier jour d'ombre (AAAA-MM-JJ), inscrit au gel de la règle
 ENGINE = "NEW_VALUE_ENGINE"
 _RACE_ID = re.compile(r"^R(\d+)C(\d+)_(\d{2})(\d{2})(\d{4})_(.*)$")
@@ -86,143 +91,139 @@ def is_eligible(ed: Dict[str, Any]) -> bool:
 
 
 def shadow_of(ed: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-    """Ombre archivée, complète (une probabilité par partant publié)."""
+    """Ombre archivée et complète : une probabilité (arrondie à 4 décimales,
+    mêmes clés que ``probabilities_json``) par partant publié, et la sélection
+    de l'ombre (10 chevaux, même code et même départage que la production).
+    Sinon : pas d'ombre pour cette édition (jamais d'ombre partielle)."""
     sh = ed["meta"].get(META_OMBRE)
     if not isinstance(sh, dict):
         return None
     try:
         probs = {int(k): float(v) for k, v in (sh.get("probabilities") or {}).items()}
+        selection = [int(x) for x in sh.get("selection") or []]
     except (TypeError, ValueError):
         return None
-    if not probs or set(probs) != set(ed["probs"]) or any(v <= 0 for v in probs.values()):
-        return None                                            # jamais d'ombre partielle
-    return {"probs": probs, "pair": (sh.get("model_version"), sh.get("nve_version")), "recette": sh.get("recette")}
+    if not probs or set(probs) != set(ed["probs"]) or any(v < 0 for v in probs.values()) or sum(probs.values()) <= 0:
+        return None
+    if len(selection) < 8 or not set(selection) <= set(probs):
+        return None
+    return {"probs": probs, "selection": selection,
+            "cle": (sh.get("model_version"), sh.get("nve_version"), sh.get("recette"))}
 
 
-def shadow_top8(ed: Dict[str, Any], sh: Dict[str, Any]) -> List[int]:
-    """Les 8 plus fortes probabilités de l'ombre ; à égalité, l'ordre de la
-    sélection publiée, puis le numéro."""
-    rank = {n: i for i, n in enumerate(ed["selection"])}
-    return sorted(sh["probs"], key=lambda n: (-sh["probs"][n], rank.get(n, 99), n))[:8]
-
-
-def _secondary(sample_ids: List[str], editions: Dict[str, Dict[str, Dict[str, Any]]], results, pair) -> Dict[str, Any]:
+def _secondary(sample: List[Dict[str, Any]], results) -> Dict[str, Any]:
+    """Les deux tests du matin : gagnant et tiercé dans les 8, ombre (sa
+    sélection archivée) face à l'édition publiée, IC95 apparié par réunion."""
+    rows = {"gagnant": [], "tierce": []}
+    for r in sample:
+        res = results[r["race_id"]]
+        if res["gagnant"] is not None:
+            rows["gagnant"].append((int(ombre.dans_les_8(r["selection_publiee"], [res["gagnant"]])),
+                                    int(ombre.dans_les_8(r["selection_ombre"], [res["gagnant"]])), r["reunion"]))
+        if res["tierce"]:
+            rows["tierce"].append((int(ombre.dans_les_8(r["selection_publiee"], res["tierce"])),
+                                   int(ombre.dans_les_8(r["selection_ombre"], res["tierce"])), r["reunion"]))
     tests: Dict[str, Any] = {}
-    for horizon in ombre.HORIZONS_SECONDAIRES:
-        eds = editions.get(horizon) or {}
-        rows = {"gagnant": [], "tierce": []}
-        for race_id in sample_ids:
-            ed = eds.get(race_id)
-            res = results.get(race_id)
-            sh = shadow_of(ed) if ed else None
-            if sh is None or sh["pair"] != pair or not ed["selection"]:
-                continue
-            mine = shadow_top8(ed, sh)
-            if res["gagnant"] is not None:
-                rows["gagnant"].append((int(ombre.dans_les_8(ed["selection"], [res["gagnant"]])),
-                                        int(ombre.dans_les_8(mine, [res["gagnant"]])), ed["reunion"]))
-            if res["tierce"]:
-                rows["tierce"].append((int(ombre.dans_les_8(ed["selection"], res["tierce"])),
-                                       int(ombre.dans_les_8(mine, res["tierce"])), ed["reunion"]))
-        for crit, pairs in rows.items():
-            name = f"{crit}_dans_8_{horizon}"
-            if len(pairs) < 2:
-                tests[name] = {"editions": len(pairs), "verdict": "NON_MESURABLE"}    # compte comme un échec
-                continue
-            diff = [s - p for p, s, _ in pairs]
-            clusters = [c for _, _, c in pairs]
-            lo, hi = ombre.intervalle(diff, clusters, 0.95)
-            tests[name] = {"editions": len(pairs), "publie": round(float(np.mean([p for p, _, _ in pairs])), 4),
-                           "ombre": round(float(np.mean([s for _, s, _ in pairs])), 4),
-                           "ecart": round(float(np.mean(diff)), 4), "ic95": [round(lo, 4), round(hi, 4)],
-                           "verdict": "OK" if lo >= ombre.SEUIL_NON_DEGRADATION else "DEGRADATION"}
+    for crit, pairs in rows.items():
+        name = f"{crit}_dans_8_T_MATIN"
+        if len(pairs) < 2:
+            tests[name] = {"editions": len(pairs), "verdict": "NON_MESURABLE"}        # compte comme un échec
+            continue
+        diff = [s_ - p_ for p_, s_, _ in pairs]
+        lo, hi = ombre.intervalle(diff, [c for _, _, c in pairs], 0.95)
+        tests[name] = {"editions": len(pairs), "publie": round(float(np.mean([p_ for p_, _, _ in pairs])), 4),
+                       "ombre": round(float(np.mean([s_ for _, s_, _ in pairs])), 4),
+                       "ecart": round(float(np.mean(diff)), 4), "ic95": [round(lo, 4), round(hi, 4)],
+                       "verdict": "OK" if lo >= ombre.SEUIL_NON_DEGRADATION else "DEGRADATION"}
     return tests
 
 
-def reading(rows: List[Dict[str, Any]], n: int, level: float, coverage: float,
-            editions, results, pair) -> Dict[str, Any]:
-    """Une lecture sur les ``n`` premières éditions : critère principal,
-    critères secondaires, couverture, décision."""
-    sample = rows[:n]
+def reading(sample: List[Dict[str, Any]], coverage: float, results, mode: str) -> Dict[str, Any]:
+    """La lecture unique : critère principal, deux tests du matin, couverture, décision."""
     deltas = [r["delta"] for r in sample]
     clusters = [r["reunion"] for r in sample]
-    mean = float(np.mean(deltas))
-    lo, hi = ombre.intervalle(deltas, clusters, level)
-    lo95, hi95 = ombre.intervalle(deltas, clusters, ombre.NIVEAU_INUTILITE)
-    secondary = _secondary([r["race_id"] for r in sample], editions, results, pair)
+    lo, hi = ombre.intervalle(deltas, clusters, ombre.NIVEAU_LECTURE)
+    lo_i, hi_i = ombre.intervalle(deltas, clusters, ombre.NIVEAU_INUTILITE)
+    secondary = _secondary(sample, results)
     failures = [k for k, v in secondary.items() if v["verdict"] != "OK"]
     if coverage < ombre.COUVERTURE_MIN:
         decision = "DECISION_SUSPENDUE_COUVERTURE"
-    elif hi95 < 0:
+    elif hi_i < 0:
         decision = "ARRET_INUTILITE"
     elif lo > 0 and not failures:
-        decision = "PASSAGE_EN_PRODUCTION_SUR_DECISION_ECRITE_DE_STEPH"
+        decision = "PASSAGE_EN_PRODUCTION_DU_MATIN_SUR_DECISION_ECRITE_DE_STEPH"
     elif lo > 0:
         decision = "PASSAGE_BLOQUE_CRITERE_SECONDAIRE"
-    elif n < ombre.LECTURE_2:
-        decision = "PROLONGATION_JUSQU_A_2300"
     else:
-        decision = "FIN_SANS_PREUVE_DECISION_ECRITE_DE_STEPH"
-    return {"editions": n, "reunions": len(set(clusters)), "couverture": round(coverage, 4),
-            "delta_ll": round(mean, 5), f"ic{round(level * 100)}": [round(lo, 5), round(hi, 5)],
-            "ic95_inutilite": [round(lo95, 5), round(hi95, 5)], "criteres_secondaires": secondary,
+        decision = "FIN_SANS_PREUVE_NVE_DEGELE"
+    return {"mode": mode, "editions": len(sample), "reunions": len(set(clusters)), "couverture": round(coverage, 4),
+            "premier_jour": sample[0]["day"], "dernier_jour": sample[-1]["day"],
+            "delta_ll": round(float(np.mean(deltas)), 5), "ic95": [round(lo, 5), round(hi, 5)],
+            "ic95_inutilite": [round(lo_i, 5), round(hi_i, 5)], "criteres_secondaires": secondary,
             "echecs_secondaires": failures, "decision": decision}
 
 
-def read(bench_path: str, debut: Optional[str] = None) -> Dict[str, Any]:
+def read(bench_path: str, debut: Optional[str] = None, today: Optional[str] = None) -> Dict[str, Any]:
     debut = debut or DEBUT_OMBRE
     if not debut:
         out = {"refus": "REGLE_NON_DATEE : DEBUT_OMBRE est inscrit au gel de la règle"}
         _log("OMBRE_REFUS", out)
         return out
+    today = today or datetime.now(timezone.utc).date().isoformat()
     editions, results = load(bench_path, debut)
     matin = sorted((ed for ed in (editions.get("T_MATIN") or {}).values() if is_eligible(ed)),
                    key=lambda ed: (ed["lock_time"] or "", ed["race_id"]))
-    # Compteur : il repart de la première édition qui porte le couple
-    # (model_version, nve_version) courant — tout changement de code, d'un
-    # côté ou de l'autre, remet le compteur à zéro.
-    pairs = [(i, sh["pair"]) for i, sh in ((i, shadow_of(ed)) for i, ed in enumerate(matin)) if sh]
-    if not pairs:
+    shadows = [(i, sh) for i, sh in ((i, shadow_of(ed)) for i, ed in enumerate(matin)) if sh]
+    if not shadows:
         out = {"debut": debut, "editions_eligibles": len(matin), "editions_avec_ombre": 0}
         _log("OMBRE_COMPTEUR", out)
         return out
-    pair, start = pairs[-1][1], pairs[-1][0]
-    for i, p in reversed(pairs):
-        if p != pair:
+    # Compteur ET horloge repartent de la première édition portant la clé
+    # courante (model_version, nve_version, recette).
+    key, start = shadows[-1][1]["cle"], shadows[-1][0]
+    for i, sh in reversed(shadows):
+        if sh["cle"] != key:
             break
         start = i
-    window = matin[start:]
-    rows, eligible_seen, excl = [], [], defaultdict(int)
-    for ed in window:
+    clock = max(debut, matin[start]["day"])
+    deadline = (date.fromisoformat(clock) + timedelta(days=ombre.DUREE_MAX_JOURS)).isoformat()
+    rows, excl, seen = [], defaultdict(int), 0
+    for ed in matin[start:]:
+        if ed["day"] >= deadline:
+            break
         res = results.get(ed["race_id"])
         if res is None or res["gagnant"] is None:
             excl["sans_arrivee_definitive"] += 1
             continue
-        eligible_seen.append(ed["race_id"])
+        seen += 1
         sh = shadow_of(ed)
-        if sh is None or sh["pair"] != pair:
-            excl["sans_ombre"] += 1
+        if sh is None or sh["cle"] != key:
+            excl["sans_ombre_complete"] += 1
+            continue
+        if key[2] != ombre.RECETTE:
+            excl["recette_differente"] += 1
             continue
         w = res["gagnant"]
         if w not in ed["probs"]:
             excl["gagnant_hors_partants_au_verrou"] += 1
             continue
-        rows.append({"race_id": ed["race_id"], "reunion": ed["reunion"], "rang_eligible": len(eligible_seen),
+        rows.append({"race_id": ed["race_id"], "day": ed["day"], "reunion": ed["reunion"], "rang_eligible": seen,
+                     "selection_publiee": ed["selection"] or sorted(ed["probs"], key=lambda n: -ed["probs"][n]),
+                     "selection_ombre": sh["selection"],
                      "delta": math.log(max(sh["probs"][w], ombre.PLANCHER))
                      - math.log(max(ed["probs"][w], ombre.PLANCHER))})
-    out: Dict[str, Any] = {"debut": debut, "model_version": pair[0], "nve_version": pair[1],
-                           "editions_eligibles": len(eligible_seen), "editions_avec_ombre": len(rows),
-                           "exclusions": dict(excl)}
-    for n, level, name in ((ombre.LECTURE_1, ombre.NIVEAU_LECTURE_1, "lecture_1"),
-                           (ombre.LECTURE_2, ombre.NIVEAU_LECTURE_2, "lecture_2")):
-        if len(rows) < n:
-            out["prochaine_lecture"] = f"{name} à {n} éditions ; aucune lecture intermédiaire"
-            break
-        coverage = n / rows[n - 1]["rang_eligible"]
-        out[name] = reading(rows, n, level, coverage, editions, results, pair)
-        if out[name]["decision"] in ("ARRET_INUTILITE", "PASSAGE_EN_PRODUCTION_SUR_DECISION_ECRITE_DE_STEPH"):
-            break
-    _log("OMBRE_LECTURE" if "lecture_1" in out else "OMBRE_COMPTEUR", out)
+    out: Dict[str, Any] = {"debut": debut, "horloge_depart": clock, "fin_des_35_jours": deadline,
+                           "model_version": key[0], "nve_version": key[1], "recette": key[2],
+                           "editions_eligibles": seen, "editions_avec_ombre": len(rows), "exclusions": dict(excl)}
+    n = ombre.LECTURE
+    if len(rows) >= n and today > rows[n - 1]["day"]:
+        out["lecture"] = reading(rows[:n], n / rows[n - 1]["rang_eligible"], results, "1000_editions")
+    elif len(rows) < n and today > deadline and rows:
+        out["lecture"] = reading(rows, len(rows) / max(seen, 1), results, "35_jours")
+    else:
+        out["prochaine_lecture"] = (f"à {n} éditions ou à partir du {deadline} (fin des {ombre.DUREE_MAX_JOURS} "
+                                    "jours) ; aucune lecture intermédiaire")
+    _log("OMBRE_LECTURE" if "lecture" in out else "OMBRE_COMPTEUR", out)
     return out
 
 

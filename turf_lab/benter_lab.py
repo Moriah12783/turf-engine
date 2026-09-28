@@ -801,6 +801,13 @@ def evaluate_bench(races: Sequence[Race], oos: Dict, bench: Dict,
 
 
 # ── Ombre du fondamental dans NVE : calcul de puissance avant le gel ─────
+# Réglages du calcul de puissance du 28/09 (historique : il a choisi la
+# recette A ; la règle en vigueur est dans turf_lab/ombre.py). « Détectable à
+# 2 300 éditions » = puissance d'au moins 80 % d'une borne basse IC95 positive.
+PUISSANCE_MIN = 0.80
+PUISSANCE_LECTURE_1, PUISSANCE_NIVEAU_1 = 1000, 0.99
+PUISSANCE_LECTURE_2, PUISSANCE_NIVEAU_2 = 2300, 0.95
+PUISSANCE_HORIZONS = ("T_MATIN", "T90", "T30", "T15")
 def _nve_rows(races: Sequence[Race], oos: Dict, editions: Dict[Tuple[str, int, int], Dict[str, Any]]
               ) -> Tuple[List[Dict[str, Any]], Dict[str, int]]:
     """Éditions NVE avec marché, alignées sur les partants au départ : part
@@ -850,13 +857,13 @@ def _secondary(pairs: List[Tuple[int, int, Hashable]], n0: int) -> Dict[str, Any
     return {"editions": len(pairs), "publie": round(float(np.mean([p for p, _, _ in pairs])), 4),
             "ombre": round(float(np.mean([o for _, o, _ in pairs])), 4), "ecart": round(mean, 4),
             "ic95": [round(lo, 4), round(hi, 4)], "erreur_type": round(se, 5),
-            "borne_basse_projetee_1000": round(ombre.borne_basse_projetee(mean, se, n0, ombre.LECTURE_1), 4),
-            "borne_basse_projetee_2300": round(ombre.borne_basse_projetee(mean, se, n0, ombre.LECTURE_2), 4),
+            "borne_basse_projetee_1000": round(ombre.borne_basse_projetee(mean, se, n0, PUISSANCE_LECTURE_1), 4),
+            "borne_basse_projetee_2300": round(ombre.borne_basse_projetee(mean, se, n0, PUISSANCE_LECTURE_2), 4),
             # Risque d'échec du test (borne basse IC95 < −2 points) si l'écart
             # vrai est celui observé : un blocage « à tort » quand l'écart est nul.
-            "risque_echec_1000": round(ombre.risque_echec_non_degradation(mean, se, n0, ombre.LECTURE_1), 4),
-            "risque_echec_2300": round(ombre.risque_echec_non_degradation(mean, se, n0, ombre.LECTURE_2), 4),
-            "risque_echec_1000_si_ecart_nul": round(ombre.risque_echec_non_degradation(0.0, se, n0, ombre.LECTURE_1), 4)}
+            "risque_echec_1000": round(ombre.risque_echec_non_degradation(mean, se, n0, PUISSANCE_LECTURE_1), 4),
+            "risque_echec_2300": round(ombre.risque_echec_non_degradation(mean, se, n0, PUISSANCE_LECTURE_2), 4),
+            "risque_echec_1000_si_ecart_nul": round(ombre.risque_echec_non_degradation(0.0, se, n0, PUISSANCE_LECTURE_1), 4)}
 
 
 def _primary(deltas: List[float], clusters: List[Hashable]) -> Dict[str, Any]:
@@ -866,17 +873,19 @@ def _primary(deltas: List[float], clusters: List[Hashable]) -> Dict[str, Any]:
     mean = float(np.mean(deltas))
     se = ombre.erreur_type(deltas, clusters)
     n0 = len(deltas)
-    p1 = ombre.puissance(mean, se, n0, ombre.LECTURE_1, ombre.NIVEAU_LECTURE_1)
-    p2 = ombre.puissance(mean, se, n0, ombre.LECTURE_2, ombre.NIVEAU_LECTURE_2)
+    p1 = ombre.puissance(mean, se, n0, PUISSANCE_LECTURE_1, PUISSANCE_NIVEAU_1)
+    p2 = ombre.puissance(mean, se, n0, PUISSANCE_LECTURE_2, PUISSANCE_NIVEAU_2)
+    p_regle = ombre.puissance(mean, se, n0, ombre.LECTURE, ombre.NIVEAU_LECTURE)
     return {"editions": n0, "reunions": len(set(clusters)), "delta_ll": round(mean, 5),
             "ic95": [round(v, 5) for v in ombre.intervalle(deltas, clusters, 0.95)],
             "ic99": [round(v, 5) for v in ombre.intervalle(deltas, clusters, 0.99)],
             "erreur_type": round(se, 5), "puissance_1000_ic99": round(p1, 3), "puissance_2300_ic95": round(p2, 3),
-            "detectable_2300": bool(p2 >= ombre.PUISSANCE_MIN)}
+            "detectable_2300": bool(p2 >= PUISSANCE_MIN),
+            "puissance_regle_lecture_unique": round(p_regle, 3)}
 
 
 def evaluate_shadow_power(races: Sequence[Race], oos: Dict, bench: Dict,
-                          horizons: Sequence[str] = ombre.HORIZONS_SECONDAIRES) -> Dict[str, Any]:
+                          horizons: Sequence[str] = PUISSANCE_HORIZONS) -> Dict[str, Any]:
     """Point 4 de la règle (avant le gel) : sur les éditions NVE de production
     passées et le fondamental « état du matin » hors échantillon, valeur
     rétrospective des deux recettes face à l'édition publiée.
@@ -887,7 +896,7 @@ def evaluate_shadow_power(races: Sequence[Race], oos: Dict, bench: Dict,
     Critère principal au matin ; « dans les 8 » (gagnant, tiercé) aux quatre
     horizons. Aucune donnée d'ombre : tout est rétrospectif."""
     out: Dict[str, Any] = {"definition_detectable": (
-        f"puissance >= {ombre.PUISSANCE_MIN:.0%} d'une borne basse IC95 positive à {ombre.LECTURE_2} éditions, "
+        f"puissance >= {PUISSANCE_MIN:.0%} d'une borne basse IC95 positive à {PUISSANCE_LECTURE_2} éditions, "
         "effet estimé et erreur-type par réunion (fixé avant le calcul)")}
     for horizon in horizons:
         rows, excl = _nve_rows(races, oos, bench.get(("NEW_VALUE_ENGINE", horizon)) or {})
@@ -963,8 +972,8 @@ def evaluate_shadow_power(races: Sequence[Race], oos: Dict, bench: Dict,
         span = (last - date.fromisoformat(min(recent))).days + 1
         rate = len(recent) / span
         out["rythme_production_matin"] = {"editions_par_jour_14j": round(rate, 1), "jours_couverts": span,
-                                          "jours_pour_1000": math.ceil(ombre.LECTURE_1 / rate) if rate else None,
-                                          "jours_pour_2300": math.ceil(ombre.LECTURE_2 / rate) if rate else None}
+                                          "jours_pour_1000": math.ceil(PUISSANCE_LECTURE_1 / rate) if rate else None,
+                                          "jours_pour_2300": math.ceil(PUISSANCE_LECTURE_2 / rate) if rate else None}
     matin = (out.get("T_MATIN") or {}).get("A") or {}
     out["recette_principale_selon_regle"] = "A_lineaire_0.90_0.10" if matin.get("detectable_2300") else "B_loglineaire"
     return out
@@ -1082,7 +1091,7 @@ def run(db_path: str, bench_path: Optional[str] = None) -> Dict[str, Any]:
                            "temoin": tx.get("kelly_temoin_marche_seul")})
     bench_report = bench_fige = shadow = None
     if bench_path and os.path.exists(bench_path):
-        bench = load_bench(bench_path, tuple(dict.fromkeys(BENCH_HORIZONS + ombre.HORIZONS_SECONDAIRES)))
+        bench = load_bench(bench_path, tuple(dict.fromkeys(BENCH_HORIZONS + PUISSANCE_HORIZONS)))
         bench_report = evaluate_bench(races, wf["oos"], bench)
         for entry in bench_report.values():
             _log("BENTER_BANC", entry)
@@ -1095,7 +1104,7 @@ def run(db_path: str, bench_path: Optional[str] = None) -> Dict[str, Any]:
         # Point 4 de la règle d'ombre : puissance des deux recettes, avec le
         # modèle « état du matin » (celui qui tournera réellement).
         shadow = evaluate_shadow_power(races, wf_fige["oos"], bench)
-        for horizon in ombre.HORIZONS_SECONDAIRES:
+        for horizon in PUISSANCE_HORIZONS:
             _log("BENTER_OMBRE_PUISSANCE", {"horizon": horizon, **(shadow.get(horizon) or {})})
         _log("BENTER_OMBRE_DECISION", {k: shadow.get(k) for k in (
             "definition_detectable", "recette_principale_selon_regle", "secondaires_A", "secondaires_B",
