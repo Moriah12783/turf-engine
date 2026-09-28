@@ -35,10 +35,11 @@ def _log(tag: str, payload: Dict[str, Any]) -> None:
 
 
 def describe(value: Any, depth: int = 0) -> Any:
-    """Forme d'un JSON (types, clés, tailles), sans les valeurs."""
+    """Forme d'un JSON (types, clés, tailles), sans les valeurs. Au-delà de
+    deux niveaux, seulement les NOMS des champs (le schéma, pas les données)."""
     if isinstance(value, dict):
         if depth >= 2:
-            return {"dict": len(value)}
+            return {"champs": sorted(value)[:25]}
         return {k: describe(v, depth + 1) for k, v in list(value.items())[:25]}
     if isinstance(value, list):
         return {"list": len(value), "elem": describe(value[0], depth + 1) if value else None}
@@ -77,17 +78,24 @@ def candidates() -> List[Tuple[str, str]]:
     return out
 
 
+def offered_bets(course: Dict[str, Any]) -> List[str]:
+    return sorted({str(p.get("typePari")) for p in course.get("paris") or [] if isinstance(p, dict)
+                   and p.get("typePari")})
+
+
 def pick_race(programme: Dict[str, Any], now_ms: int) -> Optional[Tuple[int, int, int]]:
-    """Première course pas encore partie (au moins 20 min avant le départ)."""
-    best = None
+    """Course pas encore partie (au moins 20 min avant le départ) qui propose
+    le PLUS de paris (Quinté+, multi… de préférence) ; à égalité, la plus tôt."""
+    best, best_rank = None, None
     for reunion in (programme.get("programme") or {}).get("reunions") or []:
         for course in reunion.get("courses") or []:
             start = course.get("heureDepart")
             if isinstance(start, (int, float)) and start - now_ms > 20 * 60 * 1000:
                 key = (start, int(reunion.get("numOfficiel") or reunion.get("numReunion") or 0),
                        int(course.get("numOrdre") or course.get("numCourse") or 0))
-                if best is None or key < best:
-                    best = key
+                rank = (-len(offered_bets(course)), start)
+                if best_rank is None or rank < best_rank:
+                    best, best_rank = key, rank
     return best
 
 
@@ -116,8 +124,12 @@ def main(argv: Optional[List[str]] = None) -> int:
                               "depart_utc": datetime.fromtimestamp(target[0] / 1000, timezone.utc).strftime("%H:%M")
                               if target[0] else None})
 
+    status, course, _ = fetch(f"{HOST}/7/programme/{day}/R{r_num}/C{c_num}")
+    offered = offered_bets(course) if isinstance(course, dict) else []
+    _log("PMU_PROBE_PARIS_PROPOSES", {"types": offered})
     found = []
-    for client, suffix in candidates():
+    tries = [("7", "/combinaisons?specialisation=INTERNET")] + [("7", f"/rapports/{t}") for t in offered]
+    for client, suffix in tries:
         url = f"{HOST}/{client}/programme/{day}/R{r_num}/C{c_num}{suffix}"
         status, body, size = fetch(url)
         entry = {"client": client, "chemin": suffix or "(course)", "statut": status, "octets": size}
@@ -128,13 +140,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         else:
             _log("PMU_PROBE_KO", entry)
         time.sleep(PAUSE_S)
-    # Paris proposés sur la course (fiche course) : aide à nommer les types.
-    status, course, _ = fetch(f"{HOST}/7/programme/{day}/R{r_num}/C{c_num}")
-    if isinstance(course, dict):
-        paris = course.get("paris") or []
-        _log("PMU_PROBE_PARIS_PROPOSES", {"types": sorted({str(p.get("typePari")) for p in paris
-                                                           if isinstance(p, dict)})})
-    _log("PMU_PROBE_FIN", {"reponses_ok": len(found), "essais": len(candidates())})
+    _log("PMU_PROBE_FIN", {"reponses_ok": len(found), "essais": len(tries)})
     return 0
 
 

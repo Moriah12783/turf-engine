@@ -10,18 +10,21 @@ from turf_lab import pmu_probe as probe
 def test_forme_sans_valeurs():
     body = {"combinaisons": [{"numeros": [3, 7], "rapport": 12.4}], "type": "COUPLE_GAGNANT"}
     shape = probe.describe(body)
-    assert shape == {"combinaisons": {"list": 1, "elem": {"dict": 2}}, "type": "str"}
+    assert shape == {"combinaisons": {"list": 1, "elem": {"champs": ["numeros", "rapport"]}}, "type": "str"}
     assert "12.4" not in str(shape) and "COUPLE_GAGNANT" not in str(shape)
 
 
-def test_prochaine_course_pas_encore_partie():
+def test_course_qui_propose_le_plus_de_paris():
     now = 1_000_000_000
+    quinte = [{"typePari": t} for t in ("SIMPLE_GAGNANT", "COUPLE_GAGNANT", "TRIO", "MULTI", "QUINTE_PLUS")]
     programme = {"programme": {"reunions": [
-        {"numOfficiel": 1, "courses": [{"numOrdre": 1, "heureDepart": now - 60_000},          # partie
-                                       {"numOrdre": 2, "heureDepart": now + 10 * 60_000}]},  # trop proche
-        {"numOfficiel": 4, "courses": [{"numOrdre": 3, "heureDepart": now + 90 * 60_000},
-                                       {"numOrdre": 5, "heureDepart": now + 40 * 60_000}]}]}}
-    assert probe.pick_race(programme, now) == (now + 40 * 60_000, 4, 5)
+        {"numOfficiel": 1, "courses": [{"numOrdre": 1, "heureDepart": now - 60_000, "paris": quinte},   # partie
+                                       {"numOrdre": 2, "heureDepart": now + 10 * 60_000}]},             # trop proche
+        {"numOfficiel": 4, "courses": [{"numOrdre": 3, "heureDepart": now + 90 * 60_000, "paris": quinte},
+                                       {"numOrdre": 5, "heureDepart": now + 40 * 60_000,
+                                        "paris": quinte[:2]}]}]}}
+    assert probe.pick_race(programme, now) == (now + 90 * 60_000, 4, 3)
+    assert probe.offered_bets({"paris": quinte}) == sorted(t["typePari"] for t in quinte)
     assert probe.pick_race({"programme": {"reunions": []}}, now) is None
 
 
