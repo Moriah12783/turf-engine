@@ -159,29 +159,37 @@ Le journal du workflow en donne le résumé (`HISTORY_QUALITE`).
 6. **Champs absents** chez le Radar : déferré, réduction kilométrique,
    valeur de handicap. Candidats à une phase 1c (récupération via l'API
    PMU depuis GitHub Actions), à décider au vu des premiers résultats.
-7. **Arrivées manquantes (audit du 28/09/2026).** Hors courses annulées,
-   **4 cas** seulement, tous visibles dans la table `anomalies` :
-   - **28/07/2026** : `arrivees` vide pour les 31 courses courues (39
-     courses, dont 8 annulées). `participants.ordre_arrivee` est rempli
-     pour 313 des 458 partants et les 534 rapports sont présents. Utiliser
-     `ordre_arrivee`, ou exclure la date. Le Radar ne la réparera pas avant
-     le 06/10 (pré-enregistrement) et annoncera toute réparation par ligne
-     datée.
-   - **25/06/2026, La Teste, R1C1 à R1C12** : 12 courses restées
-     `PROGRAMMEE`, sans arrivée ni ordre d'arrivée. **À exclure** tant que
-     le Radar n'a pas confirmé si la réunion a été courue. Les rapports
-     repris pourront trancher.
+7. **Courses sans résultat : réponses du Radar du 28/09/2026.** Sur les
+   15 421 courses (au 27/09), 122 n'ont pas de résultat exploitable :
+   - **108 annulées** (`statut = 'COURSE_ANNULEE'`) ;
+   - **25/06/2026, La Teste, R1C1 à R1C12** : **non courue**. Le PMU
+     affiche encore toute la réunion en `PROGRAMMEE`, sans arrivée, et la
+     reprise n'a trouvé aucun rapport pour R1. À exclure ;
    - **30/11/2025 R15C7** (Mauquenchy) et **07/05/2026 R1C7**
-     (ParisLongchamp) : arrivée absente malgré un statut
-     `ARRIVEE_DEFINITIVE_COMPLETE`. Replier sur `ordre_arrivee`.
-8. **Le champ `courses.annulee` n'est pas fiable : utiliser `statut`.**
-   91 courses de 21 dates (du 03/08/2025 au 04/09/2026) ont
-   `statut = 'COURSE_ANNULEE'` mais `annulee = false` ; seules 16 courses
-   (28/07 et 12/08/2026) ont `annulee = true`. Un modèle qui filtrerait sur
-   `annulee` garderait 91 courses sans gagnant : chacune fausserait la
-   vraisemblance du logit conditionnel. Règle : une course est courue si
-   `statut <> 'COURSE_ANNULEE'` **et** si elle a une arrivée (ou, à défaut,
-   des `ordre_arrivee`).
+     (ParisLongchamp) : courues (arrivée officielle au PMU) mais **trous de
+     capture du Radar** : ni partants, ni arrivée, ni rapports. À exclure ;
+     toute réparation sera annoncée par ligne datée.
+
+   Cas à part, **28/07/2026** : `arrivees` vide pour les 31 courses courues,
+   mais `participants.ordre_arrivee` est rempli (313 partants sur 458) et
+   les 534 rapports sont présents. Ces courses restent exploitables par
+   l'ordre d'arrivée. Pas de réparation Radar avant le 06/10
+   (pré-enregistrement).
+8. **Le champ `courses.annulee` n'est pas fiable, sur toute la période :
+   `statut` fait foi** (confirmé par le Radar). Seules 16 courses (28/07 et
+   12/08/2026) ont `annulee = true` ; 92 courses annulées d'après leur
+   statut ont `annulee = false` (par exemple le 04/09/2026 R5C2). Filtrer
+   sur `annulee` garderait des courses sans gagnant, et chacune fausserait
+   la vraisemblance du logit conditionnel.
+
+   **Règle officielle « course courue »** (Radar, 28/09/2026) : `statut`
+   commence par `ARRIVEE` ou vaut `FIN_COURSE`, **et** la course a une ligne
+   dans `arrivees` ou au moins un `participants.ordre_arrivee`. Elle est
+   codée une fois pour toutes dans la **vue `courses_courues`** du miroir
+   (colonnes de `courses`, plus `a_arrivee` et `partants_avec_ordre`) :
+   **15 299 courses courues** au 27/09. Tout entraînement ou test part de
+   cette vue, jamais de `courses` directement. Le journal du workflow en
+   donne le compte (`HISTORY_QUALITE`, clé `courses_courues`).
 9. **Données internes.** Usage exclusif du labo ; jamais redistribuées ni
    publiées.
 
