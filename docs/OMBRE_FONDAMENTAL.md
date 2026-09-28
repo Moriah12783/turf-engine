@@ -1,11 +1,18 @@
 # Ombre du fondamental dans NVE : règle pré-enregistrée
 
-**Statut : PROJET du 28/09/2026.** Il reprend les arbitrages du dev NVE sur
-les sept points. La règle sera **gelée** au plus tard la veille du premier jour
-d'ombre, dans un commit daté qui inscrira trois éléments : la date du gel, le
-premier jour d'ombre (`DEBUT_OMBRE`) et la recette principale. Après le gel, la
-règle ne change plus. Seule une coquille sans effet sur la règle peut encore
-être corrigée, avec une justification dans le commit.
+**Statut : PROJET du 28/09/2026.** Il reprend :
+
+- les arbitrages du dev NVE sur les sept points ;
+- les décisions de Steph du 28/09 : ombre limitée à l'édition du matin, gel de
+  NVE limité à 5 semaines ;
+- les précisions du dev NVE du 28/09 sur ces deux points et sur les clés de
+  l'archive.
+
+La règle sera **gelée** au plus tard la veille du premier jour d'ombre, dans un
+commit daté qui inscrira la date du gel et le premier jour d'ombre
+(`DEBUT_OMBRE`), et qui ajoutera les horaires de nuit. Après le gel, la règle
+ne change plus. Seule une coquille sans effet sur la règle peut encore être
+corrigée, avec une justification dans le commit.
 
 Rien ne tourne avant le 06/10. Le passage à l'ombre se fait sur la décision
 écrite de Steph et avec le feu vert du dev NVE.
@@ -37,102 +44,127 @@ Deux verrous tiennent jusqu'au gel :
    - Rien n'est écrit si l'audit de fuite est positif ou si l'historique a plus
      de 3 jours de retard. Ce jour-là n'a pas d'ombre et il est compté dans la
      couverture.
-2. **daily_sync** (dev daily_sync) : une ligne porte ces probabilités sur les
-   partants au verrou.
-3. **NVE** (dev NVE) : l'ombre est calculée à chaque horizon et archivée dans
-   les métadonnées de l'édition, sous la clé `ombre_fondamental` :
-   `{recette, model_version, nve_version, train_until, probabilities}`. La
-   sélection publiée ne change pas. Si la table est absente, rien ne change.
-   - Un non-partant tardif entraîne une renormalisation sur les partants
-     valides.
-   - Il n'y a jamais d'ombre partielle : un partant sans p signifie pas d'ombre
+2. **daily_sync** (dev daily_sync) : la ligne ajoutée au verrouillage ne porte
+   les probabilités fondamentales sur les partants **que lors du verrou
+   `T_MATIN`**.
+3. **NVE** (dev NVE) :
+   - `engine.py` calcule l'ombre **seulement quand les partants portent ces
+     probabilités**, donc sans aucune logique d'horizon dans le moteur ;
+   - et **seulement si la calibration marché est appliquée** (marché réel). En
+     marché partiel ou sans marché, il n'y a pas d'ombre, et l'édition n'est
+     pas éligible ;
+   - la sélection publiée ne change pas, et si la table est absente, rien ne
+     change ;
+   - un non-partant tardif entraîne une renormalisation sur les partants
+     valides ;
+   - il n'y a jamais d'ombre partielle : un partant sans p signifie pas d'ombre
      pour cette édition, et le cas est compté.
 
-## Recettes
+### Archive de l'ombre
 
-- **A, linéaire** : 0,90 × marché + 0,10 × fondamental. Le marché est la part
-  de marché NVE (cotes du verrou, sans la marge). Le fondamental est renormalisé
-  sur les partants valides.
-- **B, log-linéaire** : p ∝ marché^a × fondamental^b. Les poids (a, b) sont
-  réappris chaque lundi sur les seules éditions passées (logit conditionnel).
-- **Recette principale.** Elle est choisie **une seule fois, avant le gel**,
-  par le calcul de puissance du 28/09 (`BENTER_OMBRE_DECISION`) :
-  - A si son effet est **détectable à 2 300 éditions** ;
-  - sinon B.
-  - « Détectable » veut dire une puissance d'au moins 80 % d'obtenir une borne
-    basse de l'IC95 positive à 2 300 éditions. Le calcul part de l'effet estimé
-    sur les éditions de production passées, avec l'erreur-type par réunion.
-    Cette définition a été fixée avant le calcul.
-  - L'autre recette peut être archivée à titre exploratoire. **Elle ne sert
-    jamais à décider.**
-  - Si B est retenue, son jeu d'apprentissage initial et ses horizons seront
-    précisés ici avant le gel.
+Elle se trouve dans les métadonnées de l'édition du matin, sous la clé
+`ombre_fondamental`, avec sept champs :
+
+| Clé | Contenu |
+|---|---|
+| `recette` | la recette appliquée, `A_lineaire_0.90_0.10` |
+| `model_version` | la version du modèle fondamental (empreinte de son code) |
+| `nve_version` | la constante `NVE_VERSION` de `engine.py`, figée pendant l'ombre |
+| `train_until` | la dernière journée d'historique du modèle |
+| `probabilities` | les probabilités de l'ombre, arrondies à 4 décimales, avec les mêmes clés que `probabilities_json` |
+| `selection` | les 10 chevaux de l'ombre, calculés par le même code et avec le même départage que la production |
+| `fondamental` | les probabilités fondamentales renormalisées sur les partants valides (pour concevoir une recette B sans rien recalculer) |
+
+**Confidentialité.** L'archive reste dans la base privée sur R2. Ni le banc, ni
+le site, ni `benchmark_report.json` ne lisent `ombre_fondamental`. Rien de
+l'ombre n'est donc visible publiquement avant la lecture.
+
+## Recette
+
+- **Recette principale : A, linéaire.** 0,90 × marché + 0,10 × fondamental. Le
+  marché est la part de marché NVE (cotes du verrou, sans la marge).
+- **Pourquoi A.** Elle a été choisie une seule fois, avant le gel, par le calcul
+  de puissance du 28/09 (`BENTER_OMBRE_DECISION`). La règle, fixée avant le
+  calcul, disait : A si son effet est détectable à 2 300 éditions (puissance
+  d'au moins 80 % d'une borne basse IC95 positive), sinon B. Résultat :
+  puissance de 99,7 %, donc A.
+- **Recette B (log-linéaire).** Elle n'est jamais jugée par cette ombre. Une
+  reprise avec B est une **nouvelle expérience pré-enregistrée**, jugée sur des
+  éditions nouvelles. Les données de cette ombre peuvent servir à concevoir B,
+  jamais à la juger.
+
+## Périmètre : l'édition du matin
+
+- **Seul horizon testé : `T_MATIN`.**
+- Une éventuelle mise en production ne portera **que sur l'édition du matin**.
+- T-90, T-30 et T-15 gardent NVE tel quel, jusqu'à un test dédié.
 
 ## Critère principal
 
 - **Mesure** : écart de log-vraisemblance du gagnant (Δll), ombre moins édition
-  NVE publiée, **au matin** (T_MATIN).
+  NVE publiée, **au matin**.
 - **Éditions retenues** : celles à marché réel de la production gelée
   (`market_calibration.applied`, poids marché 0,90).
 - **Probabilités** : celles archivées au verrou, sans renormalisation.
 - **Gagnant** : arrivée définitive. En cas de dead-heat pour la première place,
   la course est exclue et comptée.
 - **Intervalle** : apparié, par bootstrap de **réunions** entières (4 000
-  tirages, graine fixe). Grouper par jour ne donnerait qu'environ 25 groupes à
-  1 000 éditions, trop peu pour un intervalle stable.
+  tirages, graine fixe).
 
-## Lectures et décisions
+## Lecture unique et décision
 
-- **Deux lectures seulement** : sur les **1 000** premières éditions, puis sur
-  les **2 300** premières, dans l'ordre des verrous. **Aucune lecture
-  intermédiaire.** Le script de lecture ne rend que le compteur avant 1 000.
-  Une lecture rendue ne change plus.
-- **Passage en production** (sur décision écrite de Steph) : si la borne basse
-  est positive, avec l'**IC99 à 1 000 éditions** et l'**IC95 à 2 300**, et
-  seulement si les huit critères secondaires sont remplis.
-- **Arrêt pour inutilité** : si la borne haute de l'**IC95** est négative, à
-  l'une ou l'autre lecture. Une règle d'inutilité ne crée pas de faux positif.
-- **Sinon, à 1 000 éditions** : l'ombre continue jusqu'à 2 300 éditions.
-- **Sinon, à 2 300 éditions** : c'est la fin sans preuve, et Steph décide par
-  écrit.
+- **Une seule lecture**, sur :
+  - les **1 000 premières** éditions éligibles portant l'ombre, dans l'ordre des
+    verrous, au plus tôt le lendemain de la 1 000e ;
+  - ou, si les 1 000 ne sont pas atteintes au bout de **35 jours**, toutes les
+    éditions des 35 premiers jours, à partir du 36e jour.
+- **Aucune lecture intermédiaire.** Avant, le script de lecture ne rend que le
+  compteur. Une lecture rendue ne change plus.
+- **Éditions retenues** : seulement celles qui portent les mêmes
+  `model_version`, `nve_version` et recette.
+- **Passage en production**, pour l'édition du matin seulement et sur décision
+  écrite de Steph. Il faut trois conditions :
+  - borne basse de l'**IC95** positive ;
+  - les deux tests du matin passés ;
+  - couverture d'au moins 90 %.
+- **Arrêt pour inutilité** : borne haute de l'IC95 négative.
+- **Sinon** : l'ombre se termine sans passage en production, et NVE est dégelé.
+  Toute reprise est une nouvelle expérience.
+- **Puissance attendue** (effet estimé le 28/09 sur les éditions passées :
+  +0,0095 par course) : environ 87 % à 1 000 éditions, et 82 % à 875.
 
-## Critères secondaires
+## Critères secondaires : les deux tests du matin
 
-Il y a huit tests : **gagnant dans les 8** et **tiercé dans les 8**, à chacun
-des quatre horizons (matin, T-90, T-30, T-15).
-
-- Chaque test compare les 8 de l'ombre aux 8 de la sélection publiée, sur les
-  courses de la lecture. Les 8 de l'ombre sont ses 8 plus fortes probabilités ;
-  à égalité, on suit l'ordre de la sélection publiée.
-- « Aucune dégradation » : la borne basse de l'IC95 apparié (bootstrap par
+- **Gagnant dans les 8** et **tiercé dans les 8**, à `T_MATIN`.
+- On compare les 8 premiers chevaux de la `selection` archivée de l'ombre aux 8
+  premiers de la sélection publiée, sur les courses de la lecture.
+- **Aucune dégradation** : la borne basse de l'IC95 apparié (bootstrap par
   réunion) de l'écart ombre − publié doit rester **≥ −2 points**.
-- Les tests sont mesurés aux deux lectures, jamais ailleurs.
-- **Un seul échec bloque le passage en production**, même si le critère
-  principal est rempli. Un test non mesurable compte comme un échec.
+- **Un seul échec bloque le passage en production.** Un test non mesurable
+  compte comme un échec.
 
 ## Couverture
 
 La couverture est la part des éditions éligibles, avec arrivée définitive, qui
 portent une ombre complète. Elle est journalisée. Si elle passe **sous 90 %**
-au moment d'une lecture, la lecture est rendue mais **la décision est
+au moment de la lecture, la lecture est rendue mais **la décision est
 suspendue** jusqu'à explication. Un trou non aléatoire, par exemple une réunion
 entière manquante, biaiserait l'échantillon.
 
-## Gel symétrique et compteur
+## Gel symétrique, changements de code et durée
 
-Pendant l'ombre, **la production NVE est gelée elle aussi** : poids marché 0,90,
-capteurs et sélection. La calibration du marché partiel attendra la lecture
-finale. Elle ne concerne que des éditions non diffusées, donc aucun abonné n'y
-perd.
-
-Tout changement de code **remet le compteur à zéro**, que ce soit :
-
-- côté fondamental, avec un nouveau `model_version`, empreinte du seul code du
-  modèle ;
-- côté NVE, avec un nouveau `nve_version`.
-
-Le compteur repart de la première édition qui porte le couple courant. Chaque
-ligne porte `train_until`, pour que tout calcul puisse être rejoué.
+- **Gel symétrique.** Pendant l'ombre, **la production NVE est gelée elle
+  aussi** : poids marché 0,90, capteurs, sélection.
+- **Durée.** Le gel dure **5 semaines au plus** (décision de Steph du 28/09).
+  Le prolonger demande l'accord écrit de Steph.
+- **Changements de code.** Pendant l'ombre, un changement de code n'est permis
+  **que pour un bug bloquant**. Il remet à zéro **le compteur et l'horloge des
+  35 jours**, que le changement vienne :
+  - du fondamental, avec un nouveau `model_version` (empreinte du seul code du
+    modèle) ;
+  - ou de NVE, avec une nouvelle `NVE_VERSION`.
+- **Traçabilité.** Chaque ligne porte `train_until`, pour que tout calcul
+  puisse être rejoué.
 
 ## Scellage
 
@@ -141,23 +173,22 @@ ligne porte `train_until`, pour que tout calcul puisse être rejoué.
   ci-dessous. `tests/test_ombre_lecture.py` vérifie qu'elles sont identiques à
   ce tableau.
 - Le dev NVE s'engage de même : ses inspections du mardi ne calculent aucune
-  comparaison entre l'ombre et l'édition publiée avant les lectures prévues.
-  La règle vaut aussi pour le labo.
+  comparaison entre l'ombre et l'édition publiée avant la lecture. La règle
+  vaut aussi pour le labo.
 
 ## Constantes
 
 | Constante | Valeur |
 |---|---|
 | POIDS_MARCHE | 0.90 |
-| LECTURE_1 | 1000 |
-| LECTURE_2 | 2300 |
-| NIVEAU_LECTURE_1 | 0.99 |
-| NIVEAU_LECTURE_2 | 0.95 |
+| RECETTE | A_lineaire_0.90_0.10 |
+| LECTURE | 1000 |
+| DUREE_MAX_JOURS | 35 |
+| NIVEAU_LECTURE | 0.95 |
 | NIVEAU_INUTILITE | 0.95 |
 | COUVERTURE_MIN | 0.90 |
 | SEUIL_NON_DEGRADATION | -0.02 |
-| HORIZONS_SECONDAIRES | T_MATIN, T90, T30, T15 |
-| PUISSANCE_MIN | 0.80 |
+| HORIZONS_SECONDAIRES | T_MATIN |
 | BOOTSTRAP_TIRAGES | 4000 |
 | GRAINE | 20260928 |
 | HEURE_LIMITE_UTC | 06:20 |

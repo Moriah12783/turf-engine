@@ -1,10 +1,12 @@
 """Ombre du fondamental dans NVE : constantes de la règle pré-enregistrée et
 outils de lecture (intervalle apparié par réunion, puissance, recettes).
 
-Règle arrêtée avec le dev NVE le 28/09/2026. Elle sera committée dans un
-document daté avant le premier jour d'ombre ; le script de lecture reprendra
-ces constantes, couvertes par un test. Aucune lecture intermédiaire : ce
-module ne lit aucune donnée d'ombre, il ne fait que calculer.
+Règle arrêtée avec le dev NVE le 28/09/2026 (docs/OMBRE_FONDAMENTAL.md,
+committée et datée avant le premier jour d'ombre) ; le script de lecture
+reprend ces constantes, couvertes par un test. Aucune lecture
+intermédiaire : ce module ne lit aucune donnée d'ombre, il ne fait que
+calculer. Les constantes du calcul de puissance du 28/09 (historique : il a
+choisi la recette) sont dans turf_lab/benter_lab.py.
 """
 
 import math
@@ -14,17 +16,14 @@ from typing import Hashable, Optional, Sequence, Tuple
 import numpy as np
 
 POIDS_MARCHE = 0.90                     # production NVE gelée pendant l'ombre (recette linéaire)
-LECTURE_1, LECTURE_2 = 1000, 2300       # éditions éligibles au matin
-NIVEAU_LECTURE_1 = 0.99                 # passage en production à la 1re lecture
-NIVEAU_LECTURE_2 = 0.95                 # passage en production à la 2de lecture
-NIVEAU_INUTILITE = 0.95                 # arrêt si la borne haute est négative, à l'une ou l'autre lecture
+RECETTE = "A_lineaire_0.90_0.10"        # recette principale (calcul de puissance du 28/09)
+LECTURE = 1000                          # une seule lecture : 1 000 éditions éligibles au matin…
+DUREE_MAX_JOURS = 35                    # … ou fin des 35 jours (gel de NVE limité à 5 semaines)
+NIVEAU_LECTURE = 0.95                   # passage en production si la borne basse IC95 est positive
+NIVEAU_INUTILITE = 0.95                 # arrêt si la borne haute IC95 est négative
 COUVERTURE_MIN = 0.90                   # en dessous : lecture rendue, décision suspendue
 SEUIL_NON_DEGRADATION = -0.02           # borne basse IC95 de l'écart ombre − publié (« dans les 8 »)
-HORIZONS_SECONDAIRES = ("T_MATIN", "T90", "T30", "T15")
-# « Effet détectable à 2 300 éditions » (point 4, fixé AVANT le calcul) :
-# puissance d'au moins 80 % d'obtenir une borne basse IC95 positive à 2 300
-# éditions, calculée sur l'effet estimé et l'erreur-type par réunion.
-PUISSANCE_MIN = 0.80
+HORIZONS_SECONDAIRES = ("T_MATIN",)     # ombre limitée à l'édition du matin
 BOOTSTRAP_TIRAGES = 4000
 GRAINE = 20260928
 PLANCHER = 1e-6
@@ -86,7 +85,7 @@ def borne_basse_projetee(effet: float, se: float, n0: int, n: int, level: float 
 
 
 def risque_echec_non_degradation(ecart: float, se: float, n0: int, n: int,
-                                 seuil: float = SEUIL_NON_DEGRADATION, level: float = 0.95) -> float:
+                                 seuil: float = -0.02, level: float = 0.95) -> float:
     """Probabilité que la borne basse de l'IC (niveau ``level``) tombe sous
     ``seuil`` à ``n`` éditions, si l'écart vrai vaut ``ecart``."""
     se_n = se * math.sqrt(n0 / n) if n0 > 0 else 0.0
