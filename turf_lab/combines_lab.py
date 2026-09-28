@@ -11,8 +11,10 @@ portefeuille bat la masse malgré le prélèvement. Contrôle intégré : au sim
 gagnant, avec les probabilités du marché de clôture, G vaut exactement
 −log(surround) (le prélèvement).
 
-Probabilités des combinaisons : formule de Harville à partir des
-probabilités de victoire de trois modèles, calculées hors échantillon :
+Probabilités des combinaisons : formule de Harville, simple puis
+« escomptée » (version 2 : un exposant par place d'honneur, appris sur les
+arrivées des mois précédents), à partir des probabilités de victoire de
+trois modèles, calculées hors échantillon :
 marché de clôture, fondamental seul, combinaison marché + fondamental. Le
 marché de clôture est une borne haute : on ne parie pas aux cotes finales.
 
@@ -44,6 +46,8 @@ from turf_lab import ombre
 REPORT_PREFIX = "lab/combines/"
 MODELS = ("marche", "combine", "fondamental")
 MAX_FIELD = 20                          # au-delà, tenseurs trop lourds : course écartée (comptée)
+MIN_FIT_RACES = 300                     # arrivées minimales pour apprendre les exposants d'un mois
+VARIANTS = MODELS + tuple(m + "_esc" for m in MODELS)   # Harville simple, puis escompté
 TOP_K = {"WIN": (1, 2, 3), "PLACE": (1, 2, 3), "PAIR_FIRST2": (1, 3, 6, 10), "SEQ_FIRST2": (1, 3, 6, 10),
          "PAIR_TOP3": (1, 3, 6, 10), "PAIR_TOP4": (1, 3, 6, 10), "SET_FIRST3": (1, 5, 10, 20)}
 # Événement -> (nombre de places concernées, combinaisons gagnantes par arrivée)
@@ -105,46 +109,52 @@ def places_paid(n_runners: int) -> int:
     return 3 if n_runners >= 8 else (2 if n_runners >= 4 else 0)
 
 
-# ── Harville ─────────────────────────────────────────────────────────────
-def seq_prob(p: np.ndarray, seq: Sequence[int]) -> float:
+# ── Harville (simple ou escompté) ───────────────────────────────────────
+# ``lam`` : exposant par place (1re, 2e, …). À la place k, la probabilité de
+# chaque partant restant est proportionnelle à p^lam[k] (Harville : tous à 1).
+# Benter (1994) et Lo & Bacon-Shone : les exposants < 1 aux places d'honneur
+# corrigent la surestimation des favoris par Harville.
+def _weights(p: np.ndarray, lam: Optional[Sequence[float]], pos: int) -> np.ndarray:
+    e = 1.0 if lam is None or pos >= len(lam) else float(lam[pos])
+    return p if e == 1.0 else np.power(np.maximum(p, 1e-12), e)
+
+
+def seq_prob(p: np.ndarray, seq: Sequence[int], lam: Optional[Sequence[float]] = None) -> float:
     """Probabilité que ``seq`` occupe les premières places, dans cet ordre."""
-    out, used = 1.0, 0.0
-    for i in seq:
-        rest = 1.0 - used
+    out = 1.0
+    for pos, i in enumerate(seq):
+        w = _weights(p, lam, pos)
+        rest = float(w.sum()) - sum(float(w[j]) for j in seq[:pos])
         if rest <= 0:
             return 0.0
-        out *= p[i] / rest
-        used += p[i]
+        out *= float(w[i]) / rest
     return out
 
 
-def set_prob(p: np.ndarray, members: Sequence[int]) -> float:
+def set_prob(p: np.ndarray, members: Sequence[int], lam: Optional[Sequence[float]] = None) -> float:
     """Probabilité que ``members`` occupent les premières places, dans un ordre quelconque."""
-    return sum(seq_prob(p, perm) for perm in itertools.permutations(members))
+    return sum(seq_prob(p, perm, lam) for perm in itertools.permutations(members))
 
 
-def ordered_tensor(p: np.ndarray, k: int) -> np.ndarray:
-    """T[i1..ik] = probabilité de l'arrivée ordonnée i1..ik en tête (Harville)."""
+def ordered_tensor(p: np.ndarray, k: int, lam: Optional[Sequence[float]] = None) -> np.ndarray:
+    """T[i1..ik] = probabilité de l'arrivée ordonnée i1..ik en tête."""
     n = len(p)
-    t = np.ones([n] * k)
-    used = np.zeros([n] * k)
-    for pos in range(k):
-        shape = [1] * k
-        shape[pos] = n
-        pk = p.reshape(shape)
-        rest = 1.0 - used
-        with np.errstate(divide="ignore", invalid="ignore"):
-            t = t * np.where(rest > 1e-12, pk / np.maximum(rest, 1e-12), 0.0)
-        used = used + pk
     idx = np.indices([n] * k)
+    t = np.ones([n] * k)
+    for pos in range(k):
+        w = _weights(p, lam, pos)
+        used = sum(w[idx[s]] for s in range(pos)) if pos else 0.0
+        rest = float(w.sum()) - used
+        with np.errstate(divide="ignore", invalid="ignore"):
+            t = t * np.where(rest > 1e-12, w[idx[pos]] / np.maximum(rest, 1e-12), 0.0)
     for a, b in itertools.combinations(range(k), 2):
         t = np.where(idx[a] == idx[b], 0.0, t)
     return t
 
 
-def in_top_k(p: np.ndarray, k: int) -> Tuple[np.ndarray, np.ndarray]:
+def in_top_k(p: np.ndarray, k: int, lam: Optional[Sequence[float]] = None) -> Tuple[np.ndarray, np.ndarray]:
     """P(partant dans les k premiers) et P(paire dans les k premiers)."""
-    t = ordered_tensor(p, k)
+    t = ordered_tensor(p, k, lam)
     axes = tuple(range(k))
     single = sum(t.sum(axis=tuple(a for a in axes if a != pos)) for pos in axes)
     pair = np.zeros((len(p), len(p)))
@@ -154,28 +164,59 @@ def in_top_k(p: np.ndarray, k: int) -> Tuple[np.ndarray, np.ndarray]:
     return single, pair
 
 
-def event_matrix(kind: str, p: np.ndarray, k_place: int) -> Dict[Tuple[int, ...], float]:
+def event_matrix(kind: str, p: np.ndarray, k_place: int,
+                 lam: Optional[Sequence[float]] = None) -> Dict[Tuple[int, ...], float]:
     """Toutes les combinaisons d'un événement et leur probabilité (pour le
     rendement des K meilleures) ; seulement pour les événements énumérables."""
     n = len(p)
     if kind == "WIN":
         return {(i,): float(p[i]) for i in range(n)}
     if kind == "PLACE":
-        single, _ = in_top_k(p, k_place)
+        single, _ = in_top_k(p, k_place, lam)
         return {(i,): float(single[i]) for i in range(n)}
     if kind in ("PAIR_FIRST2", "SEQ_FIRST2"):
-        t = ordered_tensor(p, 2)
+        t = ordered_tensor(p, 2, lam)
         if kind == "SEQ_FIRST2":
             return {(i, j): float(t[i, j]) for i in range(n) for j in range(n) if i != j}
         return {(i, j): float(t[i, j] + t[j, i]) for i in range(n) for j in range(i + 1, n)}
     if kind in ("PAIR_TOP3", "PAIR_TOP4"):
-        _, pair = in_top_k(p, 3 if kind == "PAIR_TOP3" else 4)
+        _, pair = in_top_k(p, 3 if kind == "PAIR_TOP3" else 4, lam)
         return {(i, j): float(pair[i, j]) for i in range(n) for j in range(i + 1, n)}
     if kind == "SET_FIRST3":
-        t = ordered_tensor(p, 3)
+        t = ordered_tensor(p, 3, lam)
         sym = sum(np.transpose(t, perm) for perm in itertools.permutations(range(3)))
         return {c: float(sym[c]) for c in itertools.combinations(range(n), 3)}
     return {}
+
+
+def _position_ll(logp: np.ndarray, orders: np.ndarray, pos: int, lam: float) -> float:
+    """Log-vraisemblance de la place ``pos`` (0 = 1re) : logit conditionnel à un
+    seul coefficient ``lam`` sur log p, parmi les partants encore en lice."""
+    rows = np.arange(len(logp))
+    s = lam * logp
+    for prev in range(pos):
+        s[rows, orders[:, prev]] = -np.inf
+    m = np.max(s, axis=1, keepdims=True)
+    lse = (m[:, 0] + np.log(np.exp(s - m).sum(axis=1)))
+    return float((s[rows, orders[:, pos]] - lse).sum())
+
+
+def fit_lambda(logp: np.ndarray, orders: np.ndarray, pos: int, lo: float = 0.05, hi: float = 2.5) -> float:
+    """Maximum de vraisemblance (fonction concave en lam : section dorée)."""
+    g = (math.sqrt(5) - 1) / 2
+    a, b = lo, hi
+    c, d = b - g * (b - a), a + g * (b - a)
+    fc, fd = _position_ll(logp, orders, pos, c), _position_ll(logp, orders, pos, d)
+    for _ in range(40):
+        if fc > fd:
+            b, d, fd = d, c, fc
+            c = b - g * (b - a)
+            fc = _position_ll(logp, orders, pos, c)
+        else:
+            a, c, fc = c, d, fd
+            d = a + g * (b - a)
+            fd = _position_ll(logp, orders, pos, d)
+    return round((a + b) / 2, 4)
 
 
 # ── Données ──────────────────────────────────────────────────────────────
@@ -242,29 +283,57 @@ def _combo_key(kind: str, idx: List[int]) -> Tuple[int, ...]:
     return tuple(idx) if kind.startswith("SEQ") else tuple(sorted(idx))
 
 
-def combo_prob(kind: str, p: np.ndarray, combo: Tuple[int, ...], k_place: int, cache: Dict) -> float:
+def combo_prob(kind: str, p: np.ndarray, combo: Tuple[int, ...], k_place: int, cache: Dict,
+               lam: Optional[Sequence[float]] = None) -> float:
     if kind == "WIN":
         return float(p[combo[0]])
     if kind == "PLACE":
         if "place" not in cache:
-            cache["place"] = in_top_k(p, k_place)[0]
+            cache["place"] = in_top_k(p, k_place, lam)[0]
         return float(cache["place"][combo[0]])
     if kind in ("PAIR_TOP3", "PAIR_TOP4"):
         k = 3 if kind == "PAIR_TOP3" else 4
         if k not in cache:
-            cache[k] = in_top_k(p, k)[1]
+            cache[k] = in_top_k(p, k, lam)[1]
         return float(cache[k][combo[0], combo[1]])
     if kind.startswith("SEQ"):
-        return seq_prob(p, combo)
-    return set_prob(p, combo)
+        return seq_prob(p, combo, lam)
+    return set_prob(p, combo, lam)
+
+
+def fit_lambdas(races: Sequence[lab.Race], probs: Dict[Tuple[str, int, int], np.ndarray],
+                months: Sequence[str], min_races: int = MIN_FIT_RACES) -> Dict[str, Tuple[float, ...]]:
+    """Exposants des places 2 à 5, appris pour chaque mois jugé sur les SEULES
+    arrivées des mois précédents (ex aequo et arrivées incomplètes écartés)."""
+    rows = [(r.day[:7], np.log(np.maximum(probs[r.key], 1e-12)), arrival(r)) for r in races if r.key in probs]
+    rows = [(m, lp, o) for m, lp, o in rows if o is not None and len(o) >= 5]
+    if not rows:
+        return {}
+    width = max(len(lp) for _, lp, _ in rows)
+    logp = np.full((len(rows), width), -np.inf)
+    for i, (_, lp, _) in enumerate(rows):
+        logp[i, :len(lp)] = lp
+    orders = np.array([o[:5] for _, _, o in rows])
+    month_of = np.array([m for m, _, _ in rows])
+    out = {}
+    for month in months:
+        train = month_of < month
+        if train.sum() < min_races:
+            continue
+        out[month] = (1.0,) + tuple(fit_lambda(logp[train], orders[train], pos) for pos in range(1, 5))
+    return out
 
 
 # ── Évaluation ───────────────────────────────────────────────────────────
 def evaluate_combines(races: Sequence[lab.Race], probs: Dict[str, Dict[Tuple[str, int, int], np.ndarray]],
-                      by_race: Dict[Tuple[str, int, int], List[Dict[str, Any]]]) -> Dict[str, Any]:
+                      by_race: Dict[Tuple[str, int, int], List[Dict[str, Any]]],
+                      lambdas: Optional[Dict[str, Dict[str, Tuple[float, ...]]]] = None) -> Dict[str, Any]:
     """Par (pari, libellé) et par modèle : croissance G = E[log(q × D)] du
     portefeuille « au prorata du modèle », écart apparié au marché, et
-    rendement des K combinaisons les plus probables."""
+    rendement des K combinaisons les plus probables. Avec ``lambdas`` (exposants
+    par modèle et par mois), chaque modèle est aussi jugé en Harville escompté,
+    sur les mêmes courses (celles dont le mois a des exposants appris)."""
+    variants = VARIANTS if lambdas is not None else MODELS
     acc: Dict[Tuple[str, str], Dict[str, Any]] = {}
     for race in races:
         rows = by_race.get(race.key)
@@ -276,6 +345,12 @@ def evaluate_combines(races: Sequence[lab.Race], probs: Dict[str, Dict[Tuple[str
         model_p = {m: probs[m].get(race.key) for m in MODELS}
         if order is None or any(v is None for v in model_p.values()):
             continue
+        lams: Dict[str, Optional[Tuple[float, ...]]] = {m: None for m in MODELS}
+        if lambdas is not None:
+            month = race.day[:7]
+            if any(month not in lambdas.get(m, {}) for m in MODELS):
+                continue                                      # mêmes courses pour les deux Harville
+            lams.update({m + "_esc": lambdas[m][month] for m in MODELS})
         groups: Dict[Tuple[str, str], List[Dict[str, Any]]] = defaultdict(list)
         for row in rows:
             groups[(row["pari"], row["libelle"])].append(row)
@@ -284,8 +359,8 @@ def evaluate_combines(races: Sequence[lab.Race], probs: Dict[str, Dict[Tuple[str
             if kind is None:
                 continue
             a = acc.setdefault(gkey, {"evenement": kind, "courses": 0, "non_concordant": 0, "rembourse": 0,
-                                      "champ_trop_grand": 0, "G": {m: [] for m in MODELS}, "reunion": [],
-                                      "topk": {m: defaultdict(list) for m in MODELS}})
+                                      "champ_trop_grand": 0, "G": {m: [] for m in variants}, "reunion": [],
+                                      "topk": {m: defaultdict(list) for m in variants}})
             if any(r["rembourse"] for r in grows):
                 a["rembourse"] += 1
                 continue
@@ -305,13 +380,14 @@ def evaluate_combines(races: Sequence[lab.Race], probs: Dict[str, Dict[Tuple[str
             m_count = len(expected)                         # combinaisons gagnantes par arrivée
             a["courses"] += 1
             a["reunion"].append((race.day, race.key[1]))
-            for model in MODELS:
-                p = model_p[model]
+            for model in variants:
+                p = model_p[model.replace("_esc", "")]
+                lam = lams.get(model)
                 cache: Dict = {}
-                ret = sum(combo_prob(kind, p, c, k_place, cache) / m_count * paid[c] for c in expected)
+                ret = sum(combo_prob(kind, p, c, k_place, cache, lam) / m_count * paid[c] for c in expected)
                 a["G"][model].append(math.log(max(ret, 1e-12)))
                 if kind in TOP_K:
-                    ranked = sorted(event_matrix(kind, p, k_place).items(), key=lambda kv: -kv[1])
+                    ranked = sorted(event_matrix(kind, p, k_place, lam).items(), key=lambda kv: -kv[1])
                     for k in TOP_K[kind]:
                         chosen = [c for c, _ in ranked[:k]]
                         a["topk"][model][k].append(sum(paid.get(c, 0.0) for c in chosen) / k - 1.0)
@@ -322,7 +398,7 @@ def evaluate_combines(races: Sequence[lab.Race], probs: Dict[str, Dict[Tuple[str
                                  "rembourse": a["rembourse"], "champ_trop_grand": a["champ_trop_grand"]}
         if a["courses"] >= 30:
             clusters = a["reunion"]
-            for model in MODELS:
+            for model in variants:
                 g = a["G"][model]
                 entry[f"G_{model}"] = round(float(np.mean(g)), 4)
                 entry[f"ic95_G_{model}"] = [round(v, 4) for v in ombre.intervalle(g, clusters, 0.95)]
@@ -331,11 +407,14 @@ def evaluate_combines(races: Sequence[lab.Race], probs: Dict[str, Dict[Tuple[str
                         str(k): {"roi": round(float(np.mean(v)), 4),
                                  "ic95": [round(x, 4) for x in ombre.intervalle(v, clusters, 0.95)]}
                         for k, v in a["topk"][model].items()}
-            for model in ("combine", "fondamental"):
-                diff = [x - y for x, y in zip(a["G"][model], a["G"]["marche"])]
-                entry[f"delta_G_{model}_vs_marche"] = round(float(np.mean(diff)), 4)
-                entry[f"ic95_delta_G_{model}_vs_marche"] = [round(v, 4) for v in ombre.intervalle(diff, clusters, 0.95)]
-            entry["bat_la_masse_combine"] = entry["ic95_G_combine"][0] > 0
+            pairs = [("combine", "marche"), ("fondamental", "marche")]
+            if lambdas is not None:
+                pairs += [(m + "_esc", m) for m in MODELS] + [("combine_esc", "marche_esc")]
+            for model, ref in pairs:
+                diff = [x - y for x, y in zip(a["G"][model], a["G"][ref])]
+                entry[f"delta_G_{model}_vs_{ref}"] = round(float(np.mean(diff)), 4)
+                entry[f"ic95_delta_G_{model}_vs_{ref}"] = [round(v, 4) for v in ombre.intervalle(diff, clusters, 0.95)]
+            entry["bat_la_masse"] = sorted(m for m in variants if entry[f"ic95_G_{m}"][0] > 0)
         out[f"{pari}|{libelle}"] = entry
     return out
 
@@ -362,14 +441,19 @@ def run(db_path: str) -> Dict[str, Any]:
     _log("COMBINES_DONNEES", {"courses": len(races), "courses_avec_rapports": len(by_race),
                               "courses_avec_trois_modeles": len(probs["combine"]),
                               "fuite_suspectee": audit["fuite_suspectee"]})
-    results = evaluate_combines(races, probs, by_race)
+    months = sorted({key[0][:7] for key in by_race})
+    lambdas = {m: fit_lambdas(races, probs[m], months) for m in MODELS}
+    for m in MODELS:
+        _log("COMBINES_EXPOSANTS", {"modele": m, "par_mois": {mo: list(v) for mo, v in lambdas[m].items()}})
+    results = evaluate_combines(races, probs, by_race, lambdas)
     for entry in sorted(results.values(), key=lambda e: (-e["courses"], e["pari"])):
         _log("COMBINES_RESULTAT", entry)
     return {"genere_le_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
             "methode": {"critere": "G = E[log(q x D)] : portefeuille au prorata du modele, regle au rapport officiel",
-                        "harville": True, "modeles": list(MODELS),
+                        "harville": "simple et escompte (exposants des places 2 a 5 appris sur les mois precedents)",
+                        "modeles": list(VARIANTS),
                         "avertissement": "marche de cloture = borne haute (cotes finales)"},
-            "donnees": data_stats, "inventaire": inventory, "resultats": results}
+            "donnees": data_stats, "exposants": lambdas, "inventaire": inventory, "resultats": results}
 
 
 def upload(report: Dict[str, Any], client_factory=None) -> Optional[str]:
