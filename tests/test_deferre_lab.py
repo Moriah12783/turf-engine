@@ -53,6 +53,10 @@ def test_codes_et_lecture_du_flux():
     assert dl.code("DEFERRE_ANTERIEURS_POSTERIEURS") == "D4" and dl.code("DEFERRE_ANTERIEURS") == "DA"
     assert dl.code("DEFERRE_POSTERIEURS") == "DP" and dl.code("PROTEGE_ANTERIEURS") == "PROTEGE"
     assert dl.code(None) == "FERRE" and dl.code("") == "FERRE"
+    # Valeurs mixtes vues dans le flux réel (27/09) : les pieds déferrés priment.
+    assert dl.code("PROTEGE_ANTERIEURS_DEFERRRE_POSTERIEURS") == "DP"
+    assert dl.code("DEFERRE_ANTERIEURS_PROTEGE_POSTERIEURS") == "DA"
+    assert dl.code("PROTEGE_ANTERIEURS_POSTERIEURS") == "PROTEGE"
     rows, stats = dl.fetch_day(FakePMU(), "2026-03-01")
     assert stats["courses"] == 2 and len(rows) == 5                      # réunion étrangère ignorée
     assert stats["valeurs"]["TROT:DEFERRE_ANTERIEURS_POSTERIEURS"] == 1 and stats["valeurs"]["GALOP:ABSENT"] == 2
