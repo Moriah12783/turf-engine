@@ -11,6 +11,11 @@ on:
     # passes de production (08h30-21h30 GMT). Minute décalée : évite les pics
     # de charge GitHub des crons à :00.
     - cron: '17 1 * * *'
+    # Filet 03h47 UTC : les crons GitHub ne sont pas garantis (nuit du 28/09 :
+    # le passage de 01h17 n'a jamais démarré). Si le premier a tourné, celui-ci
+    # ne relit que les 3 derniers jours (~20 requêtes) ; sinon il fait tout le
+    # travail. Toujours dans le créneau, arrêt garanti avant 04h55.
+    - cron: '47 3 * * *'
   workflow_dispatch:
     inputs:
       action:
@@ -67,6 +72,7 @@ jobs:
 
       - name: Export Radar history to R2
         env:
+          PYTHONUNBUFFERED: "1"          # journal en direct, ligne par ligne
           RADAR_HISTORY_DSN: ${{ secrets.RADAR_HISTORY_DSN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
