@@ -274,20 +274,23 @@ def test_kelly_decide_a_T_regle_au_rapport_final():
     assert out["roi_par_cote"]["cote_5-15"]["paris"] == 1                  # tranche selon la cote de décision
 
 
-def _bench(path, races, engine_probs):
-    """Base de banc minimale : table predictions au format de turf_bench.db."""
+def _bench(path, races, editions):
+    """Base de banc minimale au format de turf_bench.db. ``editions`` :
+    (moteur, horizon) -> fonction(course) -> (probabilités, métadonnées, sélection, odds_real) ou None."""
     import sqlite3
     conn = sqlite3.connect(path)
     conn.execute("CREATE TABLE predictions (prediction_id TEXT, race_id TEXT, engine_name TEXT, horizon TEXT, "
-                 "probabilities_json TEXT)")
+                 "probabilities_json TEXT, metadata_json TEXT, selection_json TEXT, odds_real INTEGER)")
     for r in races:
         d = date.fromisoformat(r.day)
         race_id = f"R{r.key[1]}C{r.key[2]}_{d.strftime('%d%m%Y')}_SYNTH"
-        for (engine, horizon), fn in engine_probs.items():
-            probs = fn(r)
-            if probs is not None:
-                conn.execute("INSERT INTO predictions VALUES (?, ?, ?, ?, ?)",
-                             (f"{race_id}_{engine}_{horizon}", race_id, engine, horizon, json.dumps(probs)))
+        for (engine, horizon), fn in editions.items():
+            ed = fn(r)
+            if ed is not None:
+                probs, meta, selection, odds_real = ed
+                conn.execute("INSERT INTO predictions VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                             (f"{race_id}_{engine}_{horizon}", race_id, engine, horizon, json.dumps(probs),
+                              json.dumps(meta), json.dumps(selection), odds_real))
     conn.commit()
     conn.close()
 
@@ -297,17 +300,35 @@ def test_apport_du_fondamental_aux_moteurs_du_banc(mirror):
     lab.build_features(races)
     wf = lab.fundamental_walk_forward(races, list(lab.FEATURES))
     recent = [r for r in races if r.day >= "2026-01-01"]
+
+    def uniform(r):
+        return {str(x["num_pmu"]): 1.0 for x in r.runners}
+
+    def nve(r):                                   # une édition sur deux « de production » (poids 0,9)
+        prod = r.key[2] % 2 == 0
+        meta = {"market_calibration": {"applied": prod, "market_weight": 0.9 if prod else 0.7},
+                "model_probs": uniform(r)}
+        return uniform(r), meta, [1, 2, 3], 1
+
+    def market(r):                                # une édition sur trois nominale (sélection vide)
+        nominal = r.key[2] % 3 == 0
+        return uniform(r), {"market_available": not nominal}, [] if nominal else [1, 2], 0 if nominal else 1
+
     with tempfile.TemporaryDirectory() as d:
         path = os.path.join(d, "turf_bench.db")
-        _bench(path, recent, {
-            # Moteur sans information (uniforme) : le fondamental doit beaucoup lui apporter.
-            ("NEW_VALUE_ENGINE", "T30"): lambda r: {str(x["num_pmu"]): 1.0 for x in r.runners},
-            # Moteur qui publie une probabilité manquante : course écartée.
-            ("ETPE_ENGINE", "T_MATIN"): lambda r: {str(x["num_pmu"]): 0.1 for x in r.runners[1:]},
-        })
+        _bench(path, recent, {("NEW_VALUE_ENGINE", "T_MATIN"): nve, ("NEW_VALUE_ENGINE", "T30"): nve,
+                              ("MARKET_BASELINE", "T_MATIN"): market})
         report = lab.evaluate_bench(races, wf["oos"], lab.load_bench(path))
-    nve = report["NEW_VALUE_ENGINE_T30"]
-    assert nve["courses_jugees"] > 0 and nve["apport_demontre"] is True
-    assert nve["delta_ll_vs_moteur_recalibre"] > 0.05 and nve["beta_fondamental_moyen"] > 0
-    assert report["ETPE_ENGINE_T_MATIN"]["courses"] == 0
-    assert report["MARKET_BASELINE_T_MATIN"]["courses"] == 0                 # moteur absent du banc
+    toutes, prod = report["NEW_VALUE_ENGINE_T_MATIN_toutes"], report["NEW_VALUE_ENGINE_T_MATIN_production_poids_0.9"]
+    assert toutes["apport_demontre"] is True and toutes["gain_top1"] > 0
+    assert toutes["ic95_gain_top1"][0] <= toutes["gain_top1"] <= toutes["ic95_gain_top1"][1]
+    assert prod["courses"] < toutes["courses"] and prod["editions_exclues"] > 0
+    assert set(prod["composition"]) == {"poids_0.90"}
+    assert set(toutes["composition"]) == {"poids_0.90", "sans_marche"}
+    informatives = report["MARKET_BASELINE_T_MATIN_informatives"]
+    assert informatives["editions_exclues"] > 0
+    assert informatives["courses"] + informatives["editions_exclues"] == report["MARKET_BASELINE_T_MATIN_toutes"]["courses"]
+    assert report["NEW_VALUE_ENGINE_T90_toutes"]["courses"] == 0              # horizon absent du banc
+    pur = report["FONDAMENTAL_vs_NVE_PUR_T_MATIN_toutes"]
+    assert pur["courses"] > 0 and pur["delta_ll_fondamental_moins_nve_pur"] > 0 and pur["ic95"][0] > 0
+    assert report["FONDAMENTAL_vs_NVE_PUR_T_MATIN_production_poids_0.9"]["courses"] < pur["courses"]
