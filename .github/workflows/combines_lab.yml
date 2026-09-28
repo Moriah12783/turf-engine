@@ -1,0 +1,50 @@
+name: Labo paris combinés (test historique)
+
+# Le public du PMU sous-paie-t-il certaines combinaisons ? Test sur les
+# rapports DÉFINITIFS du miroir Radar (R2 privé, lecture seule), sans aucune
+# capture nouvelle. Dépôt public : le journal n'affiche que des agrégats par
+# type de pari ; aucun artefact, aucun commit ; rapport complet sur R2 privé
+# (lab/combines/). Aucune requête au Radar, aucun effet sur la production.
+# Voir turf_lab/combines_lab.py.
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "turf_lab/combines_lab.py"
+      - ".github/workflows/combines_lab.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: combines-lab
+  cancel-in-progress: true
+
+jobs:
+  combines:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      PYTHONUNBUFFERED: "1"
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET: ${{ secrets.R2_BUCKET }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -q --retries 10 --timeout 60 "numpy>=1.26,<3" "boto3>=1.36,<2"
+
+      - name: Fetch the private history mirror from R2 (read-only)
+        run: python -m turf_lab.history_export fetch --db turf_history.db
+
+      - name: Run the combined-bets lab (report goes to private R2 only)
+        run: python -m turf_lab.combines_lab --db turf_history.db
