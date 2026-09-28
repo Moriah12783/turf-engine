@@ -77,13 +77,15 @@ marché ; sa valeur se mesure une fois **combiné** au marché.
   cote. Le chiffre qui compte viendra de l'étape suivante : décider à T-30 ou
   T-15 avec les cotes de ce moment, régler au rapport final.
 
-## Horizon réel de pari : T-30 et T-15 (`BENTER_TX`)
+## Horizon réel de pari : T-30, T-15, T-5 (`BENTER_TX`)
 
 En pari mutuel, on mise **avant** le départ mais on est payé à la cote
 **finale**. Le test réaliste :
 
 - cotes de la dernière photo `cotes_snapshots` prise **au moins H minutes**
-  avant le départ, et au plus H+10 (sinon, pas de cote à cet horizon) ;
+  avant le départ, et au plus H+10, **cheval par cheval** (les partants
+  d'une même capture ne tombent pas toujours sur la même minute) ; il faut
+  une cote pour chaque partant ;
 - combinaison `p ∝ exp(α·log q_T + β·log p_fondamental)` apprise **semaine
   par semaine** sur les semaines précédentes (au moins 400 courses) : les
   photos n'existent que depuis le 15/07/2026 ;

@@ -58,7 +58,7 @@ def make_mirror(path, days=200, races_per_day=18, runners=8, seed=7, leak=False,
             early = [np.exp(b + e) for b, e in zip(base, extra)]                   # référence, moins informée
             total, total_early = sum(noisy), sum(early)
             close = [max(1.1, round(total / x * 0.85, 1)) for x in noisy]         # prélèvement 15 %
-            for minute in (45, 32, 17, 2):                 # photos : de la référence vers la clôture
+            for minute in (45, 32, 17, 6, 2):              # photos : de la référence vers la clôture
                 mixed = [np.exp(b + e * minute / 60.0) for b, e in zip(base, extra)]  # T-x : entre les deux
                 tot = sum(mixed)
                 for i, x in enumerate(mixed):
@@ -199,7 +199,7 @@ def test_rapport_complet_sans_fuite_dans_le_journal(mirror):
     assert {line.split(" ")[0] for line in logs.strip().splitlines()} <= {
         "BENTER_DONNEES", "BENTER_AUDIT_FUITE", "BENTER_PLI", "BENTER_RESULTAT", "BENTER_RESULTAT_REFERENCE",
         "BENTER_KELLY", "BENTER_KELLY_TEMOIN", "BENTER_TX"}
-    for h in ("T30", "T15"):
+    for h in ("T30", "T15", "T5"):
         tx = report["horizons_de_pari"][h]
         assert tx["courses_jugees"] > 0 and tx["ic95"][0] <= tx["delta_ll_vs_marche_T_recalibre"] <= tx["ic95"][1]
         # Les cotes glissent vers la clôture : l'information tardive est positive.

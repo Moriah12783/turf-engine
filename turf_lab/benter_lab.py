@@ -63,7 +63,7 @@ REPORT_PREFIX = "lab/benter/"
 KELLY_FRACTION = 0.25           # quart de Kelly
 EV_MIN = 0.05                   # espérance minimale d'un pari (+5 %)
 MAX_RACE_EXPOSURE = 0.05        # au plus 5 % de la bankroll par course
-TX_HORIZONS = (30, 15)          # minutes avant le départ
+TX_HORIZONS = (30, 15, 5)       # minutes avant le départ
 TX_MAX_STALENESS = 10           # la photo doit dater d'au plus H+10 minutes
 TX_MIN_PRIOR = 400              # courses minimales pour apprendre la combinaison à T-x
 ODDS_BUCKETS = (("cote_<5", 1.0, 5.0), ("cote_5-15", 5.0, 15.0), ("cote_>15", 15.0, float("inf")))
@@ -187,10 +187,12 @@ def load_races(db_path: str) -> Tuple[List[Race], Dict[str, int]]:
                             "AND libelle = 'Simple gagnant'"):
         key = (row[0], int(row[1]), int(row[2]))
         dividends[key] = None if key in dividends else (str(row[3]), _f(row[4]))   # doublon : ambigu
+    # course -> partant -> minute -> cote (photo retenue cheval par cheval : les
+    # partants d'une même capture ne tombent pas toujours sur la même minute)
     snaps: Dict[Tuple[str, int, int], Dict[int, Dict[int, float]]] = defaultdict(lambda: defaultdict(dict))
     for row in conn.execute("SELECT date_course, num_reunion, num_course, num_pmu, cote, minutes_avant_depart "
                             "FROM cotes_snapshots WHERE cote IS NOT NULL AND minutes_avant_depart IS NOT NULL"):
-        snaps[(row[0], int(row[1]), int(row[2]))][int(row[5])][int(row[3])] = float(row[4])
+        snaps[(row[0], int(row[1]), int(row[2]))][int(row[3])][int(row[5])] = float(row[4])
     races: Dict[Tuple[str, int, int], Race] = {}
     for row in conn.execute(_LOAD_SQL):
         key = (row["date_course"], int(row["num_reunion"]), int(row["num_course"]))
@@ -237,10 +239,11 @@ def load_races(db_path: str) -> Tuple[List[Race], Dict[str, int]]:
             race.dividend = div[1]
         race_snaps = snaps.get(race.key) or {}
         for horizon in TX_HORIZONS:
-            minute = pick_snapshot(race_snaps.keys(), horizon)
-            if minute is None:
-                continue
-            tx = [race_snaps[minute].get(int(r["num_pmu"])) for r in race.runners]
+            tx = []
+            for r in race.runners:
+                runner_snaps = race_snaps.get(int(r["num_pmu"])) or {}
+                minute = pick_snapshot(runner_snaps.keys(), horizon)
+                tx.append(runner_snaps[minute] if minute is not None else None)
             implied = _implied(tx)
             if implied is not None:
                 race.market_tx[horizon], race.odds_tx[horizon] = implied, np.array(tx)
