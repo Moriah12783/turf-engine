@@ -334,3 +334,80 @@ def test_apport_du_fondamental_aux_moteurs_du_banc(mirror):
     pur = report["FONDAMENTAL_vs_NVE_PUR_T_MATIN_toutes"]
     assert pur["courses"] > 0 and pur["delta_ll_fondamental_moins_nve_pur"] > 0 and pur["ic95"][0] > 0
     assert report["FONDAMENTAL_vs_NVE_PUR_T_MATIN_production_poids_0.9"]["courses"] < pur["courses"]
+
+
+# ── Ombre du fondamental : outils de lecture et puissance avant le gel ──
+def test_outils_de_l_ombre():
+    import math
+    from turf_lab import ombre
+    # Réunions homogènes : l'intervalle par réunion est plus large que par course.
+    vals = [1.0] * 10 + [0.0] * 10 + [1.0] * 10 + [0.0] * 10
+    lo_c, hi_c = ombre.intervalle(vals, list(range(40)), 0.95)
+    lo_r, hi_r = ombre.intervalle(vals, [i // 10 for i in range(40)], 0.95)
+    assert lo_r <= 0.5 <= hi_r and (hi_r - lo_r) > (hi_c - lo_c)
+    lo99, hi99 = ombre.intervalle(vals, list(range(40)), 0.99)
+    assert lo99 <= lo_c and hi99 >= hi_c
+    # Puissance : 50 % quand l'effet vaut exactement z × erreur-type projetée ; croît avec n.
+    se = 0.02
+    effet = ombre.z_bilateral(0.95) * se * math.sqrt(400 / 2300)
+    assert abs(ombre.puissance(effet, se, 400, 2300, 0.95) - 0.5) < 1e-9
+    assert ombre.puissance(0.01, se, 400, 2300, 0.95) > ombre.puissance(0.01, se, 400, 1000, 0.95)
+    assert ombre.puissance(-0.01, se, 400, 2300, 0.95) < 0.025
+    # Part marché d'une édition publiée, recettes A et B, « dans les 8 ».
+    m, g, f = np.array([0.5, 0.3, 0.2]), np.array([0.2, 0.2, 0.6]), np.array([0.6, 0.3, 0.1])
+    assert np.allclose(ombre.marche_de_edition(0.9 * m + 0.1 * g, g, 0.9), m)
+    assert np.allclose(ombre.ombre_lineaire(m, f), 0.9 * m + 0.1 * f)
+    assert np.allclose(ombre.ombre_loglineaire(m, f, 1.0, 0.0), m)
+    assert ombre.top8(list(range(1, 11)), np.arange(10)[::-1] / 45.0) == list(range(1, 9))
+    assert ombre.dans_les_8([3, 1, 2, 4, 5, 6, 7, 8, 9], [1, 2])
+    assert not ombre.dans_les_8([3, 1, 2, 4, 5, 6, 7, 8, 9], [9])
+
+
+def test_puissance_de_l_ombre_avant_gel(mirror):
+    races, _ = lab.load_races(mirror)
+    lab.build_features(races)
+    matin = [n for n in lab.FEATURES if n not in lab.INTRADAY_FEATURES]
+    wf = lab.fundamental_walk_forward(races, matin)
+    recent = [r for r in races if r.day >= "2025-12-01"]
+
+    def nve(r):
+        # Marché du matin = cote de référence (moins informée) ; modèle pur sans information.
+        if r.market_ref is None:
+            return None
+        w = 0.9 if r.day >= "2026-01-15" else 0.7          # production (poids 0,9) à partir du 15/01
+        nums = [int(x["num_pmu"]) for x in r.runners]
+        g = np.full(len(nums), 1.0 / len(nums))
+        pub = w * r.market_ref + (1 - w) * g
+        probs = {str(n): round(float(p), 4) for n, p in zip(nums, pub)}
+        if r.key[2] == 5:
+            probs["99"] = 0.01                               # non-partant tardif : hors calcul
+        meta = {"market_calibration": {"applied": True, "market_weight": w},
+                "model_probs": {str(n): round(float(x), 4) for n, x in zip(nums, g)}}
+        return probs, meta, [nums[i] for i in np.argsort(-pub)[:10]], 1
+
+    with tempfile.TemporaryDirectory() as d:
+        path = os.path.join(d, "turf_bench.db")
+        _bench(path, recent, {("NEW_VALUE_ENGINE", "T_MATIN"): nve, ("NEW_VALUE_ENGINE", "T15"): nve})
+        bench = lab.load_bench(path, lab.BENCH_HORIZONS + ("T15",))
+    rep = lab.evaluate_shadow_power(races, wf["oos"], bench)
+    m = rep["T_MATIN"]
+    assert m["exclusions"]["partants_differents_au_verrou"] > 0
+    a, b, b0 = m["A"], m["B"], m["B0"]
+    assert a["editions"] == m["editions_production"] > 0
+    # Le fondamental remplace un modèle pur sans information : l'ombre A gagne.
+    assert a["delta_ll"] > 0 and a["ic95"][0] <= a["delta_ll"] <= a["ic95"][1]
+    assert a["ic99"][0] <= a["ic95"][0] and a["ic99"][1] >= a["ic95"][1]
+    assert 0.0 <= a["puissance_2300_ic95"] <= 1.0 and isinstance(a["detectable_2300"], bool)
+    assert a["puissance_2300_ic95"] >= a["puissance_1000_ic99"]
+    # B apprise sur les seules éditions passées (toutes, poids 0,7 compris), jugée en production.
+    assert 0 < b["editions"] < a["editions"] and b["poids_moyens"]["fondamental"] > 0
+    assert b0["editions"] == b["editions"] and "gagnant_dans_8" not in b0
+    for recipe in (a, b):
+        for crit in ("gagnant_dans_8", "tierce_dans_8"):
+            s = recipe[crit]
+            assert s["editions"] > 0 and s["ic95"][0] <= s["ecart"] <= s["ic95"][1]
+            assert s["borne_basse_projetee_2300"] >= s["borne_basse_projetee_1000"]
+    assert rep["T15"]["A"]["editions"] > 0 and rep["T90"]["editions_avec_marche"] == 0
+    expected = "A_lineaire_0.90_0.10" if a["detectable_2300"] else "B_loglineaire"
+    assert rep["recette_principale_selon_regle"] == expected
+    assert "CHEVAL" not in json.dumps(rep) and "JOC" not in json.dumps(rep)

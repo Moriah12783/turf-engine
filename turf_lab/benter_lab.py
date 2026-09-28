@@ -47,9 +47,11 @@ import sqlite3
 import sys
 from collections import defaultdict
 from datetime import date, datetime, timezone
-from typing import Any, Dict, List, Optional, Sequence, Tuple
+from typing import Any, Dict, Hashable, List, Optional, Sequence, Tuple
 
 import numpy as np
+
+from turf_lab import ombre
 
 TRAIN_START = "2025-08-15"      # deux semaines d'historique cheval avant le 1er apprentissage
 FIRST_TEST_MONTH = "2026-01"
@@ -605,17 +607,18 @@ def evaluate_tx(races: Sequence[Race], oos: Dict, horizon: int) -> Dict[str, Any
 
 
 # ── Apport au produit : moteurs du banc + fondamental ────────────────────
-def load_bench(path: str) -> Dict[Tuple[str, str], Dict[Tuple[str, int, int], Dict[str, Any]]]:
+def load_bench(path: str, horizons: Sequence[str] = BENCH_HORIZONS
+               ) -> Dict[Tuple[str, str], Dict[Tuple[str, int, int], Dict[str, Any]]]:
     """(moteur, horizon) -> course -> édition publiée : probabilités, métadonnées,
     sélection et drapeau de cotes réelles (pour les découpages du dev NVE)."""
     out: Dict[Tuple[str, str], Dict[Tuple[str, int, int], Dict[str, Any]]] = defaultdict(dict)
     conn = sqlite3.connect(path)
     cols = {r[1] for r in conn.execute("PRAGMA table_info(predictions)")}
     extra = [c for c in ("metadata_json", "selection_json", "odds_real") if c in cols]
-    marks = ",".join("?" * len(BENCH_ENGINES)), ",".join("?" * len(BENCH_HORIZONS))
+    marks = ",".join("?" * len(BENCH_ENGINES)), ",".join("?" * len(horizons))
     query = (f"SELECT race_id, engine_name, horizon, probabilities_json{''.join(', ' + c for c in extra)} "
              f"FROM predictions WHERE engine_name IN ({marks[0]}) AND horizon IN ({marks[1]})")
-    for row in conn.execute(query, (*BENCH_ENGINES, *BENCH_HORIZONS)):
+    for row in conn.execute(query, (*BENCH_ENGINES, *horizons)):
         race_id, engine, horizon, probs = row[:4]
         rest = dict(zip(extra, row[4:]))
         m = _RACE_ID.match(str(race_id or ""))
@@ -797,6 +800,146 @@ def evaluate_bench(races: Sequence[Race], oos: Dict, bench: Dict,
     return results
 
 
+# ── Ombre du fondamental dans NVE : calcul de puissance avant le gel ─────
+def _nve_rows(races: Sequence[Race], oos: Dict, editions: Dict[Tuple[str, int, int], Dict[str, Any]]
+              ) -> Tuple[List[Dict[str, Any]], Dict[str, int]]:
+    """Éditions NVE avec marché, alignées sur les partants au départ : part
+    marché reconstruite (publié = poids × marché + (1 − poids) × modèle),
+    fondamental « état du matin », sélection publiée, gagnant et tiercé."""
+    rows: List[Dict[str, Any]] = []
+    excl: Dict[str, int] = defaultdict(int)
+    for r in races:
+        ed = editions.get(r.key)
+        if ed is None or r.key not in oos:
+            continue
+        meta = ed.get("meta") or {}
+        cal = meta.get("market_calibration") or {}
+        weight = float(cal.get("market_weight") or 0.0)
+        if cal.get("applied") is not True or not 0.0 < weight < 1.0:
+            excl["sans_marche"] += 1
+            continue
+        nums = [int(x["num_pmu"]) for x in r.runners]
+        model = {int(k): float(v) for k, v in (meta.get("model_probs") or {}).items()}
+        if set(ed["probs"]) != set(nums):
+            excl["partants_differents_au_verrou"] += 1            # non-partant tardif : hors calcul
+            continue
+        if any(n not in model for n in nums):
+            excl["sans_modele_pur"] += 1
+            continue
+        pub = np.array([ed["probs"][n] for n in nums], dtype=float)
+        mod = np.array([model[n] for n in nums], dtype=float)
+        placed = sorted((int(x["ordre_arrivee"]), int(x["num_pmu"])) for x in r.runners
+                        if isinstance(x.get("ordre_arrivee"), (int, float)) and 1 <= int(x["ordre_arrivee"]) <= 3)
+        rows.append({"race": r, "reunion": (r.day, r.key[1]), "weight": weight, "production": abs(weight - 0.9) < 1e-9,
+                     "nums": nums, "pub": pub, "market": ombre.marche_de_edition(pub, mod, weight),
+                     "fond": oos[r.key], "selection": [int(x) for x in ed.get("selection") or []],
+                     "tierce": [n for _, n in placed] if len(placed) >= 3 else None})
+    return rows, dict(excl)
+
+
+def _secondary(pairs: List[Tuple[int, int, Hashable]], n0: int) -> Dict[str, Any]:
+    """Écart apparié ombre − publié d'un taux « dans les 8 », IC95 par réunion
+    et borne basse projetée aux deux lectures (si l'écart reste le même)."""
+    if not pairs:
+        return {"editions": 0}
+    diff = [o - p for p, o, _ in pairs]
+    clusters = [c for _, _, c in pairs]
+    mean = float(np.mean(diff))
+    lo, hi = ombre.intervalle(diff, clusters, 0.95)
+    se = ombre.erreur_type(diff, clusters)
+    return {"editions": len(pairs), "publie": round(float(np.mean([p for p, _, _ in pairs])), 4),
+            "ombre": round(float(np.mean([o for _, o, _ in pairs])), 4), "ecart": round(mean, 4),
+            "ic95": [round(lo, 4), round(hi, 4)],
+            "borne_basse_projetee_1000": round(ombre.borne_basse_projetee(mean, se, n0, ombre.LECTURE_1), 4),
+            "borne_basse_projetee_2300": round(ombre.borne_basse_projetee(mean, se, n0, ombre.LECTURE_2), 4)}
+
+
+def _primary(deltas: List[float], clusters: List[Hashable]) -> Dict[str, Any]:
+    """Δll ombre − publié : intervalles par réunion et puissance aux deux lectures."""
+    if len(deltas) < 2:
+        return {"editions": len(deltas)}
+    mean = float(np.mean(deltas))
+    se = ombre.erreur_type(deltas, clusters)
+    n0 = len(deltas)
+    p1 = ombre.puissance(mean, se, n0, ombre.LECTURE_1, ombre.NIVEAU_LECTURE_1)
+    p2 = ombre.puissance(mean, se, n0, ombre.LECTURE_2, ombre.NIVEAU_LECTURE_2)
+    return {"editions": n0, "reunions": len(set(clusters)), "delta_ll": round(mean, 5),
+            "ic95": [round(v, 5) for v in ombre.intervalle(deltas, clusters, 0.95)],
+            "ic99": [round(v, 5) for v in ombre.intervalle(deltas, clusters, 0.99)],
+            "erreur_type": round(se, 5), "puissance_1000_ic99": round(p1, 3), "puissance_2300_ic95": round(p2, 3),
+            "detectable_2300": bool(p2 >= ombre.PUISSANCE_MIN)}
+
+
+def evaluate_shadow_power(races: Sequence[Race], oos: Dict, bench: Dict,
+                          horizons: Sequence[str] = ombre.HORIZONS_SECONDAIRES) -> Dict[str, Any]:
+    """Point 4 de la règle (avant le gel) : sur les éditions NVE de production
+    passées et le fondamental « état du matin » hors échantillon, valeur
+    rétrospective des deux recettes face à l'édition publiée.
+    A : 0,90 marché + 0,10 fondamental (linéaire, sans apprentissage).
+    B : marché^a × fondamental^b, (a, b) réappris chaque lundi sur les seules
+    éditions passées (toutes éditions NVE avec marché), jugée en production.
+    B0 : marché^a seul (part de B due au seul recalibrage du marché).
+    Critère principal au matin ; « dans les 8 » (gagnant, tiercé) aux quatre
+    horizons. Aucune donnée d'ombre : tout est rétrospectif."""
+    out: Dict[str, Any] = {"definition_detectable": (
+        f"puissance >= {ombre.PUISSANCE_MIN:.0%} d'une borne basse IC95 positive à {ombre.LECTURE_2} éditions, "
+        "effet estimé et erreur-type par réunion (fixé avant le calcul)")}
+    for horizon in horizons:
+        rows, excl = _nve_rows(races, oos, bench.get(("NEW_VALUE_ENGINE", horizon)) or {})
+        by_week: Dict[Tuple[int, int], List[Dict[str, Any]]] = defaultdict(list)
+        for row in rows:
+            by_week[date.fromisoformat(row["race"].day).isocalendar()[:2]].append(row)
+        acc = {k: {"d": [], "c": [], "gagnant": [], "tierce": []} for k in ("A", "B", "B0")}
+        weights_b: List[Tuple[float, float]] = []
+        history: List[Dict[str, Any]] = []
+        for week in sorted(by_week):
+            test = by_week[week]
+            ab = a0 = None
+            if len(history) >= BENCH_MIN_PRIOR:
+                blocks = [np.column_stack([np.log(np.maximum(h["market"], FLOOR)), np.log(np.maximum(h["fond"], FLOOR))])
+                          for h in history]
+                winners = [h["race"].winner for h in history]
+                ab = fit_clogit(Packed(blocks, winners), ridge=1e-3)
+                a0 = fit_clogit(Packed([b[:, :1] for b in blocks], winners), ridge=1e-3)
+                weights_b.append((float(ab[0]), float(ab[1])))
+            for row in test:
+                if not row["production"]:
+                    continue
+                w, nums, pub = row["race"].winner, row["nums"], row["pub"]
+                shadows = {"A": ombre.ombre_lineaire(row["market"], row["fond"])}
+                if ab is not None:
+                    shadows["B"] = ombre.ombre_loglineaire(row["market"], row["fond"], float(ab[0]), float(ab[1]))
+                    shadows["B0"] = ombre.ombre_loglineaire(row["market"], None, float(a0[0]))
+                pub_sel = row["selection"] or ombre.top8(nums, pub)
+                for key, sh in shadows.items():
+                    a = acc[key]
+                    a["d"].append(math.log(max(sh[w], FLOOR)) - math.log(max(pub[w], FLOOR)))
+                    a["c"].append(row["reunion"])
+                    sel = ombre.top8(nums, sh)
+                    a["gagnant"].append((int(ombre.dans_les_8(pub_sel, [nums[w]])),
+                                         int(ombre.dans_les_8(sel, [nums[w]])), row["reunion"]))
+                    if row["tierce"]:
+                        a["tierce"].append((int(ombre.dans_les_8(pub_sel, row["tierce"])),
+                                            int(ombre.dans_les_8(sel, row["tierce"])), row["reunion"]))
+            history.extend(test)
+        entry: Dict[str, Any] = {"editions_avec_marche": len(rows),
+                                 "editions_production": sum(r["production"] for r in rows), "exclusions": excl}
+        for key, a in acc.items():
+            recipe: Dict[str, Any] = _primary(a["d"], a["c"])
+            if key != "B0":
+                n0 = max(1, len(a["d"]))
+                recipe["gagnant_dans_8"] = _secondary(a["gagnant"], n0)
+                recipe["tierce_dans_8"] = _secondary(a["tierce"], n0)
+            if key == "B" and weights_b:
+                recipe["poids_moyens"] = {"marche": round(float(np.mean([x for x, _ in weights_b])), 4),
+                                          "fondamental": round(float(np.mean([y for _, y in weights_b])), 4)}
+            entry[key] = recipe
+        out[horizon] = entry
+    matin = (out.get("T_MATIN") or {}).get("A") or {}
+    out["recette_principale_selon_regle"] = "A_lineaire_0.90_0.10" if matin.get("detectable_2300") else "B_loglineaire"
+    return out
+
+
 # ── Étape 3 simulée : Kelly fractionné ───────────────────────────────────
 def _roi(staked: float, returned: float) -> Optional[float]:
     return round(returned / staked - 1.0, 4) if staked else None
@@ -907,9 +1050,9 @@ def run(db_path: str, bench_path: Optional[str] = None) -> Dict[str, Any]:
                                                                   "ic95_roi_mise_fixe", "kelly_bankroll_finale",
                                                                   "kelly_drawdown_max")},
                            "temoin": tx.get("kelly_temoin_marche_seul")})
-    bench_report = bench_fige = None
+    bench_report = bench_fige = shadow = None
     if bench_path and os.path.exists(bench_path):
-        bench = load_bench(bench_path)
+        bench = load_bench(bench_path, tuple(dict.fromkeys(BENCH_HORIZONS + ombre.HORIZONS_SECONDAIRES)))
         bench_report = evaluate_bench(races, wf["oos"], bench)
         for entry in bench_report.values():
             _log("BENTER_BANC", entry)
@@ -919,6 +1062,13 @@ def run(db_path: str, bench_path: Optional[str] = None) -> Dict[str, Any]:
         bench_fige = evaluate_bench(races, wf_fige["oos"], bench, horizons=("T_MATIN",))
         for entry in bench_fige.values():
             _log("BENTER_BANC_VARIABLES_FIGEES", entry)
+        # Point 4 de la règle d'ombre : puissance des deux recettes, avec le
+        # modèle « état du matin » (celui qui tournera réellement).
+        shadow = evaluate_shadow_power(races, wf_fige["oos"], bench)
+        for horizon in ombre.HORIZONS_SECONDAIRES:
+            _log("BENTER_OMBRE_PUISSANCE", {"horizon": horizon, **(shadow.get(horizon) or {})})
+        _log("BENTER_OMBRE_DECISION", {"definition_detectable": shadow["definition_detectable"],
+                                       "recette_principale_selon_regle": shadow["recette_principale_selon_regle"]})
     return {
         "genere_le_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "methode": {"apprentissage_depuis": TRAIN_START, "premier_mois_test": FIRST_TEST_MONTH,
@@ -935,6 +1085,7 @@ def run(db_path: str, bench_path: Optional[str] = None) -> Dict[str, Any]:
         "horizons_de_pari": horizons,
         "apport_aux_moteurs_du_banc": bench_report,
         "apport_aux_moteurs_du_banc_variables_figees": bench_fige,
+        "ombre_puissance_avant_gel": shadow,
     }
 
 
