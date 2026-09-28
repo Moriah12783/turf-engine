@@ -138,6 +138,25 @@ Lecture :
 - Photos de cotes : environ 900 courses par horizon seulement (captures
   Radar espacées de 5 à 15 min) ; échantillons T-x encore petits.
 
+### Apport au produit (moteurs du banc, 28/09/2026)
+
+| Moteur × horizon | Courses jugées | Gain ll/course (IC 95 %) | Gagnant en tête : moteur → combiné |
+|---|---:|---|---|
+| NEW_VALUE_ENGINE, matin | 718 | **+0,070** [+0,036 ; +0,104] | **23,8 % → 27,0 %** |
+| MARKET_BASELINE, matin | 704 | **+0,086** [+0,058 ; +0,115] | 21,7 % → 27,3 % |
+| MARKET_BASELINE, T-30 | 715 | +0,014 [+0,0004 ; +0,027] | 26,3 % → 28,3 % |
+| NEW_VALUE_ENGINE, T-30 | 718 | +0,008 [−0,015 ; +0,032] | 26,6 % → 28,6 % |
+| RADAR_V4 (matin = T-30) | 197 | −0,011 [−0,034 ; +0,012] | 27,9 % → 27,9 % |
+
+ETPE_ENGINE ne publie que des sélections (pas de probabilités) : non mesuré.
+
+- **L'édition du matin est la vraie cible produit** : le fondamental y ajoute
+  une information que le marché du matin n'a pas encore (gain démontré sur
+  NVE et sur la base marché ; +3,2 points de gagnants en tête pour NVE).
+- À T-30, le marché a déjà rattrapé l'essentiel : gain faible (démontré de
+  justesse pour la base marché, pas pour NVE).
+- RADAR_V4 : aucun apport mesurable (échantillon plus court).
+
 ## Confidentialité (dépôt public)
 
 - Le journal n'affiche que des **agrégats par mois** : nombres de courses,
