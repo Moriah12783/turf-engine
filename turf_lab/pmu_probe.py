@@ -28,6 +28,7 @@ from turf_lab.secure_http import DEFAULT_HEADERS, build_ssl_context
 HOST = "https://online.turfinfo.api.pmu.fr/rest/client"
 BET_TYPES = ("SIMPLE_GAGNANT", "COUPLE_GAGNANT", "COUPLE_ORDRE", "TRIO", "DEUX_SUR_QUATRE", "MULTI")
 PAUSE_S = 0.3
+WATCH_MINUTES = (60, 30, 15, 5, 2)     # mode suivi : passages avant le départ
 
 
 def _log(tag: str, payload: Dict[str, Any]) -> None:
@@ -104,6 +105,8 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser.add_argument("--date")
     parser.add_argument("--reunion", type=int)
     parser.add_argument("--course", type=int)
+    parser.add_argument("--suivre", action="store_true",
+                        help="suivre la course jusqu'au départ (T-60, T-30, T-15, T-5, T-2)")
     args = parser.parse_args(argv)
     paris_now = datetime.now(timezone.utc) + timedelta(hours=2)
     day = args.date or paris_now.strftime("%d%m%Y")
@@ -127,6 +130,8 @@ def main(argv: Optional[List[str]] = None) -> int:
     status, course, _ = fetch(f"{HOST}/7/programme/{day}/R{r_num}/C{c_num}")
     offered = offered_bets(course) if isinstance(course, dict) else []
     _log("PMU_PROBE_PARIS_PROPOSES", {"types": offered})
+    if args.suivre and target[0]:
+        return watch(day, r_num, c_num, offered, target[0])
     found = []
     tries = [("7", "/combinaisons?specialisation=INTERNET")] + [("7", f"/rapports/{t}") for t in offered]
     for client, suffix in tries:
@@ -141,6 +146,38 @@ def main(argv: Optional[List[str]] = None) -> int:
             _log("PMU_PROBE_KO", entry)
         time.sleep(PAUSE_S)
     _log("PMU_PROBE_FIN", {"reponses_ok": len(found), "essais": len(tries)})
+    return 0
+
+
+def availability(day: str, r_num: int, c_num: int, offered: List[str]) -> Dict[str, Any]:
+    """Pour chaque pari proposé : nombre de combinaisons publiées (0 = vide),
+    et le détail du point d'accès /combinaisons (par type : nombre et champs)."""
+    base = f"{HOST}/7/programme/{day}/R{r_num}/C{c_num}"
+    out: Dict[str, Any] = {}
+    for bet in offered:
+        status, body, _ = fetch(f"{base}/rapports/{bet}")
+        out[bet] = len(body.get("rapportsParticipant") or []) if status == 200 and isinstance(body, dict) else 0
+        time.sleep(PAUSE_S)
+    status, body, _ = fetch(f"{base}/combinaisons?specialisation=INTERNET")
+    combos = {}
+    for item in (body or {}).get("combinaisons") or [] if isinstance(body, dict) else []:
+        liste = item.get("listeCombinaisons") or []
+        combos[str(item.get("pariType"))] = {"n": len(liste),
+                                             "champs": sorted(liste[0]) if liste and isinstance(liste[0], dict) else []}
+    out["_combinaisons"] = combos
+    return out
+
+
+def watch(day: str, r_num: int, c_num: int, offered: List[str], start_ms: int) -> int:
+    """Suit la course : un relevé à chaque horizon encore à venir."""
+    for minutes in WATCH_MINUTES:
+        wake = start_ms / 1000 - minutes * 60
+        delay = wake - time.time()
+        if delay < -60:
+            continue
+        if delay > 0:
+            time.sleep(delay)
+        _log("PMU_PROBE_SUIVI", {"minutes_avant_depart": minutes, **availability(day, r_num, c_num, offered)})
     return 0
 
 

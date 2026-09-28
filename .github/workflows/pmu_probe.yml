@@ -30,7 +30,8 @@ permissions:
 jobs:
   sonde:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    # Mode suivi : la sonde attend le départ de la course (jusqu'à ~4 h).
+    timeout-minutes: 300
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -50,4 +51,4 @@ jobs:
           ARGS=()
           [ -n "$IN_DATE" ] && ARGS+=(--date "$IN_DATE")
           [ -n "$IN_REUNION" ] && [ -n "$IN_COURSE" ] && ARGS+=(--reunion "$IN_REUNION" --course "$IN_COURSE")
-          python -m turf_lab.pmu_probe "${ARGS[@]}"
+          python -m turf_lab.pmu_probe --suivre "${ARGS[@]}"

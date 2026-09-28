@@ -32,3 +32,14 @@ def test_candidats_couvrent_les_paris_combines():
     paths = {s for _, s in probe.candidates()}
     assert "/combinaisons?specialisation=INTERNET" in paths and "/rapports/E_TRIO" in paths
     assert len(probe.candidates()) < 120                                     # sonde légère
+
+
+def test_suivi_releve_seulement_les_horizons_a_venir(monkeypatch):
+    calls, now = [], [10_000.0]
+    monkeypatch.setattr(probe.time, "time", lambda: now[0])
+    monkeypatch.setattr(probe.time, "sleep", lambda s: now.__setitem__(0, now[0] + s))
+    monkeypatch.setattr(probe, "availability", lambda *a: calls.append(round(now[0])) or {})
+    start_ms = (10_000 + 20 * 60) * 1000                                    # départ dans 20 min
+    assert probe.watch("28092026", 1, 1, [], start_ms) == 0
+    # T-60 et T-30 déjà passés : relevés à T-15, T-5, T-2.
+    assert calls == [10_000 + 5 * 60, 10_000 + 15 * 60, 10_000 + 18 * 60]
