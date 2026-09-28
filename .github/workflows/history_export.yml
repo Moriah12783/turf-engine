@@ -1,0 +1,98 @@
+name: Historique Radar -> R2 (phase 1 Benter)
+
+# Export NOCTURNE, en LECTURE SEULE, de l'historique Radar (Supabase, rôle
+# lecteur_benter) vers R2 history/turf_history.db. Totalement indépendant de
+# la production : ne lit ni n'écrit turf_bench.db, ne committe rien, ne
+# déploie rien. Voir docs/HISTORIQUE_RADAR.md.
+
+on:
+  schedule:
+    # 01h17 UTC : dans le créneau 00h-05h UTC convenu avec le Radar, hors des
+    # passes de production (08h30-21h30 GMT). Minute décalée : évite les pics
+    # de charge GitHub des crons à :00.
+    - cron: '17 1 * * *'
+    # Filet 03h47 UTC : les crons GitHub ne sont pas garantis (nuit du 28/09 :
+    # le passage de 01h17 n'a jamais démarré). Si le premier a tourné, celui-ci
+    # ne relit que les 3 derniers jours (~20 requêtes) ; sinon il fait tout le
+    # travail. Toujours dans le créneau, arrêt garanti avant 04h55.
+    - cron: '47 3 * * *'
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "probe = test de connexion (1 requête) ; run = export ; status = état du miroir sur R2"
+        type: choice
+        options: [run, probe, status]
+        default: run
+      start_date:
+        description: "Plage forcée : début AAAA-MM-JJ (vide = export normal)"
+        required: false
+        default: ""
+      end_date:
+        description: "Plage forcée : fin AAAA-MM-JJ (vide = jusqu'à hier)"
+        required: false
+        default: ""
+      tables:
+        description: "Tables séparées par des virgules (vide = les 6)"
+        required: false
+        default: ""
+      force_hors_creneau:
+        description: "Autoriser un export hors 00h-05h UTC (à éviter : demande du Radar)"
+        type: boolean
+        default: false
+      empreintes:
+        description: "Contrôle par empreinte : auto = le dimanche (à partir du 11/10/2026), oui = forcer, non = sauter"
+        type: choice
+        options: [auto, oui, non]
+        default: auto
+
+permissions:
+  contents: read
+
+concurrency:
+  group: history-export
+  cancel-in-progress: false
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    # L'export s'arrête seul après 45 min (et jamais après 05h UTC) ; la nuit
+    # suivante reprend là où il s'est arrêté.
+    timeout-minutes: 60
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -q "psycopg[binary]>=3.1,<4" "boto3>=1.36,<2"
+
+      - name: Export Radar history to R2
+        env:
+          PYTHONUNBUFFERED: "1"          # journal en direct, ligne par ligne
+          RADAR_HISTORY_DSN: ${{ secrets.RADAR_HISTORY_DSN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          # Entrées manuelles passées par variables d'environnement (jamais
+          # injectées dans le script).
+          IN_ACTION: ${{ github.event.inputs.action || 'run' }}
+          IN_START: ${{ github.event.inputs.start_date }}
+          IN_END: ${{ github.event.inputs.end_date }}
+          IN_TABLES: ${{ github.event.inputs.tables }}
+          IN_FORCE: ${{ github.event.inputs.force_hors_creneau }}
+          IN_EMPREINTES: ${{ github.event.inputs.empreintes || 'auto' }}
+        run: |
+          ARGS=("$IN_ACTION")
+          if [ "$IN_ACTION" = "run" ]; then
+            [ -n "$IN_START" ] && ARGS+=(--start "$IN_START")
+            [ -n "$IN_END" ] && ARGS+=(--end "$IN_END")
+            [ -n "$IN_TABLES" ] && ARGS+=(--tables "$IN_TABLES")
+            [ "$IN_FORCE" = "true" ] && ARGS+=(--force-hors-creneau)
+            ARGS+=(--empreintes "$IN_EMPREINTES")
+          fi
+          python -m turf_lab.history_export "${ARGS[@]}"
