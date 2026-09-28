@@ -50,11 +50,32 @@ marché ; sa valeur se mesure une fois **combiné** au marché.
 - **IC 95 %** par bootstrap sur les courses : l'avantage n'est **démontré**
   que si la borne basse est positive (`avantage_demontre`).
 - **G1** : au moins 3 000 courses jugées (`G1_courses_suffisantes`).
-- Le marché de référence est la **cote de clôture** (`cote_reference`
-  finale) : c'est le repère le plus exigeant. En production, on pariera à T-x
-  avec des cotes moins informées, donc un gain mesuré ici est prudent.
+- Le marché de référence est la **cote de clôture** `cote_direct` finale :
+  vérifié le 28/09/2026 sur 3 057 gagnants, elle vaut exactement le rapport
+  simple gagnant payé (médiane rapport / cote = 1,000). **`cote_reference`
+  n'est pas la clôture** (médiane 0,905, de 0,51 à 1,51) : c'est une cote de
+  référence plus ancienne, gardée comme second repère
+  (`combinaison_marche_reference`). Le premier passage du labo (PR #8)
+  l'avait prise à tort pour la clôture ; corrigé dans la PR suivante.
 - `ll_fondamental` < `ll_marche` est **normal** : Benter l'observait aussi.
   Ce qui compte, c'est `beta_fondamental` > 0 et le delta.
+
+## Étape 3 simulée : Kelly fractionné (`BENTER_KELLY`)
+
+- On mise sur chaque cheval dont l'espérance `p_combinée × cote − 1` dépasse
+  **+5 %**, au **quart de Kelly**, sans dépasser **5 % de la bankroll par
+  course**. Le gain est réglé au **rapport officiel** simple gagnant (à
+  défaut, à la cote finale, qui lui est égale en médiane).
+- Deux lectures : **ROI à mise fixe** (1 par pari, avec son IC 95 % par
+  bootstrap sur les courses) et **bankroll Kelly** (bankroll finale,
+  drawdown maximal), plus le ROI par mois et par tranche de cote.
+- **Témoin** (`BENTER_KELLY_TEMOIN`) : la même stratégie sur le marché seul
+  recalibré. Sur un marché calibré, elle ne trouve presque aucun pari ; si
+  elle en trouvait beaucoup, la simulation serait suspecte.
+- **Borne haute** : la décision utilise la cote finale, qu'on ne connaît
+  qu'au départ en pari mutuel, et ignore l'effet de nos propres mises sur la
+  cote. Le chiffre qui compte viendra de l'étape suivante : décider à T-30 ou
+  T-15 avec les cotes de ce moment, régler au rapport final.
 
 ## Confidentialité (dépôt public)
 
@@ -65,6 +86,14 @@ marché ; sa valeur se mesure une fois **combiné** au marché.
   ne va que sur R2 privé.
 - Lire le rapport : Cloudflare → R2 → `turf-engine-data` →
   `lab/benter/dernier.json` → *Download*.
+- **Décision du 28/09/2026 (Steph, avec le dev Radar)** : le dépôt reste
+  **public** tant que rien n'est vendu (pas de frais GitHub). Au passage à la
+  vente : dépôt **privé**, ou `site/` retiré de Git et publié directement sur
+  Cloudflare depuis le workflow, avec un petit commit régulier pour que
+  GitHub ne coupe pas les tâches planifiées après 60 jours sans activité.
+  À décider aussi : le sort de l'ancienne `turf_bench.db` (pronostics
+  RADAR_V4 scellés du 07/09 au 24/09, présents dans le dépôt et son
+  historique).
 
 ## Suite du plan
 

@@ -35,7 +35,7 @@ def make_mirror(path, days=200, races_per_day=18, runners=8, seed=7, leak=False,
     db = HistoryDB(path)
     for d in range(days):
         day = (start + timedelta(days=d)).isoformat()
-        courses, parts, arrs = [], [], []
+        courses, parts, arrs, raps = [], [], [], []
         pool = rng.sample(horses, races_per_day * runners)
         for rc in range(races_per_day):
             field = pool[rc * runners:(rc + 1) * runners]
@@ -52,8 +52,14 @@ def make_mirror(path, days=200, races_per_day=18, runners=8, seed=7, leak=False,
             arrs.append(_tuple("arrivees", {"id": d * 100 + rc, "date_course": day, "num_reunion": 1,
                                             "num_course": rc + 1,
                                             "ordre_arrivee": json.dumps([[order[0] + 1], [order[1] + 1]])}))
-            noisy = [np.exp(h["ability"] + rng.gauss(0, 0.8)) for h in field]
-            total = sum(noisy)
+            noisy = [np.exp(h["ability"] + rng.gauss(0, 0.8)) for h in field]       # clôture
+            early = [np.exp(h["ability"] + rng.gauss(0, 1.5)) for h in field]       # référence, moins informée
+            total, total_early = sum(noisy), sum(early)
+            close = [max(1.1, round(total / x * 0.85, 1)) for x in noisy]         # prélèvement 15 %
+            raps.append(_tuple("rapports_definitifs", {
+                "date_course": day, "num_reunion": 1, "num_course": rc + 1, "type_pari": "SIMPLE_GAGNANT",
+                "libelle": "Simple gagnant", "combinaison": str(winner + 1),
+                "dividende_pour_1e": close[winner], "rembourse": 0}))
             for i, h in enumerate(field):
                 won_today = int(i == winner)
                 parts.append(_tuple("participants", {
@@ -67,7 +73,8 @@ def make_mirror(path, days=200, races_per_day=18, runners=8, seed=7, leak=False,
                     "nombre_places": 0, "gains_carriere": 1000 * h["victoires"], "gains_annee_en_cours": 0,
                     "handicap_poids": 560 + rng.randrange(40) if spec == "PLAT" else None,
                     "place_corde": i + 1 if spec == "PLAT" else None,
-                    "cote_reference": round(total / noisy[i] / 0.85, 1), "ordre_arrivee": pos[i]}))
+                    "cote_direct": close[i], "cote_reference": max(1.1, round(total_early / early[i] * 0.85, 1)),
+                    "ordre_arrivee": pos[i]}))
             for i, h in enumerate(field):
                 h["courses"] += 1
                 h["victoires"] += int(i == winner)
@@ -75,6 +82,8 @@ def make_mirror(path, days=200, races_per_day=18, runners=8, seed=7, leak=False,
         db.replace_date("courses", day, courses, "t")
         db.replace_date("arrivees", day, arrs, "t")
         db.replace_date("participants", day, parts, "t")
+        if d % 2 == 0:                                   # rapports officiels : un jour sur deux
+            db.replace_date("rapports_definitifs", day, raps, "t")
     db.close()
     return path
 
@@ -122,6 +131,10 @@ def test_chargement_courses_et_gagnants(mirror):
     assert stats["courses_trot"] == stats["courses_galop"]
     assert all(r.runners[r.winner]["ordre_arrivee"] == 1 for r in races)
     assert all(r.market is not None and abs(r.market.sum() - 1) < 1e-9 for r in races)
+    assert all(r.market_ref is not None for r in races)
+    assert stats["courses_avec_rapport_officiel"] == 100 * 18
+    assert all(r.dividend == r.odds[r.winner] for r in races if r.dividend is not None)
+    assert 1.1 < stats["surround_moyen_cloture"] < 1.25                  # prélèvement ~15 %
     days = [r.day for r in races]
     assert days == sorted(days)                                         # ordre chronologique
 
@@ -163,11 +176,18 @@ def test_rapport_complet_sans_fuite_dans_le_journal(mirror):
     assert comb["ic95_vs_marche_recalibre"][0] <= comb["delta_ll_par_course_vs_marche_recalibre"] \
         <= comb["ic95_vs_marche_recalibre"][1]
     assert set(report["coefficients_dernier_pli"]) >= {"TROT", "GALOP"}
+    assert report["combinaison_marche_reference"]["courses_jugees"] > 0
+    assert report["kelly"]["paris"] > 0 and report["kelly"]["roi_mise_fixe"] is not None
+    # Témoin (marché seul recalibré) : présent ; sur un vrai marché calibré (γ ≈ 1) il ne mise presque
+    # rien, mais le marché synthétique, bruité donc mal calibré, laisse du jeu au simple recalibrage.
+    assert {"paris", "roi_mise_fixe"} <= set(report["kelly_temoin_marche_seul"])
     # Dépôt public : le journal ne contient ni cheval, ni jockey, ni coefficient.
     for secret in ("CHEVAL", "JOC ", "ENT ", "taux_victoires", "coefficients"):
         assert secret not in logs
     assert {line.split(" ")[0] for line in logs.strip().splitlines()} <= {
-        "BENTER_DONNEES", "BENTER_AUDIT_FUITE", "BENTER_PLI", "BENTER_RESULTAT"}
+        "BENTER_DONNEES", "BENTER_AUDIT_FUITE", "BENTER_PLI", "BENTER_RESULTAT", "BENTER_RESULTAT_REFERENCE",
+        "BENTER_KELLY", "BENTER_KELLY_TEMOIN"}
+    assert "_comb" not in report and "_recal" not in report                # probabilités par course : jamais
 
 
 def test_envoi_sur_r2_prive(monkeypatch, mirror):
@@ -185,3 +205,35 @@ def test_envoi_sur_r2_prive(monkeypatch, mirror):
     assert key == "lab/benter/fondamental_2026-09-28_42.json"
     assert set(s3.objects) == {key, "lab/benter/dernier.json"}
     assert json.loads(s3.objects[key][0])["genere_le_utc"] == report["genere_le_utc"]
+
+
+def _race(day, odds, winner, dividend=None):
+    race = lab.Race((day, 1, 1), day, "TROT")
+    race.runners = [{"num_pmu": i + 1} for i in range(len(odds))]
+    race.winner, race.odds, race.dividend = winner, np.array(odds, dtype=float), dividend
+    return race
+
+
+def test_simulation_kelly_cas_calcules_a_la_main():
+    gagne = _race("2026-02-01", [2.0, 4.0, 8.0], winner=1, dividend=4.2)
+    perd = _race("2026-02-02", [2.0, 4.0, 8.0], winner=0)
+    probs = {gagne.key: np.array([0.40, 0.35, 0.25]), perd.key: np.array([0.40, 0.35, 0.25])}
+    # Espérances : 0.40·2 − 1 = −0.20 ; 0.35·4 − 1 = +0.40 ; 0.25·8 − 1 = +1.00 → 2 paris par course.
+    out = lab.simulate_kelly([gagne, perd], probs)
+    assert out["paris"] == 4 and out["courses_jouees"] == 2
+    assert out["roi_mise_fixe"] == round(4.2 / 4 - 1, 4)                   # réglé au rapport officiel 4,2
+    assert out["reglement"] == {"rapport_officiel": 1, "cote_finale": 0}
+    # Kelly : f = 0.25·[0.40/3, 1.00/7] = [0.0333, 0.0357] → total 6,9 % > 5 % : ramené à 5 %.
+    f = 0.25 * np.array([0.40 / 3, 1.00 / 7])
+    f *= 0.05 / f.sum()
+    b1 = 1.0 + f[0] * 4.2 - f.sum()
+    assert out["kelly_bankroll_finale"] == round(b1 * (1 - 0.05), 4)
+    assert out["kelly_drawdown_max"] == round(0.05, 4)
+    assert out["roi_par_cote"]["cote_<5"]["paris"] == 2 and out["roi_par_cote"]["cote_5-15"]["paris"] == 2
+
+
+def test_simulation_sans_esperance_ne_mise_rien():
+    race = _race("2026-02-01", [1.6, 3.2, 6.4], winner=0)                # Σ 1/cote = 1,09 : prélèvement
+    fair = 1 / race.odds / (1 / race.odds).sum()                         # le marché lui-même, sans avantage
+    out = lab.simulate_kelly([race], {race.key: fair})
+    assert out["paris"] == 0 and out["roi_mise_fixe"] is None

@@ -13,8 +13,14 @@ Méthode (docs/LABO_BENTER.md, métrique unique de docs/PROTOCOLE_MOTEURS.md) :
      appris sur les mois de test PRÉCÉDENTS (jamais sur le mois jugé).
   4. Juge : gain de log-vraisemblance par course face au marché RECALIBRÉ
      (q^γ, qui corrige déjà le biais favori/outsider), IC 95 % par bootstrap.
-     Marché = cotes de clôture (cote_reference finale) : repère exigeant ; en
-     production les cotes à T-x seront moins informées.
+     Marché = cote de CLÔTURE ``cote_direct`` finale : vérifié le 28/09/2026,
+     elle vaut le rapport simple gagnant payé (médiane 1,000). ``cote_reference``
+     n'est PAS la clôture (rapport / cote_reference : médiane 0,905, 0,51 à
+     1,51) : elle sert de second repère, moins informé.
+  5. Étape 3 simulée : mises au Kelly fractionné sur les probabilités
+     combinées, réglées au rapport officiel. Décision aux cotes finales :
+     BORNE HAUTE (en pari mutuel, la cote finale n'est connue qu'au départ).
+     Témoin : la même stratégie sur le marché seul ne doit presque rien miser.
 
 Confidentialité (dépôt public) : le journal n'affiche que des agrégats par
 mois ; aucune donnée par course ou par partant, aucun coefficient. Le rapport
@@ -49,6 +55,10 @@ GROUPS = {"TROT_ATTELE": "TROT", "TROT_MONTE": "TROT", "PLAT": "GALOP", "OBSTACL
 DISCIPLINE_GROUP = {"ATTELE": "TROT", "MONTE": "TROT", "PLAT": "GALOP", "HAIE": "GALOP",
                     "STEEPLECHASE": "GALOP", "CROSS": "GALOP"}
 REPORT_PREFIX = "lab/benter/"
+KELLY_FRACTION = 0.25           # quart de Kelly
+EV_MIN = 0.05                   # espérance minimale d'un pari (+5 %)
+MAX_RACE_EXPOSURE = 0.05        # au plus 5 % de la bankroll par course
+ODDS_BUCKETS = (("cote_<5", 1.0, 5.0), ("cote_5-15", 5.0, 15.0), ("cote_>15", 15.0, float("inf")))
 
 FEATURES = (
     "taux_victoires", "taux_places", "log_courses", "log_gains", "log_gains_annee",
@@ -115,14 +125,25 @@ def parse_musique(musique: Optional[str], last: int = 6) -> Dict[str, float]:
 
 # ── Chargement et variables d'avant-course ───────────────────────────────
 class Race:
-    __slots__ = ("key", "day", "group", "runners", "features", "winner", "market")
+    __slots__ = ("key", "day", "group", "runners", "features", "winner", "market", "market_ref",
+                 "odds", "dividend")
 
     def __init__(self, key: Tuple[str, int, int], day: str, group: str):
         self.key, self.day, self.group = key, day, group
         self.runners: List[Dict[str, Any]] = []
         self.features: Optional[np.ndarray] = None
         self.winner: Optional[int] = None
-        self.market: Optional[np.ndarray] = None
+        self.market: Optional[np.ndarray] = None       # clôture (cote_direct), normalisé
+        self.market_ref: Optional[np.ndarray] = None   # cote_reference, normalisé
+        self.odds: Optional[np.ndarray] = None         # cotes de clôture brutes
+        self.dividend: Optional[float] = None          # rapport officiel simple gagnant
+
+
+def _implied(odds: Sequence[Optional[float]]) -> Optional[np.ndarray]:
+    if not all(o is not None and o > 1.0 for o in odds):
+        return None
+    inv = np.array([1.0 / o for o in odds])
+    return inv / inv.sum()
 
 
 def _group_of(specialite: Any, discipline: Any) -> Optional[str]:
@@ -143,6 +164,12 @@ def load_races(db_path: str) -> Tuple[List[Race], Dict[str, int]]:
             arrivals[(row[0], int(row[1]), int(row[2]))] = json.loads(row[3]) if row[3] else None
         except (TypeError, ValueError):
             pass
+    dividends: Dict[Tuple[str, int, int], Optional[Tuple[str, Optional[float]]]] = {}
+    for row in conn.execute("SELECT date_course, num_reunion, num_course, combinaison, dividende_pour_1e "
+                            "FROM rapports_definitifs WHERE type_pari = 'SIMPLE_GAGNANT' "
+                            "AND libelle = 'Simple gagnant'"):
+        key = (row[0], int(row[1]), int(row[2]))
+        dividends[key] = None if key in dividends else (str(row[3]), _f(row[4]))   # doublon : ambigu
     races: Dict[Tuple[str, int, int], Race] = {}
     for row in conn.execute(_LOAD_SQL):
         key = (row["date_course"], int(row["num_reunion"]), int(row["num_course"]))
@@ -179,10 +206,14 @@ def load_races(db_path: str) -> Tuple[List[Race], Dict[str, int]]:
                 continue
             firsts = idx
         race.winner = firsts[0]
-        odds = [_f(r["cote_reference"]) or _f(r["cote_direct"]) for r in race.runners]
-        if all(o is not None and o > 1.0 for o in odds):
-            inv = np.array([1.0 / o for o in odds])
-            race.market = inv / inv.sum()
+        close = [_f(r["cote_direct"]) for r in race.runners]
+        race.market = _implied(close)
+        if race.market is not None:
+            race.odds = np.array(close)
+        race.market_ref = _implied([_f(r["cote_reference"]) for r in race.runners])
+        div = dividends.get(race.key)
+        if div and div[1] and div[0] == str(race.runners[race.winner]["num_pmu"]):
+            race.dividend = div[1]
         kept.append(race)
     kept.sort(key=lambda r: (r.day, str(r.runners[0]["heure_depart"] or ""), r.key))
     stats["courses_retenues"] = len(kept)
@@ -190,6 +221,10 @@ def load_races(db_path: str) -> Tuple[List[Race], Dict[str, int]]:
     stats["courses_galop"] = sum(r.group == "GALOP" for r in kept)
     stats["partants"] = sum(len(r.runners) for r in kept)
     stats["courses_avec_marche"] = sum(r.market is not None for r in kept)
+    stats["courses_avec_marche_reference"] = sum(r.market_ref is not None for r in kept)
+    stats["courses_avec_rapport_officiel"] = sum(r.dividend is not None for r in kept)
+    overround = [float((1.0 / r.odds).sum()) for r in kept if r.odds is not None]
+    stats["surround_moyen_cloture"] = round(float(np.mean(overround)), 4) if overround else None
     return kept, stats
 
 
@@ -383,10 +418,10 @@ def fundamental_walk_forward(races: Sequence[Race], feature_names: Sequence[str]
     return {"oos": oos, "months": months, "coefficients": coefficients}
 
 
-def _combo_packed(races: Sequence[Race], oos: Dict, with_fund: bool) -> Packed:
+def _combo_packed(races: Sequence[Race], oos: Dict, with_fund: bool, attr: str = "market") -> Packed:
     blocks = []
     for r in races:
-        cols = [np.log(np.maximum(r.market, FLOOR))]
+        cols = [np.log(np.maximum(getattr(r, attr), FLOOR))]
         if with_fund:
             cols.append(np.log(np.maximum(oos[r.key], FLOOR)))
         blocks.append(np.column_stack(cols))
@@ -404,11 +439,15 @@ def bootstrap_ci(values: np.ndarray, n: int = BOOTSTRAP, seed: int = 20260928) -
     return float(np.percentile(means, 2.5)), float(np.percentile(means, 97.5))
 
 
-def evaluate(races: Sequence[Race], wf: Dict[str, Any]) -> Dict[str, Any]:
-    """Par mois : vraisemblances hors échantillon. Combinaison et marché
-    recalibré appris sur les mois de test PRÉCÉDENTS uniquement."""
+def evaluate(races: Sequence[Race], wf: Dict[str, Any], attr: str = "market") -> Dict[str, Any]:
+    """Par mois : vraisemblances hors échantillon face au marché ``attr``.
+    Combinaison et marché recalibré appris sur les mois de test PRÉCÉDENTS
+    uniquement. Garde aussi, par course, les probabilités combinées et de
+    marché recalibré (pour la simulation de mises ; jamais publiées)."""
     oos = wf["oos"]
     folds, pooled_delta, pooled_delta_raw = [], [], []
+    comb_probs: Dict[Tuple[str, int, int], np.ndarray] = {}
+    recal_probs: Dict[Tuple[str, int, int], np.ndarray] = {}
     history: List[Race] = []
     for month in wf["months"]:
         test = [r for r in races if _month(r.day) == month and r.key in oos]
@@ -422,18 +461,25 @@ def evaluate(races: Sequence[Race], wf: Dict[str, Any]) -> Dict[str, Any]:
                 "ll_uniforme": round(float(ll_unif.mean()), 4), "ll_fondamental": round(float(ll_fund.mean()), 4),
                 "r2_fondamental": round(float(1 - ll_fund.sum() / ll_unif.sum()), 4),
                 "top1_fondamental": round(float(fund_top1), 4)}
-        with_mkt = [r for r in test if r.market is not None]
+        with_mkt = [r for r in test if getattr(r, attr) is not None]
         fold["courses_avec_marche"] = len(with_mkt)
         if with_mkt:
-            ll_mkt = np.array([math.log(max(r.market[r.winner], FLOOR)) for r in with_mkt])
+            ll_mkt = np.array([math.log(max(getattr(r, attr)[r.winner], FLOOR)) for r in with_mkt])
             fold["ll_marche"] = round(float(ll_mkt.mean()), 4)
-            fold["top1_marche"] = round(float(np.mean([int(np.argmax(r.market) == r.winner) for r in with_mkt])), 4)
-            prior = [r for r in history if r.market is not None]
+            fold["top1_marche"] = round(float(np.mean([int(np.argmax(getattr(r, attr)) == r.winner)
+                                                       for r in with_mkt])), 4)
+            prior = [r for r in history if getattr(r, attr) is not None]
             if len(prior) >= 500:
-                gamma = fit_clogit(_combo_packed(prior, oos, False), ridge=1e-3)
-                ab = fit_clogit(_combo_packed(prior, oos, True), ridge=1e-3)
-                ll_recal = _race_ll(_combo_packed(with_mkt, oos, False), gamma)
-                ll_comb = _race_ll(_combo_packed(with_mkt, oos, True), ab)
+                gamma = fit_clogit(_combo_packed(prior, oos, False, attr), ridge=1e-3)
+                ab = fit_clogit(_combo_packed(prior, oos, True, attr), ridge=1e-3)
+                recal_pack = _combo_packed(with_mkt, oos, False, attr)
+                comb_pack = _combo_packed(with_mkt, oos, True, attr)
+                ll_recal = _race_ll(recal_pack, gamma)
+                ll_comb = _race_ll(comb_pack, ab)
+                pc, pr = comb_pack.probs(ab), recal_pack.probs(gamma)
+                for r, start in zip(with_mkt, comb_pack.starts):
+                    comb_probs[r.key] = pc[start:start + len(r.runners)]
+                    recal_probs[r.key] = pr[start:start + len(r.runners)]
                 fold.update({"ll_marche_recalibre": round(float(ll_recal.mean()), 4),
                              "ll_combine": round(float(ll_comb.mean()), 4),
                              "gamma_marche": round(float(gamma[0]), 4),
@@ -445,7 +491,7 @@ def evaluate(races: Sequence[Race], wf: Dict[str, Any]) -> Dict[str, Any]:
         folds.append(fold)
         history.extend(test)
 
-    result: Dict[str, Any] = {"plis": folds}
+    result: Dict[str, Any] = {"plis": folds, "_comb": comb_probs, "_recal": recal_probs}
     if pooled_delta:
         delta = np.array(pooled_delta)
         lo, hi = bootstrap_ci(delta)
@@ -463,6 +509,76 @@ def evaluate(races: Sequence[Race], wf: Dict[str, Any]) -> Dict[str, Any]:
     return result
 
 
+# ── Étape 3 simulée : Kelly fractionné ───────────────────────────────────
+def _roi(staked: float, returned: float) -> Optional[float]:
+    return round(returned / staked - 1.0, 4) if staked else None
+
+
+def simulate_kelly(races: Sequence[Race], probs: Dict[Tuple[str, int, int], np.ndarray]) -> Dict[str, Any]:
+    """Mises sur chaque cheval dont l'espérance p·cote − 1 dépasse EV_MIN :
+    quart de Kelly, au plus MAX_RACE_EXPOSURE de la bankroll par course ;
+    gain réglé au rapport officiel (à défaut, cote finale). Deux lectures :
+    mise fixe (1 par pari, ROI robuste) et Kelly (bankroll, drawdown)."""
+    bankroll, peak, max_dd = 1.0, 1.0, 0.0
+    flat_s = flat_r = kelly_s = kelly_r = 0.0
+    n_bets = 0
+    per_race: List[Tuple[float, float]] = []
+    months: Dict[str, List[float]] = defaultdict(lambda: [0.0, 0.0, 0.0])
+    buckets: Dict[str, List[float]] = {name: [0.0, 0.0, 0.0] for name, _, _ in ODDS_BUCKETS}
+    settled = {"rapport_officiel": 0, "cote_finale": 0}
+    for r in races:
+        if r.key not in probs or r.odds is None:
+            continue
+        p, o = probs[r.key], r.odds
+        ev = p * o - 1.0
+        idx = [int(i) for i in np.where(ev > EV_MIN)[0]]
+        if not idx:
+            continue
+        payout = r.dividend if r.dividend else float(o[r.winner])
+        won = r.winner in idx
+        if won:
+            settled["rapport_officiel" if r.dividend else "cote_finale"] += 1
+        fs, fr = float(len(idx)), (payout if won else 0.0)
+        flat_s, flat_r, n_bets = flat_s + fs, flat_r + fr, n_bets + len(idx)
+        per_race.append((fs, fr))
+        month = months[_month(r.day)]
+        month[0], month[1], month[2] = month[0] + fs, month[1] + fr, month[2] + len(idx)
+        for i in idx:
+            for name, lo, hi in ODDS_BUCKETS:
+                if lo <= o[i] < hi:
+                    b = buckets[name]
+                    b[0], b[1], b[2] = b[0] + 1.0, b[1] + (payout if i == r.winner else 0.0), b[2] + 1
+        f = KELLY_FRACTION * ev[idx] / (o[idx] - 1.0)
+        if f.sum() > MAX_RACE_EXPOSURE:
+            f *= MAX_RACE_EXPOSURE / f.sum()
+        stakes = f * bankroll
+        ret = float(stakes[idx.index(r.winner)] * payout) if won else 0.0
+        kelly_s, kelly_r = kelly_s + float(stakes.sum()), kelly_r + ret
+        bankroll += ret - float(stakes.sum())
+        peak = max(peak, bankroll)
+        max_dd = max(max_dd, 1.0 - bankroll / peak)
+
+    out: Dict[str, Any] = {"paris": n_bets, "courses_jouees": len(per_race),
+                           "roi_mise_fixe": _roi(flat_s, flat_r), "reglement": settled}
+    if per_race:
+        arr = np.array(per_race)
+        rng = np.random.default_rng(20260928)
+        rois = []
+        for _ in range(BOOTSTRAP // 100):
+            idx = rng.integers(0, len(arr), size=(100, len(arr)))
+            s, rr = arr[idx, 0].sum(axis=1), arr[idx, 1].sum(axis=1)
+            rois.append(rr / s - 1.0)
+        rois = np.concatenate(rois)
+        out["ic95_roi_mise_fixe"] = [round(float(np.percentile(rois, 2.5)), 4),
+                                     round(float(np.percentile(rois, 97.5)), 4)]
+        out.update({"kelly_bankroll_finale": round(bankroll, 4), "kelly_roi": _roi(kelly_s, kelly_r),
+                    "kelly_drawdown_max": round(max_dd, 4),
+                    "roi_par_mois": {m: _roi(v[0], v[1]) for m, v in sorted(months.items())},
+                    "paris_par_mois": {m: int(v[2]) for m, v in sorted(months.items())},
+                    "roi_par_cote": {n: {"paris": int(v[2]), "roi": _roi(v[0], v[1])} for n, v in buckets.items()}})
+    return out
+
+
 # ── Rapport et envoi sur R2 privé ────────────────────────────────────────
 def run(db_path: str) -> Dict[str, Any]:
     races, data_stats = load_races(db_path)
@@ -471,18 +587,33 @@ def run(db_path: str) -> Dict[str, Any]:
     _log("BENTER_AUDIT_FUITE", audit)
     names = [n for n in FEATURES if not (audit["fuite_suspectee"] and n in CAREER_FEATURES)]
     wf = fundamental_walk_forward(races, names)
-    ev = evaluate(races, wf)
+    ev = evaluate(races, wf, "market")
+    comb, recal = ev.pop("_comb"), ev.pop("_recal")
     for fold in ev["plis"]:
         _log("BENTER_PLI", fold)
     if "combinaison" in ev:
-        _log("BENTER_RESULTAT", ev["combinaison"])
+        _log("BENTER_RESULTAT", {"marche": "cloture", **ev["combinaison"]})
+    ev_ref = evaluate(races, wf, "market_ref")
+    ev_ref.pop("_comb"), ev_ref.pop("_recal")
+    if "combinaison" in ev_ref:
+        _log("BENTER_RESULTAT_REFERENCE", {"marche": "cote_reference", **ev_ref["combinaison"]})
+    kelly = simulate_kelly(races, comb)
+    _log("BENTER_KELLY", kelly)
+    temoin = simulate_kelly(races, recal)
+    _log("BENTER_KELLY_TEMOIN", {k: temoin.get(k) for k in ("paris", "courses_jouees", "roi_mise_fixe")})
     return {
         "genere_le_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "methode": {"apprentissage_depuis": TRAIN_START, "premier_mois_test": FIRST_TEST_MONTH,
                     "ridge": RIDGE, "variables": names, "groupes": ["TROT", "GALOP"],
-                    "marche": "cote_reference finale (clôture), normalisée"},
+                    "marche": "cote_direct finale (clôture = rapport payé), normalisée",
+                    "kelly": {"fraction": KELLY_FRACTION, "esperance_min": EV_MIN,
+                              "exposition_max_par_course": MAX_RACE_EXPOSURE,
+                              "avertissement": "décision aux cotes finales : borne haute"}},
         "donnees": data_stats, "audit_fuite": audit,
         "coefficients_dernier_pli": wf["coefficients"], **ev,
+        "combinaison_marche_reference": ev_ref.get("combinaison"),
+        "plis_marche_reference": ev_ref["plis"],
+        "kelly": kelly, "kelly_temoin_marche_seul": temoin,
     }
 
 
