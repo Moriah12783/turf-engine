@@ -1,0 +1,67 @@
+name: Labo déferrage (phase 1c)
+
+# Le déferrage (D4, DA, DP) vient du flux PMU public : le miroir Radar ne le
+# contient pas. Sonde de forme, rattrapage historique incrémental vers une
+# base PRIVÉE sur R2 (lab/deferre/deferre.db, une requête par course de trot,
+# pause entre deux requêtes), puis test d'apport au fondamental et au marché.
+# Dépôt public : journal = agrégats seulement ; aucun artefact, aucun commit ;
+# aucune requête au Radar ; aucun effet sur la production.
+# Voir turf_lab/deferre_lab.py.
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "sonde | rattrapage | test | complet"
+        required: false
+        default: "rattrapage"
+  pull_request:
+    paths:
+      - "turf_lab/deferre_lab.py"
+      - ".github/workflows/deferre_lab.yml"
+
+permissions:
+  contents: read
+
+# Une seule exécution à la fois : la base privée n'a jamais deux écrivains.
+concurrency:
+  group: deferre-lab
+  cancel-in-progress: false
+
+jobs:
+  deferre:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    env:
+      PYTHONUNBUFFERED: "1"
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET: ${{ secrets.R2_BUCKET }}
+      ACTION: ${{ github.event_name == 'pull_request' && 'complet' || github.event.inputs.action }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -q --retries 10 --timeout 60 "numpy>=1.26,<3" "boto3>=1.36,<2"
+
+      - name: Fetch the private history mirror from R2 (read-only)
+        run: python -m turf_lab.history_export fetch --db turf_history.db
+
+      - name: Probe the shoeing field (shape only)
+        if: env.ACTION == 'sonde' || env.ACTION == 'complet'
+        run: python -m turf_lab.deferre_lab sonde --jours "2025-09-01,2026-03-01,$(date -u -d yesterday +%F)"
+
+      - name: Backfill shoeing history into private R2 (incremental, time budget)
+        if: env.ACTION == 'rattrapage' || env.ACTION == 'complet'
+        run: python -m turf_lab.deferre_lab rattrapage --historique turf_history.db --budget-min 50
+
+      - name: Test the value of shoeing (report goes to private R2 only)
+        if: env.ACTION == 'test' || env.ACTION == 'complet'
+        run: python -m turf_lab.deferre_lab test --historique turf_history.db
