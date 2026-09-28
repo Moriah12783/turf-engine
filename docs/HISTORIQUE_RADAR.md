@@ -13,7 +13,7 @@ avec le marché. Critère d'entrée G1 : au moins 3 000 courses de test hors
 | Secret | `RADAR_HISTORY_DSN` (dépôt turf-engine, Session pooler, port 5432) + les 4 secrets R2 déjà en place |
 | Cible | R2 `turf-engine-data` → `history/turf_history.db` (version précédente : `history/turf_history_prev.db`) |
 | Code | `turf_lab/history_export.py`, tests `tests/test_history_export.py` |
-| Planification | `.github/workflows/history_export.yml`, chaque nuit à **01h17 UTC** |
+| Planification | `.github/workflows/history_export.yml`, chaque nuit à **01h17 UTC**, filet à **03h47 UTC** (crons GitHub non garantis) |
 | Production | **Aucun impact** : ne lit ni n'écrit `turf_bench.db`, ne committe rien, ne déploie rien, groupe de concurrence séparé |
 
 ## Règles convenues avec le dev Radar (27-28/09/2026)
