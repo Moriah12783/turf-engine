@@ -21,6 +21,9 @@ Méthode (docs/LABO_BENTER.md, métrique unique de docs/PROTOCOLE_MOTEURS.md) :
      combinées, réglées au rapport officiel. Décision aux cotes finales :
      BORNE HAUTE (en pari mutuel, la cote finale n'est connue qu'au départ).
      Témoin : la même stratégie sur le marché seul ne doit presque rien miser.
+  7. Apport au PRODUIT : sur les courses du banc (``turf_bench.db``), le
+     fondamental améliore-t-il les probabilités publiées par chaque moteur à
+     l'édition du matin et à T-30 ? Combinaison apprise semaine par semaine.
   6. Horizon réel de pari (T-30, T-15) : cotes de la dernière photo
      ``cotes_snapshots`` prise au moins H minutes avant le départ (au plus
      H+10) ; combinaison apprise semaine par semaine sur les semaines
@@ -44,9 +47,11 @@ import sqlite3
 import sys
 from collections import defaultdict
 from datetime import date, datetime, timezone
-from typing import Any, Dict, List, Optional, Sequence, Tuple
+from typing import Any, Dict, Hashable, List, Optional, Sequence, Tuple
 
 import numpy as np
+
+from turf_lab import ombre
 
 TRAIN_START = "2025-08-15"      # deux semaines d'historique cheval avant le 1er apprentissage
 FIRST_TEST_MONTH = "2026-01"
@@ -64,6 +69,10 @@ KELLY_FRACTION = 0.25           # quart de Kelly
 EV_MIN = 0.05                   # espérance minimale d'un pari (+5 %)
 MAX_RACE_EXPOSURE = 0.05        # au plus 5 % de la bankroll par course
 TX_HORIZONS = (30, 15, 5)       # minutes avant le départ
+BENCH_ENGINES = ("MARKET_BASELINE", "NEW_VALUE_ENGINE", "RADAR_V4")   # ETPE : pas de probabilités publiées
+BENCH_HORIZONS = ("T_MATIN", "T90", "T30")     # T90 : l'édition des joueurs au guichet
+BENCH_MIN_PRIOR = 300
+_RACE_ID = re.compile(r"^R(\d+)C(\d+)_(\d{2})(\d{2})(\d{4})")
 TX_MAX_STALENESS = 10           # la photo doit dater d'au plus H+10 minutes
 TX_MIN_PRIOR = 400              # courses minimales pour apprendre la combinaison à T-x
 ODDS_BUCKETS = (("cote_<5", 1.0, 5.0), ("cote_5-15", 5.0, 15.0), ("cote_>15", 15.0, float("inf")))
@@ -76,6 +85,9 @@ FEATURES = (
     "log_jours_repos", "premiere_vue", "derniere_place",
     "jockey_taux", "jockey_log_montes", "entraineur_taux", "entraineur_log_courses",
 )
+# Variables susceptibles de changer dans la journée (driver remplacé, œillères
+# modifiées) : exclues du test de robustesse « état connu au matin ».
+INTRADAY_FEATURES = ("driver_change", "jockey_taux", "jockey_log_montes", "oeilleres", "oeilleres_austr")
 CAREER_FEATURES = ("taux_victoires", "taux_places", "log_courses", "log_gains", "log_gains_annee",
                    "log_gain_par_course", "mus_moyenne", "mus_victoires", "mus_top3", "mus_fautes",
                    "mus_derniere", "mus_absente")
@@ -594,6 +606,370 @@ def evaluate_tx(races: Sequence[Race], oos: Dict, horizon: int) -> Dict[str, Any
     return out
 
 
+# ── Apport au produit : moteurs du banc + fondamental ────────────────────
+def load_bench(path: str, horizons: Sequence[str] = BENCH_HORIZONS
+               ) -> Dict[Tuple[str, str], Dict[Tuple[str, int, int], Dict[str, Any]]]:
+    """(moteur, horizon) -> course -> édition publiée : probabilités, métadonnées,
+    sélection et drapeau de cotes réelles (pour les découpages du dev NVE)."""
+    out: Dict[Tuple[str, str], Dict[Tuple[str, int, int], Dict[str, Any]]] = defaultdict(dict)
+    conn = sqlite3.connect(path)
+    cols = {r[1] for r in conn.execute("PRAGMA table_info(predictions)")}
+    extra = [c for c in ("metadata_json", "selection_json", "odds_real") if c in cols]
+    marks = ",".join("?" * len(BENCH_ENGINES)), ",".join("?" * len(horizons))
+    query = (f"SELECT race_id, engine_name, horizon, probabilities_json{''.join(', ' + c for c in extra)} "
+             f"FROM predictions WHERE engine_name IN ({marks[0]}) AND horizon IN ({marks[1]})")
+    for row in conn.execute(query, (*BENCH_ENGINES, *horizons)):
+        race_id, engine, horizon, probs = row[:4]
+        rest = dict(zip(extra, row[4:]))
+        m = _RACE_ID.match(str(race_id or ""))
+        if not m or not probs:
+            continue
+        try:
+            parsed = {int(k): float(v) for k, v in json.loads(probs).items()}
+            meta = json.loads(rest.get("metadata_json") or "{}")
+            selection = json.loads(rest.get("selection_json") or "[]")
+        except (TypeError, ValueError):
+            continue
+        key = (f"{m.group(5)}-{m.group(4)}-{m.group(3)}", int(m.group(1)), int(m.group(2)))
+        out[(engine, horizon)][key] = {"probs": parsed, "meta": meta if isinstance(meta, dict) else {},
+                                       "selection": selection, "odds_real": rest.get("odds_real")}
+    conn.close()
+    return out
+
+
+def _engine_probs(race: Race, published: Dict[int, float]) -> Optional[np.ndarray]:
+    """Probabilités d'un moteur alignées sur les partants au départ (il en faut
+    pour tous), renormalisées sur ces partants comme le fondamental."""
+    vals = [published.get(int(r["num_pmu"])) for r in race.runners]
+    if any(v is None or v <= 0 for v in vals):
+        return None
+    arr = np.array(vals, dtype=float)
+    return arr / arr.sum()
+
+
+def _is_nve_production(edition: Dict[str, Any]) -> bool:
+    """Découpage (1) du dev NVE : éditions de production actuelles."""
+    cal = (edition.get("meta") or {}).get("market_calibration") or {}
+    return cal.get("applied") is True and abs(float(cal.get("market_weight") or 0.0) - 0.9) < 1e-9
+
+
+def _is_market_informative(edition: Dict[str, Any]) -> bool:
+    """Découpage (2) : règle officielle du banc (baselines.market_edition_informative)."""
+    from turf_lab.baselines import market_edition_informative
+    return market_edition_informative({"selection": edition.get("selection"), "odds_real": edition.get("odds_real"),
+                                       "probabilities": {str(k): v for k, v in edition["probs"].items()}})
+
+
+# (moteur, découpage, filtre, portée du filtre). « juger » : la combinaison est
+# apprise sur TOUTES les éditions passées du moteur (les éditions de
+# production sont trop récentes pour 300 courses d'apprentissage) mais jugée
+# sur les seules éditions filtrées ; « tout » : filtrées partout.
+BENCH_LINES = (
+    ("MARKET_BASELINE", "toutes", None, "tout"),
+    ("MARKET_BASELINE", "informatives", _is_market_informative, "tout"),
+    ("NEW_VALUE_ENGINE", "toutes", None, "tout"),
+    ("NEW_VALUE_ENGINE", "production_poids_0.9", _is_nve_production, "juger"),
+    ("RADAR_V4", "toutes", None, "tout"),
+)
+
+
+def _paired_ci(values: Sequence[float]) -> List[float]:
+    lo, hi = bootstrap_ci(np.asarray(values, dtype=float))
+    return [round(lo, 5), round(hi, 5)]
+
+
+def _bench_line(races: Sequence[Race], oos: Dict, probs: Dict[Tuple[str, int, int], np.ndarray],
+                judge: Optional[set] = None) -> Dict[str, Any]:
+    """Combinaison moteur + fondamental apprise semaine par semaine sur le passé ;
+    gain de log-vraisemblance face au moteur seul recalibré et gain APPARIÉ de
+    gagnants en tête (même course, combiné − moteur), chacun avec IC 95 %."""
+    pool = [r for r in races if r.key in probs]
+    by_week: Dict[Tuple[int, int], List[Race]] = defaultdict(list)
+    for r in pool:
+        by_week[date.fromisoformat(r.day).isocalendar()[:2]].append(r)
+    market_of = lambda r: probs[r.key]                                           # noqa: E731
+    deltas, betas, ll_eng, top_diff, top_eng = [], [], [], [], []
+    history: List[Race] = []
+    for week in sorted(by_week):
+        test = by_week[week]
+        if len(history) >= BENCH_MIN_PRIOR:
+            gamma = fit_clogit(_combo_packed(history, oos, False, market_of), ridge=1e-3)
+            ab = fit_clogit(_combo_packed(history, oos, True, market_of), ridge=1e-3)
+            betas.append(float(ab[1]))
+            recal_pack = _combo_packed(test, oos, False, market_of)
+            comb_pack = _combo_packed(test, oos, True, market_of)
+            race_delta = _race_ll(comb_pack, ab) - _race_ll(recal_pack, gamma)
+            pc = comb_pack.probs(ab)
+            for r, start, delta in zip(test, comb_pack.starts, race_delta):
+                if judge is not None and r.key not in judge:
+                    continue                           # apprise ici, jugée ailleurs
+                deltas.append(float(delta))
+                ll_eng.append(math.log(max(probs[r.key][r.winner], FLOOR)))
+                t_eng = int(np.argmax(probs[r.key]) == r.winner)
+                t_comb = int(np.argmax(pc[start:start + len(r.runners)]) == r.winner)
+                top_eng.append(t_eng)
+                top_diff.append(t_comb - t_eng)
+        history.extend(test)
+    entry: Dict[str, Any] = {"courses": len(pool) if judge is None else len(judge & set(probs)),
+                             "courses_jugees": len(deltas)}
+    if deltas:
+        arr = np.array(deltas)
+        lo, hi = bootstrap_ci(arr)
+        entry.update({"ll_moteur": round(float(np.mean(ll_eng)), 4),
+                      "delta_ll_vs_moteur_recalibre": round(float(arr.mean()), 5),
+                      "ic95": [round(lo, 5), round(hi, 5)], "apport_demontre": lo > 0,
+                      "beta_fondamental_moyen": round(float(np.mean(betas)), 4),
+                      "top1_moteur": round(float(np.mean(top_eng)), 4),
+                      "gain_top1": round(float(np.mean(top_diff)), 4), "ic95_gain_top1": _paired_ci(top_diff)})
+    return entry
+
+
+def _fund_vs_pure(races: Sequence[Race], oos: Dict, editions: Dict[Tuple[str, int, int], Dict[str, Any]]) -> Dict[str, Any]:
+    """Fondamental SEUL face au modèle NVE pur (``model_probs``, avant tout
+    mélange avec le marché), sur les mêmes courses : écarts appariés."""
+    d_ll, d_top, ll_f, ll_n, top_f, top_n = [], [], [], [], [], []
+    for r in races:
+        ed = editions.get(r.key)
+        if ed is None or r.key not in oos:
+            continue
+        pure = _engine_probs(r, {int(k): float(v) for k, v in ((ed.get("meta") or {}).get("model_probs") or {}).items()})
+        if pure is None:
+            continue
+        f = oos[r.key]
+        lf, ln = math.log(max(f[r.winner], FLOOR)), math.log(max(pure[r.winner], FLOOR))
+        tf, tn = int(np.argmax(f) == r.winner), int(np.argmax(pure) == r.winner)
+        ll_f.append(lf), ll_n.append(ln), top_f.append(tf), top_n.append(tn)
+        d_ll.append(lf - ln), d_top.append(tf - tn)
+    if not d_ll:
+        return {"courses": 0}
+    return {"courses": len(d_ll), "ll_fondamental": round(float(np.mean(ll_f)), 4),
+            "ll_nve_pur": round(float(np.mean(ll_n)), 4),
+            "delta_ll_fondamental_moins_nve_pur": round(float(np.mean(d_ll)), 5), "ic95": _paired_ci(d_ll),
+            "top1_fondamental": round(float(np.mean(top_f)), 4), "top1_nve_pur": round(float(np.mean(top_n)), 4),
+            "delta_top1": round(float(np.mean(d_top)), 4), "ic95_delta_top1": _paired_ci(d_top)}
+
+
+def _nve_composition(editions: Dict[Tuple[str, int, int], Dict[str, Any]], keys) -> Dict[str, int]:
+    """Composition des éditions NVE jugées : sans marché, poids 0,70, 0,90…"""
+    counts: Dict[str, int] = defaultdict(int)
+    for key in keys:
+        cal = (editions[key].get("meta") or {}).get("market_calibration") or {}
+        label = "sans_marche" if cal.get("applied") is not True else f"poids_{float(cal.get('market_weight') or 0):.2f}"
+        counts[label] += 1
+    return dict(counts)
+
+
+def evaluate_bench(races: Sequence[Race], oos: Dict, bench: Dict,
+                   horizons: Sequence[str] = BENCH_HORIZONS) -> Dict[str, Any]:
+    """Découpages demandés par le dev NVE (28/09) : pour chaque moteur, horizon
+    et découpage, apport du fondamental ; au matin, fondamental seul face au
+    NVE pur ; composition des éditions NVE jugées."""
+    results: Dict[str, Any] = {}
+    for horizon in horizons:
+        for engine, cut, keep, scope in BENCH_LINES:
+            editions = bench.get((engine, horizon)) or {}
+            probs: Dict[Tuple[str, int, int], np.ndarray] = {}
+            judge: Optional[set] = set() if scope == "juger" else None
+            excluded = 0
+            for r in races:
+                ed = editions.get(r.key)
+                if ed is None or r.key not in oos:
+                    continue
+                kept = keep is None or keep(ed)
+                if not kept:
+                    excluded += 1
+                    if scope == "tout":
+                        continue
+                arr = _engine_probs(r, ed["probs"])
+                if arr is not None:
+                    probs[r.key] = arr
+                    if judge is not None and kept:
+                        judge.add(r.key)
+            entry = {"moteur": engine, "horizon": horizon, "decoupage": cut, "editions_exclues": excluded,
+                     **_bench_line(races, oos, probs, judge)}
+            if engine == "NEW_VALUE_ENGINE":
+                entry["composition"] = _nve_composition(editions, judge if judge is not None else probs.keys())
+            results[f"{engine}_{horizon}_{cut}"] = entry
+        nve = bench.get(("NEW_VALUE_ENGINE", horizon)) or {}
+        if horizon == "T_MATIN" and nve:
+            results["FONDAMENTAL_vs_NVE_PUR_T_MATIN_toutes"] = {
+                "horizon": horizon, "decoupage": "toutes", **_fund_vs_pure(races, oos, nve)}
+            prod = {k: v for k, v in nve.items() if _is_nve_production(v)}
+            results["FONDAMENTAL_vs_NVE_PUR_T_MATIN_production_poids_0.9"] = {
+                "horizon": horizon, "decoupage": "production_poids_0.9", **_fund_vs_pure(races, oos, prod)}
+    return results
+
+
+# ── Ombre du fondamental dans NVE : calcul de puissance avant le gel ─────
+def _nve_rows(races: Sequence[Race], oos: Dict, editions: Dict[Tuple[str, int, int], Dict[str, Any]]
+              ) -> Tuple[List[Dict[str, Any]], Dict[str, int]]:
+    """Éditions NVE avec marché, alignées sur les partants au départ : part
+    marché reconstruite (publié = poids × marché + (1 − poids) × modèle),
+    fondamental « état du matin », sélection publiée, gagnant et tiercé."""
+    rows: List[Dict[str, Any]] = []
+    excl: Dict[str, int] = defaultdict(int)
+    for r in races:
+        ed = editions.get(r.key)
+        if ed is None or r.key not in oos:
+            continue
+        meta = ed.get("meta") or {}
+        cal = meta.get("market_calibration") or {}
+        weight = float(cal.get("market_weight") or 0.0)
+        if cal.get("applied") is not True or not 0.0 < weight < 1.0:
+            excl["sans_marche"] += 1
+            continue
+        nums = [int(x["num_pmu"]) for x in r.runners]
+        model = {int(k): float(v) for k, v in (meta.get("model_probs") or {}).items()}
+        if set(ed["probs"]) != set(nums):
+            excl["partants_differents_au_verrou"] += 1            # non-partant tardif : hors calcul
+            continue
+        if any(n not in model for n in nums):
+            excl["sans_modele_pur"] += 1
+            continue
+        pub = np.array([ed["probs"][n] for n in nums], dtype=float)
+        mod = np.array([model[n] for n in nums], dtype=float)
+        placed = sorted((int(x["ordre_arrivee"]), int(x["num_pmu"])) for x in r.runners
+                        if isinstance(x.get("ordre_arrivee"), (int, float)) and 1 <= int(x["ordre_arrivee"]) <= 3)
+        rows.append({"race": r, "reunion": (r.day, r.key[1]), "weight": weight, "production": abs(weight - 0.9) < 1e-9,
+                     "nums": nums, "pub": pub, "market": ombre.marche_de_edition(pub, mod, weight),
+                     "fond": oos[r.key], "selection": [int(x) for x in ed.get("selection") or []],
+                     "tierce": [n for _, n in placed] if len(placed) >= 3 else None})
+    return rows, dict(excl)
+
+
+def _secondary(pairs: List[Tuple[int, int, Hashable]], n0: int) -> Dict[str, Any]:
+    """Écart apparié ombre − publié d'un taux « dans les 8 », IC95 par réunion
+    et borne basse projetée aux deux lectures (si l'écart reste le même)."""
+    if not pairs:
+        return {"editions": 0}
+    diff = [o - p for p, o, _ in pairs]
+    clusters = [c for _, _, c in pairs]
+    mean = float(np.mean(diff))
+    lo, hi = ombre.intervalle(diff, clusters, 0.95)
+    se = ombre.erreur_type(diff, clusters)
+    return {"editions": len(pairs), "publie": round(float(np.mean([p for p, _, _ in pairs])), 4),
+            "ombre": round(float(np.mean([o for _, o, _ in pairs])), 4), "ecart": round(mean, 4),
+            "ic95": [round(lo, 4), round(hi, 4)], "erreur_type": round(se, 5),
+            "borne_basse_projetee_1000": round(ombre.borne_basse_projetee(mean, se, n0, ombre.LECTURE_1), 4),
+            "borne_basse_projetee_2300": round(ombre.borne_basse_projetee(mean, se, n0, ombre.LECTURE_2), 4),
+            # Risque d'échec du test (borne basse IC95 < −2 points) si l'écart
+            # vrai est celui observé : un blocage « à tort » quand l'écart est nul.
+            "risque_echec_1000": round(ombre.risque_echec_non_degradation(mean, se, n0, ombre.LECTURE_1), 4),
+            "risque_echec_2300": round(ombre.risque_echec_non_degradation(mean, se, n0, ombre.LECTURE_2), 4),
+            "risque_echec_1000_si_ecart_nul": round(ombre.risque_echec_non_degradation(0.0, se, n0, ombre.LECTURE_1), 4)}
+
+
+def _primary(deltas: List[float], clusters: List[Hashable]) -> Dict[str, Any]:
+    """Δll ombre − publié : intervalles par réunion et puissance aux deux lectures."""
+    if len(deltas) < 2:
+        return {"editions": len(deltas)}
+    mean = float(np.mean(deltas))
+    se = ombre.erreur_type(deltas, clusters)
+    n0 = len(deltas)
+    p1 = ombre.puissance(mean, se, n0, ombre.LECTURE_1, ombre.NIVEAU_LECTURE_1)
+    p2 = ombre.puissance(mean, se, n0, ombre.LECTURE_2, ombre.NIVEAU_LECTURE_2)
+    return {"editions": n0, "reunions": len(set(clusters)), "delta_ll": round(mean, 5),
+            "ic95": [round(v, 5) for v in ombre.intervalle(deltas, clusters, 0.95)],
+            "ic99": [round(v, 5) for v in ombre.intervalle(deltas, clusters, 0.99)],
+            "erreur_type": round(se, 5), "puissance_1000_ic99": round(p1, 3), "puissance_2300_ic95": round(p2, 3),
+            "detectable_2300": bool(p2 >= ombre.PUISSANCE_MIN)}
+
+
+def evaluate_shadow_power(races: Sequence[Race], oos: Dict, bench: Dict,
+                          horizons: Sequence[str] = ombre.HORIZONS_SECONDAIRES) -> Dict[str, Any]:
+    """Point 4 de la règle (avant le gel) : sur les éditions NVE de production
+    passées et le fondamental « état du matin » hors échantillon, valeur
+    rétrospective des deux recettes face à l'édition publiée.
+    A : 0,90 marché + 0,10 fondamental (linéaire, sans apprentissage).
+    B : marché^a × fondamental^b, (a, b) réappris chaque lundi sur les seules
+    éditions passées (toutes éditions NVE avec marché), jugée en production.
+    B0 : marché^a seul (part de B due au seul recalibrage du marché).
+    Critère principal au matin ; « dans les 8 » (gagnant, tiercé) aux quatre
+    horizons. Aucune donnée d'ombre : tout est rétrospectif."""
+    out: Dict[str, Any] = {"definition_detectable": (
+        f"puissance >= {ombre.PUISSANCE_MIN:.0%} d'une borne basse IC95 positive à {ombre.LECTURE_2} éditions, "
+        "effet estimé et erreur-type par réunion (fixé avant le calcul)")}
+    for horizon in horizons:
+        rows, excl = _nve_rows(races, oos, bench.get(("NEW_VALUE_ENGINE", horizon)) or {})
+        by_week: Dict[Tuple[int, int], List[Dict[str, Any]]] = defaultdict(list)
+        for row in rows:
+            by_week[date.fromisoformat(row["race"].day).isocalendar()[:2]].append(row)
+        acc = {k: {"d": [], "c": [], "gagnant": [], "tierce": []} for k in ("A", "B", "B0")}
+        weights_b: List[Tuple[float, float]] = []
+        history: List[Dict[str, Any]] = []
+        for week in sorted(by_week):
+            test = by_week[week]
+            ab = a0 = None
+            if len(history) >= BENCH_MIN_PRIOR:
+                blocks = [np.column_stack([np.log(np.maximum(h["market"], FLOOR)), np.log(np.maximum(h["fond"], FLOOR))])
+                          for h in history]
+                winners = [h["race"].winner for h in history]
+                ab = fit_clogit(Packed(blocks, winners), ridge=1e-3)
+                a0 = fit_clogit(Packed([b[:, :1] for b in blocks], winners), ridge=1e-3)
+                weights_b.append((float(ab[0]), float(ab[1])))
+            for row in test:
+                if not row["production"]:
+                    continue
+                w, nums, pub = row["race"].winner, row["nums"], row["pub"]
+                shadows = {"A": ombre.ombre_lineaire(row["market"], row["fond"])}
+                if ab is not None:
+                    shadows["B"] = ombre.ombre_loglineaire(row["market"], row["fond"], float(ab[0]), float(ab[1]))
+                    shadows["B0"] = ombre.ombre_loglineaire(row["market"], None, float(a0[0]))
+                pub_sel = row["selection"] or ombre.top8(nums, pub)
+                for key, sh in shadows.items():
+                    a = acc[key]
+                    a["d"].append(math.log(max(sh[w], FLOOR)) - math.log(max(pub[w], FLOOR)))
+                    a["c"].append(row["reunion"])
+                    sel = ombre.top8(nums, sh)
+                    a["gagnant"].append((int(ombre.dans_les_8(pub_sel, [nums[w]])),
+                                         int(ombre.dans_les_8(sel, [nums[w]])), row["reunion"]))
+                    if row["tierce"]:
+                        a["tierce"].append((int(ombre.dans_les_8(pub_sel, row["tierce"])),
+                                            int(ombre.dans_les_8(sel, row["tierce"])), row["reunion"]))
+            history.extend(test)
+        entry: Dict[str, Any] = {"editions_avec_marche": len(rows),
+                                 "editions_production": sum(r["production"] for r in rows), "exclusions": excl}
+        for key, a in acc.items():
+            recipe: Dict[str, Any] = _primary(a["d"], a["c"])
+            if key != "B0":
+                n0 = max(1, len(a["d"]))
+                recipe["gagnant_dans_8"] = _secondary(a["gagnant"], n0)
+                recipe["tierce_dans_8"] = _secondary(a["tierce"], n0)
+            if key == "B" and weights_b:
+                recipe["poids_moyens"] = {"marche": round(float(np.mean([x for x, _ in weights_b])), 4),
+                                          "fondamental": round(float(np.mean([y for _, y in weights_b])), 4)}
+            entry[key] = recipe
+        out[horizon] = entry
+    # Risque que l'un au moins des huit tests secondaires échoue (tests
+    # supposés indépendants : borne prudente, les tests sont corrélés).
+    for key in ("A", "B"):
+        risks = {n: [] for n in ("risque_echec_1000", "risque_echec_2300", "risque_echec_1000_si_ecart_nul")}
+        for horizon in horizons:
+            for crit in ("gagnant_dans_8", "tierce_dans_8"):
+                test = ((out.get(horizon) or {}).get(key) or {}).get(crit) or {}
+                for n in risks:
+                    if n in test:
+                        risks[n].append(test[n])
+        out[f"secondaires_{key}"] = {"tests_mesures": len(risks["risque_echec_1000"]),
+                                     **{"au_moins_un_" + n: round(1.0 - float(np.prod([1.0 - r for r in v])), 4)
+                                        for n, v in risks.items() if v}}
+    # Rythme des éditions de production au matin (14 derniers jours du banc) :
+    # durée probable de l'ombre, donc du gel symétrique de NVE.
+    days = sorted(r["race"].day for r in _nve_rows(races, oos, bench.get(("NEW_VALUE_ENGINE", "T_MATIN")) or {})[0]
+                  if r["production"])
+    if days:
+        last = date.fromisoformat(days[-1])
+        recent = [d for d in days if (last - date.fromisoformat(d)).days < 14]
+        span = (last - date.fromisoformat(min(recent))).days + 1
+        rate = len(recent) / span
+        out["rythme_production_matin"] = {"editions_par_jour_14j": round(rate, 1), "jours_couverts": span,
+                                          "jours_pour_1000": math.ceil(ombre.LECTURE_1 / rate) if rate else None,
+                                          "jours_pour_2300": math.ceil(ombre.LECTURE_2 / rate) if rate else None}
+    matin = (out.get("T_MATIN") or {}).get("A") or {}
+    out["recette_principale_selon_regle"] = "A_lineaire_0.90_0.10" if matin.get("detectable_2300") else "B_loglineaire"
+    return out
+
+
 # ── Étape 3 simulée : Kelly fractionné ───────────────────────────────────
 def _roi(staked: float, returned: float) -> Optional[float]:
     return round(returned / staked - 1.0, 4) if staked else None
@@ -673,7 +1049,7 @@ def simulate_kelly(races: Sequence[Race], probs: Dict[Tuple[str, int, int], np.n
 
 
 # ── Rapport et envoi sur R2 privé ────────────────────────────────────────
-def run(db_path: str) -> Dict[str, Any]:
+def run(db_path: str, bench_path: Optional[str] = None) -> Dict[str, Any]:
     races, data_stats = load_races(db_path)
     _log("BENTER_DONNEES", data_stats)
     audit = build_features(races)
@@ -704,6 +1080,26 @@ def run(db_path: str) -> Dict[str, Any]:
                                                                   "ic95_roi_mise_fixe", "kelly_bankroll_finale",
                                                                   "kelly_drawdown_max")},
                            "temoin": tx.get("kelly_temoin_marche_seul")})
+    bench_report = bench_fige = shadow = None
+    if bench_path and os.path.exists(bench_path):
+        bench = load_bench(bench_path, tuple(dict.fromkeys(BENCH_HORIZONS + ombre.HORIZONS_SECONDAIRES)))
+        bench_report = evaluate_bench(races, wf["oos"], bench)
+        for entry in bench_report.values():
+            _log("BENTER_BANC", entry)
+        # Robustesse « état connu au matin » : sans les variables qui peuvent
+        # changer dans la journée (driver, œillères).
+        wf_fige = fundamental_walk_forward(races, [n for n in names if n not in INTRADAY_FEATURES])
+        bench_fige = evaluate_bench(races, wf_fige["oos"], bench, horizons=("T_MATIN",))
+        for entry in bench_fige.values():
+            _log("BENTER_BANC_VARIABLES_FIGEES", entry)
+        # Point 4 de la règle d'ombre : puissance des deux recettes, avec le
+        # modèle « état du matin » (celui qui tournera réellement).
+        shadow = evaluate_shadow_power(races, wf_fige["oos"], bench)
+        for horizon in ombre.HORIZONS_SECONDAIRES:
+            _log("BENTER_OMBRE_PUISSANCE", {"horizon": horizon, **(shadow.get(horizon) or {})})
+        _log("BENTER_OMBRE_DECISION", {k: shadow.get(k) for k in (
+            "definition_detectable", "recette_principale_selon_regle", "secondaires_A", "secondaires_B",
+            "rythme_production_matin")})
     return {
         "genere_le_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "methode": {"apprentissage_depuis": TRAIN_START, "premier_mois_test": FIRST_TEST_MONTH,
@@ -718,6 +1114,9 @@ def run(db_path: str) -> Dict[str, Any]:
         "plis_marche_reference": ev_ref["plis"],
         "kelly": kelly, "kelly_temoin_marche_seul": temoin,
         "horizons_de_pari": horizons,
+        "apport_aux_moteurs_du_banc": bench_report,
+        "apport_aux_moteurs_du_banc_variables_figees": bench_fige,
+        "ombre_puissance_avant_gel": shadow,
     }
 
 
@@ -742,11 +1141,12 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser.add_argument("--db", default="turf_history.db")
     parser.add_argument("--sortie")
     parser.add_argument("--sans-envoi", action="store_true")
+    parser.add_argument("--banc", help="turf_bench.db : mesure l'apport du fondamental aux moteurs publiés")
     args = parser.parse_args(argv)
     if not os.path.exists(args.db):
         _log("BENTER_ERREUR", {"erreur": "miroir absent", "chemin": args.db})
         return 2
-    report = run(args.db)
+    report = run(args.db, args.banc)
     if args.sortie:
         with open(args.sortie, "w", encoding="utf-8") as f:
             json.dump(report, f, ensure_ascii=False, indent=1)
