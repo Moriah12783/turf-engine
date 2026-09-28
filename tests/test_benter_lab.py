@@ -353,6 +353,10 @@ def test_outils_de_l_ombre():
     assert abs(ombre.puissance(effet, se, 400, 2300, 0.95) - 0.5) < 1e-9
     assert ombre.puissance(0.01, se, 400, 2300, 0.95) > ombre.puissance(0.01, se, 400, 1000, 0.95)
     assert ombre.puissance(-0.01, se, 400, 2300, 0.95) < 0.025
+    # Risque d'échec du critère secondaire : 97,5 % quand l'écart vrai est pile au seuil de −2 points.
+    assert abs(ombre.risque_echec_non_degradation(-0.02, 0.01, 100, 100) - 0.975) < 1e-9
+    assert ombre.risque_echec_non_degradation(0.0, 0.01, 100, 2300) < ombre.risque_echec_non_degradation(0.0, 0.01, 100, 100)
+    assert ombre.risque_echec_non_degradation(0.0, 0.0, 100, 1000) == 0.0
     # Part marché d'une édition publiée, recettes A et B, « dans les 8 ».
     m, g, f = np.array([0.5, 0.3, 0.2]), np.array([0.2, 0.2, 0.6]), np.array([0.6, 0.3, 0.1])
     assert np.allclose(ombre.marche_de_edition(0.9 * m + 0.1 * g, g, 0.9), m)
@@ -408,6 +412,11 @@ def test_puissance_de_l_ombre_avant_gel(mirror):
             assert s["editions"] > 0 and s["ic95"][0] <= s["ecart"] <= s["ic95"][1]
             assert s["borne_basse_projetee_2300"] >= s["borne_basse_projetee_1000"]
     assert rep["T15"]["A"]["editions"] > 0 and rep["T90"]["editions_avec_marche"] == 0
+    assert 0.0 <= a["gagnant_dans_8"]["risque_echec_2300"] <= 1.0
+    assert rep["secondaires_A"]["tests_mesures"] == 4                  # T_MATIN et T15 présents, 2 critères
+    assert 0.0 <= rep["secondaires_A"]["au_moins_un_risque_echec_1000"] <= 1.0
+    rythme = rep["rythme_production_matin"]
+    assert rythme["editions_par_jour_14j"] > 0 and rythme["jours_pour_2300"] > rythme["jours_pour_1000"]
     expected = "A_lineaire_0.90_0.10" if a["detectable_2300"] else "B_loglineaire"
     assert rep["recette_principale_selon_regle"] == expected
     assert "CHEVAL" not in json.dumps(rep) and "JOC" not in json.dumps(rep)

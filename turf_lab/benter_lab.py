@@ -849,9 +849,14 @@ def _secondary(pairs: List[Tuple[int, int, Hashable]], n0: int) -> Dict[str, Any
     se = ombre.erreur_type(diff, clusters)
     return {"editions": len(pairs), "publie": round(float(np.mean([p for p, _, _ in pairs])), 4),
             "ombre": round(float(np.mean([o for _, o, _ in pairs])), 4), "ecart": round(mean, 4),
-            "ic95": [round(lo, 4), round(hi, 4)],
+            "ic95": [round(lo, 4), round(hi, 4)], "erreur_type": round(se, 5),
             "borne_basse_projetee_1000": round(ombre.borne_basse_projetee(mean, se, n0, ombre.LECTURE_1), 4),
-            "borne_basse_projetee_2300": round(ombre.borne_basse_projetee(mean, se, n0, ombre.LECTURE_2), 4)}
+            "borne_basse_projetee_2300": round(ombre.borne_basse_projetee(mean, se, n0, ombre.LECTURE_2), 4),
+            # Risque d'échec du test (borne basse IC95 < −2 points) si l'écart
+            # vrai est celui observé : un blocage « à tort » quand l'écart est nul.
+            "risque_echec_1000": round(ombre.risque_echec_non_degradation(mean, se, n0, ombre.LECTURE_1), 4),
+            "risque_echec_2300": round(ombre.risque_echec_non_degradation(mean, se, n0, ombre.LECTURE_2), 4),
+            "risque_echec_1000_si_ecart_nul": round(ombre.risque_echec_non_degradation(0.0, se, n0, ombre.LECTURE_1), 4)}
 
 
 def _primary(deltas: List[float], clusters: List[Hashable]) -> Dict[str, Any]:
@@ -935,6 +940,31 @@ def evaluate_shadow_power(races: Sequence[Race], oos: Dict, bench: Dict,
                                           "fondamental": round(float(np.mean([y for _, y in weights_b])), 4)}
             entry[key] = recipe
         out[horizon] = entry
+    # Risque que l'un au moins des huit tests secondaires échoue (tests
+    # supposés indépendants : borne prudente, les tests sont corrélés).
+    for key in ("A", "B"):
+        risks = {n: [] for n in ("risque_echec_1000", "risque_echec_2300", "risque_echec_1000_si_ecart_nul")}
+        for horizon in horizons:
+            for crit in ("gagnant_dans_8", "tierce_dans_8"):
+                test = ((out.get(horizon) or {}).get(key) or {}).get(crit) or {}
+                for n in risks:
+                    if n in test:
+                        risks[n].append(test[n])
+        out[f"secondaires_{key}"] = {"tests_mesures": len(risks["risque_echec_1000"]),
+                                     **{"au_moins_un_" + n: round(1.0 - float(np.prod([1.0 - r for r in v])), 4)
+                                        for n, v in risks.items() if v}}
+    # Rythme des éditions de production au matin (14 derniers jours du banc) :
+    # durée probable de l'ombre, donc du gel symétrique de NVE.
+    days = sorted(r["race"].day for r in _nve_rows(races, oos, bench.get(("NEW_VALUE_ENGINE", "T_MATIN")) or {})[0]
+                  if r["production"])
+    if days:
+        last = date.fromisoformat(days[-1])
+        recent = [d for d in days if (last - date.fromisoformat(d)).days < 14]
+        span = (last - date.fromisoformat(min(recent))).days + 1
+        rate = len(recent) / span
+        out["rythme_production_matin"] = {"editions_par_jour_14j": round(rate, 1), "jours_couverts": span,
+                                          "jours_pour_1000": math.ceil(ombre.LECTURE_1 / rate) if rate else None,
+                                          "jours_pour_2300": math.ceil(ombre.LECTURE_2 / rate) if rate else None}
     matin = (out.get("T_MATIN") or {}).get("A") or {}
     out["recette_principale_selon_regle"] = "A_lineaire_0.90_0.10" if matin.get("detectable_2300") else "B_loglineaire"
     return out
@@ -1067,8 +1097,9 @@ def run(db_path: str, bench_path: Optional[str] = None) -> Dict[str, Any]:
         shadow = evaluate_shadow_power(races, wf_fige["oos"], bench)
         for horizon in ombre.HORIZONS_SECONDAIRES:
             _log("BENTER_OMBRE_PUISSANCE", {"horizon": horizon, **(shadow.get(horizon) or {})})
-        _log("BENTER_OMBRE_DECISION", {"definition_detectable": shadow["definition_detectable"],
-                                       "recette_principale_selon_regle": shadow["recette_principale_selon_regle"]})
+        _log("BENTER_OMBRE_DECISION", {k: shadow.get(k) for k in (
+            "definition_detectable", "recette_principale_selon_regle", "secondaires_A", "secondaires_B",
+            "rythme_production_matin")})
     return {
         "genere_le_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "methode": {"apprentissage_depuis": TRAIN_START, "premier_mois_test": FIRST_TEST_MONTH,

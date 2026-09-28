@@ -85,6 +85,16 @@ def borne_basse_projetee(effet: float, se: float, n0: int, n: int, level: float 
     return effet - z_bilateral(level) * se * math.sqrt(n0 / n)
 
 
+def risque_echec_non_degradation(ecart: float, se: float, n0: int, n: int,
+                                 seuil: float = SEUIL_NON_DEGRADATION, level: float = 0.95) -> float:
+    """Probabilité que la borne basse de l'IC (niveau ``level``) tombe sous
+    ``seuil`` à ``n`` éditions, si l'écart vrai vaut ``ecart``."""
+    se_n = se * math.sqrt(n0 / n) if n0 > 0 else 0.0
+    if se_n <= 0:
+        return 0.0 if ecart >= seuil else 1.0
+    return 1.0 - NormalDist().cdf((ecart - seuil) / se_n - z_bilateral(level))
+
+
 def marche_de_edition(publie: np.ndarray, modele: np.ndarray, poids: float) -> np.ndarray:
     """Part marché d'une édition NVE : publié = poids × marché + (1 − poids) × modèle."""
     m = np.maximum((publie - (1.0 - poids) * modele) / poids, PLANCHER)
