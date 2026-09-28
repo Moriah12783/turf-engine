@@ -10,6 +10,13 @@ règle ne change plus. Seule une coquille sans effet sur la règle peut encore
 Rien ne tourne avant le 06/10. Le passage à l'ombre se fait sur la décision
 écrite de Steph et avec le feu vert du dev NVE.
 
+Deux verrous tiennent jusqu'au gel :
+
+- **Aucun horaire.** Le workflow de nuit ne tourne pas automatiquement. Le
+  commit de gel ajoute les deux horaires de nuit.
+- **Aucune écriture.** Le calcul de nuit refuse d'écrire tant que `DEBUT_OMBRE`
+  n'est pas inscrit (`OMBRE_PAS_OUVERTE`), même lancé à la main.
+
 ## Ce qui tourne
 
 1. **Chaque nuit, calcul du fondamental** (`turf_lab/fondamental_nuit.py`,

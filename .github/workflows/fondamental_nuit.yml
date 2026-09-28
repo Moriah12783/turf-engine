@@ -1,8 +1,10 @@
 name: Fondamental de nuit (ombre NVE)
 
 # Règle arrêtée avec le dev NVE le 28/09/2026 : ombre APRÈS le 06/10, rien
-# avant — ce fichier n'est fusionné que sur décision écrite de Steph (les
-# crons ne tournent que sur la branche principale).
+# avant. AUCUN horaire ici tant que la règle n'est pas gelée : le commit de
+# gel (après le 06/10, sur décision écrite de Steph) ajoute les deux horaires
+# de nuit (05h05 et 05h50 UTC) et inscrit DEBUT_OMBRE ; d'ici là le calcul de
+# nuit refuse d'écrire (OMBRE_PAS_OUVERTE), même lancé à la main.
 # Nuit : miroir historique (R2 privé, lecture seule) + programme PMU du jour
 # -> table fundamental_probs de turf_bench.db, entre le pull et le push R2.
 # Aucune écriture après 06h20 UTC ni pour une course déjà verrouillée, aucun
@@ -14,9 +16,6 @@ name: Fondamental de nuit (ombre NVE)
 # Voir turf_lab/fondamental_nuit.py.
 
 on:
-  schedule:
-    - cron: '5 5 * * *'
-    - cron: '50 5 * * *'      # secours : les crons GitHub sautent parfois
   workflow_dispatch:
     inputs:
       action:

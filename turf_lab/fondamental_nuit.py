@@ -14,10 +14,11 @@ avant). Chaque nuit, entre le pull et le push R2 de ``turf_bench.db``
      ``model_version`` (empreinte du code du modèle : tout changement de code
      remet le compteur de l'ombre à zéro), ``computed_at``, ``train_until``.
 
-Garde-fous : aucune écriture après 06h20 UTC ni pour une course déjà
-verrouillée ; audit de fuite négatif obligatoire ; historique en retard de
-plus de 3 jours => rien n'est écrit (jour compté hors couverture). Journal :
-agrégats seulement (dépôt public).
+Garde-fous : rien n'est écrit tant que la règle n'est pas gelée
+(``DEBUT_OMBRE``, turf_lab/ombre_lecture.py) ; aucune écriture après 06h20
+UTC ni pour une course déjà verrouillée ; audit de fuite négatif obligatoire ;
+historique en retard de plus de 3 jours => rien n'est écrit (jour compté hors
+couverture). Journal : agrégats seulement (dépôt public).
 
 Mode ``parite`` (lecture seule) : pour une journée passée, compare le
 programme PMU converti au format Radar avec les lignes du miroir, champ par
@@ -240,6 +241,12 @@ def _too_late(now_utc: datetime) -> bool:
     return (now_utc.hour, now_utc.minute) >= HEURE_LIMITE_UTC
 
 
+def shadow_open(day: str) -> bool:
+    """L'ombre est ouverte à partir de DEBUT_OMBRE, inscrit au gel de la règle."""
+    from turf_lab import ombre_lecture
+    return bool(ombre_lecture.DEBUT_OMBRE) and day >= ombre_lecture.DEBUT_OMBRE
+
+
 # ── Nuit ─────────────────────────────────────────────────────────────────
 def run_night(history_path: str, bench_path: str, fetcher, now_utc: Optional[datetime] = None,
               enforce_hour: bool = True, day: Optional[str] = None) -> Dict[str, Any]:
@@ -251,6 +258,12 @@ def run_night(history_path: str, bench_path: str, fetcher, now_utc: Optional[dat
     day = day or clock.date().isoformat()
     version = model_version()
     report: Dict[str, Any] = {"jour": day, "model_version": version, "ecrit": False}
+    if enforce_hour and not shadow_open(day):
+        # Verrou de la règle : tant que le gel n'a pas inscrit DEBUT_OMBRE
+        # (après le 06/10, sur décision écrite de Steph), rien n'est écrit.
+        report["refus"] = "OMBRE_PAS_OUVERTE"
+        _log("NUIT_FONDAMENTAL_REFUS", report)
+        return report
     if enforce_hour and _too_late(clock):
         report["refus"] = "HEURE_LIMITE_DEPASSEE"
         _log("NUIT_FONDAMENTAL_REFUS", report)

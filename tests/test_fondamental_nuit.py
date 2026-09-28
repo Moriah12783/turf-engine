@@ -81,6 +81,12 @@ def no_pause(monkeypatch):
     monkeypatch.setattr(nuit, "PAUSE_S", 0.0)
 
 
+@pytest.fixture
+def ombre_ouverte(monkeypatch):
+    from turf_lab import ombre_lecture
+    monkeypatch.setattr(ombre_lecture, "DEBUT_OMBRE", "2025-01-01")
+
+
 def _bench(path, locked=()):
     conn = sqlite3.connect(path)
     conn.execute("CREATE TABLE predictions (prediction_id TEXT, race_id TEXT, engine_name TEXT, horizon TEXT)")
@@ -102,7 +108,7 @@ def _rows(path):
         conn.close()
 
 
-def test_nuit_ecrit_les_probabilites_du_jour(mirror):
+def test_nuit_ecrit_les_probabilites_du_jour(mirror, ombre_ouverte):
     today = (date.fromisoformat(LAST_DAY) + timedelta(days=1)).isoformat()
     fake = FakePMU(mirror, LAST_DAY, today, non_partant=(2, 3))
     api = date.fromisoformat(today).strftime("%d%m%Y")
@@ -128,7 +134,7 @@ def test_nuit_ecrit_les_probabilites_du_jour(mirror):
     assert "CHEVAL" not in logs and "JOC" not in logs and "ENT " not in logs              # dépôt public
 
 
-def test_nuit_refuse_apres_06h20_et_historique_en_retard(mirror):
+def test_nuit_refuse_apres_06h20_et_historique_en_retard(mirror, ombre_ouverte):
     today = (date.fromisoformat(LAST_DAY) + timedelta(days=1)).isoformat()
     with tempfile.TemporaryDirectory() as d:
         bench = _bench(os.path.join(d, "turf_bench.db"))
@@ -145,7 +151,7 @@ def test_nuit_refuse_apres_06h20_et_historique_en_retard(mirror):
         assert len({r[0] for r in _rows(bench)}) == trial["courses_ecrites"]
 
 
-def test_nuit_refuse_si_fuite(tmp_path):
+def test_nuit_refuse_si_fuite(tmp_path, ombre_ouverte):
     leaky = make_mirror(str(tmp_path / "leak.db"), days=120, leak=True)
     day = (date(2025, 8, 1) + timedelta(days=119)).isoformat()
     today = (date.fromisoformat(day) + timedelta(days=1)).isoformat()
@@ -228,3 +234,20 @@ def test_essai_en_ligne_de_commande(mirror, tmp_path):
     assert code == 0 and len({r[0] for r in _rows(bench)}) == 18
     line = [l for l in out.getvalue().splitlines() if l.startswith("NUIT_FONDAMENTAL ")][0]
     assert json.loads(line.split(" ", 1)[1])["courses_ecrites"] == 18
+
+
+def test_rien_n_est_ecrit_avant_le_gel_de_la_regle(mirror, tmp_path, monkeypatch):
+    """Tant que DEBUT_OMBRE n'est pas inscrit (gel après le 06/10), la nuit
+    refuse d'écrire, même lancée à la main ; avant DEBUT_OMBRE aussi."""
+    from turf_lab import ombre_lecture
+    bench = _bench(str(tmp_path / "turf_bench.db"))
+    fake = FakePMU(mirror, LAST_DAY, "2026-02-17")
+    at = datetime(2026, 2, 17, 5, 5, tzinfo=timezone.utc)
+    monkeypatch.setattr(ombre_lecture, "DEBUT_OMBRE", None)
+    with redirect_stdout(io.StringIO()):
+        closed = nuit.run_night(mirror, bench, fake, now_utc=at)
+    monkeypatch.setattr(ombre_lecture, "DEBUT_OMBRE", "2026-02-18")
+    with redirect_stdout(io.StringIO()):
+        early = nuit.run_night(mirror, bench, fake, now_utc=at)
+    assert closed["refus"] == early["refus"] == "OMBRE_PAS_OUVERTE" and _rows(bench) == []
+    assert fake.calls == 0                                   # pas même une requête PMU
