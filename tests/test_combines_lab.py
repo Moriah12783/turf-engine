@@ -45,6 +45,9 @@ def test_classement_des_paris():
     assert cl.classify("MULTI", "Multi en 4") == "SET_FIRST4" and cl.classify("MULTI", "Multi en 6") is None
     assert cl.classify("DEUX_SUR_QUATRE", "2sur4") == "PAIR_TOP4"
     assert cl.classify("INCONNU", "x") is None
+    for special in ("Couplé Gagnant 1 NP", "Trio dégradé 2 rangs", "Quinté+ Ordre + Tirelire", "Remboursement Total"):
+        assert cl.classify("COUPLE_GAGNANT", special) is None
+    assert cl.classify("SIMPLE_PLACE", "Simple placé 4 à 7 partants") == "PLACE"
     assert cl.places_paid(8) == 3 and cl.places_paid(7) == 2 and cl.places_paid(3) == 0
 
 

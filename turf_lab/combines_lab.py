@@ -66,7 +66,10 @@ def classify(type_pari: Any, libelle: Any) -> Optional[str]:
     t = _norm(type_pari)
     t = t[2:] if t.startswith("E_") else t
     lib = _norm(libelle)
-    if any(w in lib for w in ("BONUS", "SPECIAL", "NON PARTANT", "REMBOURS")):
+    # Rapports particuliers (non-partant, dégradé, tirelire, bonus, remboursement) :
+    # d'autres masses ou d'autres règles de gain, inventoriés seulement.
+    if any(w in lib for w in ("BONUS", "SPECIAL", "NON PARTANT", "REMBOURS", "DEGRADE", "TIRELIRE")) \
+            or re.search(r"\bNP\b", lib):
         return None
     ordre = bool(re.search(r"(^|[^S])ORDRE", lib)) and "DESORDRE" not in lib
     desordre = "DESORDRE" in lib
