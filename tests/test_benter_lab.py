@@ -324,6 +324,8 @@ def test_apport_du_fondamental_aux_moteurs_du_banc(mirror):
     assert toutes["ic95_gain_top1"][0] <= toutes["gain_top1"] <= toutes["ic95_gain_top1"][1]
     assert prod["courses"] < toutes["courses"] and prod["editions_exclues"] > 0
     assert set(prod["composition"]) == {"poids_0.90"}
+    # Apprise sur toutes les éditions NVE passées, jugée sur les seules éditions de production.
+    assert 0 < prod["courses_jugees"] < toutes["courses_jugees"]
     assert set(toutes["composition"]) == {"poids_0.90", "sans_marche"}
     informatives = report["MARKET_BASELINE_T_MATIN_informatives"]
     assert informatives["editions_exclues"] > 0

@@ -657,12 +657,16 @@ def _is_market_informative(edition: Dict[str, Any]) -> bool:
                                        "probabilities": {str(k): v for k, v in edition["probs"].items()}})
 
 
-BENCH_LINES = (                                   # (moteur, découpage, filtre)
-    ("MARKET_BASELINE", "toutes", None),
-    ("MARKET_BASELINE", "informatives", _is_market_informative),
-    ("NEW_VALUE_ENGINE", "toutes", None),
-    ("NEW_VALUE_ENGINE", "production_poids_0.9", _is_nve_production),
-    ("RADAR_V4", "toutes", None),
+# (moteur, découpage, filtre, portée du filtre). « juger » : la combinaison est
+# apprise sur TOUTES les éditions passées du moteur (les éditions de
+# production sont trop récentes pour 300 courses d'apprentissage) mais jugée
+# sur les seules éditions filtrées ; « tout » : filtrées partout.
+BENCH_LINES = (
+    ("MARKET_BASELINE", "toutes", None, "tout"),
+    ("MARKET_BASELINE", "informatives", _is_market_informative, "tout"),
+    ("NEW_VALUE_ENGINE", "toutes", None, "tout"),
+    ("NEW_VALUE_ENGINE", "production_poids_0.9", _is_nve_production, "juger"),
+    ("RADAR_V4", "toutes", None, "tout"),
 )
 
 
@@ -671,7 +675,8 @@ def _paired_ci(values: Sequence[float]) -> List[float]:
     return [round(lo, 5), round(hi, 5)]
 
 
-def _bench_line(races: Sequence[Race], oos: Dict, probs: Dict[Tuple[str, int, int], np.ndarray]) -> Dict[str, Any]:
+def _bench_line(races: Sequence[Race], oos: Dict, probs: Dict[Tuple[str, int, int], np.ndarray],
+                judge: Optional[set] = None) -> Dict[str, Any]:
     """Combinaison moteur + fondamental apprise semaine par semaine sur le passé ;
     gain de log-vraisemblance face au moteur seul recalibré et gain APPARIÉ de
     gagnants en tête (même course, combiné − moteur), chacun avec IC 95 %."""
@@ -690,16 +695,20 @@ def _bench_line(races: Sequence[Race], oos: Dict, probs: Dict[Tuple[str, int, in
             betas.append(float(ab[1]))
             recal_pack = _combo_packed(test, oos, False, market_of)
             comb_pack = _combo_packed(test, oos, True, market_of)
-            deltas.extend((_race_ll(comb_pack, ab) - _race_ll(recal_pack, gamma)).tolist())
+            race_delta = _race_ll(comb_pack, ab) - _race_ll(recal_pack, gamma)
             pc = comb_pack.probs(ab)
-            for r, start in zip(test, comb_pack.starts):
+            for r, start, delta in zip(test, comb_pack.starts, race_delta):
+                if judge is not None and r.key not in judge:
+                    continue                           # apprise ici, jugée ailleurs
+                deltas.append(float(delta))
                 ll_eng.append(math.log(max(probs[r.key][r.winner], FLOOR)))
                 t_eng = int(np.argmax(probs[r.key]) == r.winner)
                 t_comb = int(np.argmax(pc[start:start + len(r.runners)]) == r.winner)
                 top_eng.append(t_eng)
                 top_diff.append(t_comb - t_eng)
         history.extend(test)
-    entry: Dict[str, Any] = {"courses": len(pool), "courses_jugees": len(deltas)}
+    entry: Dict[str, Any] = {"courses": len(pool) if judge is None else len(judge & set(probs)),
+                             "courses_jugees": len(deltas)}
     if deltas:
         arr = np.array(deltas)
         lo, hi = bootstrap_ci(arr)
@@ -754,24 +763,29 @@ def evaluate_bench(races: Sequence[Race], oos: Dict, bench: Dict,
     NVE pur ; composition des éditions NVE jugées."""
     results: Dict[str, Any] = {}
     for horizon in horizons:
-        for engine, cut, keep in BENCH_LINES:
+        for engine, cut, keep, scope in BENCH_LINES:
             editions = bench.get((engine, horizon)) or {}
             probs: Dict[Tuple[str, int, int], np.ndarray] = {}
+            judge: Optional[set] = set() if scope == "juger" else None
             excluded = 0
             for r in races:
                 ed = editions.get(r.key)
                 if ed is None or r.key not in oos:
                     continue
-                if keep is not None and not keep(ed):
+                kept = keep is None or keep(ed)
+                if not kept:
                     excluded += 1
-                    continue
+                    if scope == "tout":
+                        continue
                 arr = _engine_probs(r, ed["probs"])
                 if arr is not None:
                     probs[r.key] = arr
+                    if judge is not None and kept:
+                        judge.add(r.key)
             entry = {"moteur": engine, "horizon": horizon, "decoupage": cut, "editions_exclues": excluded,
-                     **_bench_line(races, oos, probs)}
+                     **_bench_line(races, oos, probs, judge)}
             if engine == "NEW_VALUE_ENGINE":
-                entry["composition"] = _nve_composition(editions, probs.keys())
+                entry["composition"] = _nve_composition(editions, judge if judge is not None else probs.keys())
             results[f"{engine}_{horizon}_{cut}"] = entry
         nve = bench.get(("NEW_VALUE_ENGINE", horizon)) or {}
         if horizon == "T_MATIN" and nve:
