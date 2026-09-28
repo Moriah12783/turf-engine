@@ -32,6 +32,19 @@ absente n'est pas lue ; dès qu'elle est écrite (complète), le comptage la
 détecte et la nuit suivante la lit ; un ajout tardif change le comptage et
 la fait relire. Aucun horodatage (``captured_at``) n'est utilisé.
 
+Angle mort du comptage (signalé par le Radar le 28/09/2026) : une ligne
+modifiée sur place ne change pas le nombre de lignes. Deux filets :
+  - relecture liée : une date relue dans ``participants_cotes_hist`` (une
+    cote a changé) est aussi relue dans ``participants`` ;
+  - empreinte hebdomadaire (dimanche, à partir du 11/10/2026) : une
+    empreinte MD5 par date et par table, calculée côté Radar sur les
+    colonnes exportées ; toute date dont l'empreinte a changé (ou jamais
+    calculée) est relue.
+
+Après chaque export, un contrôle qualité local (aucune requête Radar)
+remplit la table ``anomalies`` du miroir : courses courues sans arrivée,
+courses annulées dont le champ ``annulee`` est faux.
+
 Mises en garde de données (voir docs/HISTORIQUE_RADAR.md) :
   - ``participants.cote_reference`` est réécrite au fil de la journée :
     jamais une cote à un instant donné (prendre ``cotes_snapshots``) ;
@@ -42,6 +55,7 @@ Usage :
     python -m turf_lab.history_export probe
     python -m turf_lab.history_export run [--start AAAA-MM-JJ] [--end AAAA-MM-JJ]
            [--tables t1,t2] [--refresh-days 3] [--max-minutes 45] [--force-hors-creneau]
+           [--empreintes auto|oui|non]
     python -m turf_lab.history_export status
     python -m turf_lab.history_export fetch [--db chemin]   # lecture : miroir vérifié, sans accès Radar
 """
@@ -98,6 +112,13 @@ TABLES: Dict[str, Tuple[str, ...]] = {
 ORDER_BY = {
     "rapports_definitifs": "num_reunion, num_course, type_pari, libelle, combinaison",
 }
+# Relecture liée : une date relue dans la clé l'est aussi dans les tables
+# listées (un changement de cote modifie participants sur place).
+RELECTURES_LIEES = {"participants_cotes_hist": ("participants",)}
+# Empreinte hebdomadaire : dimanche (UTC). Première le 11/10/2026, après
+# l'échéance Radar du 06/10 (elle relit une fois toutes les dates).
+JOUR_EMPREINTES = 6
+EMPREINTES_A_PARTIR_DU = "2026-10-11"
 CRENEAU_UTC = (0, 5)            # [00h, 05h[
 MARGE_FIN_CRENEAU = timedelta(minutes=5)   # dernière requête au plus tard à 04h55
 MAX_DROP_RATIO = 0.01           # refus d'envoi si le miroir perd > 1 % de lignes
@@ -156,6 +177,15 @@ class PgSource:
         return {to_sqlite(d): int(n) for d, n in self.query(
             f"select date_course, count(*) from {table} group by 1 order by 1")}
 
+    def date_fingerprints(self, table: str) -> Dict[str, str]:
+        """Empreinte MD5 par date sur les colonnes exportées (1 requête
+        groupée par table, quelques secondes)."""
+        cols = ", ".join(TABLES[table])
+        order = ORDER_BY.get(table, "id")
+        return {to_sqlite(d): h for d, h in self.query(
+            f"select date_course, md5(string_agg(row({cols})::text, '' order by {order})) "
+            f"from {table} group by 1")}
+
     def fetch(self, table: str, day: str) -> List[Tuple[Any, ...]]:
         cols = ", ".join(TABLES[table])
         order = ORDER_BY.get(table, "id")
@@ -178,13 +208,26 @@ class HistoryDB:
         self.conn.execute("""CREATE TABLE IF NOT EXISTS export_log (
             tbl TEXT NOT NULL, date_course TEXT NOT NULL, nb_lignes INTEGER NOT NULL,
             exporte_le_utc TEXT NOT NULL, PRIMARY KEY (tbl, date_course))""")
+        self.conn.execute("""CREATE TABLE IF NOT EXISTS empreintes (
+            tbl TEXT NOT NULL, date_course TEXT NOT NULL, md5 TEXT NOT NULL,
+            calcule_le_utc TEXT NOT NULL, PRIMARY KEY (tbl, date_course))""")
+        self.conn.execute("""CREATE TABLE IF NOT EXISTS anomalies (
+            date_course TEXT, num_reunion INTEGER, num_course INTEGER, statut TEXT,
+            anomalie TEXT, partants_avec_ordre INTEGER, detecte_le_utc TEXT)""")
         self.conn.commit()
 
     def exported(self, table: str) -> Dict[str, int]:
         """date -> nombre de lignes lors du dernier export."""
         return dict(self.conn.execute("SELECT date_course, nb_lignes FROM export_log WHERE tbl = ?", (table,)))
 
-    def replace_date(self, table: str, day: str, rows: Sequence[Tuple[Any, ...]], now: str) -> None:
+    def fingerprints(self, table: str) -> Dict[str, str]:
+        return dict(self.conn.execute("SELECT date_course, md5 FROM empreintes WHERE tbl = ?", (table,)))
+
+    def replace_date(self, table: str, day: str, rows: Sequence[Tuple[Any, ...]], now: str,
+                     fingerprint: Optional[str] = None) -> None:
+        """Remplace une date. L'empreinte, calculée AVANT la lecture, n'est
+        enregistrée qu'avec les lignes : une modification survenue entre les
+        deux la rendra différente au contrôle suivant (relecture)."""
         cols = TABLES[table]
         with self.conn:
             self.conn.execute(f"DELETE FROM {table} WHERE date_course = ?", (day,))
@@ -192,6 +235,37 @@ class HistoryDB:
                 f"INSERT INTO {table} ({', '.join(cols)}) VALUES ({', '.join('?' * len(cols))})", rows)
             self.conn.execute("INSERT OR REPLACE INTO export_log VALUES (?, ?, ?, ?)",
                               (table, day, len(rows), now))
+            if fingerprint is not None:
+                self.conn.execute("INSERT OR REPLACE INTO empreintes VALUES (?, ?, ?, ?)",
+                                  (table, day, fingerprint, now))
+
+    def quality_check(self, now: str) -> Dict[str, Any]:
+        """Contrôle local (aucune requête Radar), refait à chaque export.
+        Ne juge que les dates déjà traitées pour ``arrivees`` (export
+        interrompu : pas de fausse alerte)."""
+        with self.conn:
+            self.conn.execute("DELETE FROM anomalies")
+            self.conn.execute("""
+                INSERT INTO anomalies
+                SELECT c.date_course, c.num_reunion, c.num_course, c.statut, 'arrivee_absente',
+                       (SELECT COUNT(*) FROM participants p
+                         WHERE p.date_course = c.date_course AND p.num_reunion = c.num_reunion
+                           AND p.num_course = c.num_course AND p.ordre_arrivee IS NOT NULL), ?
+                  FROM courses c
+                 WHERE c.statut IS NOT 'COURSE_ANNULEE'
+                   AND c.date_course <= (SELECT MAX(date_course) FROM export_log WHERE tbl = 'arrivees')
+                   AND NOT EXISTS (SELECT 1 FROM arrivees a
+                                    WHERE a.date_course = c.date_course AND a.num_reunion = c.num_reunion
+                                      AND a.num_course = c.num_course)""", (now,))
+            self.conn.execute("""
+                INSERT INTO anomalies
+                SELECT date_course, num_reunion, num_course, statut, 'annulee_incoherente', NULL, ?
+                  FROM courses WHERE statut = 'COURSE_ANNULEE' AND annulee = 0""", (now,))
+        out = {}
+        for kind, n, nd in self.conn.execute(
+                "SELECT anomalie, COUNT(*), COUNT(DISTINCT date_course) FROM anomalies GROUP BY 1"):
+            out[kind] = {"courses": n, "dates": nd}
+        return out
 
     def counts(self) -> Dict[str, int]:
         return {t: int(self.conn.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0]) for t in TABLES}
@@ -233,30 +307,62 @@ def plan_dates(source_counts: Dict[str, int], exported: Dict[str, int], today: s
 
 def run_export(source, db: HistoryDB, tables: Sequence[str], today: str, refresh_days: int = 3,
                start: Optional[str] = None, end: Optional[str] = None, max_seconds: float = 45 * 60,
-               clock=time.monotonic, now_utc=None) -> Dict[str, Any]:
-    """Exporte date par date ; s'arrête proprement si le budget de temps est
-    épuisé (la nuit suivante reprend là où l'export s'est arrêté)."""
+               clock=time.monotonic, now_utc=None, empreintes: bool = False) -> Dict[str, Any]:
+    """Planifie puis exporte date par date ; s'arrête proprement si le budget
+    de temps est épuisé (la nuit suivante reprend là où l'export s'est
+    arrêté ; une empreinte n'est enregistrée qu'avec sa date relue)."""
     started = clock()
     stamp = now_utc or (lambda: datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"))
     report = {"tables": {}, "interrompu": False}
-    for table in tables:
-        if clock() - started > max_seconds:          # aucune requête, même de comptage
+
+    def over() -> bool:                                # aucune requête, même de comptage
+        if clock() - started > max_seconds:
             report["interrompu"] = True
+        return report["interrompu"]
+
+    # 1. Planification : comptages (et empreintes le dimanche), puis relectures liées.
+    plans: Dict[str, List[str]] = {}
+    fps: Dict[str, Dict[str, str]] = {}
+    motifs: Dict[str, Dict[str, int]] = {}
+    for table in tables:
+        if over():
             break
-        todo = plan_dates(source.date_counts(table), db.exported(table), today, refresh_days, start, end)
-        done = rows = 0
-        for day in todo:
-            if clock() - started > max_seconds:
-                report["interrompu"] = True
+        todo = set(plan_dates(source.date_counts(table), db.exported(table), today, refresh_days, start, end))
+        motifs[table] = {"par_empreinte": 0, "par_lien": 0}
+        if empreintes:
+            if over():
                 break
+            fps[table] = source.date_fingerprints(table)
+            stored = db.fingerprints(table)
+            changed = {d for d, h in fps[table].items()
+                       if d < today and not (start and d < start) and not (end and d > end)
+                       and stored.get(d) != h} - todo
+            motifs[table]["par_empreinte"] = len(changed)
+            todo |= changed
+        plans[table] = sorted(todo)
+    for cle, liees in RELECTURES_LIEES.items():
+        for table in liees:
+            if cle in plans and table in plans:
+                extra = set(plans[cle]) - set(plans[table])
+                motifs[table]["par_lien"] = len(extra)
+                plans[table] = sorted(set(plans[table]) | extra)
+
+    # 2. Lecture date par date.
+    for table in tables:
+        if table not in plans or over():
+            break
+        done = rows = 0
+        for day in plans[table]:
+            if over():
+                break
+            fingerprint = fps.get(table, {}).get(day)
             batch = source.fetch(table, day)
-            db.replace_date(table, day, batch, stamp())
+            db.replace_date(table, day, batch, stamp(), fingerprint)
             done += 1
             rows += len(batch)
-        report["tables"][table] = {"dates_prevues": len(todo), "dates_exportees": done, "lignes": rows}
+        report["tables"][table] = {"dates_prevues": len(plans[table]), "dates_exportees": done,
+                                   "lignes": rows, **motifs[table]}
         _log("HISTORY_TABLE", {"table": table, **report["tables"][table]})
-        if report["interrompu"]:
-            break
     return report
 
 
@@ -316,6 +422,8 @@ def main(argv: Optional[List[str]] = None, source_factory=PgSource, client_facto
     parser.add_argument("--max-minutes", type=float, default=45)
     parser.add_argument("--force-hors-creneau", action="store_true")
     parser.add_argument("--allow-drop", action="store_true")
+    parser.add_argument("--empreintes", choices=["auto", "oui", "non"], default="auto",
+                        help="auto = le dimanche à partir du " + EMPREINTES_A_PARTIR_DU)
     args = parser.parse_args(argv)
     now = now or datetime.now(timezone.utc)
 
@@ -374,6 +482,10 @@ def main(argv: Optional[List[str]] = None, source_factory=PgSource, client_facto
             _log("HISTORY_HORS_CRENEAU", {"heure_utc": now.strftime("%H:%M"), "creneau": "00:00-04:55 UTC"})
             return 0
 
+    empreintes = args.empreintes == "oui" or (
+        args.empreintes == "auto" and now.weekday() == JOUR_EMPREINTES
+        and now.date().isoformat() >= EMPREINTES_A_PARTIR_DU)
+
     try:
         previous = pull_history(client, cfg["bucket"], args.db)
         source = source_factory(dsn)
@@ -382,7 +494,9 @@ def main(argv: Optional[List[str]] = None, source_factory=PgSource, client_facto
             _log("HISTORY_PROBE_OK", source.whoami())
             report = run_export(source, db, tables, today=now.date().isoformat(),
                                 refresh_days=args.refresh_days, start=args.start, end=args.end,
-                                max_seconds=budget)
+                                max_seconds=budget, empreintes=empreintes)
+            qualite = db.quality_check(now.strftime("%Y-%m-%dT%H:%M:%SZ"))
+            _log("HISTORY_QUALITE", qualite)
             counts, coverage = db.counts(), db.coverage()
         finally:
             db.close()

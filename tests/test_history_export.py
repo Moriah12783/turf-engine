@@ -1,6 +1,7 @@
 """Tests de l'export de l'historique Radar vers R2 (phase 1 du plan Benter).
 Aucun réseau : une fausse source remplace le Postgres Radar, le faux client
 S3 de test_r2_store remplace R2."""
+import hashlib
 import os
 import sqlite3
 import sys
@@ -39,6 +40,7 @@ class FakeSource:
         self.data = data            # {table: {date: [rows]}}
         self.fetches = []
         self.counted = []
+        self.fingerprinted = []
         self.closed = False
 
     def whoami(self):
@@ -47,6 +49,11 @@ class FakeSource:
     def date_counts(self, table):
         self.counted.append(table)
         return {d: len(rows) for d, rows in self.data.get(table, {}).items()}
+
+    def date_fingerprints(self, table):
+        self.fingerprinted.append(table)
+        return {d: hashlib.md5(repr(sorted(rows)).encode()).hexdigest()
+                for d, rows in self.data.get(table, {}).items()}
 
     def fetch(self, table, day):
         self.fetches.append((table, day))
@@ -136,11 +143,12 @@ def test_reprise_des_rapports_arrive_date_par_date(workdir):
 def test_budget_epuise_aucune_requete_meme_de_comptage(workdir):
     source = FakeSource(_data(["2026-08-01"], tables=("courses", "participants")))
     db = HistoryDB("h.db")
-    ticks = iter([0, 1, 2, 10, 11])      # le budget (5 s) s'épuise pendant la 1re table
+    ticks = iter([0, 1, 10, 11, 12])     # le budget (5 s) s'épuise après le 1er comptage
     report = run_export(source, db, ["courses", "participants"], AUJOURDHUI, max_seconds=5,
                         clock=lambda: next(ticks))
     assert report["interrompu"] is True
     assert source.counted == ["courses"]                                 # participants jamais interrogée
+    assert source.fetches == []
     db.close()
 
 
@@ -161,7 +169,8 @@ def test_run_export_nuit_suivante_incrementale(workdir):
     source = FakeSource(_data(days))
     db = HistoryDB("h.db")
     first = run_export(source, db, ["courses", "participants"], AUJOURDHUI)
-    assert first["tables"]["courses"] == {"dates_prevues": 4, "dates_exportees": 4, "lignes": 8}
+    assert first["tables"]["courses"] == {"dates_prevues": 4, "dates_exportees": 4, "lignes": 8,
+                                          "par_empreinte": 0, "par_lien": 0}
     source.fetches.clear()
     run_export(source, db, ["courses", "participants"], AUJOURDHUI)
     # Seuls les 3 derniers jours sont relus : 26 et 27.
@@ -178,9 +187,9 @@ def test_run_export_s_arrete_au_budget_et_reprend(workdir):
     ticks = iter(range(100))
     report = run_export(source, db, ["courses"], AUJOURDHUI, max_seconds=3, clock=lambda: next(ticks))
     assert report["interrompu"] is True
-    assert report["tables"]["courses"]["dates_exportees"] == 2
+    assert report["tables"]["courses"]["dates_exportees"] == 1
     report = run_export(source, db, ["courses"], AUJOURDHUI)
-    assert report["tables"]["courses"]["dates_prevues"] == 8      # reprise là où la nuit s'est arrêtée
+    assert report["tables"]["courses"]["dates_prevues"] == 9      # reprise là où la nuit s'est arrêtée
     assert db.counts()["courses"] == 20
     db.close()
 
@@ -311,3 +320,95 @@ def test_main_fetch_lecture_seule(env_ok, monkeypatch, capsys):
     assert "HISTORY_FETCH_OK" in capsys.readouterr().out
     assert hx.sha256_file("copie.db") == hx.sha256_file("h.db")
     assert s3.puts == 1                                                   # fetch n'écrit jamais sur R2
+
+
+# ── Angle mort du comptage (message Radar du 28/09) ─────────────────────
+def test_relecture_liee_cotes_vers_partants(workdir):
+    days = ["2026-09-01", "2026-09-02"]
+    data = _data(days, tables=("participants", "participants_cotes_hist"))
+    source = FakeSource(data)
+    db = HistoryDB("h.db")
+    run_export(source, db, ["participants", "participants_cotes_hist"], AUJOURDHUI)
+    # Une cote change le 01/09 : une ligne de plus au journal, participants modifié SUR PLACE.
+    data["participants_cotes_hist"]["2026-09-01"].append(_row("participants_cotes_hist", "2026-09-01", 7))
+    data["participants"]["2026-09-01"][0] = _row("participants", "2026-09-01", 99)
+    source.fetches.clear()
+    report = run_export(source, db, ["participants", "participants_cotes_hist"], AUJOURDHUI)
+    assert source.fetches == [("participants", "2026-09-01"), ("participants_cotes_hist", "2026-09-01")]
+    assert report["tables"]["participants"]["par_lien"] == 1
+    assert db.conn.execute("SELECT COUNT(*) FROM participants WHERE id = 99").fetchone()[0] == 1
+    db.close()
+
+
+def test_empreinte_hebdomadaire_attrape_la_modification_sur_place(workdir):
+    days = ["2026-09-01", "2026-09-02"]
+    data = _data(days, tables=("courses",))
+    source = FakeSource(data)
+    db = HistoryDB("h.db")
+    run_export(source, db, ["courses"], AUJOURDHUI)
+    # 1er contrôle : aucune empreinte connue -> tout est relu une fois, empreintes posées.
+    source.fetches.clear()
+    report = run_export(source, db, ["courses"], AUJOURDHUI, empreintes=True)
+    assert report["tables"]["courses"]["par_empreinte"] == 2
+    assert set(db.fingerprints("courses")) == set(days)
+    # Modification sur place (même nombre de lignes) : invisible au comptage…
+    data["courses"]["2026-09-01"][1] = _row("courses", "2026-09-01", 42)
+    source.fetches.clear()
+    run_export(source, db, ["courses"], AUJOURDHUI)
+    assert source.fetches == []
+    # … mais pas à l'empreinte : seule la date modifiée est relue.
+    report = run_export(source, db, ["courses"], AUJOURDHUI, empreintes=True)
+    assert source.fetches == [("courses", "2026-09-01")]
+    assert db.conn.execute("SELECT COUNT(*) FROM courses WHERE id = 42").fetchone()[0] == 1
+    db.close()
+
+
+def test_empreinte_enregistree_seulement_avec_sa_date(workdir):
+    days = [f"2026-08-{d:02d}" for d in range(1, 6)]
+    source = FakeSource(_data(days, tables=("courses",)))
+    db = HistoryDB("h.db")
+    ticks = iter(range(100))
+    run_export(source, db, ["courses"], AUJOURDHUI, empreintes=True, max_seconds=4, clock=lambda: next(ticks))
+    lues = {d for _, d in source.fetches}
+    assert lues and set(db.fingerprints("courses")) == lues              # budget épuisé : rien de plus
+    source.fetches.clear()
+    run_export(source, db, ["courses"], AUJOURDHUI, empreintes=True)
+    assert {d for _, d in source.fetches} == set(days) - lues            # la suite est relue
+
+
+def test_main_empreintes_le_dimanche_apres_le_11_10(env_ok):
+    def fps(now, *args):
+        source = FakeSource(_data(["2026-09-01"]))
+        assert _main(["run", *args], source, FakeS3(), now=now) == 0
+        return source.fingerprinted != []
+    dimanche_04 = datetime(2026, 10, 4, 1, 17, tzinfo=timezone.utc)
+    dimanche_11 = datetime(2026, 10, 11, 1, 17, tzinfo=timezone.utc)
+    lundi_12 = datetime(2026, 10, 12, 1, 17, tzinfo=timezone.utc)
+    assert not fps(dimanche_04)                                          # avant l'échéance Radar
+    assert fps(dimanche_11)
+    assert not fps(lundi_12)
+    assert fps(lundi_12, "--empreintes", "oui")
+    assert not fps(dimanche_11, "--empreintes", "non")
+
+
+# ── Contrôle qualité local ──────────────────────────────────────────────
+def _course(day, reunion, course, statut, annulee):
+    cols = TABLES["courses"]
+    values = dict(zip(cols, _row("courses", day, course)))
+    values.update(num_reunion=reunion, num_course=course, statut=statut, annulee=annulee)
+    return tuple(values[c] for c in cols)
+
+
+def test_controle_qualite_trous_et_annulations(workdir):
+    db = HistoryDB("h.db")
+    db.replace_date("courses", "2026-07-28", [_course("2026-07-28", 1, 1, "FIN_COURSE", 0),
+                                              _course("2026-07-28", 1, 2, "COURSE_ANNULEE", 1)], "t")
+    db.replace_date("courses", "2026-09-04", [_course("2026-09-04", 1, 1, "ARRIVEE_DEFINITIVE_COMPLETE", 0),
+                                              _course("2026-09-04", 1, 2, "COURSE_ANNULEE", 0)], "t")
+    db.replace_date("arrivees", "2026-09-04", [_row("arrivees", "2026-09-04", 1)], "t")
+    # 28/07 : aucune arrivée côté Radar (date jamais dans export_log) -> détectée quand même.
+    assert db.quality_check("t") == {"arrivee_absente": {"courses": 1, "dates": 1},
+                                     "annulee_incoherente": {"courses": 1, "dates": 1}}
+    assert db.conn.execute("SELECT date_course, anomalie FROM anomalies ORDER BY 1").fetchall() == [
+        ("2026-07-28", "arrivee_absente"), ("2026-09-04", "annulee_incoherente")]
+    db.close()
