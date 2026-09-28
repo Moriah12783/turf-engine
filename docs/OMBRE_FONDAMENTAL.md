@@ -18,8 +18,9 @@ commit daté qui inscrira la date du gel et le premier jour d'ombre
 ne change plus. Seule une coquille sans effet sur la règle peut encore être
 corrigée, avec une justification dans le commit.
 
-Rien ne tourne avant le 06/10. Le passage à l'ombre se fait sur la décision
-écrite de Steph et avec le feu vert du dev NVE.
+L'ombre ne tourne pas avant le 06/10. Seule la répétition générale, sans
+effet sur la production, tourne du 01 au 06/10. Le passage à l'ombre se fait
+sur la décision écrite de Steph et avec le feu vert du dev NVE.
 
 Deux verrous tiennent jusqu'au gel :
 
@@ -27,6 +28,45 @@ Deux verrous tiennent jusqu'au gel :
   commit de gel ajoute les deux horaires de nuit.
 - **Aucune écriture.** Le calcul de nuit refuse d'écrire tant que `DEBUT_OMBRE`
   n'est pas inscrit (`OMBRE_PAS_OUVERTE`), même lancé à la main.
+
+## Calendrier (accepté par Steph le 28/09)
+
+| Étape | Date |
+|---|---|
+| Répétition générale | du jeudi 01/10 au mardi 06/10 |
+| Publication du gel : règle, horaires de nuit, partie moteur | mercredi 07/10 |
+| Premier jour d'ombre (`DEBUT_OMBRE`) | jeudi 08/10 |
+| 35e jour | mercredi 11/11 |
+| Lecture unique, au plus tard | jeudi 12/11 |
+
+Au rythme observé (environ 29 éditions éligibles par jour), les 1 000 éditions
+arrivent vers le 35e jour : la lecture tombe vers le 12/11 quel que soit le
+critère atteint en premier.
+
+## Répétition générale (01-06/10)
+
+- **But** : faire tourner toute la chaîne avant le premier jour d'ombre, sans
+  toucher à la production. Un bug trouvé après `DEBUT_OMBRE` remettrait
+  l'horloge à zéro.
+- **Nuit** : chaque matin à 05h05 UTC (secours à 05h50), le workflow
+  `repetition_ombre.yml` fait une copie en lecture seule de la base, y calcule
+  le fondamental du jour et l'envoie sur la clé privée
+  `lab/repetition/turf_bench.db`, jamais sur la base de production.
+- **Matin** : les devs NVE et daily_sync récupèrent la copie
+  (`python -m turf_lab.repetition fetch`) et y enchaînent le verrou du matin et
+  le moteur avec l'ombre. Ils lancent ensuite le diagnostic
+  (`python -m turf_lab.repetition diagnostic --jour AAAA-MM-JJ`).
+- **Confidentialité** : le diagnostic ne compare jamais l'ombre à l'édition
+  publiée. Après le 06/10, l'outil refuse tout.
+- **Critères de réussite, chaque jour** :
+  - calcul fini avant 06h20 UTC et copie envoyée avant 06h28 ;
+  - probabilités fondamentales d'une seule version, de somme 1 par course ;
+  - toutes les éditions du matin éligibles portent une ombre complète, avec
+    une seule clé et la recette A ;
+  - aucun écart sur ce qui est publié (contrôle du dev NVE).
+- **Suites** : un écart est corrigé avant le gel, sans effet sur la règle. Si
+  le retard de déclenchement des horaires GitHub menace la limite de 06h20, le
+  commit de gel avance les horaires de nuit.
 
 ## Ce qui tourne
 
