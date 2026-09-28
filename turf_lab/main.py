@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 from turf_lab.database import TurfDatabase
 from turf_lab.benchmark import TurfBenchmarkLab
 from turf_lab.simulator import RaceSimulator
-from turf_lab.html_report import generate_html_dashboard
+from turf_lab.html_report import generate_html_dashboard, export_site_archives
 from turf_lab.daily_sync import DailySyncManager
 from turf_lab.cloudflare_deploy import CloudflarePagesDeployer
 
@@ -154,13 +154,15 @@ def main():
         json.dump(report, f, indent=2, ensure_ascii=False)
     print(f"[+] Rapport JSON exporte dans : {os.path.abspath(args.export)}")
 
-    # 2. Generate HTML Dashboard
-    html_path = generate_html_dashboard(report, output_path=args.html)
+    # 2. Archives journalieres (detail des courses lu a la demande par la page)
+    #    puis HTML Dashboard (jour courant seulement)
+    site_dir = os.path.join(script_dir, "site")
+    os.makedirs(site_dir, exist_ok=True)
+    report_for_html = dict(report, archive_manifest=export_site_archives(report, site_dir))
+    html_path = generate_html_dashboard(report_for_html, output_path=args.html)
     print(f"[+] Tableau de bord HTML genere dans : {html_path}")
 
     # 3. Synchronize site/index.html automatically
-    site_dir = os.path.join(script_dir, "site")
-    os.makedirs(site_dir, exist_ok=True)
     site_index = os.path.join(site_dir, "index.html")
     shutil.copyfile(html_path, site_index)
     print(f"[+] Dossier local 'site/index.html' synchronise automatiquement.")

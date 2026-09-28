@@ -184,15 +184,15 @@ def main():
     except Exception as exc:  # defense en profondeur : le banc ne depend pas du pont
         print(f"[!] Pont retour Radar : {exc}")
 
-    # 2. Historique permanent : archives mensuelles statiques dans site/archive/
-    #    (les ~3 dernieres semaines restent embarquees dans index.html,
-    #    le reste est charge a la demande par le navigateur pour la recherche).
+    # 2. Historique permanent : une archive statique par journee dans
+    #    site/archive/AAAA-MM-JJ.json. index.html n'embarque que les lignes du
+    #    jour courant ; le navigateur charge le reste a la demande.
     site_dir = os.path.join(script_dir, "site")
     os.makedirs(site_dir, exist_ok=True)
-    recent_logs, archive_manifest = export_site_archives(report, site_dir)
+    archive_manifest = export_site_archives(report, site_dir)
     if archive_manifest:
         total_archived = sum(archive_manifest.values())
-        print(f"[+] Archives mensuelles ecrites : {len(archive_manifest)} mois, {total_archived} courses (site/archive/).")
+        print(f"[+] Archives journalieres : {len(archive_manifest)} jours, {total_archived} courses (site/archive/).")
 
     # 2bis. Export JSON des resultats (livrable partenaire) : site/resultats/
     try:
@@ -203,7 +203,6 @@ def main():
         print(f"[!] Export resultats impossible : {exc}")
 
     report_for_html = dict(report)
-    report_for_html["historical_logs"] = recent_logs if recent_logs else report.get("historical_logs", [])
     report_for_html["archive_manifest"] = archive_manifest
 
     # 3. Generate HTML Dashboard

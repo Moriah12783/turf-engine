@@ -143,7 +143,7 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           # Déploiement via l'outil OFFICIEL Cloudflare (wrangler) : fiable,
-          # multi-fichiers (index.html + archives mensuelles), et surtout un
+          # multi-fichiers (index.html + archives journalières), et surtout un
           # échec est VISIBLE (le job passe au rouge) au lieu d'être avalé
           # silencieusement comme avec l'ancien appel API maison.
           if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
