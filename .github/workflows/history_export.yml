@@ -34,6 +34,11 @@ on:
         description: "Autoriser un export hors 00h-05h UTC (à éviter : demande du Radar)"
         type: boolean
         default: false
+      empreintes:
+        description: "Contrôle par empreinte : auto = le dimanche (à partir du 11/10/2026), oui = forcer, non = sauter"
+        type: choice
+        options: [auto, oui, non]
+        default: auto
 
 permissions:
   contents: read
@@ -74,6 +79,7 @@ jobs:
           IN_END: ${{ github.event.inputs.end_date }}
           IN_TABLES: ${{ github.event.inputs.tables }}
           IN_FORCE: ${{ github.event.inputs.force_hors_creneau }}
+          IN_EMPREINTES: ${{ github.event.inputs.empreintes || 'auto' }}
         run: |
           ARGS=("$IN_ACTION")
           if [ "$IN_ACTION" = "run" ]; then
@@ -81,5 +87,6 @@ jobs:
             [ -n "$IN_END" ] && ARGS+=(--end "$IN_END")
             [ -n "$IN_TABLES" ] && ARGS+=(--tables "$IN_TABLES")
             [ "$IN_FORCE" = "true" ] && ARGS+=(--force-hors-creneau)
+            ARGS+=(--empreintes "$IN_EMPREINTES")
           fi
           python -m turf_lab.history_export "${ARGS[@]}"

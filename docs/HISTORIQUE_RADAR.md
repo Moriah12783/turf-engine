@@ -85,6 +85,45 @@ quinzaine de requêtes et moins d'une minute.
 - **Colonnes explicites.** Une colonne disparue côté Radar fait échouer
   l'export (job rouge) au lieu de produire un miroir amputé en silence.
 
+### Angle mort du comptage et ses deux filets (message Radar du 28/09/2026)
+
+Un comptage ne voit pas une ligne **modifiée sur place** : même nombre de
+lignes, valeur différente (`cote_reference`, statut d'un partant,
+`ordre_arrivee`, `annulee`…). Aujourd'hui toutes ces modifications ont lieu
+le jour même, donc la fenêtre de 3 jours les relit. Deux filets en plus :
+
+- **Relecture liée.** Toute date relue dans `participants_cotes_hist` (une
+  cote a changé) est aussi relue dans `participants`. Coût : nul ou
+  presque (quelques dates).
+- **Empreinte hebdomadaire.** Chaque dimanche à 01h17 UTC, **à partir du
+  11/10/2026** (après l'échéance Radar du 06/10), une empreinte MD5 par
+  date et par table est calculée côté Radar sur les colonnes exportées :
+  6 requêtes groupées de quelques secondes. Toute date dont l'empreinte a
+  changé, ou n'a jamais été calculée, est relue.
+  - Le **premier** contrôle relit donc une fois toutes les dates (~1 500
+    lectures, comme la première nuit). Ensuite : 6 empreintes et une
+    quarantaine de relectures par semaine (les dates de la semaine, plus
+    celles réellement modifiées).
+  - L'empreinte est calculée **avant** la lecture et enregistrée **avec**
+    les lignes : une modification survenue entre les deux est vue au
+    contrôle suivant. Un contrôle interrompu par le budget reprend la
+    semaine suivante sans rien perdre.
+  - Lancement manuel : *Run workflow*, entrée `empreintes` = `oui` (ou `non`
+    pour sauter le contrôle un dimanche).
+
+### Contrôle qualité automatique (table `anomalies` du miroir)
+
+Après chaque export, un contrôle **local** (aucune requête Radar) remplit la
+table `anomalies`, refaite à chaque passage (une anomalie réparée côté
+Radar disparaît d'elle-même) :
+
+| `anomalie` | Définition | Colonne utile |
+|---|---|---|
+| `arrivee_absente` | Course dont le `statut` n'est pas `COURSE_ANNULEE` mais sans ligne dans `arrivees` | `partants_avec_ordre` : partants dont `participants.ordre_arrivee` est rempli (repli possible) |
+| `annulee_incoherente` | `statut = 'COURSE_ANNULEE'` mais `annulee` faux | — |
+
+Le journal du workflow en donne le résumé (`HISTORY_QUALITE`).
+
 ## Garde-fous
 
 | Situation | Comportement |
@@ -120,7 +159,30 @@ quinzaine de requêtes et moins d'une minute.
 6. **Champs absents** chez le Radar : déferré, réduction kilométrique,
    valeur de handicap. Candidats à une phase 1c (récupération via l'API
    PMU depuis GitHub Actions), à décider au vu des premiers résultats.
-7. **Données internes.** Usage exclusif du labo ; jamais redistribuées ni
+7. **Arrivées manquantes (audit du 28/09/2026).** Hors courses annulées,
+   **4 cas** seulement, tous visibles dans la table `anomalies` :
+   - **28/07/2026** : `arrivees` vide pour les 31 courses courues (39
+     courses, dont 8 annulées). `participants.ordre_arrivee` est rempli
+     pour 313 des 458 partants et les 534 rapports sont présents. Utiliser
+     `ordre_arrivee`, ou exclure la date. Le Radar ne la réparera pas avant
+     le 06/10 (pré-enregistrement) et annoncera toute réparation par ligne
+     datée.
+   - **25/06/2026, La Teste, R1C1 à R1C12** : 12 courses restées
+     `PROGRAMMEE`, sans arrivée ni ordre d'arrivée. **À exclure** tant que
+     le Radar n'a pas confirmé si la réunion a été courue. Les rapports
+     repris pourront trancher.
+   - **30/11/2025 R15C7** (Mauquenchy) et **07/05/2026 R1C7**
+     (ParisLongchamp) : arrivée absente malgré un statut
+     `ARRIVEE_DEFINITIVE_COMPLETE`. Replier sur `ordre_arrivee`.
+8. **Le champ `courses.annulee` n'est pas fiable : utiliser `statut`.**
+   91 courses de 21 dates (du 03/08/2025 au 04/09/2026) ont
+   `statut = 'COURSE_ANNULEE'` mais `annulee = false` ; seules 16 courses
+   (28/07 et 12/08/2026) ont `annulee = true`. Un modèle qui filtrerait sur
+   `annulee` garderait 91 courses sans gagnant : chacune fausserait la
+   vraisemblance du logit conditionnel. Règle : une course est courue si
+   `statut <> 'COURSE_ANNULEE'` **et** si elle a une arrivée (ou, à défaut,
+   des `ordre_arrivee`).
+9. **Données internes.** Usage exclusif du labo ; jamais redistribuées ni
    publiées.
 
 ## Opérations
