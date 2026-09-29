@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "919031dad313ab0468abbfcbdd112743566197a9",
-  "run_id": "36555960670",
+  "commit": "0fac572cf1c762089aad8066bc84792cb577a359",
+  "run_id": "36556562716",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-09-29",
- "genere_le_utc": "2026-09-29T10:31:17Z",
+ "genere_le_utc": "2026-09-29T10:37:29Z",
  "nb_courses": 24,
  "compte_par_statut": {
   "EN_ATTENTE": 22,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 1,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "31acc4670560a0a60178158bef7ec0e8a9aee905b47429aef84d3d773c93cd7f",
+ "empreinte_sha256": "c8defb264fa7122bd0f64fc7b60ad6c6b000a7cfd48588c4ba3f36977e6ffd17",
  "courses": [
   {
    "course_id": "R1C1_29092026_CHANTILLY",
@@ -640,7 +640,7 @@
     "verifiee_le_utc": "2026-09-29T10:06:19Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-09-29T10:06:19Z",
-    "derniere_verification_utc": "2026-09-29T10:30:24Z"
+    "derniere_verification_utc": "2026-09-29T10:36:18Z"
    },
    "correction": {
     "version": 2,
@@ -695,11 +695,11 @@
     "partants_actifs": 7
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_AVEC_PHOTO"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -718,29 +718,71 @@
      "rang": 3,
      "num": 6,
      "nom": "MARIE DE PRUSSE",
-     "dead_heat": true
+     "dead_heat": false
     },
     {
-     "rang": 3,
+     "rang": 4,
      "num": 7,
      "nom": "SOUPIR",
-     "dead_heat": true
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 2,
+     "nom": "SIR GARSING",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 4,
+     "nom": "EXCELSIOR",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 5,
+     "nom": "AL HABISSET",
+     "dead_heat": false
     }
    ],
    "arrivee": [
     1,
     3,
     6,
-    7
+    7,
+    2,
+    4,
+    5
    ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "1": 2.6
+    },
+    "simple_place": {
+     "1": 1.8,
+     "3": 2.8
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_ORDRE",
+      "combinaison": "1-3",
+      "dividende_pour_1_eur": 14.9
+     },
+     {
+      "type_pari": "TRIO_ORDRE",
+      "combinaison": "1-3-6",
+      "dividende_pour_1_eur": 26.4
+     },
+     {
+      "type_pari": "SUPER_QUATRE",
+      "combinaison": "1-3-6-7",
+      "dividende_pour_1_eur": 88.9
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -750,15 +792,15 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-09-29T10:30:24Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-09-29T10:36:18Z",
+    "verifiee_le_utc": "2026-09-29T10:36:18Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-09-29T10:30:24Z",
-    "derniere_verification_utc": "2026-09-29T10:30:24Z"
+    "derniere_modification_utc": "2026-09-29T10:36:18Z",
+    "derniere_verification_utc": "2026-09-29T10:36:18Z"
    },
    "correction": {
-    "version": 1,
-    "nb_corrections": 0,
+    "version": 2,
+    "nb_corrections": 1,
     "historique": [
      {
       "version": 1,
@@ -771,6 +813,22 @@
        3,
        6,
        7
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "CORRECTION_CLASSEMENT",
+      "horodatage_utc": "2026-09-29T10:36:18Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       1,
+       3,
+       6,
+       7,
+       2,
+       4,
+       5
       ]
      }
     ]
@@ -798,7 +856,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
