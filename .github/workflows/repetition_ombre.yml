@@ -16,7 +16,14 @@ on:
   schedule:
     - cron: "5 5 1-6 10 *"
     - cron: "50 5 1-6 10 *"
+  # Lancement principal : horloge Cloudflare (Worker turf-horloge, voir
+  # docs/HORLOGE_CLOUDFLARE.md), les horaires ci-dessus servant de filet.
   workflow_dispatch:
+    inputs:
+      prevu:
+        description: "Horaire prévu (05:05 ou 05:50), pour mesurer le retard de déclenchement"
+        required: false
+        default: "05:05"
   pull_request:
     paths:
       - "turf_lab/repetition.py"
@@ -39,7 +46,7 @@ jobs:
       R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
       R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
       R2_BUCKET: ${{ secrets.R2_BUCKET }}
-      PREVU: ${{ github.event.schedule == '50 5 1-6 10 *' && '05:50' || '05:05' }}
+      PREVU: ${{ github.event.inputs.prevu || (github.event.schedule == '50 5 1-6 10 *' && '05:50' || '05:05') }}
       CONTROLE: ${{ github.event_name == 'pull_request' && '--controle' || '' }}
     steps:
       - name: Checkout Repository

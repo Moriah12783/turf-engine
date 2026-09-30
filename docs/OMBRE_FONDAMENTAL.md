@@ -48,7 +48,8 @@ critère atteint en premier.
 - **But** : faire tourner toute la chaîne avant le premier jour d'ombre, sans
   toucher à la production. Un bug trouvé après `DEBUT_OMBRE` remettrait
   l'horloge à zéro.
-- **Nuit** : chaque matin à 05h05 UTC (secours à 05h50), le workflow
+- **Nuit** : chaque matin à 05h05 UTC (secours à 05h50), lancé par l'horloge
+  Cloudflare avec les horaires GitHub en filet, le workflow
   `repetition_ombre.yml` fait une copie en lecture seule de la base, y calcule
   le fondamental du jour et l'envoie sur la clé privée
   `lab/repetition/turf_bench.db`, jamais sur la base de production.
@@ -75,6 +76,9 @@ critère atteint en premier.
 
 1. **Chaque nuit, calcul du fondamental** (`turf_lab/fondamental_nuit.py`,
    workflow `fondamental_nuit.yml` à 05h05 UTC, secours à 05h50).
+   - Le lancement est fait par l'horloge Cloudflare (Worker `turf-horloge`,
+     `docs/HORLOGE_CLOUDFLARE.md`), tenue à la minute. Les horaires GitHub,
+     ajoutés au gel, servent de filet : ils ne sont pas garantis la nuit.
    - Le calcul part du miroir historique Radar arrêté à la veille et du
      programme PMU du jour.
    - Il utilise le modèle « état du matin » : les 5 variables qui changent dans
