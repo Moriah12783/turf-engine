@@ -1,0 +1,10 @@
+# Déploiement en ligne de commande (facultatif) : npx wrangler deploy
+# Sinon, suivre docs/HORLOGE_CLOUDFLARE.md (tableau de bord Cloudflare).
+# Secret à poser à part : npx wrangler secret put GITHUB_TOKEN
+name = "turf-horloge"
+main = "worker.js"
+compatibility_date = "2026-09-01"
+workers_dev = false
+
+[triggers]
+crons = ["17 1 * * *", "5 5 * * *", "50 5 * * *"]

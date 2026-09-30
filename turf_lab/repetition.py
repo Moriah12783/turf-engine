@@ -94,7 +94,9 @@ def nuit(history_path: str, copie_path: str, fetcher, client, bucket: str, prevu
     debut = horloge()
     today = debut.date()
     jour = (today + timedelta(days=1)).isoformat() if controle else today.isoformat()
-    rep: Dict[str, Any] = {"jour": jour, "controle": controle, "debut_utc": debut.strftime("%H:%M:%S")}
+    rep: Dict[str, Any] = {"jour": jour, "controle": controle, "debut_utc": debut.strftime("%H:%M:%S"),
+                           # schedule = horaire GitHub ; workflow_dispatch = horloge Cloudflare ou lancement à la main
+                           "declencheur": os.environ.get("GITHUB_EVENT_NAME", "local")}
     if today.isoformat() > FENETRE[1] or not (controle or dans_la_fenetre(jour)):
         rep["refus"] = "HORS_FENETRE"
         _log("REPETITION_REFUS", rep)
