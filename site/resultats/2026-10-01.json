@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "833a74175026c2375226ab9fc02d8fd3e21b1079",
-  "run_id": "36852693386",
+  "commit": "ac76bd78b3160d96f83adf670f7dd8d69d815cf7",
+  "run_id": "36854255075",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-01",
- "genere_le_utc": "2026-10-01T11:02:20Z",
+ "genere_le_utc": "2026-10-01T11:17:15Z",
  "nb_courses": 23,
  "compte_par_statut": {
   "EN_ATTENTE": 21,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 1,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "625b53b1523c8a57649ff3db82bf9a700af6cc8b1c1ec7352fa8b89747c022cb",
+ "empreinte_sha256": "886fea886a6dda08a4040278af3b8650671c61579164b2fbf00328f130e2df5d",
  "courses": [
   {
    "course_id": "R1C1_01102026_AUTEUIL",
@@ -587,7 +587,7 @@
     "verifiee_le_utc": "2026-10-01T10:46:04Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-01T10:46:04Z",
-    "derniere_verification_utc": "2026-10-01T11:01:07Z"
+    "derniere_verification_utc": "2026-10-01T11:15:59Z"
    },
    "correction": {
     "version": 2,
@@ -643,11 +643,11 @@
     "partants_actifs": 9
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -673,22 +673,94 @@
      "num": 5,
      "nom": "HONEY PEARL",
      "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 9,
+     "nom": "LIKE LINDY",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 7,
+     "nom": "MONARCH HUNZA",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 3,
+     "nom": "GIORGIANA",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 2,
+     "nom": "GAILLARD",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 4,
+     "nom": "ROSAPENNA",
+     "dead_heat": false
     }
    ],
    "arrivee": [
     8,
     6,
     1,
-    5
+    5,
+    9,
+    7,
+    3,
+    2,
+    4
    ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "8": 23.1
+    },
+    "simple_place": {
+     "8": 3.3,
+     "6": 1.5,
+     "1": 1.4
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "8-6",
+      "dividende_pour_1_eur": 47.5
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "8-6",
+      "dividende_pour_1_eur": 9.4
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "8-1",
+      "dividende_pour_1_eur": 7.7
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "6-1",
+      "dividende_pour_1_eur": 2.9
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "8-6-1",
+      "dividende_pour_1_eur": 69.7
+     },
+     {
+      "type_pari": "SUPER_QUATRE",
+      "combinaison": "8-6-1-5",
+      "dividende_pour_1_eur": 5526.2
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -698,14 +770,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-10-01T11:01:07Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-10-01T11:15:59Z",
+    "verifiee_le_utc": "2026-10-01T11:15:59Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-10-01T11:01:07Z",
-    "derniere_verification_utc": "2026-10-01T11:01:07Z"
+    "derniere_modification_utc": "2026-10-01T11:15:59Z",
+    "derniere_verification_utc": "2026-10-01T11:15:59Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -719,6 +791,24 @@
        6,
        1,
        5
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-10-01T11:15:59Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       8,
+       6,
+       1,
+       5,
+       9,
+       7,
+       3,
+       2,
+       4
       ]
      }
     ]
@@ -735,9 +825,9 @@
     "libelle": "PRIX PHILIPPE DE BOURGOING",
     "discipline": "PLAT",
     "distance_m": 2900,
-    "heure_depart_utc": "2026-10-01T11:27:00Z",
+    "heure_depart_utc": "2026-10-01T11:28:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "11:27 GMT (13:27 Paris)",
+    "heure_depart_affichee": "11:28 GMT (13:28 Paris)",
     "partants_declares": 14,
     "partants_actifs": 14
    },
@@ -746,7 +836,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
