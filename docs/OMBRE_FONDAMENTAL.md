@@ -64,10 +64,13 @@ critère atteint en premier.
   - probabilités fondamentales d'une seule version, de somme 1 par course ;
   - toutes les éditions du matin éligibles portent une ombre complète, avec
     une seule clé et la recette A ;
-  - aucun écart sur ce qui est publié (contrôle du dev NVE : pour chaque
-    course du matin, empreinte des champs publiés sur la copie et en
-    production). Sur la semaine, au moins 20 courses à cotes du verrou
-    identiques, toutes avec la même empreinte.
+  - aucun écart sur ce qui est publié (contrôle du dev NVE, décidé le
+    01/10). Chaque jour, le verrou du matin est rejoué avec et sans ombre
+    sur les mêmes réponses PMU : 0 empreinte différente pour NVE, ETPE et
+    MARCHÉ, sur toutes les éditions du matin. La comparaison avec la
+    production reste un contrôle complémentaire : toute différence
+    d'empreinte doit s'y expliquer par une différence d'entrées (cotes,
+    non-partants, déferrage).
 - **Suites** : un écart est corrigé avant le gel, sans effet sur la règle. Si
   le retard de déclenchement des horaires GitHub menace la limite de 06h20, le
   commit de gel avance les horaires de nuit.
