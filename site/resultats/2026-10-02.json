@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "769b1fce397a96cab5274adba343eddd6b3e713d",
-  "run_id": "37058753143",
+  "commit": "c982f5ab43b07d0e58e6f7f696f0bd93ab7ed453",
+  "run_id": "37059469449",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-02",
- "genere_le_utc": "2026-10-02T20:10:11Z",
+ "genere_le_utc": "2026-10-02T20:17:32Z",
  "nb_courses": 48,
  "compte_par_statut": {
-  "EN_ATTENTE": 1,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 0,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 47,
   "ANNULEE": 0
  },
- "empreinte_sha256": "351cca39b191cbbd7f63417d3d05e4bcd6e8d281d8e14d9f75a3eb045e5790ab",
+ "empreinte_sha256": "0d6fba4444e1596fd55928590ca9d00cb1c696f649c91fe0d4b84b68a52f7f2f",
  "courses": [
   {
    "course_id": "R1C1_02102026_VINCENNES",
@@ -227,7 +227,7 @@
     "verifiee_le_utc": "2026-10-02T16:46:18Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T16:46:18Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 2,
@@ -495,7 +495,7 @@
     "verifiee_le_utc": "2026-10-02T17:16:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T17:16:24Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 1,
@@ -758,7 +758,7 @@
     "verifiee_le_utc": "2026-10-02T17:46:21Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T18:01:20Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 2,
@@ -1060,7 +1060,7 @@
     "verifiee_le_utc": "2026-10-02T18:31:33Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T18:31:33Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 1,
@@ -1293,7 +1293,7 @@
     "verifiee_le_utc": "2026-10-02T19:01:20Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T19:01:20Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 1,
@@ -1469,7 +1469,7 @@
     "verifiee_le_utc": "2026-10-02T19:32:03Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T19:32:03Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 1,
@@ -1641,7 +1641,7 @@
     "verifiee_le_utc": "2026-10-02T20:01:36Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T20:01:36Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 1,
@@ -1684,15 +1684,51 @@
     "partants_actifs": 12
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_DANS_TROIS_MINUTES"
+    "pmu_statut": "ARRIVEE_PROVISOIRE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 3,
+     "nom": "KING MOKO",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 12,
+     "nom": "INTRIGUE DE VIETTE",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 9,
+     "nom": "FRINGANT PACHA",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 5,
+     "nom": "JACKPOT D'ORGUEIL",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    3,
+    12,
+    9,
+    5
+   ],
+   "non_classes": [
+    {
+     "num": 4,
+     "nom": "ISSI TOP",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": false,
@@ -1704,21 +1740,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/02102026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-10-02T20:16:19Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-10-02T20:16:19Z",
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-10-02T20:16:19Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       3,
+       12,
+       9,
+       5
+      ]
+     }
+    ]
    }
   },
   {
@@ -1867,7 +1917,7 @@
     "verifiee_le_utc": "2026-10-02T09:16:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T09:16:24Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 1,
@@ -2099,7 +2149,7 @@
     "verifiee_le_utc": "2026-10-02T09:46:25Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T09:46:25Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 1,
@@ -2322,7 +2372,7 @@
     "verifiee_le_utc": "2026-10-02T10:31:32Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T10:31:32Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 2,
@@ -2527,7 +2577,7 @@
     "verifiee_le_utc": "2026-10-02T11:01:42Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T11:01:42Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 2,
@@ -2706,7 +2756,7 @@
     "verifiee_le_utc": "2026-10-02T11:31:19Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T11:31:19Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 2,
@@ -2863,7 +2913,7 @@
     "verifiee_le_utc": "2026-10-02T12:01:37Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T12:01:37Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 2,
@@ -3019,7 +3069,7 @@
     "verifiee_le_utc": "2026-10-02T12:31:34Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T12:31:34Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 2,
@@ -3198,7 +3248,7 @@
     "verifiee_le_utc": "2026-10-02T13:01:30Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T13:01:30Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 1,
@@ -3472,7 +3522,7 @@
     "verifiee_le_utc": "2026-10-02T10:16:32Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T10:16:32Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 2,
@@ -3655,7 +3705,7 @@
     "verifiee_le_utc": "2026-10-02T10:46:15Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T10:46:15Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 2,
@@ -3870,7 +3920,7 @@
     "verifiee_le_utc": "2026-10-02T11:31:19Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T11:31:19Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 3,
@@ -4142,7 +4192,7 @@
     "verifiee_le_utc": "2026-10-02T11:46:22Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T11:46:22Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 1,
@@ -4385,7 +4435,7 @@
     "verifiee_le_utc": "2026-10-02T12:31:34Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T12:31:34Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 2,
@@ -4630,7 +4680,7 @@
     "verifiee_le_utc": "2026-10-02T13:01:30Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T13:01:30Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 2,
@@ -4874,7 +4924,7 @@
     "verifiee_le_utc": "2026-10-02T13:46:19Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T13:46:19Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 2,
@@ -5125,7 +5175,7 @@
     "verifiee_le_utc": "2026-10-02T14:01:17Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T14:01:17Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 1,
@@ -5295,7 +5345,7 @@
     "verifiee_le_utc": "2026-10-02T12:01:37Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T12:01:37Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 1,
@@ -5469,7 +5519,7 @@
     "verifiee_le_utc": "2026-10-02T12:31:34Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T12:31:34Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 1,
@@ -5638,7 +5688,7 @@
     "verifiee_le_utc": "2026-10-02T13:16:16Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T13:16:16Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 2,
@@ -5884,7 +5934,7 @@
     "verifiee_le_utc": "2026-10-02T13:46:19Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T13:46:19Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 1,
@@ -6044,7 +6094,7 @@
     "verifiee_le_utc": "2026-10-02T14:31:14Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T14:31:14Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 2,
@@ -6273,7 +6323,7 @@
     "verifiee_le_utc": "2026-10-02T14:51:43Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T14:51:43Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 2,
@@ -6526,7 +6576,7 @@
     "verifiee_le_utc": "2026-10-02T16:01:26Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T16:01:26Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 1,
@@ -6785,7 +6835,7 @@
     "verifiee_le_utc": "2026-10-02T16:01:26Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T16:01:26Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 1,
@@ -6968,7 +7018,7 @@
     "verifiee_le_utc": "2026-10-02T14:31:14Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T14:46:27Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 2,
@@ -7150,7 +7200,7 @@
     "verifiee_le_utc": "2026-10-02T15:16:16Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T15:16:16Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 2,
@@ -7388,7 +7438,7 @@
     "verifiee_le_utc": "2026-10-02T16:01:26Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T16:01:26Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 1,
@@ -7634,7 +7684,7 @@
     "verifiee_le_utc": "2026-10-02T16:31:18Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T16:31:18Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 2,
@@ -7885,7 +7935,7 @@
     "verifiee_le_utc": "2026-10-02T17:01:29Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T17:01:29Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 2,
@@ -8078,7 +8128,7 @@
     "verifiee_le_utc": "2026-10-02T17:31:14Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T17:31:14Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 1,
@@ -8247,7 +8297,7 @@
     "verifiee_le_utc": "2026-10-02T18:16:21Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T18:16:21Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 2,
@@ -8446,7 +8496,7 @@
     "verifiee_le_utc": "2026-10-02T16:01:26Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T16:01:26Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 1,
@@ -8635,7 +8685,7 @@
     "verifiee_le_utc": "2026-10-02T16:31:18Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T16:31:18Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 2,
@@ -8840,7 +8890,7 @@
     "verifiee_le_utc": "2026-10-02T17:01:29Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T17:01:29Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 2,
@@ -9036,7 +9086,7 @@
     "verifiee_le_utc": "2026-10-02T17:16:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T17:16:24Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 1,
@@ -9221,7 +9271,7 @@
     "verifiee_le_utc": "2026-10-02T17:46:21Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T17:46:21Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 1,
@@ -9401,7 +9451,7 @@
     "verifiee_le_utc": "2026-10-02T18:16:21Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T18:16:21Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 1,
@@ -9587,7 +9637,7 @@
     "verifiee_le_utc": "2026-10-02T18:46:15Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T18:46:15Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 1,
@@ -9763,7 +9813,7 @@
     "verifiee_le_utc": "2026-10-02T19:16:12Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T19:16:12Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 1,
@@ -9956,7 +10006,7 @@
     "verifiee_le_utc": "2026-10-02T19:46:20Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-02T19:46:20Z",
-    "derniere_verification_utc": "2026-10-02T20:09:35Z"
+    "derniere_verification_utc": "2026-10-02T20:16:19Z"
    },
    "correction": {
     "version": 1,
