@@ -9,33 +9,33 @@
   "benter_delta": {
     "T_MATIN": {
       "horizon": "T_MATIN",
-      "courses": 720,
+      "courses": 721,
       "lock_gap_median_min": 74.8,
       "comparaison_loyale": false,
       "status": "OK",
       "train": 432,
-      "test": 288,
+      "test": 289,
       "periode_test": [
         "2026-09-23",
         "2026-10-03"
       ],
-      "ll_marche_brut": 2.228,
+      "ll_marche_brut": 2.2241,
       "variantes": {
         "marche_recalibre": {
-          "gain": 0.0149,
+          "gain": 0.0144,
           "ic95": [
-            -0.0034,
-            0.0347
+            -0.0043,
+            0.0346
           ],
           "coefs": {
             "MARCHE": 0.828
           }
         },
         "marche_nve": {
-          "gain": 0.0236,
+          "gain": 0.0231,
           "ic95": [
-            -0.0017,
-            0.0491
+            -0.0018,
+            0.0476
           ],
           "coefs": {
             "MARCHE": 0.774,
@@ -43,10 +43,10 @@
           }
         },
         "marche_radar": {
-          "gain": 0.0775,
+          "gain": 0.0755,
           "ic95": [
-            0.0195,
-            0.1352
+            0.0166,
+            0.1319
           ],
           "coefs": {
             "MARCHE": 0.119,
@@ -54,10 +54,10 @@
           }
         },
         "marche_nve_radar": {
-          "gain": 0.0778,
+          "gain": 0.0759,
           "ic95": [
-            0.02,
-            0.136
+            0.0171,
+            0.1323
           ],
           "coefs": {
             "MARCHE": 0.121,
@@ -70,60 +70,60 @@
     },
     "T90": {
       "horizon": "T90",
-      "courses": 768,
+      "courses": 769,
       "lock_gap_median_min": -0.1,
       "comparaison_loyale": true,
       "status": "OK",
-      "train": 460,
+      "train": 461,
       "test": 308,
       "periode_test": [
         "2026-09-23",
         "2026-10-03"
       ],
-      "ll_marche_brut": 2.0825,
+      "ll_marche_brut": 2.0804,
       "variantes": {
         "marche_recalibre": {
           "gain": -0.0028,
           "ic95": [
-            -0.0189,
-            0.0123
+            -0.0193,
+            0.0133
           ],
           "coefs": {
-            "MARCHE": 1.195
+            "MARCHE": 1.197
           }
         },
         "marche_nve": {
-          "gain": -0.0036,
+          "gain": -0.003,
           "ic95": [
-            -0.0204,
-            0.0119
+            -0.02,
+            0.014
           ],
           "coefs": {
-            "MARCHE": 1.176,
-            "NVE_PUR": 0.051
+            "MARCHE": 1.182,
+            "NVE_PUR": 0.04
           }
         },
         "marche_radar": {
-          "gain": 0.0013,
+          "gain": 0.0012,
           "ic95": [
-            -0.0164,
-            0.0174
+            -0.016,
+            0.0179
           ],
           "coefs": {
-            "MARCHE": 1.062,
+            "MARCHE": 1.063,
             "RADAR": 0.148
           }
         },
         "marche_nve_radar": {
-          "gain": 0.0005,
+          "gain": 0.0009,
           "ic95": [
-            -0.0175,
-            0.0168
+            -0.0168,
+            0.0178
           ],
           "coefs": {
-            "MARCHE": 1.051,
-            "NVE_PUR": 0.044,
-            "RADAR": 0.142
+            "MARCHE": 1.055,
+            "NVE_PUR": 0.033,
+            "RADAR": 0.143
           }
         }
       },
@@ -131,6 +131,67 @@
     },
     "T30": {
       "horizon": "T30",
+      "courses": 769,
+      "lock_gap_median_min": -0.1,
+      "comparaison_loyale": true,
+      "status": "OK",
+      "train": 461,
+      "test": 308,
+      "periode_test": [
+        "2026-09-23",
+        "2026-10-03"
+      ],
+      "ll_marche_brut": 2.0548,
+      "variantes": {
+        "marche_recalibre": {
+          "gain": -0.0001,
+          "ic95": [
+            -0.0084,
+            0.0081
+          ],
+          "coefs": {
+            "MARCHE": 1.099
+          }
+        },
+        "marche_nve": {
+          "gain": -0.0002,
+          "ic95": [
+            -0.0084,
+            0.0083
+          ],
+          "coefs": {
+            "MARCHE": 1.094,
+            "NVE_PUR": 0.012
+          }
+        },
+        "marche_radar": {
+          "gain": 0.0001,
+          "ic95": [
+            -0.0125,
+            0.0122
+          ],
+          "coefs": {
+            "MARCHE": 0.933,
+            "RADAR": 0.197
+          }
+        },
+        "marche_nve_radar": {
+          "gain": 0.0001,
+          "ic95": [
+            -0.0126,
+            0.0123
+          ],
+          "coefs": {
+            "MARCHE": 0.932,
+            "NVE_PUR": 0.004,
+            "RADAR": 0.197
+          }
+        }
+      },
+      "succes": false
+    },
+    "T15": {
+      "horizon": "T15",
       "courses": 768,
       "lock_gap_median_min": -0.1,
       "comparaison_loyale": true,
@@ -141,81 +202,20 @@
         "2026-09-23",
         "2026-10-03"
       ],
-      "ll_marche_brut": 2.0557,
-      "variantes": {
-        "marche_recalibre": {
-          "gain": -0.0,
-          "ic95": [
-            -0.0084,
-            0.0077
-          ],
-          "coefs": {
-            "MARCHE": 1.097
-          }
-        },
-        "marche_nve": {
-          "gain": -0.0003,
-          "ic95": [
-            -0.0087,
-            0.0076
-          ],
-          "coefs": {
-            "MARCHE": 1.088,
-            "NVE_PUR": 0.023
-          }
-        },
-        "marche_radar": {
-          "gain": 0.0002,
-          "ic95": [
-            -0.0134,
-            0.0125
-          ],
-          "coefs": {
-            "MARCHE": 0.931,
-            "RADAR": 0.197
-          }
-        },
-        "marche_nve_radar": {
-          "gain": 0.0,
-          "ic95": [
-            -0.0133,
-            0.0125
-          ],
-          "coefs": {
-            "MARCHE": 0.927,
-            "NVE_PUR": 0.015,
-            "RADAR": 0.196
-          }
-        }
-      },
-      "succes": false
-    },
-    "T15": {
-      "horizon": "T15",
-      "courses": 767,
-      "lock_gap_median_min": -0.1,
-      "comparaison_loyale": true,
-      "status": "OK",
-      "train": 460,
-      "test": 307,
-      "periode_test": [
-        "2026-09-23",
-        "2026-10-03"
-      ],
-      "ll_marche_brut": 2.0397,
+      "ll_marche_brut": 2.0372,
       "variantes": {
         "marche_recalibre": {
           "gain": -0.0005,
           "ic95": [
-            -0.0046,
-            0.0032
+            -0.0045,
+            0.0033
           ],
           "coefs": {
             "MARCHE": 1.043
           }
         },
         "marche_nve": {
-          "gain": -0.001,
+          "gain": -0.0009,
           "ic95": [
             -0.0052,
             0.003
@@ -226,10 +226,10 @@
           }
         },
         "marche_radar": {
-          "gain": -0.0021,
+          "gain": -0.0022,
           "ic95": [
-            -0.0132,
-            0.0079
+            -0.0129,
+            0.0082
           ],
           "coefs": {
             "MARCHE": 0.896,
@@ -237,10 +237,10 @@
           }
         },
         "marche_nve_radar": {
-          "gain": -0.0024,
+          "gain": -0.0025,
           "ic95": [
-            -0.0136,
-            0.0076
+            -0.0133,
+            0.008
           ],
           "coefs": {
             "MARCHE": 0.893,
@@ -252,70 +252,70 @@
       "succes": false
     }
   },
-  "total_finished_races": 1544,
+  "total_finished_races": 1545,
   "evaluations": {
     "NEW_VALUE_ENGINE": {
       "engine_name": "NEW_VALUE_ENGINE",
-      "total_races": 1512,
+      "total_races": 1513,
       "hit_rates": {
-        "top1_win_rate_pct": 26.92,
-        "winner_in_top3_pct": 58.0,
-        "winner_in_top8_pct": 88.62,
-        "at_least_one_base_placed_pct": 78.9,
-        "both_bases_placed_pct": 24.8,
-        "tierce_in_top8_pct": 64.75,
-        "quarte_in_top8_pct": 52.71,
-        "quinte_in_top8_pct": 42.92,
-        "outsider_placed_pct": 16.93
+        "top1_win_rate_pct": 26.9,
+        "winner_in_top3_pct": 58.03,
+        "winner_in_top8_pct": 88.63,
+        "at_least_one_base_placed_pct": 78.92,
+        "both_bases_placed_pct": 24.85,
+        "tierce_in_top8_pct": 64.77,
+        "quarte_in_top8_pct": 52.74,
+        "quinte_in_top8_pct": 42.96,
+        "outsider_placed_pct": 16.92
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 1422.0,
+          "total_staked_eur": 1423.0,
           "total_returned_eur": 1186.8,
-          "net_profit_eur": -235.2,
-          "roi_pct": -16.54,
+          "net_profit_eur": -236.2,
+          "roi_pct": -16.6,
           "max_drawdown_eur": 257.6
         },
         "simple_place": {
-          "total_staked_eur": 2834.0,
-          "total_returned_eur": 2522.1,
-          "net_profit_eur": -311.9,
-          "roi_pct": -11.01,
+          "total_staked_eur": 2836.0,
+          "total_returned_eur": 2524.8,
+          "net_profit_eur": -311.2,
+          "roi_pct": -10.97,
           "max_drawdown_eur": 321.05
         }
       },
       "statistical_calibration": {
         "brier_score": 0.0736,
-        "log_loss": 2.0811
+        "log_loss": 2.0806
       }
     },
     "ETPE_ENGINE": {
       "engine_name": "ETPE_ENGINE",
-      "total_races": 1512,
+      "total_races": 1513,
       "hit_rates": {
-        "top1_win_rate_pct": 20.83,
-        "winner_in_top3_pct": 45.57,
-        "winner_in_top8_pct": 82.87,
-        "at_least_one_base_placed_pct": 69.11,
-        "both_bases_placed_pct": 18.39,
-        "tierce_in_top8_pct": 58.73,
-        "quarte_in_top8_pct": 46.76,
-        "quinte_in_top8_pct": 38.16,
-        "outsider_placed_pct": 21.3
+        "top1_win_rate_pct": 20.82,
+        "winner_in_top3_pct": 45.6,
+        "winner_in_top8_pct": 82.88,
+        "at_least_one_base_placed_pct": 69.13,
+        "both_bases_placed_pct": 18.44,
+        "tierce_in_top8_pct": 58.76,
+        "quarte_in_top8_pct": 46.73,
+        "quinte_in_top8_pct": 38.14,
+        "outsider_placed_pct": 21.28
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 1422.0,
+          "total_staked_eur": 1423.0,
           "total_returned_eur": 1194.7,
-          "net_profit_eur": -227.3,
-          "roi_pct": -15.98,
+          "net_profit_eur": -228.3,
+          "roi_pct": -16.04,
           "max_drawdown_eur": 236.8
         },
         "simple_place": {
-          "total_staked_eur": 2834.0,
-          "total_returned_eur": 2320.8,
-          "net_profit_eur": -513.2,
-          "roi_pct": -18.11,
+          "total_staked_eur": 2836.0,
+          "total_returned_eur": 2323.5,
+          "net_profit_eur": -512.5,
+          "roi_pct": -18.07,
           "max_drawdown_eur": 515.9
         }
       },
@@ -326,109 +326,109 @@
     },
     "MARKET_BASELINE": {
       "engine_name": "MARKET_BASELINE",
-      "total_races": 1374,
+      "total_races": 1375,
       "hit_rates": {
-        "top1_win_rate_pct": 29.84,
-        "winner_in_top3_pct": 61.64,
+        "top1_win_rate_pct": 29.82,
+        "winner_in_top3_pct": 61.67,
         "winner_in_top8_pct": 92.58,
-        "at_least_one_base_placed_pct": 81.0,
-        "both_bases_placed_pct": 27.51,
-        "tierce_in_top8_pct": 70.23,
-        "quarte_in_top8_pct": 57.5,
-        "quinte_in_top8_pct": 46.58,
-        "outsider_placed_pct": 14.99
+        "at_least_one_base_placed_pct": 81.02,
+        "both_bases_placed_pct": 27.56,
+        "tierce_in_top8_pct": 70.25,
+        "quarte_in_top8_pct": 57.53,
+        "quinte_in_top8_pct": 46.62,
+        "outsider_placed_pct": 14.98
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 1374.0,
+          "total_staked_eur": 1375.0,
           "total_returned_eur": 1211.1,
-          "net_profit_eur": -162.9,
-          "roi_pct": -11.86,
+          "net_profit_eur": -163.9,
+          "roi_pct": -11.92,
           "max_drawdown_eur": 170.8
         },
         "simple_place": {
-          "total_staked_eur": 2738.0,
-          "total_returned_eur": 2467.65,
-          "net_profit_eur": -270.35,
-          "roi_pct": -9.87,
+          "total_staked_eur": 2740.0,
+          "total_returned_eur": 2470.35,
+          "net_profit_eur": -269.65,
+          "roi_pct": -9.84,
           "max_drawdown_eur": 278.1
         }
       },
       "statistical_calibration": {
         "brier_score": 0.0715,
-        "log_loss": 2.011
+        "log_loss": 2.0105
       }
     },
     "RADAR_V4": {
       "engine_name": "RADAR_V4",
-      "total_races": 768,
+      "total_races": 769,
       "hit_rates": {
-        "top1_win_rate_pct": 27.6,
-        "winner_in_top3_pct": 57.55,
-        "winner_in_top8_pct": 90.23,
-        "at_least_one_base_placed_pct": 77.6,
-        "both_bases_placed_pct": 22.53,
-        "tierce_in_top8_pct": 66.15,
-        "quarte_in_top8_pct": 53.39,
-        "quinte_in_top8_pct": 41.93,
-        "outsider_placed_pct": 14.45
+        "top1_win_rate_pct": 27.57,
+        "winner_in_top3_pct": 57.61,
+        "winner_in_top8_pct": 90.25,
+        "at_least_one_base_placed_pct": 77.63,
+        "both_bases_placed_pct": 22.63,
+        "tierce_in_top8_pct": 66.19,
+        "quarte_in_top8_pct": 53.45,
+        "quinte_in_top8_pct": 42.0,
+        "outsider_placed_pct": 14.43
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 768.0,
+          "total_staked_eur": 769.0,
           "total_returned_eur": 729.8,
-          "net_profit_eur": -38.2,
-          "roi_pct": -4.97,
+          "net_profit_eur": -39.2,
+          "roi_pct": -5.1,
           "max_drawdown_eur": 102.0
         },
         "simple_place": {
-          "total_staked_eur": 1534.0,
-          "total_returned_eur": 1362.45,
-          "net_profit_eur": -171.55,
-          "roi_pct": -11.18,
+          "total_staked_eur": 1536.0,
+          "total_returned_eur": 1365.15,
+          "net_profit_eur": -170.85,
+          "roi_pct": -11.12,
           "max_drawdown_eur": 180.3
         }
       },
       "statistical_calibration": {
         "brier_score": 0.0718,
-        "log_loss": 2.1136
+        "log_loss": 2.1129
       }
     }
   },
   "discipline_breakdown": {
     "TROT": {
       "engine_name": "NEW_VALUE_ENGINE",
-      "total_races": 787,
+      "total_races": 788,
       "hit_rates": {
-        "top1_win_rate_pct": 26.3,
-        "winner_in_top3_pct": 58.07,
-        "winner_in_top8_pct": 87.04,
-        "at_least_one_base_placed_pct": 78.4,
-        "both_bases_placed_pct": 23.89,
-        "tierce_in_top8_pct": 60.48,
-        "quarte_in_top8_pct": 43.2,
-        "quinte_in_top8_pct": 31.39,
-        "outsider_placed_pct": 12.96
+        "top1_win_rate_pct": 26.27,
+        "winner_in_top3_pct": 58.12,
+        "winner_in_top8_pct": 87.06,
+        "at_least_one_base_placed_pct": 78.43,
+        "both_bases_placed_pct": 23.98,
+        "tierce_in_top8_pct": 60.53,
+        "quarte_in_top8_pct": 43.27,
+        "quinte_in_top8_pct": 31.47,
+        "outsider_placed_pct": 12.94
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 764.0,
+          "total_staked_eur": 765.0,
           "total_returned_eur": 632.2,
-          "net_profit_eur": -131.8,
-          "roi_pct": -17.25,
+          "net_profit_eur": -132.8,
+          "roi_pct": -17.36,
           "max_drawdown_eur": 158.5
         },
         "simple_place": {
-          "total_staked_eur": 1524.0,
-          "total_returned_eur": 1404.9,
-          "net_profit_eur": -119.1,
-          "roi_pct": -7.81,
+          "total_staked_eur": 1526.0,
+          "total_returned_eur": 1407.6,
+          "net_profit_eur": -118.4,
+          "roi_pct": -7.76,
           "max_drawdown_eur": 126.8
         }
       },
       "statistical_calibration": {
         "brier_score": 0.067,
-        "log_loss": 2.1107
+        "log_loss": 2.1097
       }
     },
     "PLAT": {
@@ -505,37 +505,37 @@
   "discipline_breakdown_market": {
     "TROT": {
       "engine_name": "MARKET_BASELINE",
-      "total_races": 721,
+      "total_races": 722,
       "hit_rates": {
-        "top1_win_rate_pct": 30.1,
-        "winner_in_top3_pct": 62.97,
-        "winner_in_top8_pct": 91.82,
-        "at_least_one_base_placed_pct": 81.97,
-        "both_bases_placed_pct": 26.35,
-        "tierce_in_top8_pct": 66.85,
-        "quarte_in_top8_pct": 49.65,
-        "quinte_in_top8_pct": 36.06,
-        "outsider_placed_pct": 15.26
+        "top1_win_rate_pct": 30.06,
+        "winner_in_top3_pct": 63.02,
+        "winner_in_top8_pct": 91.83,
+        "at_least_one_base_placed_pct": 81.99,
+        "both_bases_placed_pct": 26.45,
+        "tierce_in_top8_pct": 66.9,
+        "quarte_in_top8_pct": 49.72,
+        "quinte_in_top8_pct": 36.15,
+        "outsider_placed_pct": 15.24
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 721.0,
+          "total_staked_eur": 722.0,
           "total_returned_eur": 617.2,
-          "net_profit_eur": -103.8,
-          "roi_pct": -14.4,
+          "net_profit_eur": -104.8,
+          "roi_pct": -14.52,
           "max_drawdown_eur": 110.6
         },
         "simple_place": {
-          "total_staked_eur": 1438.0,
-          "total_returned_eur": 1356.5,
-          "net_profit_eur": -81.5,
-          "roi_pct": -5.67,
+          "total_staked_eur": 1440.0,
+          "total_returned_eur": 1359.2,
+          "net_profit_eur": -80.8,
+          "roi_pct": -5.61,
           "max_drawdown_eur": 85.7
         }
       },
       "statistical_calibration": {
         "brier_score": 0.0652,
-        "log_loss": 2.0123
+        "log_loss": 2.0113
       }
     },
     "PLAT": {
@@ -612,371 +612,406 @@
   "horizon_breakdown": {
     "T_MATIN": {
       "engine_name": "NEW_VALUE_ENGINE",
-      "total_races": 1177,
+      "total_races": 1178,
       "hit_rates": {
-        "top1_win_rate_pct": 23.45,
-        "winner_in_top3_pct": 51.15,
-        "winner_in_top8_pct": 86.41,
-        "at_least_one_base_placed_pct": 73.83,
-        "both_bases_placed_pct": 19.63,
-        "tierce_in_top8_pct": 59.3,
-        "quarte_in_top8_pct": 48.51,
-        "quinte_in_top8_pct": 39.0,
-        "outsider_placed_pct": 25.23
+        "top1_win_rate_pct": 23.51,
+        "winner_in_top3_pct": 51.19,
+        "winner_in_top8_pct": 86.42,
+        "at_least_one_base_placed_pct": 73.85,
+        "both_bases_placed_pct": 19.69,
+        "tierce_in_top8_pct": 59.25,
+        "quarte_in_top8_pct": 48.47,
+        "quinte_in_top8_pct": 38.96,
+        "outsider_placed_pct": 25.21
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 1146.0,
-          "total_returned_eur": 965.1,
-          "net_profit_eur": -180.9,
-          "roi_pct": -15.79,
+          "total_staked_eur": 1147.0,
+          "total_returned_eur": 967.6,
+          "net_profit_eur": -179.4,
+          "roi_pct": -15.64,
           "max_drawdown_eur": 208.8
         },
         "simple_place": {
-          "total_staked_eur": 2282.0,
-          "total_returned_eur": 1945.0,
-          "net_profit_eur": -337.0,
-          "roi_pct": -14.77,
+          "total_staked_eur": 2284.0,
+          "total_returned_eur": 1947.7,
+          "net_profit_eur": -336.3,
+          "roi_pct": -14.72,
           "max_drawdown_eur": 346.15
         }
       },
       "statistical_calibration": {
         "brier_score": 0.074,
-        "log_loss": 2.2146
+        "log_loss": 2.2138
       }
     },
     "T90": {
       "engine_name": "NEW_VALUE_ENGINE",
-      "total_races": 1176,
+      "total_races": 1177,
       "hit_rates": {
-        "top1_win_rate_pct": 27.04,
-        "winner_in_top3_pct": 58.08,
-        "winner_in_top8_pct": 89.03,
-        "at_least_one_base_placed_pct": 78.83,
-        "both_bases_placed_pct": 25.0,
-        "tierce_in_top8_pct": 65.39,
-        "quarte_in_top8_pct": 53.74,
-        "quinte_in_top8_pct": 43.28,
-        "outsider_placed_pct": 18.71
+        "top1_win_rate_pct": 27.02,
+        "winner_in_top3_pct": 58.11,
+        "winner_in_top8_pct": 89.04,
+        "at_least_one_base_placed_pct": 78.84,
+        "both_bases_placed_pct": 25.06,
+        "tierce_in_top8_pct": 65.42,
+        "quarte_in_top8_pct": 53.78,
+        "quinte_in_top8_pct": 43.33,
+        "outsider_placed_pct": 18.69
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 1146.0,
+          "total_staked_eur": 1147.0,
           "total_returned_eur": 973.8,
-          "net_profit_eur": -172.2,
-          "roi_pct": -15.03,
+          "net_profit_eur": -173.2,
+          "roi_pct": -15.1,
           "max_drawdown_eur": 227.9
         },
         "simple_place": {
-          "total_staked_eur": 2282.0,
-          "total_returned_eur": 2057.05,
-          "net_profit_eur": -224.95,
-          "roi_pct": -9.86,
+          "total_staked_eur": 2284.0,
+          "total_returned_eur": 2059.75,
+          "net_profit_eur": -224.25,
+          "roi_pct": -9.82,
           "max_drawdown_eur": 228.9
         }
       },
       "statistical_calibration": {
         "brier_score": 0.0724,
-        "log_loss": 2.1107
+        "log_loss": 2.11
       }
     },
     "T30": {
       "engine_name": "NEW_VALUE_ENGINE",
-      "total_races": 1168,
+      "total_races": 1169,
       "hit_rates": {
-        "top1_win_rate_pct": 27.31,
-        "winner_in_top3_pct": 58.73,
-        "winner_in_top8_pct": 89.64,
-        "at_least_one_base_placed_pct": 79.45,
-        "both_bases_placed_pct": 25.51,
-        "tierce_in_top8_pct": 65.24,
-        "quarte_in_top8_pct": 53.77,
-        "quinte_in_top8_pct": 43.75,
-        "outsider_placed_pct": 18.15
+        "top1_win_rate_pct": 27.29,
+        "winner_in_top3_pct": 58.77,
+        "winner_in_top8_pct": 89.65,
+        "at_least_one_base_placed_pct": 79.47,
+        "both_bases_placed_pct": 25.58,
+        "tierce_in_top8_pct": 65.27,
+        "quarte_in_top8_pct": 53.81,
+        "quinte_in_top8_pct": 43.8,
+        "outsider_placed_pct": 18.14
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 1142.0,
+          "total_staked_eur": 1143.0,
           "total_returned_eur": 973.8,
-          "net_profit_eur": -168.2,
-          "roi_pct": -14.73,
+          "net_profit_eur": -169.2,
+          "roi_pct": -14.8,
           "max_drawdown_eur": 195.3
         },
         "simple_place": {
-          "total_staked_eur": 2274.0,
-          "total_returned_eur": 2045.15,
-          "net_profit_eur": -228.85,
-          "roi_pct": -10.06,
+          "total_staked_eur": 2276.0,
+          "total_returned_eur": 2047.85,
+          "net_profit_eur": -228.15,
+          "roi_pct": -10.02,
           "max_drawdown_eur": 235.4
         }
       },
       "statistical_calibration": {
-        "brier_score": 0.0722,
-        "log_loss": 2.0914
+        "brier_score": 0.0721,
+        "log_loss": 2.091
       }
     },
     "T15": {
       "engine_name": "NEW_VALUE_ENGINE",
-      "total_races": 1162,
+      "total_races": 1163,
       "hit_rates": {
-        "top1_win_rate_pct": 28.74,
-        "winner_in_top3_pct": 60.15,
+        "top1_win_rate_pct": 28.72,
+        "winner_in_top3_pct": 60.19,
         "winner_in_top8_pct": 90.28,
-        "at_least_one_base_placed_pct": 80.29,
-        "both_bases_placed_pct": 26.42,
-        "tierce_in_top8_pct": 67.64,
-        "quarte_in_top8_pct": 55.59,
-        "quinte_in_top8_pct": 45.7,
-        "outsider_placed_pct": 16.01
+        "at_least_one_base_placed_pct": 80.31,
+        "both_bases_placed_pct": 26.48,
+        "tierce_in_top8_pct": 67.67,
+        "quarte_in_top8_pct": 55.63,
+        "quinte_in_top8_pct": 45.74,
+        "outsider_placed_pct": 15.99
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 1138.0,
+          "total_staked_eur": 1139.0,
           "total_returned_eur": 988.8,
-          "net_profit_eur": -149.2,
-          "roi_pct": -13.11,
+          "net_profit_eur": -150.2,
+          "roi_pct": -13.19,
           "max_drawdown_eur": 182.3
         },
         "simple_place": {
-          "total_staked_eur": 2266.0,
-          "total_returned_eur": 2048.15,
-          "net_profit_eur": -217.85,
-          "roi_pct": -9.61,
+          "total_staked_eur": 2268.0,
+          "total_returned_eur": 2050.85,
+          "net_profit_eur": -217.15,
+          "roi_pct": -9.57,
           "max_drawdown_eur": 226.0
         }
       },
       "statistical_calibration": {
-        "brier_score": 0.0718,
-        "log_loss": 2.0649
+        "brier_score": 0.0717,
+        "log_loss": 2.0643
       }
     }
   },
   "horizon_breakdown_market": {
     "T_MATIN": {
       "engine_name": "MARKET_BASELINE",
-      "total_races": 945,
+      "total_races": 946,
       "hit_rates": {
-        "top1_win_rate_pct": 24.34,
-        "winner_in_top3_pct": 54.39,
-        "winner_in_top8_pct": 88.04,
-        "at_least_one_base_placed_pct": 75.24,
-        "both_bases_placed_pct": 21.8,
-        "tierce_in_top8_pct": 61.9,
-        "quarte_in_top8_pct": 49.63,
-        "quinte_in_top8_pct": 40.21,
-        "outsider_placed_pct": 15.45
+        "top1_win_rate_pct": 24.31,
+        "winner_in_top3_pct": 54.44,
+        "winner_in_top8_pct": 88.05,
+        "at_least_one_base_placed_pct": 75.26,
+        "both_bases_placed_pct": 21.88,
+        "tierce_in_top8_pct": 61.95,
+        "quarte_in_top8_pct": 49.68,
+        "quinte_in_top8_pct": 40.27,
+        "outsider_placed_pct": 15.54
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 945.0,
+          "total_staked_eur": 946.0,
           "total_returned_eur": 826.1,
-          "net_profit_eur": -118.9,
-          "roi_pct": -12.58,
+          "net_profit_eur": -119.9,
+          "roi_pct": -12.67,
           "max_drawdown_eur": 190.3
         },
         "simple_place": {
-          "total_staked_eur": 1880.0,
-          "total_returned_eur": 1625.1,
-          "net_profit_eur": -254.9,
-          "roi_pct": -13.56,
+          "total_staked_eur": 1882.0,
+          "total_returned_eur": 1627.8,
+          "net_profit_eur": -254.2,
+          "roi_pct": -13.51,
           "max_drawdown_eur": 267.95
         }
       },
       "statistical_calibration": {
         "brier_score": 0.0736,
-        "log_loss": 2.1837
+        "log_loss": 2.1825
       }
     },
     "T90": {
       "engine_name": "MARKET_BASELINE",
-      "total_races": 1053,
+      "total_races": 1054,
       "hit_rates": {
-        "top1_win_rate_pct": 28.49,
-        "winner_in_top3_pct": 59.35,
-        "winner_in_top8_pct": 91.64,
-        "at_least_one_base_placed_pct": 80.25,
-        "both_bases_placed_pct": 27.16,
-        "tierce_in_top8_pct": 67.62,
-        "quarte_in_top8_pct": 55.37,
-        "quinte_in_top8_pct": 44.54,
-        "outsider_placed_pct": 14.62
+        "top1_win_rate_pct": 28.46,
+        "winner_in_top3_pct": 59.39,
+        "winner_in_top8_pct": 91.65,
+        "at_least_one_base_placed_pct": 80.27,
+        "both_bases_placed_pct": 27.23,
+        "tierce_in_top8_pct": 67.65,
+        "quarte_in_top8_pct": 55.41,
+        "quinte_in_top8_pct": 44.59,
+        "outsider_placed_pct": 14.61
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 1053.0,
+          "total_staked_eur": 1054.0,
           "total_returned_eur": 920.7,
-          "net_profit_eur": -132.3,
-          "roi_pct": -12.56,
+          "net_profit_eur": -133.3,
+          "roi_pct": -12.65,
           "max_drawdown_eur": 165.1
         },
         "simple_place": {
-          "total_staked_eur": 2096.0,
-          "total_returned_eur": 1889.35,
-          "net_profit_eur": -206.65,
-          "roi_pct": -9.86,
+          "total_staked_eur": 2098.0,
+          "total_returned_eur": 1892.05,
+          "net_profit_eur": -205.95,
+          "roi_pct": -9.82,
           "max_drawdown_eur": 210.15
         }
       },
       "statistical_calibration": {
-        "brier_score": 0.0713,
-        "log_loss": 2.0477
+        "brier_score": 0.0712,
+        "log_loss": 2.0469
       }
     },
     "T30": {
       "engine_name": "MARKET_BASELINE",
-      "total_races": 1061,
+      "total_races": 1062,
       "hit_rates": {
-        "top1_win_rate_pct": 29.31,
-        "winner_in_top3_pct": 60.7,
-        "winner_in_top8_pct": 91.89,
-        "at_least_one_base_placed_pct": 81.24,
-        "both_bases_placed_pct": 27.9,
-        "tierce_in_top8_pct": 68.61,
-        "quarte_in_top8_pct": 56.17,
-        "quinte_in_top8_pct": 45.33,
-        "outsider_placed_pct": 14.33
+        "top1_win_rate_pct": 29.28,
+        "winner_in_top3_pct": 60.73,
+        "winner_in_top8_pct": 91.9,
+        "at_least_one_base_placed_pct": 81.26,
+        "both_bases_placed_pct": 27.97,
+        "tierce_in_top8_pct": 68.64,
+        "quarte_in_top8_pct": 56.21,
+        "quinte_in_top8_pct": 45.39,
+        "outsider_placed_pct": 14.31
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 1061.0,
+          "total_staked_eur": 1062.0,
           "total_returned_eur": 945.3,
-          "net_profit_eur": -115.7,
-          "roi_pct": -10.9,
+          "net_profit_eur": -116.7,
+          "roi_pct": -10.99,
           "max_drawdown_eur": 144.0
         },
         "simple_place": {
-          "total_staked_eur": 2112.0,
-          "total_returned_eur": 1927.65,
-          "net_profit_eur": -184.35,
-          "roi_pct": -8.73,
+          "total_staked_eur": 2114.0,
+          "total_returned_eur": 1930.35,
+          "net_profit_eur": -183.65,
+          "roi_pct": -8.69,
           "max_drawdown_eur": 188.8
         }
       },
       "statistical_calibration": {
         "brier_score": 0.0712,
-        "log_loss": 2.0362
+        "log_loss": 2.0358
       }
     },
     "T15": {
       "engine_name": "MARKET_BASELINE",
-      "total_races": 1090,
+      "total_races": 1091,
       "hit_rates": {
-        "top1_win_rate_pct": 30.0,
-        "winner_in_top3_pct": 61.47,
+        "top1_win_rate_pct": 29.97,
+        "winner_in_top3_pct": 61.5,
         "winner_in_top8_pct": 92.48,
-        "at_least_one_base_placed_pct": 81.01,
-        "both_bases_placed_pct": 27.98,
-        "tierce_in_top8_pct": 70.64,
-        "quarte_in_top8_pct": 57.89,
-        "quinte_in_top8_pct": 46.88,
-        "outsider_placed_pct": 15.6
+        "at_least_one_base_placed_pct": 81.03,
+        "both_bases_placed_pct": 28.05,
+        "tierce_in_top8_pct": 70.67,
+        "quarte_in_top8_pct": 57.93,
+        "quinte_in_top8_pct": 46.93,
+        "outsider_placed_pct": 15.58
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 1090.0,
+          "total_staked_eur": 1091.0,
           "total_returned_eur": 975.6,
-          "net_profit_eur": -114.4,
-          "roi_pct": -10.5,
+          "net_profit_eur": -115.4,
+          "roi_pct": -10.58,
           "max_drawdown_eur": 133.3
         },
         "simple_place": {
-          "total_staked_eur": 2170.0,
-          "total_returned_eur": 1957.2,
-          "net_profit_eur": -212.8,
-          "roi_pct": -9.81,
+          "total_staked_eur": 2172.0,
+          "total_returned_eur": 1959.9,
+          "net_profit_eur": -212.1,
+          "roi_pct": -9.77,
           "max_drawdown_eur": 221.15
         }
       },
       "statistical_calibration": {
         "brier_score": 0.071,
-        "log_loss": 2.0165
+        "log_loss": 2.0159
       }
     }
   },
   "horizon_breakdown_radar": {
     "T_MATIN": {
       "engine_name": "RADAR_V4",
-      "total_races": 768,
+      "total_races": 769,
       "hit_rates": {
-        "top1_win_rate_pct": 27.47,
-        "winner_in_top3_pct": 57.16,
-        "winner_in_top8_pct": 89.84,
-        "at_least_one_base_placed_pct": 77.47,
-        "both_bases_placed_pct": 22.14,
-        "tierce_in_top8_pct": 65.1,
-        "quarte_in_top8_pct": 52.6,
-        "quinte_in_top8_pct": 40.76,
-        "outsider_placed_pct": 14.32
+        "top1_win_rate_pct": 27.44,
+        "winner_in_top3_pct": 57.22,
+        "winner_in_top8_pct": 89.86,
+        "at_least_one_base_placed_pct": 77.5,
+        "both_bases_placed_pct": 22.24,
+        "tierce_in_top8_pct": 65.15,
+        "quarte_in_top8_pct": 52.67,
+        "quinte_in_top8_pct": 40.83,
+        "outsider_placed_pct": 14.3
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 768.0,
+          "total_staked_eur": 769.0,
           "total_returned_eur": 723.4,
-          "net_profit_eur": -44.6,
-          "roi_pct": -5.81,
+          "net_profit_eur": -45.6,
+          "roi_pct": -5.93,
           "max_drawdown_eur": 108.4
         },
         "simple_place": {
-          "total_staked_eur": 1534.0,
-          "total_returned_eur": 1355.05,
-          "net_profit_eur": -178.95,
-          "roi_pct": -11.67,
+          "total_staked_eur": 1536.0,
+          "total_returned_eur": 1357.75,
+          "net_profit_eur": -178.25,
+          "roi_pct": -11.6,
           "max_drawdown_eur": 187.7
         }
       },
       "statistical_calibration": {
         "brier_score": 0.0713,
-        "log_loss": 2.123
+        "log_loss": 2.1223
       }
     },
     "T90": {
       "engine_name": "RADAR_V4",
-      "total_races": 768,
+      "total_races": 769,
       "hit_rates": {
-        "top1_win_rate_pct": 27.6,
-        "winner_in_top3_pct": 57.29,
-        "winner_in_top8_pct": 90.1,
-        "at_least_one_base_placed_pct": 77.6,
-        "both_bases_placed_pct": 22.53,
-        "tierce_in_top8_pct": 65.62,
-        "quarte_in_top8_pct": 52.99,
-        "quinte_in_top8_pct": 41.28,
-        "outsider_placed_pct": 14.06
+        "top1_win_rate_pct": 27.57,
+        "winner_in_top3_pct": 57.35,
+        "winner_in_top8_pct": 90.12,
+        "at_least_one_base_placed_pct": 77.63,
+        "both_bases_placed_pct": 22.63,
+        "tierce_in_top8_pct": 65.67,
+        "quarte_in_top8_pct": 53.06,
+        "quinte_in_top8_pct": 41.35,
+        "outsider_placed_pct": 14.04
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 768.0,
+          "total_staked_eur": 769.0,
           "total_returned_eur": 729.8,
-          "net_profit_eur": -38.2,
-          "roi_pct": -4.97,
+          "net_profit_eur": -39.2,
+          "roi_pct": -5.1,
           "max_drawdown_eur": 102.0
         },
         "simple_place": {
-          "total_staked_eur": 1534.0,
-          "total_returned_eur": 1362.45,
-          "net_profit_eur": -171.55,
-          "roi_pct": -11.18,
+          "total_staked_eur": 1536.0,
+          "total_returned_eur": 1365.15,
+          "net_profit_eur": -170.85,
+          "roi_pct": -11.12,
           "max_drawdown_eur": 180.3
         }
       },
       "statistical_calibration": {
         "brier_score": 0.0716,
-        "log_loss": 2.1172
+        "log_loss": 2.1166
       }
     },
     "T30": {
       "engine_name": "RADAR_V4",
+      "total_races": 769,
+      "hit_rates": {
+        "top1_win_rate_pct": 27.57,
+        "winner_in_top3_pct": 57.48,
+        "winner_in_top8_pct": 90.25,
+        "at_least_one_base_placed_pct": 77.63,
+        "both_bases_placed_pct": 22.63,
+        "tierce_in_top8_pct": 66.06,
+        "quarte_in_top8_pct": 53.32,
+        "quinte_in_top8_pct": 41.87,
+        "outsider_placed_pct": 14.43
+      },
+      "financial_performance": {
+        "simple_gagnant": {
+          "total_staked_eur": 769.0,
+          "total_returned_eur": 729.8,
+          "net_profit_eur": -39.2,
+          "roi_pct": -5.1,
+          "max_drawdown_eur": 102.0
+        },
+        "simple_place": {
+          "total_staked_eur": 1536.0,
+          "total_returned_eur": 1365.15,
+          "net_profit_eur": -170.85,
+          "roi_pct": -11.12,
+          "max_drawdown_eur": 180.3
+        }
+      },
+      "statistical_calibration": {
+        "brier_score": 0.0717,
+        "log_loss": 2.1145
+      }
+    },
+    "T15": {
+      "engine_name": "RADAR_V4",
       "total_races": 768,
       "hit_rates": {
         "top1_win_rate_pct": 27.6,
-        "winner_in_top3_pct": 57.42,
+        "winner_in_top3_pct": 57.68,
         "winner_in_top8_pct": 90.23,
-        "at_least_one_base_placed_pct": 77.6,
-        "both_bases_placed_pct": 22.53,
-        "tierce_in_top8_pct": 66.02,
-        "quarte_in_top8_pct": 53.26,
-        "quinte_in_top8_pct": 41.8,
-        "outsider_placed_pct": 14.45
+        "at_least_one_base_placed_pct": 77.73,
+        "both_bases_placed_pct": 22.66,
+        "tierce_in_top8_pct": 66.28,
+        "quarte_in_top8_pct": 53.52,
+        "quinte_in_top8_pct": 42.06,
+        "outsider_placed_pct": 14.32
       },
       "financial_performance": {
         "simple_gagnant": {
@@ -984,91 +1019,56 @@
           "total_returned_eur": 729.8,
           "net_profit_eur": -38.2,
           "roi_pct": -4.97,
-          "max_drawdown_eur": 102.0
-        },
-        "simple_place": {
-          "total_staked_eur": 1534.0,
-          "total_returned_eur": 1362.45,
-          "net_profit_eur": -171.55,
-          "roi_pct": -11.18,
-          "max_drawdown_eur": 180.3
-        }
-      },
-      "statistical_calibration": {
-        "brier_score": 0.0717,
-        "log_loss": 2.1151
-      }
-    },
-    "T15": {
-      "engine_name": "RADAR_V4",
-      "total_races": 767,
-      "hit_rates": {
-        "top1_win_rate_pct": 27.64,
-        "winner_in_top3_pct": 57.63,
-        "winner_in_top8_pct": 90.22,
-        "at_least_one_base_placed_pct": 77.71,
-        "both_bases_placed_pct": 22.56,
-        "tierce_in_top8_pct": 66.23,
-        "quarte_in_top8_pct": 53.46,
-        "quinte_in_top8_pct": 41.98,
-        "outsider_placed_pct": 14.34
-      },
-      "financial_performance": {
-        "simple_gagnant": {
-          "total_staked_eur": 767.0,
-          "total_returned_eur": 729.8,
-          "net_profit_eur": -37.2,
-          "roi_pct": -4.85,
           "max_drawdown_eur": 101.0
         },
         "simple_place": {
-          "total_staked_eur": 1532.0,
-          "total_returned_eur": 1362.45,
-          "net_profit_eur": -169.55,
-          "roi_pct": -11.07,
+          "total_staked_eur": 1534.0,
+          "total_returned_eur": 1365.15,
+          "net_profit_eur": -168.85,
+          "roi_pct": -11.01,
           "max_drawdown_eur": 178.3
         }
       },
       "statistical_calibration": {
-        "brier_score": 0.0719,
-        "log_loss": 2.1128
+        "brier_score": 0.0718,
+        "log_loss": 2.1121
       }
     }
   },
   "discipline_breakdown_radar": {
     "TROT": {
       "engine_name": "RADAR_V4",
-      "total_races": 353,
+      "total_races": 354,
       "hit_rates": {
-        "top1_win_rate_pct": 27.48,
-        "winner_in_top3_pct": 58.92,
-        "winner_in_top8_pct": 89.52,
-        "at_least_one_base_placed_pct": 77.62,
-        "both_bases_placed_pct": 21.25,
-        "tierce_in_top8_pct": 62.04,
-        "quarte_in_top8_pct": 45.89,
-        "quinte_in_top8_pct": 31.73,
-        "outsider_placed_pct": 13.31
+        "top1_win_rate_pct": 27.4,
+        "winner_in_top3_pct": 59.04,
+        "winner_in_top8_pct": 89.55,
+        "at_least_one_base_placed_pct": 77.68,
+        "both_bases_placed_pct": 21.47,
+        "tierce_in_top8_pct": 62.15,
+        "quarte_in_top8_pct": 46.05,
+        "quinte_in_top8_pct": 31.92,
+        "outsider_placed_pct": 13.28
       },
       "financial_performance": {
         "simple_gagnant": {
-          "total_staked_eur": 353.0,
+          "total_staked_eur": 354.0,
           "total_returned_eur": 291.6,
-          "net_profit_eur": -61.4,
-          "roi_pct": -17.39,
+          "net_profit_eur": -62.4,
+          "roi_pct": -17.63,
           "max_drawdown_eur": 86.6
         },
         "simple_place": {
-          "total_staked_eur": 706.0,
-          "total_returned_eur": 636.25,
-          "net_profit_eur": -69.75,
-          "roi_pct": -9.88,
+          "total_staked_eur": 708.0,
+          "total_returned_eur": 638.95,
+          "net_profit_eur": -69.05,
+          "roi_pct": -9.75,
           "max_drawdown_eur": 75.05
         }
       },
       "statistical_calibration": {
         "brier_score": 0.0647,
-        "log_loss": 2.1298
+        "log_loss": 2.1284
       }
     },
     "PLAT": {
@@ -1150,446 +1150,336 @@
     ],
     "horizons": {
       "T_MATIN": {
-        "courses": 728,
+        "courses": 729,
         "metriques": {
           "NEW_VALUE_ENGINE": {
             "engine_name": "NEW_VALUE_ENGINE",
-            "total_races": 728,
+            "total_races": 729,
             "hit_rates": {
-              "top1_win_rate_pct": 24.18,
-              "winner_in_top3_pct": 52.47,
-              "winner_in_top8_pct": 87.77,
-              "at_least_one_base_placed_pct": 74.73,
-              "both_bases_placed_pct": 19.64,
-              "tierce_in_top8_pct": 61.81,
-              "quarte_in_top8_pct": 50.14,
-              "quinte_in_top8_pct": 39.84,
-              "outsider_placed_pct": 18.82
+              "top1_win_rate_pct": 24.28,
+              "winner_in_top3_pct": 52.54,
+              "winner_in_top8_pct": 87.79,
+              "at_least_one_base_placed_pct": 74.76,
+              "both_bases_placed_pct": 19.75,
+              "tierce_in_top8_pct": 61.73,
+              "quarte_in_top8_pct": 50.07,
+              "quinte_in_top8_pct": 39.78,
+              "outsider_placed_pct": 18.79
             },
             "financial_performance": {
               "simple_gagnant": {
-                "total_staked_eur": 728.0,
-                "total_returned_eur": 652.4,
-                "net_profit_eur": -75.6,
-                "roi_pct": -10.38,
+                "total_staked_eur": 729.0,
+                "total_returned_eur": 654.9,
+                "net_profit_eur": -74.1,
+                "roi_pct": -10.16,
                 "max_drawdown_eur": 136.5
               },
               "simple_place": {
-                "total_staked_eur": 1454.0,
-                "total_returned_eur": 1248.45,
-                "net_profit_eur": -205.55,
-                "roi_pct": -14.14,
+                "total_staked_eur": 1456.0,
+                "total_returned_eur": 1251.15,
+                "net_profit_eur": -204.85,
+                "roi_pct": -14.07,
                 "max_drawdown_eur": 220.05
               }
             },
             "statistical_calibration": {
-              "brier_score": 0.0728,
-              "log_loss": 2.196
+              "brier_score": 0.0727,
+              "log_loss": 2.1946
             }
           },
           "MARKET_BASELINE": {
             "engine_name": "MARKET_BASELINE",
-            "total_races": 728,
+            "total_races": 729,
             "hit_rates": {
-              "top1_win_rate_pct": 23.21,
-              "winner_in_top3_pct": 53.16,
-              "winner_in_top8_pct": 87.91,
-              "at_least_one_base_placed_pct": 74.18,
-              "both_bases_placed_pct": 20.6,
-              "tierce_in_top8_pct": 61.26,
-              "quarte_in_top8_pct": 49.18,
-              "quinte_in_top8_pct": 39.42,
-              "outsider_placed_pct": 16.21
+              "top1_win_rate_pct": 23.18,
+              "winner_in_top3_pct": 53.22,
+              "winner_in_top8_pct": 87.93,
+              "at_least_one_base_placed_pct": 74.21,
+              "both_bases_placed_pct": 20.71,
+              "tierce_in_top8_pct": 61.32,
+              "quarte_in_top8_pct": 49.25,
+              "quinte_in_top8_pct": 39.51,
+              "outsider_placed_pct": 16.32
             },
             "financial_performance": {
               "simple_gagnant": {
-                "total_staked_eur": 728.0,
+                "total_staked_eur": 729.0,
                 "total_returned_eur": 624.4,
-                "net_profit_eur": -103.6,
-                "roi_pct": -14.23,
+                "net_profit_eur": -104.6,
+                "roi_pct": -14.35,
                 "max_drawdown_eur": 140.9
               },
               "simple_place": {
-                "total_staked_eur": 1454.0,
-                "total_returned_eur": 1258.05,
-                "net_profit_eur": -195.95,
-                "roi_pct": -13.48,
+                "total_staked_eur": 1456.0,
+                "total_returned_eur": 1260.75,
+                "net_profit_eur": -195.25,
+                "roi_pct": -13.41,
                 "max_drawdown_eur": 216.2
               }
             },
             "statistical_calibration": {
               "brier_score": 0.0731,
-              "log_loss": 2.2097
+              "log_loss": 2.2082
             }
           },
           "RADAR_V4": {
             "engine_name": "RADAR_V4",
-            "total_races": 728,
+            "total_races": 729,
             "hit_rates": {
-              "top1_win_rate_pct": 27.2,
-              "winner_in_top3_pct": 56.32,
-              "winner_in_top8_pct": 89.7,
-              "at_least_one_base_placed_pct": 76.92,
-              "both_bases_placed_pct": 21.98,
-              "tierce_in_top8_pct": 64.84,
-              "quarte_in_top8_pct": 52.75,
-              "quinte_in_top8_pct": 40.93,
-              "outsider_placed_pct": 14.29
+              "top1_win_rate_pct": 27.16,
+              "winner_in_top3_pct": 56.38,
+              "winner_in_top8_pct": 89.71,
+              "at_least_one_base_placed_pct": 76.95,
+              "both_bases_placed_pct": 22.09,
+              "tierce_in_top8_pct": 64.88,
+              "quarte_in_top8_pct": 52.81,
+              "quinte_in_top8_pct": 41.02,
+              "outsider_placed_pct": 14.27
             },
             "financial_performance": {
               "simple_gagnant": {
-                "total_staked_eur": 728.0,
+                "total_staked_eur": 729.0,
                 "total_returned_eur": 684.7,
-                "net_profit_eur": -43.3,
-                "roi_pct": -5.95,
+                "net_profit_eur": -44.3,
+                "roi_pct": -6.08,
                 "max_drawdown_eur": 107.1
               },
               "simple_place": {
-                "total_staked_eur": 1454.0,
-                "total_returned_eur": 1272.6,
-                "net_profit_eur": -181.4,
-                "roi_pct": -12.48,
+                "total_staked_eur": 1456.0,
+                "total_returned_eur": 1275.3,
+                "net_profit_eur": -180.7,
+                "roi_pct": -12.41,
                 "max_drawdown_eur": 190.15
               }
             },
             "statistical_calibration": {
               "brier_score": 0.0717,
-              "log_loss": 2.1373
+              "log_loss": 2.1366
             }
           }
         }
       },
       "T90": {
-        "courses": 768,
+        "courses": 769,
         "metriques": {
           "NEW_VALUE_ENGINE": {
             "engine_name": "NEW_VALUE_ENGINE",
-            "total_races": 768,
+            "total_races": 769,
             "hit_rates": {
-              "top1_win_rate_pct": 28.12,
-              "winner_in_top3_pct": 59.64,
-              "winner_in_top8_pct": 91.41,
-              "at_least_one_base_placed_pct": 80.34,
-              "both_bases_placed_pct": 26.3,
-              "tierce_in_top8_pct": 69.4,
-              "quarte_in_top8_pct": 56.25,
-              "quinte_in_top8_pct": 44.01,
-              "outsider_placed_pct": 13.8
+              "top1_win_rate_pct": 28.09,
+              "winner_in_top3_pct": 59.69,
+              "winner_in_top8_pct": 91.42,
+              "at_least_one_base_placed_pct": 80.36,
+              "both_bases_placed_pct": 26.4,
+              "tierce_in_top8_pct": 69.44,
+              "quarte_in_top8_pct": 56.31,
+              "quinte_in_top8_pct": 44.08,
+              "outsider_placed_pct": 13.78
             },
             "financial_performance": {
               "simple_gagnant": {
-                "total_staked_eur": 768.0,
+                "total_staked_eur": 769.0,
                 "total_returned_eur": 666.4,
-                "net_profit_eur": -101.6,
-                "roi_pct": -13.23,
+                "net_profit_eur": -102.6,
+                "roi_pct": -13.34,
                 "max_drawdown_eur": 144.3
               },
               "simple_place": {
-                "total_staked_eur": 1534.0,
-                "total_returned_eur": 1391.95,
-                "net_profit_eur": -142.05,
-                "roi_pct": -9.26,
+                "total_staked_eur": 1536.0,
+                "total_returned_eur": 1394.65,
+                "net_profit_eur": -141.35,
+                "roi_pct": -9.2,
                 "max_drawdown_eur": 142.05
               }
             },
             "statistical_calibration": {
               "brier_score": 0.0707,
-              "log_loss": 2.0706
+              "log_loss": 2.0696
             }
           },
           "MARKET_BASELINE": {
             "engine_name": "MARKET_BASELINE",
-            "total_races": 768,
+            "total_races": 769,
             "hit_rates": {
-              "top1_win_rate_pct": 28.78,
-              "winner_in_top3_pct": 59.9,
-              "winner_in_top8_pct": 91.28,
-              "at_least_one_base_placed_pct": 80.73,
-              "both_bases_placed_pct": 26.56,
-              "tierce_in_top8_pct": 68.88,
-              "quarte_in_top8_pct": 56.64,
-              "quinte_in_top8_pct": 44.66,
-              "outsider_placed_pct": 15.49
+              "top1_win_rate_pct": 28.74,
+              "winner_in_top3_pct": 59.95,
+              "winner_in_top8_pct": 91.29,
+              "at_least_one_base_placed_pct": 80.75,
+              "both_bases_placed_pct": 26.66,
+              "tierce_in_top8_pct": 68.92,
+              "quarte_in_top8_pct": 56.7,
+              "quinte_in_top8_pct": 44.73,
+              "outsider_placed_pct": 15.47
             },
             "financial_performance": {
               "simple_gagnant": {
-                "total_staked_eur": 768.0,
+                "total_staked_eur": 769.0,
                 "total_returned_eur": 677.9,
-                "net_profit_eur": -90.1,
-                "roi_pct": -11.73,
+                "net_profit_eur": -91.1,
+                "roi_pct": -11.85,
                 "max_drawdown_eur": 139.0
               },
               "simple_place": {
-                "total_staked_eur": 1534.0,
-                "total_returned_eur": 1390.25,
-                "net_profit_eur": -143.75,
-                "roi_pct": -9.37,
+                "total_staked_eur": 1536.0,
+                "total_returned_eur": 1392.95,
+                "net_profit_eur": -143.05,
+                "roi_pct": -9.31,
                 "max_drawdown_eur": 145.95
               }
             },
             "statistical_calibration": {
               "brier_score": 0.0704,
-              "log_loss": 2.051
+              "log_loss": 2.05
             }
           },
           "RADAR_V4": {
             "engine_name": "RADAR_V4",
-            "total_races": 768,
+            "total_races": 769,
             "hit_rates": {
-              "top1_win_rate_pct": 27.6,
-              "winner_in_top3_pct": 57.29,
-              "winner_in_top8_pct": 90.1,
-              "at_least_one_base_placed_pct": 77.6,
-              "both_bases_placed_pct": 22.53,
-              "tierce_in_top8_pct": 65.62,
-              "quarte_in_top8_pct": 52.99,
-              "quinte_in_top8_pct": 41.28,
-              "outsider_placed_pct": 14.06
+              "top1_win_rate_pct": 27.57,
+              "winner_in_top3_pct": 57.35,
+              "winner_in_top8_pct": 90.12,
+              "at_least_one_base_placed_pct": 77.63,
+              "both_bases_placed_pct": 22.63,
+              "tierce_in_top8_pct": 65.67,
+              "quarte_in_top8_pct": 53.06,
+              "quinte_in_top8_pct": 41.35,
+              "outsider_placed_pct": 14.04
             },
             "financial_performance": {
               "simple_gagnant": {
-                "total_staked_eur": 768.0,
+                "total_staked_eur": 769.0,
                 "total_returned_eur": 729.8,
-                "net_profit_eur": -38.2,
-                "roi_pct": -4.97,
+                "net_profit_eur": -39.2,
+                "roi_pct": -5.1,
                 "max_drawdown_eur": 102.0
               },
               "simple_place": {
-                "total_staked_eur": 1534.0,
-                "total_returned_eur": 1362.45,
-                "net_profit_eur": -171.55,
-                "roi_pct": -11.18,
+                "total_staked_eur": 1536.0,
+                "total_returned_eur": 1365.15,
+                "net_profit_eur": -170.85,
+                "roi_pct": -11.12,
                 "max_drawdown_eur": 180.3
               }
             },
             "statistical_calibration": {
               "brier_score": 0.0716,
-              "log_loss": 2.1172
+              "log_loss": 2.1166
             }
           }
         }
       },
       "T30": {
-        "courses": 768,
+        "courses": 769,
         "metriques": {
           "NEW_VALUE_ENGINE": {
             "engine_name": "NEW_VALUE_ENGINE",
-            "total_races": 768,
+            "total_races": 769,
             "hit_rates": {
-              "top1_win_rate_pct": 28.26,
-              "winner_in_top3_pct": 58.98,
-              "winner_in_top8_pct": 92.19,
-              "at_least_one_base_placed_pct": 80.86,
-              "both_bases_placed_pct": 27.08,
-              "tierce_in_top8_pct": 68.62,
-              "quarte_in_top8_pct": 55.6,
-              "quinte_in_top8_pct": 44.53,
-              "outsider_placed_pct": 13.54
+              "top1_win_rate_pct": 28.22,
+              "winner_in_top3_pct": 59.04,
+              "winner_in_top8_pct": 92.2,
+              "at_least_one_base_placed_pct": 80.88,
+              "both_bases_placed_pct": 27.18,
+              "tierce_in_top8_pct": 68.66,
+              "quarte_in_top8_pct": 55.66,
+              "quinte_in_top8_pct": 44.6,
+              "outsider_placed_pct": 13.52
             },
             "financial_performance": {
               "simple_gagnant": {
-                "total_staked_eur": 768.0,
+                "total_staked_eur": 769.0,
                 "total_returned_eur": 661.7,
-                "net_profit_eur": -106.3,
-                "roi_pct": -13.84,
+                "net_profit_eur": -107.3,
+                "roi_pct": -13.95,
                 "max_drawdown_eur": 126.5
               },
               "simple_place": {
-                "total_staked_eur": 1534.0,
-                "total_returned_eur": 1384.55,
-                "net_profit_eur": -149.45,
-                "roi_pct": -9.74,
+                "total_staked_eur": 1536.0,
+                "total_returned_eur": 1387.25,
+                "net_profit_eur": -148.75,
+                "roi_pct": -9.68,
                 "max_drawdown_eur": 154.2
               }
             },
             "statistical_calibration": {
               "brier_score": 0.0708,
-              "log_loss": 2.058
+              "log_loss": 2.0575
             }
           },
           "MARKET_BASELINE": {
             "engine_name": "MARKET_BASELINE",
-            "total_races": 768,
+            "total_races": 769,
             "hit_rates": {
-              "top1_win_rate_pct": 29.17,
-              "winner_in_top3_pct": 61.2,
-              "winner_in_top8_pct": 92.19,
-              "at_least_one_base_placed_pct": 81.64,
-              "both_bases_placed_pct": 27.86,
-              "tierce_in_top8_pct": 70.18,
-              "quarte_in_top8_pct": 57.42,
-              "quinte_in_top8_pct": 45.83,
-              "outsider_placed_pct": 15.1
+              "top1_win_rate_pct": 29.13,
+              "winner_in_top3_pct": 61.25,
+              "winner_in_top8_pct": 92.2,
+              "at_least_one_base_placed_pct": 81.66,
+              "both_bases_placed_pct": 27.96,
+              "tierce_in_top8_pct": 70.22,
+              "quarte_in_top8_pct": 57.48,
+              "quinte_in_top8_pct": 45.9,
+              "outsider_placed_pct": 15.08
             },
             "financial_performance": {
               "simple_gagnant": {
-                "total_staked_eur": 768.0,
+                "total_staked_eur": 769.0,
                 "total_returned_eur": 670.6,
-                "net_profit_eur": -97.4,
-                "roi_pct": -12.68,
+                "net_profit_eur": -98.4,
+                "roi_pct": -12.8,
                 "max_drawdown_eur": 123.1
               },
               "simple_place": {
-                "total_staked_eur": 1534.0,
-                "total_returned_eur": 1407.55,
-                "net_profit_eur": -126.45,
-                "roi_pct": -8.24,
+                "total_staked_eur": 1536.0,
+                "total_returned_eur": 1410.25,
+                "net_profit_eur": -125.75,
+                "roi_pct": -8.19,
                 "max_drawdown_eur": 138.35
               }
             },
             "statistical_calibration": {
               "brier_score": 0.0706,
-              "log_loss": 2.0398
+              "log_loss": 2.0392
             }
           },
           "RADAR_V4": {
             "engine_name": "RADAR_V4",
-            "total_races": 768,
+            "total_races": 769,
             "hit_rates": {
-              "top1_win_rate_pct": 27.6,
-              "winner_in_top3_pct": 57.42,
-              "winner_in_top8_pct": 90.23,
-              "at_least_one_base_placed_pct": 77.6,
-              "both_bases_placed_pct": 22.53,
-              "tierce_in_top8_pct": 66.02,
-              "quarte_in_top8_pct": 53.26,
-              "quinte_in_top8_pct": 41.8,
-              "outsider_placed_pct": 14.45
+              "top1_win_rate_pct": 27.57,
+              "winner_in_top3_pct": 57.48,
+              "winner_in_top8_pct": 90.25,
+              "at_least_one_base_placed_pct": 77.63,
+              "both_bases_placed_pct": 22.63,
+              "tierce_in_top8_pct": 66.06,
+              "quarte_in_top8_pct": 53.32,
+              "quinte_in_top8_pct": 41.87,
+              "outsider_placed_pct": 14.43
             },
             "financial_performance": {
               "simple_gagnant": {
-                "total_staked_eur": 768.0,
+                "total_staked_eur": 769.0,
                 "total_returned_eur": 729.8,
-                "net_profit_eur": -38.2,
-                "roi_pct": -4.97,
+                "net_profit_eur": -39.2,
+                "roi_pct": -5.1,
                 "max_drawdown_eur": 102.0
               },
               "simple_place": {
-                "total_staked_eur": 1534.0,
-                "total_returned_eur": 1362.45,
-                "net_profit_eur": -171.55,
-                "roi_pct": -11.18,
+                "total_staked_eur": 1536.0,
+                "total_returned_eur": 1365.15,
+                "net_profit_eur": -170.85,
+                "roi_pct": -11.12,
                 "max_drawdown_eur": 180.3
               }
             },
             "statistical_calibration": {
               "brier_score": 0.0717,
-              "log_loss": 2.1151
+              "log_loss": 2.1145
             }
           }
         }
       },
       "T15": {
-        "courses": 767,
-        "metriques": {
-          "NEW_VALUE_ENGINE": {
-            "engine_name": "NEW_VALUE_ENGINE",
-            "total_races": 767,
-            "hit_rates": {
-              "top1_win_rate_pct": 29.6,
-              "winner_in_top3_pct": 59.45,
-              "winner_in_top8_pct": 92.31,
-              "at_least_one_base_placed_pct": 81.1,
-              "both_bases_placed_pct": 28.03,
-              "tierce_in_top8_pct": 70.01,
-              "quarte_in_top8_pct": 57.11,
-              "quinte_in_top8_pct": 45.76,
-              "outsider_placed_pct": 11.99
-            },
-            "financial_performance": {
-              "simple_gagnant": {
-                "total_staked_eur": 767.0,
-                "total_returned_eur": 689.2,
-                "net_profit_eur": -77.8,
-                "roi_pct": -10.14,
-                "max_drawdown_eur": 99.3
-              },
-              "simple_place": {
-                "total_staked_eur": 1532.0,
-                "total_returned_eur": 1380.55,
-                "net_profit_eur": -151.45,
-                "roi_pct": -9.89,
-                "max_drawdown_eur": 158.3
-              }
-            },
-            "statistical_calibration": {
-              "brier_score": 0.0707,
-              "log_loss": 2.0445
-            }
-          },
-          "MARKET_BASELINE": {
-            "engine_name": "MARKET_BASELINE",
-            "total_races": 767,
-            "hit_rates": {
-              "top1_win_rate_pct": 29.47,
-              "winner_in_top3_pct": 61.8,
-              "winner_in_top8_pct": 92.83,
-              "at_least_one_base_placed_pct": 80.83,
-              "both_bases_placed_pct": 27.9,
-              "tierce_in_top8_pct": 71.32,
-              "quarte_in_top8_pct": 58.28,
-              "quinte_in_top8_pct": 46.94,
-              "outsider_placed_pct": 16.3
-            },
-            "financial_performance": {
-              "simple_gagnant": {
-                "total_staked_eur": 767.0,
-                "total_returned_eur": 681.7,
-                "net_profit_eur": -85.3,
-                "roi_pct": -11.12,
-                "max_drawdown_eur": 100.8
-              },
-              "simple_place": {
-                "total_staked_eur": 1532.0,
-                "total_returned_eur": 1368.65,
-                "net_profit_eur": -163.35,
-                "roi_pct": -10.66,
-                "max_drawdown_eur": 166.2
-              }
-            },
-            "statistical_calibration": {
-              "brier_score": 0.0705,
-              "log_loss": 2.0271
-            }
-          },
-          "RADAR_V4": {
-            "engine_name": "RADAR_V4",
-            "total_races": 767,
-            "hit_rates": {
-              "top1_win_rate_pct": 27.64,
-              "winner_in_top3_pct": 57.63,
-              "winner_in_top8_pct": 90.22,
-              "at_least_one_base_placed_pct": 77.71,
-              "both_bases_placed_pct": 22.56,
-              "tierce_in_top8_pct": 66.23,
-              "quarte_in_top8_pct": 53.46,
-              "quinte_in_top8_pct": 41.98,
-              "outsider_placed_pct": 14.34
-            },
-            "financial_performance": {
-              "simple_gagnant": {
-                "total_staked_eur": 767.0,
-                "total_returned_eur": 729.8,
-                "net_profit_eur": -37.2,
-                "roi_pct": -4.85,
-                "max_drawdown_eur": 101.0
-              },
-              "simple_place": {
-                "total_staked_eur": 1532.0,
-                "total_returned_eur": 1362.45,
-                "net_profit_eur": -169.55,
-                "roi_pct": -11.07,
-                "max_drawdown_eur": 178.3
-              }
-            },
-            "statistical_calibration": {
-              "brier_score": 0.0719,
-              "log_loss": 2.1128
-            }
-          }
-        }
-      },
-      "TOUS": {
         "courses": 768,
         "metriques": {
           "NEW_VALUE_ENGINE": {
@@ -1597,14 +1487,14 @@
             "total_races": 768,
             "hit_rates": {
               "top1_win_rate_pct": 29.56,
-              "winner_in_top3_pct": 59.38,
-              "winner_in_top8_pct": 92.19,
-              "at_least_one_base_placed_pct": 80.99,
-              "both_bases_placed_pct": 27.99,
-              "tierce_in_top8_pct": 69.92,
-              "quarte_in_top8_pct": 57.03,
-              "quinte_in_top8_pct": 45.7,
-              "outsider_placed_pct": 12.11
+              "winner_in_top3_pct": 59.51,
+              "winner_in_top8_pct": 92.32,
+              "at_least_one_base_placed_pct": 81.12,
+              "both_bases_placed_pct": 28.12,
+              "tierce_in_top8_pct": 70.05,
+              "quarte_in_top8_pct": 57.16,
+              "quinte_in_top8_pct": 45.83,
+              "outsider_placed_pct": 11.98
             },
             "financial_performance": {
               "simple_gagnant": {
@@ -1616,15 +1506,15 @@
               },
               "simple_place": {
                 "total_staked_eur": 1534.0,
-                "total_returned_eur": 1380.55,
-                "net_profit_eur": -153.45,
-                "roi_pct": -10.0,
-                "max_drawdown_eur": 160.3
+                "total_returned_eur": 1383.25,
+                "net_profit_eur": -150.75,
+                "roi_pct": -9.83,
+                "max_drawdown_eur": 158.3
               }
             },
             "statistical_calibration": {
               "brier_score": 0.0707,
-              "log_loss": 2.0461
+              "log_loss": 2.0435
             }
           },
           "MARKET_BASELINE": {
@@ -1632,13 +1522,13 @@
             "total_races": 768,
             "hit_rates": {
               "top1_win_rate_pct": 29.43,
-              "winner_in_top3_pct": 61.72,
-              "winner_in_top8_pct": 92.71,
-              "at_least_one_base_placed_pct": 80.73,
-              "both_bases_placed_pct": 27.86,
-              "tierce_in_top8_pct": 71.22,
-              "quarte_in_top8_pct": 58.2,
-              "quinte_in_top8_pct": 46.88,
+              "winner_in_top3_pct": 61.85,
+              "winner_in_top8_pct": 92.84,
+              "at_least_one_base_placed_pct": 80.86,
+              "both_bases_placed_pct": 27.99,
+              "tierce_in_top8_pct": 71.35,
+              "quarte_in_top8_pct": 58.33,
+              "quinte_in_top8_pct": 47.01,
               "outsider_placed_pct": 16.28
             },
             "financial_performance": {
@@ -1647,19 +1537,19 @@
                 "total_returned_eur": 681.7,
                 "net_profit_eur": -86.3,
                 "roi_pct": -11.24,
-                "max_drawdown_eur": 101.8
+                "max_drawdown_eur": 100.8
               },
               "simple_place": {
                 "total_staked_eur": 1534.0,
-                "total_returned_eur": 1368.65,
-                "net_profit_eur": -165.35,
-                "roi_pct": -10.78,
-                "max_drawdown_eur": 168.2
+                "total_returned_eur": 1371.35,
+                "net_profit_eur": -162.65,
+                "roi_pct": -10.6,
+                "max_drawdown_eur": 166.2
               }
             },
             "statistical_calibration": {
               "brier_score": 0.0705,
-              "log_loss": 2.0291
+              "log_loss": 2.0261
             }
           },
           "RADAR_V4": {
@@ -1667,14 +1557,14 @@
             "total_races": 768,
             "hit_rates": {
               "top1_win_rate_pct": 27.6,
-              "winner_in_top3_pct": 57.55,
+              "winner_in_top3_pct": 57.68,
               "winner_in_top8_pct": 90.23,
-              "at_least_one_base_placed_pct": 77.6,
-              "both_bases_placed_pct": 22.53,
-              "tierce_in_top8_pct": 66.15,
-              "quarte_in_top8_pct": 53.39,
-              "quinte_in_top8_pct": 41.93,
-              "outsider_placed_pct": 14.45
+              "at_least_one_base_placed_pct": 77.73,
+              "both_bases_placed_pct": 22.66,
+              "tierce_in_top8_pct": 66.28,
+              "quarte_in_top8_pct": 53.52,
+              "quinte_in_top8_pct": 42.06,
+              "outsider_placed_pct": 14.32
             },
             "financial_performance": {
               "simple_gagnant": {
@@ -1682,19 +1572,129 @@
                 "total_returned_eur": 729.8,
                 "net_profit_eur": -38.2,
                 "roi_pct": -4.97,
-                "max_drawdown_eur": 102.0
+                "max_drawdown_eur": 101.0
               },
               "simple_place": {
                 "total_staked_eur": 1534.0,
-                "total_returned_eur": 1362.45,
-                "net_profit_eur": -171.55,
-                "roi_pct": -11.18,
+                "total_returned_eur": 1365.15,
+                "net_profit_eur": -168.85,
+                "roi_pct": -11.01,
+                "max_drawdown_eur": 178.3
+              }
+            },
+            "statistical_calibration": {
+              "brier_score": 0.0718,
+              "log_loss": 2.1121
+            }
+          }
+        }
+      },
+      "TOUS": {
+        "courses": 769,
+        "metriques": {
+          "NEW_VALUE_ENGINE": {
+            "engine_name": "NEW_VALUE_ENGINE",
+            "total_races": 769,
+            "hit_rates": {
+              "top1_win_rate_pct": 29.52,
+              "winner_in_top3_pct": 59.43,
+              "winner_in_top8_pct": 92.2,
+              "at_least_one_base_placed_pct": 81.01,
+              "both_bases_placed_pct": 28.09,
+              "tierce_in_top8_pct": 69.96,
+              "quarte_in_top8_pct": 57.09,
+              "quinte_in_top8_pct": 45.77,
+              "outsider_placed_pct": 12.09
+            },
+            "financial_performance": {
+              "simple_gagnant": {
+                "total_staked_eur": 769.0,
+                "total_returned_eur": 689.2,
+                "net_profit_eur": -79.8,
+                "roi_pct": -10.38,
+                "max_drawdown_eur": 99.3
+              },
+              "simple_place": {
+                "total_staked_eur": 1536.0,
+                "total_returned_eur": 1383.25,
+                "net_profit_eur": -152.75,
+                "roi_pct": -9.94,
+                "max_drawdown_eur": 160.3
+              }
+            },
+            "statistical_calibration": {
+              "brier_score": 0.0707,
+              "log_loss": 2.0451
+            }
+          },
+          "MARKET_BASELINE": {
+            "engine_name": "MARKET_BASELINE",
+            "total_races": 769,
+            "hit_rates": {
+              "top1_win_rate_pct": 29.39,
+              "winner_in_top3_pct": 61.77,
+              "winner_in_top8_pct": 92.72,
+              "at_least_one_base_placed_pct": 80.75,
+              "both_bases_placed_pct": 27.96,
+              "tierce_in_top8_pct": 71.26,
+              "quarte_in_top8_pct": 58.26,
+              "quinte_in_top8_pct": 46.94,
+              "outsider_placed_pct": 16.25
+            },
+            "financial_performance": {
+              "simple_gagnant": {
+                "total_staked_eur": 769.0,
+                "total_returned_eur": 681.7,
+                "net_profit_eur": -87.3,
+                "roi_pct": -11.35,
+                "max_drawdown_eur": 101.8
+              },
+              "simple_place": {
+                "total_staked_eur": 1536.0,
+                "total_returned_eur": 1371.35,
+                "net_profit_eur": -164.65,
+                "roi_pct": -10.72,
+                "max_drawdown_eur": 168.2
+              }
+            },
+            "statistical_calibration": {
+              "brier_score": 0.0705,
+              "log_loss": 2.0281
+            }
+          },
+          "RADAR_V4": {
+            "engine_name": "RADAR_V4",
+            "total_races": 769,
+            "hit_rates": {
+              "top1_win_rate_pct": 27.57,
+              "winner_in_top3_pct": 57.61,
+              "winner_in_top8_pct": 90.25,
+              "at_least_one_base_placed_pct": 77.63,
+              "both_bases_placed_pct": 22.63,
+              "tierce_in_top8_pct": 66.19,
+              "quarte_in_top8_pct": 53.45,
+              "quinte_in_top8_pct": 42.0,
+              "outsider_placed_pct": 14.43
+            },
+            "financial_performance": {
+              "simple_gagnant": {
+                "total_staked_eur": 769.0,
+                "total_returned_eur": 729.8,
+                "net_profit_eur": -39.2,
+                "roi_pct": -5.1,
+                "max_drawdown_eur": 102.0
+              },
+              "simple_place": {
+                "total_staked_eur": 1536.0,
+                "total_returned_eur": 1365.15,
+                "net_profit_eur": -170.85,
+                "roi_pct": -11.12,
                 "max_drawdown_eur": 180.3
               }
             },
             "statistical_calibration": {
               "brier_score": 0.0718,
-              "log_loss": 2.1136
+              "log_loss": 2.1129
             }
           }
         }
@@ -5339,8 +5339,8 @@
       "priced_ratio": 1.0,
       "edition_provisoire": false,
       "provisoire_reason": null,
-      "publishable": true,
-      "publication_reason": "OK",
+      "publishable": false,
+      "publication_reason": "RACE_STARTED",
       "display_horizon": "T15",
       "editions_moteur": {
         "T_MATIN": {
@@ -5411,9 +5411,9 @@
       "autostart": false,
       "scheduled_start_time": "16:15 GMT (18:15 Paris)",
       "is_finished": false,
-      "status": "PROGRAMMÉE",
+      "status": "PARTIE",
       "is_cancelled": false,
-      "is_started": false,
+      "is_started": true,
       "start_time_utc": "2026-10-03T16:15:00Z",
       "contract_recorded": true,
       "confidence_stars": 3,
@@ -5574,7 +5574,7 @@
       "couv_moteur_count": 0,
       "couv_marche": "0/5",
       "couv_marche_count": 0,
-      "couverture_label": "Course à venir",
+      "couverture_label": "Course partie",
       "decision": "Bases: 9 - 2",
       "decision_badge": "badge-base",
       "runners": [
@@ -14462,8 +14462,8 @@
       "rope": "GAUCHE",
       "autostart": false,
       "scheduled_start_time": "15:57 GMT (17:57 Paris)",
-      "is_finished": false,
-      "status": "PARTIE",
+      "is_finished": true,
+      "status": "TERMINÉE",
       "is_cancelled": false,
       "is_started": true,
       "start_time_utc": "2026-10-03T15:57:00Z",
@@ -14617,14 +14617,20 @@
       "common_count": 7,
       "fav_presse": "-",
       "fav_marche": 7,
-      "arrivee": "En attente",
-      "arrival_list": [],
-      "couv_moteur": "0/5",
-      "couv_moteur_count": 0,
-      "couv_marche": "0/5",
-      "couv_marche_count": 0,
-      "couverture_label": "Course partie",
-      "decision": "⭐ COUPLE MAITRE: 7 - 11",
+      "arrivee": "11-7-9-8-13",
+      "arrival_list": [
+        11,
+        7,
+        9,
+        8,
+        13
+      ],
+      "couv_moteur": "5/5",
+      "couv_moteur_count": 5,
+      "couv_marche": "5/5",
+      "couv_marche_count": 5,
+      "couverture_label": "Moteur 5/5 · Marché 5/5",
+      "decision": "⭐ COUPLE MAITRE: 7 (2e 🟢) - 11 (1e 🟢)",
       "decision_badge": "badge-master",
       "runners": [
         {
@@ -14871,7 +14877,7 @@
       "provisoire_reason": null,
       "publishable": true,
       "publication_reason": "OK",
-      "display_horizon": "T30",
+      "display_horizon": "T15",
       "editions_moteur": {
         "T_MATIN": {
           "sel": "8-2-10-7-5-9-4-14",
@@ -14893,6 +14899,13 @@
           "lock": "16:02",
           "priced_ratio": 1.0,
           "odds_real": true
+        },
+        "T15": {
+          "sel": "5-8-11-12-4-7-2-9",
+          "nominal": false,
+          "lock": "16:16",
+          "priced_ratio": 1.0,
+          "odds_real": true
         }
       },
       "editions_marche": {
@@ -14909,6 +14922,13 @@
           "lock": "16:02",
           "priced_ratio": 1.0,
           "odds_real": true
+        },
+        "T15": {
+          "sel": "5-11-12-8-4-7-2-9",
+          "nominal": false,
+          "lock": "16:16",
+          "priced_ratio": 1.0,
+          "odds_real": true
         }
       },
       "date": "2026-10-03",
@@ -14918,24 +14938,24 @@
       "distance": 2850,
       "rope": "GAUCHE",
       "autostart": false,
-      "scheduled_start_time": "16:27 GMT (18:27 Paris)",
+      "scheduled_start_time": "16:32 GMT (18:32 Paris)",
       "is_finished": false,
       "status": "PROGRAMMÉE",
       "is_cancelled": false,
       "is_started": false,
-      "start_time_utc": "2026-10-03T16:27:00Z",
+      "start_time_utc": "2026-10-03T16:32:00Z",
       "contract_recorded": true,
       "confidence_stars": 3,
       "confidence_label": "⭐⭐⭐ (Course Ouverte - Équilibre Favoris / Outsiders)",
       "is_no_bet": false,
       "is_master": false,
       "np_nums": [],
-      "sel_moteur": "5-8-12-11-4-7-2-9",
+      "sel_moteur": "5-8-11-12-4-7-2-9",
       "sel_moteur_list": [
         5,
         8,
-        12,
         11,
+        12,
         4,
         7,
         2,
@@ -15001,8 +15021,8 @@
             "chevaux": [
               5,
               8,
-              12,
               11,
+              12,
               4,
               7
             ],
@@ -15011,8 +15031,8 @@
               8
             ],
             "associes": [
-              12,
               11,
+              12,
               4,
               7
             ],
@@ -15021,7 +15041,7 @@
             "cout_total_eur": null,
             "eligible": false,
             "motif_ineligibilite": "PARI_NON_OUVERT",
-            "texte": "5 - 8 - X - X - X / 12, 11, 4, 7"
+            "texte": "5 - 8 - X - X - X / 11, 12, 4, 7"
           }
         ],
         "ticket_securite": {
@@ -15050,21 +15070,21 @@
             8
           ],
           "associes": [
-            12,
             11,
+            12,
             4,
             7
           ],
-          "formule": "5 - 8 - X - X - X / 12, 11, 4, 7",
+          "formule": "5 - 8 - X - X - X / 11, 12, 4, 7",
           "combinaisons": 4,
           "budget_conseille_eur": null
         }
       },
-      "sel_marche": "5-12-11-8-4-7-2-9",
+      "sel_marche": "5-11-12-8-4-7-2-9",
       "sel_marche_list": [
         5,
-        12,
         11,
+        12,
         8,
         4,
         7,
@@ -15095,7 +15115,7 @@
           "live_odds": 3.8,
           "o_t90": 4.1,
           "o_t30": 3.8,
-          "o_t15": null,
+          "o_t15": 3.8,
           "prob_pct": 20.9,
           "value_index": 0.79,
           "smart_signal": "FORTE_BAISSE_INSIDER",
@@ -15110,12 +15130,30 @@
           "draw": 8,
           "music": "1a1a1a2a5a4a4aDa5a4a",
           "morning_odds": 18.0,
-          "live_odds": 8.8,
+          "live_odds": 7.8,
           "o_t90": 7.4,
           "o_t30": 8.8,
-          "o_t15": null,
-          "prob_pct": 12.3,
-          "value_index": 1.09,
+          "o_t15": 7.8,
+          "prob_pct": 13.6,
+          "value_index": 1.06,
+          "smart_signal": "FORTE_BAISSE_INSIDER",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 11,
+          "name": "MY LADY BLUE",
+          "driver": "S. ERNAULT",
+          "shoeing": "FERRE",
+          "draw": 11,
+          "music": "2a3a0aDa3a1aDaDa(25)1a",
+          "morning_odds": 33.0,
+          "live_odds": 6.7,
+          "o_t90": 8.8,
+          "o_t30": 8.3,
+          "o_t15": 6.7,
+          "prob_pct": 11.9,
+          "value_index": 0.8,
           "smart_signal": "FORTE_BAISSE_INSIDER",
           "is_np": false,
           "odds_real": true
@@ -15128,31 +15166,13 @@
           "draw": 12,
           "music": "3aDa6a7a1a(25)1a8a1a8a",
           "morning_odds": 6.7,
-          "live_odds": 7.1,
+          "live_odds": 6.9,
           "o_t90": 8.5,
           "o_t30": 7.1,
-          "o_t15": null,
-          "prob_pct": 10.9,
+          "o_t15": 6.9,
+          "prob_pct": 11.2,
           "value_index": 0.77,
           "smart_signal": "STABLE",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 11,
-          "name": "MY LADY BLUE",
-          "driver": "S. ERNAULT",
-          "shoeing": "FERRE",
-          "draw": 11,
-          "music": "2a3a0aDa3a1aDaDa(25)1a",
-          "morning_odds": 33.0,
-          "live_odds": 8.3,
-          "o_t90": 8.8,
-          "o_t30": 8.3,
-          "o_t15": null,
-          "prob_pct": 9.8,
-          "value_index": 0.81,
-          "smart_signal": "FORTE_BAISSE_INSIDER",
           "is_np": false,
           "odds_real": true
         },
@@ -15164,11 +15184,11 @@
           "draw": 4,
           "music": "3a4a4a0a3a2a(25)6aDa1a",
           "morning_odds": 18.0,
-          "live_odds": 10.0,
+          "live_odds": 9.8,
           "o_t90": 9.6,
           "o_t30": 10.0,
-          "o_t15": null,
-          "prob_pct": 8.3,
+          "o_t15": 9.8,
+          "prob_pct": 8.5,
           "value_index": 0.83,
           "smart_signal": "FORTE_BAISSE_INSIDER",
           "is_np": false,
@@ -15182,11 +15202,11 @@
           "draw": 7,
           "music": "7aDa1a5mDm6a6a1aDa2a",
           "morning_odds": 5.1,
-          "live_odds": 11.0,
+          "live_odds": 12.0,
           "o_t90": 10.0,
           "o_t30": 11.0,
-          "o_t15": null,
-          "prob_pct": 7.2,
+          "o_t15": 12.0,
+          "prob_pct": 6.7,
           "value_index": 0.8,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
@@ -15200,13 +15220,13 @@
           "draw": 2,
           "music": "1aDa2a4a3a3a(25)1a7a",
           "morning_odds": 9.3,
-          "live_odds": 13.0,
+          "live_odds": 16.0,
           "o_t90": 12.0,
           "o_t30": 13.0,
-          "o_t15": null,
-          "prob_pct": 6.6,
+          "o_t15": 16.0,
+          "prob_pct": 5.4,
           "value_index": 0.86,
-          "smart_signal": "LEGERE_HAUSSE",
+          "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
         },
@@ -15218,12 +15238,12 @@
           "draw": 9,
           "music": "6a1a2a5aDa1a4aDa6a(25)",
           "morning_odds": 21.0,
-          "live_odds": 16.0,
+          "live_odds": 17.0,
           "o_t90": 17.0,
           "o_t30": 16.0,
-          "o_t15": null,
-          "prob_pct": 5.4,
-          "value_index": 0.86,
+          "o_t15": 17.0,
+          "prob_pct": 5.1,
+          "value_index": 0.87,
           "smart_signal": "BAISSE_CONFIRMEE",
           "is_np": false,
           "odds_real": true
@@ -15236,12 +15256,12 @@
           "draw": 10,
           "music": "Da5a1a3a1a7a2a5aDa3a",
           "morning_odds": 1.1,
-          "live_odds": 16.0,
+          "live_odds": 18.0,
           "o_t90": 15.0,
           "o_t30": 16.0,
-          "o_t15": null,
-          "prob_pct": 5.1,
-          "value_index": 0.82,
+          "o_t15": 18.0,
+          "prob_pct": 4.6,
+          "value_index": 0.83,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -15254,12 +15274,12 @@
           "draw": 14,
           "music": "7a3aDa5a7a5a1a0aDa8a",
           "morning_odds": 39.0,
-          "live_odds": 28.0,
+          "live_odds": 31.0,
           "o_t90": 27.0,
           "o_t30": 28.0,
-          "o_t15": null,
-          "prob_pct": 3.3,
-          "value_index": 0.91,
+          "o_t15": 31.0,
+          "prob_pct": 3.0,
+          "value_index": 0.94,
           "smart_signal": "BAISSE_CONFIRMEE",
           "is_np": false,
           "odds_real": true
@@ -15272,12 +15292,12 @@
           "draw": 15,
           "music": "Da3a0aDa2a0a4a1a3a8a",
           "morning_odds": 33.0,
-          "live_odds": 28.0,
+          "live_odds": 30.0,
           "o_t90": 25.0,
           "o_t30": 28.0,
-          "o_t15": null,
-          "prob_pct": 3.0,
-          "value_index": 0.85,
+          "o_t15": 30.0,
+          "prob_pct": 2.9,
+          "value_index": 0.86,
           "smart_signal": "STABLE",
           "is_np": false,
           "odds_real": true
@@ -15290,12 +15310,12 @@
           "draw": 13,
           "music": "0aDa7a8a7a3a8a9a8aDa",
           "morning_odds": 10.0,
-          "live_odds": 32.0,
+          "live_odds": 36.0,
           "o_t90": 42.0,
           "o_t30": 32.0,
-          "o_t15": null,
-          "prob_pct": 2.6,
-          "value_index": 0.83,
+          "o_t15": 36.0,
+          "prob_pct": 2.3,
+          "value_index": 0.84,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -15308,13 +15328,13 @@
           "draw": 6,
           "music": "5aDaDaDa0a7aDa7a3a(25)",
           "morning_odds": 57.0,
-          "live_odds": 39.0,
+          "live_odds": 50.0,
           "o_t90": 27.0,
           "o_t30": 39.0,
-          "o_t15": null,
-          "prob_pct": 2.3,
-          "value_index": 0.89,
-          "smart_signal": "FORTE_BAISSE_INSIDER",
+          "o_t15": 50.0,
+          "prob_pct": 1.7,
+          "value_index": 0.86,
+          "smart_signal": "STABLE",
           "is_np": false,
           "odds_real": true
         },
@@ -15326,12 +15346,12 @@
           "draw": 3,
           "music": "8aDa(25)1a8a1a3a",
           "morning_odds": 525.0,
-          "live_odds": 119.0,
+          "live_odds": 137.0,
           "o_t90": 115.0,
           "o_t30": 119.0,
-          "o_t15": null,
+          "o_t15": 137.0,
           "prob_pct": 1.0,
-          "value_index": 1.23,
+          "value_index": 1.32,
           "smart_signal": "FORTE_BAISSE_INSIDER",
           "is_np": false,
           "odds_real": true
@@ -15344,12 +15364,12 @@
           "draw": 1,
           "music": "5a5aDa7aDaDa1a6a(25)0a",
           "morning_odds": 31.0,
-          "live_odds": 106.0,
+          "live_odds": 123.0,
           "o_t90": 107.0,
           "o_t30": 106.0,
-          "o_t15": null,
-          "prob_pct": 0.8,
-          "value_index": 0.8,
+          "o_t15": 123.0,
+          "prob_pct": 0.7,
+          "value_index": 0.81,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -15362,12 +15382,12 @@
           "draw": 16,
           "music": "8a5a(25)Da1a4a6a6a4a1a",
           "morning_odds": 463.0,
-          "live_odds": 276.0,
+          "live_odds": 270.0,
           "o_t90": 319.0,
           "o_t30": 276.0,
-          "o_t15": null,
+          "o_t15": 270.0,
           "prob_pct": 0.5,
-          "value_index": 1.38,
+          "value_index": 1.39,
           "smart_signal": "FORTE_BAISSE_INSIDER",
           "is_np": false,
           "odds_real": true
@@ -15589,7 +15609,7 @@
           "draw": 11,
           "music": "1aDaDa5aDa4a(25)8a",
           "morning_odds": 4.2,
-          "live_odds": 5.6,
+          "live_odds": 5.9,
           "o_t90": 5.4,
           "o_t30": null,
           "o_t15": null,
@@ -15607,7 +15627,7 @@
           "draw": 6,
           "music": "3a1a",
           "morning_odds": 20.0,
-          "live_odds": 7.4,
+          "live_odds": 7.6,
           "o_t90": 7.6,
           "o_t30": null,
           "o_t15": null,
@@ -15625,7 +15645,7 @@
           "draw": 7,
           "music": "1a3aDa",
           "morning_odds": 10.0,
-          "live_odds": 6.8,
+          "live_odds": 6.0,
           "o_t90": 6.8,
           "o_t30": null,
           "o_t15": null,
@@ -15643,7 +15663,7 @@
           "draw": 8,
           "music": "1a3aDaDa",
           "morning_odds": 1.1,
-          "live_odds": 6.5,
+          "live_odds": 6.9,
           "o_t90": 7.4,
           "o_t30": null,
           "o_t15": null,
@@ -15661,7 +15681,7 @@
           "draw": 12,
           "music": "3a1a0a",
           "morning_odds": 7.3,
-          "live_odds": 11.0,
+          "live_odds": 12.0,
           "o_t90": 10.0,
           "o_t30": null,
           "o_t15": null,
@@ -15679,7 +15699,7 @@
           "draw": 5,
           "music": "Da1aDaDa",
           "morning_odds": 30.0,
-          "live_odds": 8.4,
+          "live_odds": 7.8,
           "o_t90": 9.5,
           "o_t30": null,
           "o_t15": null,
@@ -15697,7 +15717,7 @@
           "draw": 1,
           "music": "Da1a",
           "morning_odds": 2.3,
-          "live_odds": 12.0,
+          "live_odds": 13.0,
           "o_t90": 11.0,
           "o_t30": null,
           "o_t15": null,
@@ -15751,7 +15771,7 @@
           "draw": 10,
           "music": "5a3a9a3aDa7a2a",
           "morning_odds": 20.0,
-          "live_odds": 20.0,
+          "live_odds": 19.0,
           "o_t90": 19.0,
           "o_t30": null,
           "o_t15": null,
@@ -15769,7 +15789,7 @@
           "draw": 15,
           "music": "1a5a3a",
           "morning_odds": 151.0,
-          "live_odds": 32.0,
+          "live_odds": 34.0,
           "o_t90": 30.0,
           "o_t30": null,
           "o_t15": null,
@@ -15787,7 +15807,7 @@
           "draw": 13,
           "music": "2aDa8aDa2aDa4a",
           "morning_odds": 7.0,
-          "live_odds": 28.0,
+          "live_odds": 29.0,
           "o_t90": 27.0,
           "o_t30": null,
           "o_t15": null,
@@ -15805,7 +15825,7 @@
           "draw": 3,
           "music": "4a1a7a",
           "morning_odds": 14.0,
-          "live_odds": 49.0,
+          "live_odds": 41.0,
           "o_t90": 47.0,
           "o_t30": null,
           "o_t15": null,
@@ -15823,7 +15843,7 @@
           "draw": 16,
           "music": "6a1a4aDa7a6a5aDa",
           "morning_odds": 10.0,
-          "live_odds": 64.0,
+          "live_odds": 66.0,
           "o_t90": 57.0,
           "o_t30": null,
           "o_t15": null,
@@ -15841,7 +15861,7 @@
           "draw": 14,
           "music": "8a8a1a5a4aDaDa9a5a6a",
           "morning_odds": 13.0,
-          "live_odds": 106.0,
+          "live_odds": 111.0,
           "o_t90": 111.0,
           "o_t30": null,
           "o_t15": null,
@@ -15859,7 +15879,7 @@
           "draw": 2,
           "music": "9a0aAa6m9m0a0a6a1a6a",
           "morning_odds": 151.0,
-          "live_odds": 149.0,
+          "live_odds": 158.0,
           "o_t90": 184.0,
           "o_t30": null,
           "o_t15": null,
@@ -16086,7 +16106,7 @@
           "draw": 16,
           "music": "4a0a4a3a2a(25)4a2a3a1a",
           "morning_odds": 10.0,
-          "live_odds": 4.8,
+          "live_odds": 4.6,
           "o_t90": 4.8,
           "o_t30": null,
           "o_t15": null,
@@ -16104,7 +16124,7 @@
           "draw": 13,
           "music": "0a1m2m3a(25)0aDm3mDmDa",
           "morning_odds": 43.0,
-          "live_odds": 7.4,
+          "live_odds": 7.6,
           "o_t90": 7.4,
           "o_t30": null,
           "o_t15": null,
@@ -16122,7 +16142,7 @@
           "draw": 8,
           "music": "9a8a3m1m6a(25)1mDa3a6m",
           "morning_odds": 2.1,
-          "live_odds": 7.6,
+          "live_odds": 7.8,
           "o_t90": 7.6,
           "o_t30": null,
           "o_t15": null,
@@ -16158,7 +16178,7 @@
           "draw": 12,
           "music": "DmDmDmDm1mDm(25)Dm2mDm",
           "morning_odds": 4.8,
-          "live_odds": 8.2,
+          "live_odds": 7.9,
           "o_t90": 8.2,
           "o_t30": null,
           "o_t15": null,
@@ -16194,7 +16214,7 @@
           "draw": 11,
           "music": "9aDa2a4aDa1aDa(25)3a2a",
           "morning_odds": 12.0,
-          "live_odds": 11.0,
+          "live_odds": 12.0,
           "o_t90": 11.0,
           "o_t30": null,
           "o_t15": null,
@@ -16212,7 +16232,7 @@
           "draw": 10,
           "music": "1m0a0a7a(25)8a7a4m3m7a",
           "morning_odds": 1.4,
-          "live_odds": 21.0,
+          "live_odds": 22.0,
           "o_t90": 21.0,
           "o_t30": null,
           "o_t15": null,
@@ -16248,7 +16268,7 @@
           "draw": 14,
           "music": "4m5m1m2m1mDmDm4mDa4m",
           "morning_odds": 3.0,
-          "live_odds": 26.0,
+          "live_odds": 23.0,
           "o_t90": 26.0,
           "o_t30": null,
           "o_t15": null,
@@ -16266,7 +16286,7 @@
           "draw": 2,
           "music": "DmDm4m7mDm4m6m(25)7m2m",
           "morning_odds": 34.0,
-          "live_odds": 27.0,
+          "live_odds": 26.0,
           "o_t90": 27.0,
           "o_t30": null,
           "o_t15": null,
@@ -16284,7 +16304,7 @@
           "draw": 15,
           "music": "6m6m4m1m6m2m3mDm(25)7m",
           "morning_odds": 7.3,
-          "live_odds": 30.0,
+          "live_odds": 29.0,
           "o_t90": 30.0,
           "o_t30": null,
           "o_t15": null,
@@ -16302,7 +16322,7 @@
           "draw": 3,
           "music": "8a1a4a8a9aDa2a8a0a8a",
           "morning_odds": 151.0,
-          "live_odds": 49.0,
+          "live_odds": 51.0,
           "o_t90": 49.0,
           "o_t30": null,
           "o_t15": null,
@@ -16320,7 +16340,7 @@
           "draw": 9,
           "music": "1mDaDa2a1aDa(25)0m6aDa",
           "morning_odds": 151.0,
-          "live_odds": 51.0,
+          "live_odds": 52.0,
           "o_t90": 51.0,
           "o_t30": null,
           "o_t15": null,
@@ -16338,7 +16358,7 @@
           "draw": 6,
           "music": "Dm4m3m0mDmDaDm1m2m9m",
           "morning_odds": 4.1,
-          "live_odds": 45.0,
+          "live_odds": 47.0,
           "o_t90": 45.0,
           "o_t30": null,
           "o_t15": null,
@@ -16374,7 +16394,7 @@
           "draw": 5,
           "music": "0a9m5mDm8mDm9m9a8mDm",
           "morning_odds": 34.0,
-          "live_odds": 86.0,
+          "live_odds": 85.0,
           "o_t90": 86.0,
           "o_t30": null,
           "o_t15": null,
@@ -16475,7 +16495,7 @@
           "draw": 13,
           "music": "0a0a1a6a8a0a7a3a3a0a",
           "morning_odds": 12.0,
-          "live_odds": 33.0,
+          "live_odds": 32.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16493,7 +16513,7 @@
           "draw": 14,
           "music": "8a0a5a4a0a2a6a0a0a6a",
           "morning_odds": 75.0,
-          "live_odds": 52.0,
+          "live_odds": 59.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16511,7 +16531,7 @@
           "draw": 2,
           "music": "5a2a4a5aDa0a9aDa4a5a",
           "morning_odds": 12.0,
-          "live_odds": 12.0,
+          "live_odds": 14.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16529,7 +16549,7 @@
           "draw": 6,
           "music": "0mDa2a6a5a6aDm8a0a8a",
           "morning_odds": 9.6,
-          "live_odds": 16.0,
+          "live_odds": 17.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16565,7 +16585,7 @@
           "draw": 7,
           "music": "5a9a7a5a8a0a0a0a(25)Da",
           "morning_odds": 75.0,
-          "live_odds": 28.0,
+          "live_odds": 25.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16583,7 +16603,7 @@
           "draw": 16,
           "music": "Da0a3a9a9a8a5aDa5a4a",
           "morning_odds": 9.6,
-          "live_odds": 4.6,
+          "live_odds": 4.7,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16601,7 +16621,7 @@
           "draw": 9,
           "music": "6a0aDa7a8a0a6aDa4a8a",
           "morning_odds": 122.0,
-          "live_odds": 66.0,
+          "live_odds": 69.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16637,7 +16657,7 @@
           "draw": 15,
           "music": "Da2a0a1a2m4a1a(25)9a0a",
           "morning_odds": 1.1,
-          "live_odds": 2.5,
+          "live_odds": 2.4,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16655,7 +16675,7 @@
           "draw": 1,
           "music": "0a0a0a0a(25)1a1a1a0a5m",
           "morning_odds": 12.0,
-          "live_odds": 44.0,
+          "live_odds": 48.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16745,7 +16765,7 @@
           "draw": 11,
           "music": "Da9mDa0aDm9aDa0mDaDa",
           "morning_odds": 9.6,
-          "live_odds": 80.0,
+          "live_odds": 90.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16760,7 +16780,7 @@
     {
       "race_id": "R9C1_03102026_AMIENS",
       "market_odds_available": false,
-      "priced_ratio": 0.231,
+      "priced_ratio": 0.385,
       "edition_provisoire": true,
       "provisoire_reason": "NOT_LOCKED",
       "publishable": false,
@@ -16839,7 +16859,7 @@
           "draw": 2,
           "music": "3a2a1a9a3aDa1a4a8a(25)",
           "morning_odds": 1.8,
-          "live_odds": 1.8,
+          "live_odds": 2.6,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16856,8 +16876,8 @@
           "shoeing": "FERRE",
           "draw": 3,
           "music": "Da8a1aDaDa1aDa6aDaDm",
-          "morning_odds": 15.0,
-          "live_odds": 15.0,
+          "morning_odds": 2.2,
+          "live_odds": 2.2,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16865,7 +16885,7 @@
           "value_index": 1.0,
           "smart_signal": "STABLE",
           "is_np": false,
-          "odds_real": false
+          "odds_real": true
         },
         {
           "num": 4,
@@ -16911,7 +16931,7 @@
           "draw": 6,
           "music": "Da2aDa3a2aDa0aDa(25)Da",
           "morning_odds": 1.1,
-          "live_odds": 9.4,
+          "live_odds": 22.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -16965,7 +16985,7 @@
           "draw": 9,
           "music": "0a4a2a4aDa3a3aDaDa(25)",
           "morning_odds": 1.8,
-          "live_odds": 1.8,
+          "live_odds": 4.4,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -17054,8 +17074,8 @@
           "shoeing": "D4",
           "draw": 14,
           "music": "1aDaDa8a3a1a7aDaDaDa",
-          "morning_odds": 15.0,
-          "live_odds": 15.0,
+          "morning_odds": 14.0,
+          "live_odds": 14.0,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -17063,7 +17083,7 @@
           "value_index": 1.0,
           "smart_signal": "STABLE",
           "is_np": false,
-          "odds_real": false
+          "odds_real": true
         }
       ]
     },
@@ -17282,7 +17302,7 @@
           "draw": 12,
           "music": "2a1a3a5a4aDa0a3aDa0a",
           "morning_odds": 13.0,
-          "live_odds": 3.9,
+          "live_odds": 3.5,
           "o_t90": 3.9,
           "o_t30": null,
           "o_t15": null,
@@ -17300,7 +17320,7 @@
           "draw": 9,
           "music": "2a4a0a2a1a1a2a(25)1a4a",
           "morning_odds": 13.0,
-          "live_odds": 8.0,
+          "live_odds": 8.3,
           "o_t90": 8.0,
           "o_t30": null,
           "o_t15": null,
@@ -17318,7 +17338,7 @@
           "draw": 3,
           "music": "6a2a5aDa5a7aDa7a(25)4a",
           "morning_odds": 17.0,
-          "live_odds": 8.0,
+          "live_odds": 7.4,
           "o_t90": 8.0,
           "o_t30": null,
           "o_t15": null,
@@ -17336,7 +17356,7 @@
           "draw": 6,
           "music": "1a3a1a7a2a6a4a1a1a2a",
           "morning_odds": 1.7,
-          "live_odds": 8.3,
+          "live_odds": 9.5,
           "o_t90": 8.3,
           "o_t30": null,
           "o_t15": null,
@@ -17354,7 +17374,7 @@
           "draw": 10,
           "music": "6a2a5a5a6a3a2a4a5a1a",
           "morning_odds": 2.0,
-          "live_odds": 9.2,
+          "live_odds": 9.5,
           "o_t90": 9.2,
           "o_t30": null,
           "o_t15": null,
@@ -17372,7 +17392,7 @@
           "draw": 7,
           "music": "DaDm4a3aDa1a2aDa5a9a",
           "morning_odds": 3.2,
-          "live_odds": 8.8,
+          "live_odds": 9.1,
           "o_t90": 8.8,
           "o_t30": null,
           "o_t15": null,
@@ -17390,7 +17410,7 @@
           "draw": 8,
           "music": "1a5aDa1aDaDaDa5a0a2a",
           "morning_odds": 13.0,
-          "live_odds": 12.0,
+          "live_odds": 14.0,
           "o_t90": 12.0,
           "o_t30": null,
           "o_t15": null,
@@ -17408,7 +17428,7 @@
           "draw": 5,
           "music": "7aDa0a0a6a9a6a6a0a(25)",
           "morning_odds": 1.1,
-          "live_odds": 14.0,
+          "live_odds": 16.0,
           "o_t90": 14.0,
           "o_t30": null,
           "o_t15": null,
@@ -17426,7 +17446,7 @@
           "draw": 1,
           "music": "3a7a3a9a0a0a(25)6a0a6a",
           "morning_odds": 2.5,
-          "live_odds": 16.0,
+          "live_odds": 18.0,
           "o_t90": 16.0,
           "o_t30": null,
           "o_t15": null,
@@ -17444,7 +17464,7 @@
           "draw": 2,
           "music": "2a1a5a8a0a2a8a1a7a8a",
           "morning_odds": 14.0,
-          "live_odds": 19.0,
+          "live_odds": 14.0,
           "o_t90": 19.0,
           "o_t30": null,
           "o_t15": null,
@@ -17462,7 +17482,7 @@
           "draw": 11,
           "music": "Aa7a6a5a0aDa3a1a2aDa",
           "morning_odds": 25.0,
-          "live_odds": 22.0,
+          "live_odds": 25.0,
           "o_t90": 22.0,
           "o_t30": null,
           "o_t15": null,
@@ -17480,7 +17500,7 @@
           "draw": 4,
           "music": "Da9aDa6a0a9a7aDa0a7a",
           "morning_odds": 78.0,
-          "live_odds": 88.0,
+          "live_odds": 100.0,
           "o_t90": 88.0,
           "o_t30": null,
           "o_t15": null,
@@ -17495,11 +17515,11 @@
     {
       "race_id": "R9C3_03102026_AMIENS",
       "market_odds_available": false,
-      "priced_ratio": 0.0,
+      "priced_ratio": 0.083,
       "edition_provisoire": true,
       "provisoire_reason": "NOT_LOCKED",
       "publishable": false,
-      "publication_reason": "ODDS_DEFAULT",
+      "publication_reason": "PRICED_RATIO_LOW",
       "display_horizon": null,
       "editions_moteur": {},
       "editions_marche": {},
@@ -17643,8 +17663,8 @@
           "shoeing": "FERRE",
           "draw": 6,
           "music": "5a8aDa0a8a4aDmDa",
-          "morning_odds": 15.0,
-          "live_odds": 15.0,
+          "morning_odds": 1.1,
+          "live_odds": 1.1,
           "o_t90": null,
           "o_t30": null,
           "o_t15": null,
@@ -17652,7 +17672,7 @@
           "value_index": 1.0,
           "smart_signal": "STABLE",
           "is_np": false,
-          "odds_real": false
+          "odds_real": true
         },
         {
           "num": 7,
@@ -23169,7 +23189,7 @@
       "edition_provisoire": true,
       "provisoire_reason": "ODDS_DEFAULT",
       "publishable": false,
-      "publication_reason": "ODDS_DEFAULT",
+      "publication_reason": "RACE_STARTED",
       "display_horizon": "T15",
       "editions_moteur": {
         "T_MATIN": {
@@ -23211,9 +23231,9 @@
       "autostart": false,
       "scheduled_start_time": "16:04 GMT (18:04 Paris)",
       "is_finished": false,
-      "status": "PROGRAMMÉE",
+      "status": "ARRIVÉE PROVISOIRE",
       "is_cancelled": false,
-      "is_started": false,
+      "is_started": true,
       "start_time_utc": "2026-10-03T16:04:00Z",
       "contract_recorded": true,
       "confidence_stars": 2,
@@ -23362,7 +23382,7 @@
       "couv_moteur_count": 0,
       "couv_marche": "0/5",
       "couv_marche_count": 0,
-      "couverture_label": "Course à venir",
+      "couverture_label": "Course partie",
       "decision": "Bases: 2 - 3",
       "decision_badge": "badge-base",
       "runners": [
