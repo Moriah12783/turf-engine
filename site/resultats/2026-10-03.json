@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "89d7c311d6a97f5b460522c68b8973597de3e674",
-  "run_id": "37114154720",
+  "commit": "8b895470398f9909af8875e75990be52aedf5d29",
+  "run_id": "37114990450",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-03",
- "genere_le_utc": "2026-10-03T09:47:41Z",
+ "genere_le_utc": "2026-10-03T10:02:55Z",
  "nb_courses": 49,
  "compte_par_statut": {
-  "EN_ATTENTE": 46,
+  "EN_ATTENTE": 45,
   "PROVISOIRE": 0,
-  "DEFINITIVE": 3,
+  "DEFINITIVE": 4,
   "ANNULEE": 0
  },
- "empreinte_sha256": "5e958369a7cf12199b7b284d54c62354be1083eb2f1c81a9974365cacd7a55be",
+ "empreinte_sha256": "c870803d727de2226e9a8e5652a0308d0e374b865effef26780077be24628ce4",
  "courses": [
   {
    "course_id": "R1C1_03102026_ParisLongchamp",
@@ -627,7 +627,7 @@
     "verifiee_le_utc": "2026-10-03T09:01:17Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-03T09:01:17Z",
-    "derniere_verification_utc": "2026-10-03T09:46:17Z"
+    "derniere_verification_utc": "2026-10-03T10:01:29Z"
    },
    "correction": {
     "version": 1,
@@ -790,7 +790,7 @@
     "verifiee_le_utc": "2026-10-03T09:31:28Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-03T09:31:28Z",
-    "derniere_verification_utc": "2026-10-03T09:46:17Z"
+    "derniere_verification_utc": "2026-10-03T10:01:29Z"
    },
    "correction": {
     "version": 1,
@@ -833,41 +833,152 @@
     "partants_actifs": 8
    },
    "statut": {
-    "code": "EN_ATTENTE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "DEPART_DANS_TROIS_MINUTES"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 2,
+     "nom": "DINO D'OR",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 5,
+     "nom": "GRECIAN LIGHTNING",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 3,
+     "nom": "DON DINO",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 4,
+     "nom": "TELMORION",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 7,
+     "nom": "NECTAR DES DIEUX",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 8,
+     "nom": "PARADOX TOO",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 1,
+     "nom": "NOT YET",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    2,
+    5,
+    3,
+    4,
+    7,
+    8,
+    1
+   ],
+   "non_classes": [
+    {
+     "num": 6,
+     "nom": "ENVOL BLEU",
+     "incident": "ARRETE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "2": 2.0
+    },
+    "simple_place": {
+     "2": 1.3,
+     "5": 2.1,
+     "3": 1.9
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "2-5",
+      "dividende_pour_1_eur": 7.9
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "2-5",
+      "dividende_pour_1_eur": 3.6
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "2-3",
+      "dividende_pour_1_eur": 3.8
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "5-3",
+      "dividende_pour_1_eur": 4.7
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "2-5-3",
+      "dividende_pour_1_eur": 16.8
+     },
+     {
+      "type_pari": "SUPER_QUATRE",
+      "combinaison": "2-5-3-4",
+      "dividende_pour_1_eur": 263.5
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/03102026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "premiere_lecture_utc": "2026-10-03T10:01:29Z",
+    "definitive_depuis_utc": "2026-10-03T10:01:29Z",
+    "verifiee_le_utc": "2026-10-03T10:01:29Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-10-03T10:01:29Z",
+    "derniere_verification_utc": "2026-10-03T10:01:29Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "DEFINITIVE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-10-03T10:01:29Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       2,
+       5,
+       3,
+       4,
+       7,
+       8,
+       1
+      ]
+     }
+    ]
    }
   },
   {
@@ -881,9 +992,9 @@
     "libelle": "PRIX PIERRE DEBROISE",
     "discipline": "OBSTACLE_HAIE",
     "distance_m": 3550,
-    "heure_depart_utc": "2026-10-03T10:16:00Z",
+    "heure_depart_utc": "2026-10-03T10:20:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "10:16 GMT (12:16 Paris)",
+    "heure_depart_affichee": "10:20 GMT (12:20 Paris)",
     "partants_declares": 9,
     "partants_actifs": 9
    },
@@ -892,7 +1003,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -1294,7 +1405,7 @@
     "verifiee_le_utc": "2026-10-03T09:46:17Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-03T09:46:17Z",
-    "derniere_verification_utc": "2026-10-03T09:46:17Z"
+    "derniere_verification_utc": "2026-10-03T10:01:29Z"
    },
    "correction": {
     "version": 1,
@@ -1345,7 +1456,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
