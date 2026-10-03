@@ -93,11 +93,34 @@ def test_nuit_ecrit_la_copie_sur_la_cle_de_repetition(mirror, tmp_path, fenetre_
 
 
 def test_nuit_hors_delai_a_expliquer(mirror, tmp_path, fenetre_miroir):
+    """Lancement en retard (horaire GitHub) : calcul jugé, mais rien n'est
+    envoyé ; la copie du matin reste en place (cas du 02/10 à 10h56)."""
+    s3 = FakeS3()
+    s3.objects[repetition.REPETITION_KEY] = {"body": b"copie de 05h05", "meta": {"sha256": "x"}}
+    rep, _ = _quiet(repetition.nuit, mirror, _bench(str(tmp_path / "c.db")), FakePMU(mirror, LAST_DAY, JOUR_MIROIR),
+                    s3, "b", prevu="05:05", horloge=_clock("10:56:00", "10:57:00"))
+    assert rep["retard_declenchement_min"] == 351.0 and not rep["calcul_avant_06h20"]
+    assert rep["envoi"] == "SANS_ENVOI_HORS_DELAI" and rep["verdict"] == "A_EXPLIQUER" and "sha256" not in rep
+    assert s3.objects[repetition.REPETITION_KEY]["body"] == b"copie de 05h05"
+
+
+def test_envoi_apres_06h28_a_expliquer(mirror, tmp_path, fenetre_miroir):
     s3 = FakeS3()
     rep, _ = _quiet(repetition.nuit, mirror, _bench(str(tmp_path / "c.db")), FakePMU(mirror, LAST_DAY, JOUR_MIROIR),
-                    s3, "b", prevu="05:50", horloge=_clock("06:05:00", "06:21:00", "06:29:00"))
-    assert rep["retard_declenchement_min"] == 15.0 and not rep["calcul_avant_06h20"]
-    assert not rep["envoi_avant_06h28"] and rep["verdict"] == "A_EXPLIQUER"
+                    s3, "b", prevu="05:50", horloge=_clock("06:05:00", "06:19:00", "06:29:00"))
+    assert rep["calcul_avant_06h20"] and not rep["envoi_avant_06h28"] and rep["verdict"] == "A_EXPLIQUER"
+    assert list(s3.objects) == [repetition.REPETITION_KEY]
+
+
+def test_controle_pendant_la_fenetre_n_envoie_rien(mirror, tmp_path, monkeypatch):
+    """Une PR pendant la répétition ne remplace jamais la copie du matin."""
+    monkeypatch.setattr(repetition, "FENETRE", (LAST_DAY, "2026-02-22"))
+    monkeypatch.setattr(fondamental_nuit, "PAUSE_S", 0.0)
+    s3 = FakeS3()
+    rep, _ = _quiet(repetition.nuit, mirror, _bench(str(tmp_path / "c.db")), FakePMU(mirror, LAST_DAY, JOUR_MIROIR),
+                    s3, "b", controle=True, horloge=_clock("11:00:00", "11:01:00", day=LAST_DAY))
+    assert rep["jour"] == JOUR_MIROIR and rep["ecrit"] and rep["envoi"] == "SANS_ENVOI_CONTROLE"
+    assert rep["verdict"] == "OK" and s3.objects == {}
 
 
 def _add_fundamental(path, version="fond-v1", create=True):

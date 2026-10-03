@@ -13,6 +13,13 @@ Chaque matin de la fenêtre, aux horaires réels de l'ombre (05h05 UTC, secours
 Journal : horaires réels (retard de déclenchement, calcul fini avant 06h20,
 envoi avant 06h28) et agrégats du calcul.
 
+Rien n'est envoyé par un lancement en retard (calcul fini après 06h20, comme la
+nuit de l'ombre) ni par un contrôle de PR pendant la fenêtre : la copie du
+matin reste celle de 05h05 (ou du secours de 05h50) jusqu'au lancement des
+devs. Le 02/10, l'horaire GitHub de secours est parti à 10h56 et sa copie,
+prise après le verrou du matin de la production, avait remplacé celle de
+05h05.
+
 Les devs NVE et daily_sync récupèrent la copie (``fetch``), enchaînent chez
 eux le verrou du matin et le moteur avec l'ombre, puis contrôlent la chaîne
 (``diagnostic``) : probabilités fondamentales complètes et d'une seule
@@ -114,13 +121,17 @@ def nuit(history_path: str, copie_path: str, fetcher, client, bucket: str, prevu
         rep["refus_calcul"] = calc["refus"]                 # en production : pas d'ombre ce jour-là
     if not controle:
         rep["calcul_avant_06h20"] = (fin.hour, fin.minute) < fondamental_nuit.HEURE_LIMITE_UTC
-    if rep["ecrit"]:
+    if rep["ecrit"] and controle and dans_la_fenetre(today.isoformat()):
+        rep["envoi"] = "SANS_ENVOI_CONTROLE"                # pendant la répétition, la copie du matin reste en place
+    elif rep["ecrit"] and not controle and not rep["calcul_avant_06h20"]:
+        rep["envoi"] = "SANS_ENVOI_HORS_DELAI"              # comme la nuit de l'ombre : rien après 06h20
+    elif rep["ecrit"]:
         rep["sha256"] = upload(client, bucket, copie_path, {"jour": jour, "model_version": rep["model_version"]})
         envoi = horloge()
         rep["envoi_utc"] = envoi.strftime("%H:%M:%S")
         if not controle:
             rep["envoi_avant_06h28"] = (envoi.hour, envoi.minute) < LIMITE_ENVOI_UTC
-    ok = rep["ecrit"] and (controle or (rep["calcul_avant_06h20"] and rep["envoi_avant_06h28"]))
+    ok = rep["ecrit"] and (controle or (rep["calcul_avant_06h20"] and rep.get("envoi_avant_06h28", False)))
     rep["verdict"] = "OK" if ok else "A_EXPLIQUER"
     _log("REPETITION_NUIT", rep)
     return rep
