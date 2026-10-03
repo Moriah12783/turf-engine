@@ -52,7 +52,10 @@ critère atteint en premier.
   Cloudflare avec les horaires GitHub en filet, le workflow
   `repetition_ombre.yml` fait une copie en lecture seule de la base, y calcule
   le fondamental du jour et l'envoie sur la clé privée
-  `lab/repetition/turf_bench.db`, jamais sur la base de production.
+  `lab/repetition/turf_bench.db`, jamais sur la base de production. Un
+  lancement en retard (calcul fini après 06h20) ou un contrôle de PR n'envoie
+  rien : la copie du matin reste en place (constaté le 02/10, horaire GitHub
+  parti à 10h56).
 - **Matin** : les devs NVE et daily_sync récupèrent la copie
   (`python -m turf_lab.repetition fetch`) et y enchaînent le verrou du matin et
   le moteur avec l'ombre. Ils lancent ensuite le diagnostic
