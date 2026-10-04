@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "d4880afa4cf40074ae9d27e6c786332c76028136",
-  "run_id": "37194023442",
+  "commit": "9d381cb1d333eb1e69edefd2747a4c5b5127efbc",
+  "run_id": "37194805986",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-04",
- "genere_le_utc": "2026-10-04T10:02:39Z",
+ "genere_le_utc": "2026-10-04T10:17:06Z",
  "nb_courses": 51,
  "compte_par_statut": {
-  "EN_ATTENTE": 49,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 48,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "cf7c04504818e27f7f9e152ab4cda8b55d0a2306d138dacfdce9458da38363b7",
+ "empreinte_sha256": "62269bf5c24f3535fe3e56fc0f6bfc63f3a1d86a2560ba8ec21348c331b17a0b",
  "courses": [
   {
    "course_id": "R1C1_04102026_ParisLongchamp",
@@ -671,7 +671,7 @@
     "verifiee_le_utc": "2026-10-04T09:16:28Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-04T09:16:28Z",
-    "derniere_verification_utc": "2026-10-04T10:01:47Z"
+    "derniere_verification_utc": "2026-10-04T10:16:11Z"
    },
    "correction": {
     "version": 1,
@@ -842,7 +842,7 @@
     "verifiee_le_utc": "2026-10-04T10:01:47Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-04T10:01:47Z",
-    "derniere_verification_utc": "2026-10-04T10:01:47Z"
+    "derniere_verification_utc": "2026-10-04T10:16:11Z"
    },
    "correction": {
     "version": 2,
@@ -900,15 +900,51 @@
     "partants_actifs": 5
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
+    "pmu_statut": "ARRIVEE_PROVISOIRE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 5,
+     "nom": "BONITA DE LA SERRE",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 1,
+     "nom": "LE GENE BLEU",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 2,
+     "nom": "KWELAFE",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 4,
+     "nom": "IN VICTIS",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    5,
+    1,
+    2,
+    4
+   ],
+   "non_classes": [
+    {
+     "num": 3,
+     "nom": "PIPER'S HILL",
+     "incident": "TOMBE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": false,
@@ -920,21 +956,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/04102026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-10-04T10:16:11Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-10-04T10:16:11Z",
+    "derniere_verification_utc": "2026-10-04T10:16:11Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-10-04T10:16:11Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       5,
+       1,
+       2,
+       4
+      ]
+     }
+    ]
    }
   },
   {
