@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "8622d12f9bb2358082589eb6ceb650f17737fbca",
-  "run_id": "37196446340",
+  "commit": "c09f467360a01c656eea439e561f79c992db2bf1",
+  "run_id": "37197286069",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-04",
- "genere_le_utc": "2026-10-04T10:47:58Z",
+ "genere_le_utc": "2026-10-04T11:02:13Z",
  "nb_courses": 51,
  "compte_par_statut": {
-  "EN_ATTENTE": 48,
+  "EN_ATTENTE": 47,
   "PROVISOIRE": 0,
-  "DEFINITIVE": 3,
+  "DEFINITIVE": 4,
   "ANNULEE": 0
  },
- "empreinte_sha256": "4ed9919432c2abd56e9f5cc2040aac1fb1bb843265047c143e8799f2b1546bfe",
+ "empreinte_sha256": "d2ddead6728dc7909c383c89675ff373abd52199aa64d62ab25be09985dd956e",
  "courses": [
   {
    "course_id": "R1C1_04102026_ParisLongchamp",
@@ -29,9 +29,9 @@
     "libelle": "QATAR PRIX MARCEL BOUSSAC - CRITERIUM DES POULICHES",
     "discipline": "PLAT",
     "distance_m": 1600,
-    "heure_depart_utc": "2026-10-04T11:31:00Z",
+    "heure_depart_utc": "2026-10-04T11:33:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "11:31 GMT (13:31 Paris)",
+    "heure_depart_affichee": "11:33 GMT (13:33 Paris)",
     "partants_declares": 12,
     "partants_actifs": 12
    },
@@ -671,7 +671,7 @@
     "verifiee_le_utc": "2026-10-04T09:16:28Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-04T09:16:28Z",
-    "derniere_verification_utc": "2026-10-04T10:46:29Z"
+    "derniere_verification_utc": "2026-10-04T11:01:21Z"
    },
    "correction": {
     "version": 1,
@@ -842,7 +842,7 @@
     "verifiee_le_utc": "2026-10-04T10:01:47Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-04T10:01:47Z",
-    "derniere_verification_utc": "2026-10-04T10:46:29Z"
+    "derniere_verification_utc": "2026-10-04T11:01:21Z"
    },
    "correction": {
     "version": 2,
@@ -986,7 +986,7 @@
     "verifiee_le_utc": "2026-10-04T10:31:20Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-04T10:31:20Z",
-    "derniere_verification_utc": "2026-10-04T10:46:29Z"
+    "derniere_verification_utc": "2026-10-04T11:01:21Z"
    },
    "correction": {
     "version": 2,
@@ -1039,14 +1039,93 @@
     "partants_actifs": 11
    },
    "statut": {
-    "code": "EN_ATTENTE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "DEPART_DANS_TROIS_MINUTES"
+    "pmu_statut": "FIN_COURSE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 5,
+     "nom": "MAAVAH",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 7,
+     "nom": "KNOSSINGTON",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 12,
+     "nom": "TOOGOODFORSCHOOL",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 6,
+     "nom": "LITTLE LADY",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 3,
+     "nom": "FIREMAN",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 11,
+     "nom": "WILMOT",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 9,
+     "nom": "AGRI",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 4,
+     "nom": "PLACEHOLDER",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 8,
+     "nom": "KARINAS DREAM",
+     "dead_heat": false
+    },
+    {
+     "rang": 10,
+     "num": 2,
+     "nom": "BEST LOOKING",
+     "dead_heat": false
+    },
+    {
+     "rang": 11,
+     "num": 10,
+     "nom": "AUDELADESETOILES",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    5,
+    7,
+    12,
+    6,
+    3,
+    11,
+    9,
+    4,
+    8,
+    2,
+    10
+   ],
    "non_classes": [],
    "non_partants": [
     {
@@ -1055,30 +1134,163 @@
     }
    ],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "5": 22.3
+    },
+    "simple_place": {
+     "5": 4.0,
+     "7": 1.8,
+     "12": 2.9
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "5-7",
+      "dividende_pour_1_eur": 21.8
+     },
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "5-NP",
+      "dividende_pour_1_eur": 5.9
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "5-7",
+      "dividende_pour_1_eur": 7.7
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "5-12",
+      "dividende_pour_1_eur": 14.1
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "7-12",
+      "dividende_pour_1_eur": 7.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "5-NP",
+      "dividende_pour_1_eur": 3.2
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "7-NP",
+      "dividende_pour_1_eur": 2.3
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "12-NP",
+      "dividende_pour_1_eur": 3.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "5-7",
+      "dividende_pour_1_eur": 2.2
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "5-12",
+      "dividende_pour_1_eur": 2.2
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "5-6",
+      "dividende_pour_1_eur": 2.2
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "7-12",
+      "dividende_pour_1_eur": 2.2
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "7-6",
+      "dividende_pour_1_eur": 2.2
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "12-6",
+      "dividende_pour_1_eur": 2.2
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "5-NP",
+      "dividende_pour_1_eur": 1.3
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "7-NP",
+      "dividende_pour_1_eur": 1.3
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "12-NP",
+      "dividende_pour_1_eur": 1.3
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "6-NP",
+      "dividende_pour_1_eur": 1.3
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "5-7-12",
+      "dividende_pour_1_eur": 57.1
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "5-7-NP",
+      "dividende_pour_1_eur": 18.4
+     },
+     {
+      "type_pari": "MINI_MULTI",
+      "combinaison": "5-7-12-6",
+      "dividende_pour_1_eur": 3.6
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/04102026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "premiere_lecture_utc": "2026-10-04T11:01:21Z",
+    "definitive_depuis_utc": "2026-10-04T11:01:21Z",
+    "verifiee_le_utc": "2026-10-04T11:01:21Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-10-04T11:01:21Z",
+    "derniere_verification_utc": "2026-10-04T11:01:21Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "DEFINITIVE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-10-04T11:01:21Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       5,
+       7,
+       12,
+       6,
+       3,
+       11,
+       9,
+       4,
+       8,
+       2,
+       10
+      ]
+     }
+    ]
    }
   },
   {
@@ -1092,9 +1304,9 @@
     "libelle": "PRIX MID DANCER",
     "discipline": "OBSTACLE_HAIE",
     "distance_m": 3600,
-    "heure_depart_utc": "2026-10-04T11:13:00Z",
+    "heure_depart_utc": "2026-10-04T11:14:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "11:13 GMT (13:13 Paris)",
+    "heure_depart_affichee": "11:14 GMT (13:14 Paris)",
     "partants_declares": 9,
     "partants_actifs": 9
    },
@@ -1103,7 +1315,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -1783,7 +1995,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
