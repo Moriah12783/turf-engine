@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "97ce1f84590232dd840781d2af382f823e40d625",
-  "run_id": "37193224737",
+  "commit": "d4880afa4cf40074ae9d27e6c786332c76028136",
+  "run_id": "37194023442",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-04",
- "genere_le_utc": "2026-10-04T09:47:56Z",
+ "genere_le_utc": "2026-10-04T10:02:39Z",
  "nb_courses": 51,
  "compte_par_statut": {
   "EN_ATTENTE": 49,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 1,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "88e92e4a1dfb736768ef3ae266bf9bb1e3ad0d4124c919f1e21ab4cf63b40ab5",
+ "empreinte_sha256": "cf7c04504818e27f7f9e152ab4cda8b55d0a2306d138dacfdce9458da38363b7",
  "courses": [
   {
    "course_id": "R1C1_04102026_ParisLongchamp",
@@ -478,7 +478,7 @@
     "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "16:35 GMT (18:35 Paris)",
     "partants_declares": 15,
-    "partants_actifs": 15
+    "partants_actifs": 14
    },
    "statut": {
     "code": "EN_ATTENTE",
@@ -490,7 +490,12 @@
    "classement": [],
    "arrivee": [],
    "non_classes": [],
-   "non_partants": [],
+   "non_partants": [
+    {
+     "num": 15,
+     "nom": "DROGO"
+    }
+   ],
    "rapports": {
     "disponibles": false,
     "unite": "EUR pour 1 EUR de mise",
@@ -666,7 +671,7 @@
     "verifiee_le_utc": "2026-10-04T09:16:28Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-04T09:16:28Z",
-    "derniere_verification_utc": "2026-10-04T09:46:38Z"
+    "derniere_verification_utc": "2026-10-04T10:01:47Z"
    },
    "correction": {
     "version": 1,
@@ -706,11 +711,11 @@
     "partants_actifs": 9
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE"
+    "pmu_statut": "FIN_COURSE"
    },
    "classement": [
     {
@@ -736,22 +741,94 @@
      "num": 9,
      "nom": "KIANGA",
      "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 3,
+     "nom": "TOOCOOLTOBECOOL",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 1,
+     "nom": "IN SPACE",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 8,
+     "nom": "TOUNGE",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 4,
+     "nom": "CARMONTELLE",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 7,
+     "nom": "FLYING MAN",
+     "dead_heat": false
     }
    ],
    "arrivee": [
     6,
     5,
     2,
-    9
+    9,
+    3,
+    1,
+    8,
+    4,
+    7
    ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "6": 8.3
+    },
+    "simple_place": {
+     "6": 1.7,
+     "5": 1.4,
+     "2": 1.9
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "6-5",
+      "dividende_pour_1_eur": 11.9
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "6-5",
+      "dividende_pour_1_eur": 3.6
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "6-2",
+      "dividende_pour_1_eur": 4.8
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "5-2",
+      "dividende_pour_1_eur": 3.5
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "6-5-2",
+      "dividende_pour_1_eur": 11.6
+     },
+     {
+      "type_pari": "SUPER_QUATRE",
+      "combinaison": "6-5-2-9",
+      "dividende_pour_1_eur": 430.7
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -761,14 +838,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-10-04T09:46:38Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-10-04T10:01:47Z",
+    "verifiee_le_utc": "2026-10-04T10:01:47Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-10-04T09:46:38Z",
-    "derniere_verification_utc": "2026-10-04T09:46:38Z"
+    "derniere_modification_utc": "2026-10-04T10:01:47Z",
+    "derniere_verification_utc": "2026-10-04T10:01:47Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -782,6 +859,24 @@
        5,
        2,
        9
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-10-04T10:01:47Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       6,
+       5,
+       2,
+       9,
+       3,
+       1,
+       8,
+       4,
+       7
       ]
      }
     ]
@@ -809,7 +904,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
    },
    "classement": [],
    "arrivee": [],
