@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "c96ca0cd99f7be30f1a70ed25a90a9c107f48899",
-  "run_id": "37279585210",
+  "commit": "9dc099f89bd8f9c95f48a7942fa99c4ecd5ce154",
+  "run_id": "37281095621",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-05",
- "genere_le_utc": "2026-10-05T07:47:46Z",
+ "genere_le_utc": "2026-10-05T08:03:21Z",
  "nb_courses": 33,
  "compte_par_statut": {
   "EN_ATTENTE": 31,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 1,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "81025b70fe4000270d71c24ec1a233e2bfc7d0c14661a7ffe860f01195dbae80",
+ "empreinte_sha256": "b3e4a072fe88bbc0aba063c20aa626b544489e66c1298d88788f0f81731ec301",
  "courses": [
   {
    "course_id": "R1C1_05102026_ENGHIEN",
@@ -1587,7 +1587,7 @@
     "verifiee_le_utc": "2026-10-05T07:16:38Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-05T07:16:38Z",
-    "derniere_verification_utc": "2026-10-05T07:46:17Z"
+    "derniere_verification_utc": "2026-10-05T08:01:56Z"
    },
    "correction": {
     "version": 1,
@@ -1633,11 +1633,11 @@
     "partants_actifs": 14
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE"
+    "pmu_statut": "FIN_COURSE"
    },
    "classement": [
     {
@@ -1648,23 +1648,28 @@
     },
     {
      "rang": 2,
-     "num": 1,
-     "nom": "NEROLI D'OURVILLE",
+     "num": 8,
+     "nom": "NIGLO DE BELLANDE",
      "dead_heat": false
     },
     {
      "rang": 3,
-     "num": 8,
-     "nom": "NIGLO DE BELLANDE",
+     "num": 10,
+     "nom": "NOAM",
      "dead_heat": false
     }
    ],
    "arrivee": [
     4,
-    1,
-    8
+    8,
+    10
    ],
    "non_classes": [
+    {
+     "num": 1,
+     "nom": "NEROLI D'OURVILLE",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
     {
      "num": 2,
      "nom": "NILL TRY",
@@ -1688,11 +1693,33 @@
    ],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "4": 12.6
+    },
+    "simple_place": {
+     "4": 3.8,
+     "8": 3.0,
+     "10": 14.0
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "8-10",
+      "dividende_pour_1_eur": 5.3
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -1702,15 +1729,15 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-10-05T07:46:17Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-10-05T08:01:56Z",
+    "verifiee_le_utc": "2026-10-05T08:01:56Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-10-05T07:46:17Z",
-    "derniere_verification_utc": "2026-10-05T07:46:17Z"
+    "derniere_modification_utc": "2026-10-05T08:01:56Z",
+    "derniere_verification_utc": "2026-10-05T08:01:56Z"
    },
    "correction": {
-    "version": 1,
-    "nb_corrections": 0,
+    "version": 2,
+    "nb_corrections": 1,
     "historique": [
      {
       "version": 1,
@@ -1722,6 +1749,18 @@
        4,
        1,
        8
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "CORRECTION_CLASSEMENT",
+      "horodatage_utc": "2026-10-05T08:01:56Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       4,
+       8,
+       10
       ]
      }
     ]
@@ -1749,7 +1788,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "DEPART_CONFIRME"
    },
    "classement": [],
    "arrivee": [],
