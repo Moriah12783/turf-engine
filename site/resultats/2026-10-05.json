@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "a0cf6e7709863da27a6739310f312c21e650d703",
-  "run_id": "37292240401",
+  "commit": "26d25022f8951d99f43190d60849471d40a0b150",
+  "run_id": "37293808774",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-05",
- "genere_le_utc": "2026-10-05T09:48:11Z",
+ "genere_le_utc": "2026-10-05T10:02:38Z",
  "nb_courses": 33,
  "compte_par_statut": {
-  "EN_ATTENTE": 27,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 26,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 6,
   "ANNULEE": 0
  },
- "empreinte_sha256": "62390e1d9b5cf6eff4a2f13a2217423f6718f34d16afbfd4a44d697a90b1e78d",
+ "empreinte_sha256": "151132ad307b7bb35ffa82b6ca488a4c40e8327faaadad467cc2968581676acb",
  "courses": [
   {
    "course_id": "R1C1_05102026_ENGHIEN",
@@ -496,14 +496,44 @@
     "partants_actifs": 8
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
+    "pmu_statut": "ARRIVEE_PROVISOIRE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 2,
+     "nom": "TIMUR",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 3,
+     "nom": "MISS CHOCO",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 4,
+     "nom": "KALIMAAT",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 1,
+     "nom": "FARADAY",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    2,
+    3,
+    4,
+    1
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
@@ -516,21 +546,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/05102026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-10-05T10:01:13Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-10-05T10:01:13Z",
+    "derniere_verification_utc": "2026-10-05T10:01:13Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-10-05T10:01:13Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       2,
+       3,
+       4,
+       1
+      ]
+     }
+    ]
    }
   },
   {
@@ -1591,7 +1635,7 @@
     "verifiee_le_utc": "2026-10-05T07:16:38Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-05T07:16:38Z",
-    "derniere_verification_utc": "2026-10-05T09:46:44Z"
+    "derniere_verification_utc": "2026-10-05T10:01:13Z"
    },
    "correction": {
     "version": 1,
@@ -1737,7 +1781,7 @@
     "verifiee_le_utc": "2026-10-05T08:01:56Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-05T08:01:56Z",
-    "derniere_verification_utc": "2026-10-05T09:46:44Z"
+    "derniere_verification_utc": "2026-10-05T10:01:13Z"
    },
    "correction": {
     "version": 2,
@@ -1934,7 +1978,7 @@
     "verifiee_le_utc": "2026-10-05T08:16:33Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-05T08:16:33Z",
-    "derniere_verification_utc": "2026-10-05T09:46:44Z"
+    "derniere_verification_utc": "2026-10-05T10:01:13Z"
    },
    "correction": {
     "version": 1,
@@ -2125,7 +2169,7 @@
     "verifiee_le_utc": "2026-10-05T08:46:15Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-05T08:46:15Z",
-    "derniere_verification_utc": "2026-10-05T09:46:44Z"
+    "derniere_verification_utc": "2026-10-05T10:01:13Z"
    },
    "correction": {
     "version": 1,
@@ -2328,7 +2372,7 @@
     "verifiee_le_utc": "2026-10-05T09:16:13Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-05T09:16:13Z",
-    "derniere_verification_utc": "2026-10-05T09:46:44Z"
+    "derniere_verification_utc": "2026-10-05T10:01:13Z"
    },
    "correction": {
     "version": 1,
@@ -2529,7 +2573,7 @@
     "verifiee_le_utc": "2026-10-05T09:46:44Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-05T09:46:44Z",
-    "derniere_verification_utc": "2026-10-05T09:46:44Z"
+    "derniere_verification_utc": "2026-10-05T10:01:13Z"
    },
    "correction": {
     "version": 1,
@@ -2579,7 +2623,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "CHEVAUX_SOUS_ORDRES"
    },
    "classement": [],
    "arrivee": [],
