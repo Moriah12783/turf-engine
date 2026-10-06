@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "e33564dbca2a545decf59e13712f2e7c059ba925",
-  "run_id": "37446911359",
+  "commit": "06ba981aba5514f76b5c68d1ffaeb839661f7f7e",
+  "run_id": "37448631993",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-06",
- "genere_le_utc": "2026-10-06T10:02:37Z",
+ "genere_le_utc": "2026-10-06T10:17:46Z",
  "nb_courses": 24,
  "compte_par_statut": {
   "EN_ATTENTE": 22,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 1,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "4f948c06f1f2409b17f2c1f06c8b99454cb90210a87877ef3028ebf53ff409f3",
+ "empreinte_sha256": "f552c13b8da9241171b39a37c5c307fc3afd0dfdb1c200c308651d6e882be329",
  "courses": [
   {
    "course_id": "R1C1_06102026_AUTEUIL",
@@ -578,7 +578,7 @@
     "verifiee_le_utc": "2026-10-06T09:31:30Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-06T09:31:30Z",
-    "derniere_verification_utc": "2026-10-06T10:01:11Z"
+    "derniere_verification_utc": "2026-10-06T10:16:17Z"
    },
    "correction": {
     "version": 1,
@@ -619,11 +619,11 @@
     "partants_actifs": 7
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -649,13 +649,34 @@
      "num": 3,
      "nom": "SI NOIR",
      "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 1,
+     "nom": "LOUKPAN",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 7,
+     "nom": "LINTERCEPTOR",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 5,
+     "nom": "ARION",
+     "dead_heat": false
     }
    ],
    "arrivee": [
     6,
     4,
     2,
-    3
+    3,
+    1,
+    7,
+    5
    ],
    "non_classes": [],
    "non_partants": [],
@@ -695,14 +716,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-10-06T10:01:11Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-10-06T10:16:17Z",
+    "verifiee_le_utc": "2026-10-06T10:16:17Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-10-06T10:01:11Z",
-    "derniere_verification_utc": "2026-10-06T10:01:11Z"
+    "derniere_modification_utc": "2026-10-06T10:16:17Z",
+    "derniere_verification_utc": "2026-10-06T10:16:17Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -716,6 +737,22 @@
        4,
        2,
        3
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-10-06T10:16:17Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       6,
+       4,
+       2,
+       3,
+       1,
+       7,
+       5
       ]
      }
     ]
@@ -732,9 +769,9 @@
     "libelle": "PRIX DU HARAS DU MA",
     "discipline": "PLAT",
     "distance_m": 1600,
-    "heure_depart_utc": "2026-10-06T10:23:00Z",
+    "heure_depart_utc": "2026-10-06T10:24:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "10:23 GMT (12:23 Paris)",
+    "heure_depart_affichee": "10:24 GMT (12:24 Paris)",
     "partants_declares": 11,
     "partants_actifs": 11
    },
@@ -743,7 +780,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
