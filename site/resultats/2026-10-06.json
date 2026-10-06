@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "3f9d417cd09c17b6ce4b772b48939ef80c126604",
-  "run_id": "37455278044",
+  "commit": "e4365fb7dec882fb069cae9b6ab4a98f4247a52f",
+  "run_id": "37456919428",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-06",
- "genere_le_utc": "2026-10-06T11:17:17Z",
+ "genere_le_utc": "2026-10-06T11:32:45Z",
  "nb_courses": 24,
  "compte_par_statut": {
-  "EN_ATTENTE": 20,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 19,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 4,
   "ANNULEE": 0
  },
- "empreinte_sha256": "7ba20ef8c78850cbd81f3c980cb74b6a15f8c164965abf799252db1f45a82393",
+ "empreinte_sha256": "089ee66886d6a0dd358f78cf3fed8cedf7f62f3db35de7dbef1d06217847c7d9",
  "courses": [
   {
    "course_id": "R1C1_06102026_AUTEUIL",
@@ -40,7 +40,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -578,7 +578,7 @@
     "verifiee_le_utc": "2026-10-06T09:31:30Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-06T09:31:30Z",
-    "derniere_verification_utc": "2026-10-06T11:16:27Z"
+    "derniere_verification_utc": "2026-10-06T11:31:18Z"
    },
    "correction": {
     "version": 1,
@@ -720,7 +720,7 @@
     "verifiee_le_utc": "2026-10-06T10:16:17Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-06T10:16:17Z",
-    "derniere_verification_utc": "2026-10-06T11:16:27Z"
+    "derniere_verification_utc": "2026-10-06T11:31:18Z"
    },
    "correction": {
     "version": 2,
@@ -951,7 +951,7 @@
     "verifiee_le_utc": "2026-10-06T10:46:33Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-06T10:46:33Z",
-    "derniere_verification_utc": "2026-10-06T11:16:27Z"
+    "derniere_verification_utc": "2026-10-06T11:31:18Z"
    },
    "correction": {
     "version": 2,
@@ -1105,7 +1105,7 @@
     "verifiee_le_utc": "2026-10-06T11:16:27Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-06T11:16:27Z",
-    "derniere_verification_utc": "2026-10-06T11:16:27Z"
+    "derniere_verification_utc": "2026-10-06T11:31:18Z"
    },
    "correction": {
     "version": 2,
@@ -1160,14 +1160,44 @@
     "partants_actifs": 10
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 1,
+     "nom": "TERREDEGUERRE",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 10,
+     "nom": "THAT'S LIFE",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 4,
+     "nom": "EAGLE GATE",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 6,
+     "nom": "DAR ES SALAAM",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    1,
+    10,
+    4,
+    6
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
@@ -1180,21 +1210,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/06102026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-10-06T11:31:18Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-10-06T11:31:18Z",
+    "derniere_verification_utc": "2026-10-06T11:31:18Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-10-06T11:31:18Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       1,
+       10,
+       4,
+       6
+      ]
+     }
+    ]
    }
   },
   {
