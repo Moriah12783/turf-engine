@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "1b297622c4db8c196ed2ed8dadd99da40d40f480",
-  "run_id": "37467630686",
+  "commit": "d7a48a90e8765fe7c5c3382a7472fc54d88db151",
+  "run_id": "37469456135",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-06",
- "genere_le_utc": "2026-10-06T13:03:19Z",
+ "genere_le_utc": "2026-10-06T13:17:43Z",
  "nb_courses": 24,
  "compte_par_statut": {
-  "EN_ATTENTE": 15,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 14,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 9,
   "ANNULEE": 0
  },
- "empreinte_sha256": "2d142eb080a2a849930a0c8850318f5cdf0c03a1a357956fdeabded337cdb89a",
+ "empreinte_sha256": "0d4db6a6d7cda924cb84163edf4afd8a0102d8b2094c0847fbb50b156d0d39eb",
  "courses": [
   {
    "course_id": "R1C1_06102026_AUTEUIL",
@@ -282,7 +282,7 @@
     "verifiee_le_utc": "2026-10-06T12:16:35Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-06T12:16:35Z",
-    "derniere_verification_utc": "2026-10-06T13:02:14Z"
+    "derniere_verification_utc": "2026-10-06T13:16:19Z"
    },
    "correction": {
     "version": 1,
@@ -415,7 +415,7 @@
     "verifiee_le_utc": "2026-10-06T12:46:08Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-06T12:46:08Z",
-    "derniere_verification_utc": "2026-10-06T13:02:14Z"
+    "derniere_verification_utc": "2026-10-06T13:16:19Z"
    },
    "correction": {
     "version": 1,
@@ -455,15 +455,51 @@
     "partants_actifs": 8
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "JOKEYS_MONTENT_A_CHEVAL"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 3,
+     "nom": "BAGHERA DU BERLAIS",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 5,
+     "nom": "NOUVEAUTHAIX ALLEN",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 4,
+     "nom": "NARVICK SWEEN",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 2,
+     "nom": "SPANISH BOY",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    3,
+    5,
+    4,
+    2
+   ],
+   "non_classes": [
+    {
+     "num": 9,
+     "nom": "MILORD DU BERLAIS",
+     "incident": "TOMBE"
+    }
+   ],
    "non_partants": [
     {
      "num": 8,
@@ -480,21 +516,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/06102026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-10-06T13:16:19Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-10-06T13:16:19Z",
+    "derniere_verification_utc": "2026-10-06T13:16:19Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-10-06T13:16:19Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       3,
+       5,
+       4,
+       2
+      ]
+     }
+    ]
    }
   },
   {
@@ -882,7 +932,7 @@
     "verifiee_le_utc": "2026-10-06T09:31:30Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-06T09:31:30Z",
-    "derniere_verification_utc": "2026-10-06T13:02:14Z"
+    "derniere_verification_utc": "2026-10-06T13:16:19Z"
    },
    "correction": {
     "version": 1,
@@ -1024,7 +1074,7 @@
     "verifiee_le_utc": "2026-10-06T10:16:17Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-06T10:16:17Z",
-    "derniere_verification_utc": "2026-10-06T13:02:14Z"
+    "derniere_verification_utc": "2026-10-06T13:16:19Z"
    },
    "correction": {
     "version": 2,
@@ -1255,7 +1305,7 @@
     "verifiee_le_utc": "2026-10-06T10:46:33Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-06T10:46:33Z",
-    "derniere_verification_utc": "2026-10-06T13:02:14Z"
+    "derniere_verification_utc": "2026-10-06T13:16:19Z"
    },
    "correction": {
     "version": 2,
@@ -1409,7 +1459,7 @@
     "verifiee_le_utc": "2026-10-06T11:16:27Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-06T11:16:27Z",
-    "derniere_verification_utc": "2026-10-06T13:02:14Z"
+    "derniere_verification_utc": "2026-10-06T13:16:19Z"
    },
    "correction": {
     "version": 2,
@@ -1642,7 +1692,7 @@
     "verifiee_le_utc": "2026-10-06T11:46:26Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-06T11:46:26Z",
-    "derniere_verification_utc": "2026-10-06T13:02:14Z"
+    "derniere_verification_utc": "2026-10-06T13:16:19Z"
    },
    "correction": {
     "version": 2,
@@ -1869,7 +1919,7 @@
     "verifiee_le_utc": "2026-10-06T12:31:49Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-06T12:31:49Z",
-    "derniere_verification_utc": "2026-10-06T13:02:14Z"
+    "derniere_verification_utc": "2026-10-06T13:16:19Z"
    },
    "correction": {
     "version": 1,
@@ -2016,7 +2066,7 @@
     "verifiee_le_utc": "2026-10-06T13:02:14Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-06T13:02:14Z",
-    "derniere_verification_utc": "2026-10-06T13:02:14Z"
+    "derniere_verification_utc": "2026-10-06T13:16:19Z"
    },
    "correction": {
     "version": 1,
@@ -2063,7 +2113,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
