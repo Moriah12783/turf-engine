@@ -12,6 +12,7 @@ from turf_lab.database import TurfDatabase
 from turf_lab.engine import NewValueEngine
 from turf_lab.baselines import ETPEEngineProxy, MarketOddsEngine
 from turf_lab.human_stats import HumanStatsBook
+from turf_lab.fondamental_verrou import porter_fondamental
 from turf_lab.odds_quality import MIN_LOCK_RATIO, MIN_PRICED_RATIO, neutralize_odds, priced_ratio
 from turf_lab.radar_bridge import ENGINE_NAME as RADAR_ENGINE, RadarV4Engine
 from turf_lab import secure_http
@@ -19,6 +20,33 @@ from turf_lab.results_reader import (
     SOURCE_COURSE, SOURCE_PROGRAMME, STATUT_ANNULEE, STATUT_DEFINITIVE, STATUT_PROVISOIRE,
     ArrivalReading, read_arrival,
 )
+
+
+def shoeing_code(raw: Any) -> str:
+    """Déferrage du flux PMU -> code du moteur (D4, DA, DP, FERRE).
+
+    MÊME RÈGLE que le labo (``turf_lab.deferre_lab.code``, test d'égalité
+    dans tests/test_ombre_daily_sync.py) : le flux mêle déferrage et
+    protection (« PROTEGE_ANTERIEURS_DEFERRRE_POSTERIEURS », sic -> DP ;
+    « DEFERRE_ANTERIEURS_PROTEGE_POSTERIEURS » -> DA) et les pieds déferrés
+    priment. Avant le 07/10/2026, ces valeurs mixtes tombaient en FERRE.
+    Seule différence avec le labo, voulue : la protection seule reste FERRE
+    en production (le labo la code PROTEGE), pour ne changer que les valeurs
+    mixtes."""
+    s = str(raw or "").upper()
+    if s == "DEFERRE_ANTERIEURS_POSTERIEURS":
+        return "D4"
+    if s.startswith("DEFERRE_ANTERIEURS"):
+        return "DA"
+    if s == "DEFERRE_POSTERIEURS" or ("DEFERR" in s and s.endswith("POSTERIEURS")):
+        return "DP"
+    return "FERRE"
+
+
+def is_mixed_shoeing(raw: Any) -> bool:
+    """Valeur mixte déferrage + protection (celles que le correctif du 07/10 reclasse)."""
+    s = str(raw or "").upper()
+    return "DEFERR" in s and "PROTEGE" in s
 
 
 class PMUDataFetcher:
@@ -300,6 +328,15 @@ class DailySyncManager:
                 "race_id": race_id, "horizon": horizon,
                 "priced_ratio": round(ratio, 3), "now_utc": now_utc.isoformat()
             }))
+
+        # Ombre du fondamental (docs/OMBRE_FONDAMENTAL.md) : au verrou T_MATIN
+        # SEULEMENT, les partants passés aux moteurs portent leur probabilité
+        # fondamentale de la nuit (table fundamental_probs), sur une COPIE :
+        # `runners` reste intact pour les horizons suivants de la même passe.
+        # Table absente -> rien ne change. Journal sans aucune probabilité.
+        if horizon == "T_MATIN":
+            engine_runners, fondamental = porter_fondamental(self.db, race_id, engine_runners)
+            print("FONDAMENTAL_VERROU " + json.dumps(fondamental, ensure_ascii=False))
 
         engines = [
             ("NEW", self.new_engine),
@@ -660,6 +697,7 @@ class DailySyncManager:
                     continue
 
                 runners = []
+                mixed_shoeing = 0
 
                 for p in part_data["participants"]:
                     p_num = p.get("numPmu", 1)
@@ -708,15 +746,11 @@ class DailySyncManager:
                     gains_obj = p.get("gainsParticipant") or {}
                     earnings_eur = float(gains_obj.get("gainsCarriere", p.get("gainsCarriere", 0.0)) or 0.0) / 100.0
 
-                    shoeing = p.get("deferre", "FERRE")
-                    if shoeing == "DEFERRE_ANTERIEURS_POSTERIEURS":
-                        shoeing_code = "D4"
-                    elif shoeing == "DEFERRE_POSTERIEURS":
-                        shoeing_code = "DP"
-                    elif shoeing == "DEFERRE_ANTERIEURS":
-                        shoeing_code = "DA"
-                    else:
-                        shoeing_code = "FERRE"
+                    # Déferrage : même règle que le labo (valeurs mixtes
+                    # déferrage/protection : les pieds déferrés priment).
+                    shoeing_raw = p.get("deferre", "FERRE")
+                    if is_mixed_shoeing(shoeing_raw):
+                        mixed_shoeing += 1
 
                     runners.append({
                         "num": p_num,
@@ -727,7 +761,7 @@ class DailySyncManager:
                         "trainer": trainer,
                         "weight": weight_kg,
                         "draw": p.get("placeCorde", p_num),
-                        "shoeing": shoeing_code,
+                        "shoeing": shoeing_code(shoeing_raw),
                         "blinkers": p.get("oeilleres", "SANS"),
                         "morning_odds": m_odds,
                         "odds_t15": live_odds,
@@ -746,6 +780,11 @@ class DailySyncManager:
 
                 if not runners:
                     continue
+                if mixed_shoeing:
+                    # Courses touchées par le correctif du déferrage (07/10) :
+                    # leurs sorties NVE diffèrent de l'ancien code, à exclure
+                    # des comparaisons d'empreinte ancien/nouveau code.
+                    print("DEFERRE_MIXTE " + json.dumps({"race_id": race_id, "partants": mixed_shoeing}))
 
                 # 1bis. Préservation des cotes archivées (jamais écrasées) :
                 #  - morning_odds : figée à la première capture de la course

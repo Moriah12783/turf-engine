@@ -4,6 +4,22 @@ import math
 from typing import Optional, Any, Dict, List, Tuple
 from turf_lab.features import extract_runner_features
 
+# ── Ombre du fondamental (règle pré-enregistrée : docs/OMBRE_FONDAMENTAL.md) ──
+# Version de NVE, FIGÉE pendant l'ombre : tout changement de code du moteur
+# (engine.py, features.py, human_stats.py) crée une nouvelle version et remet
+# à zéro le compteur et l'horloge de la lecture (bug bloquant seulement).
+NVE_VERSION = "nve-2026-10-07"
+OMBRE_META = "ombre_fondamental"
+OMBRE_RECETTE = "A_lineaire_0.90_0.10"
+# Contrat avec la ligne du verrou T_MATIN (dev daily_sync) : noms des clés
+# posées sur les partants, importés de sa source unique. Repli sur les mêmes
+# noms si le module est absent : le moteur ne casse jamais, il ne fait
+# simplement aucune ombre tant que la ligne n'est pas en place.
+try:
+    from turf_lab.fondamental_verrou import CLE_MODEL_VERSION, CLE_P, CLE_TRAIN_UNTIL
+except ImportError:  # pragma: no cover
+    CLE_P, CLE_MODEL_VERSION, CLE_TRAIN_UNTIL = "p_fondamental", "fondamental_model_version", "fondamental_train_until"
+
 
 class NewValueEngine:
     """The senior-grade predictive engine based on multi-factor calibration,
@@ -312,6 +328,7 @@ class NewValueEngine:
             total_implied = sum(implied.values()) or 1.0
             for r in scored_runners:
                 p_market = implied[r["num"]] / total_implied
+                r["p_market"] = p_market          # conservée pour l'ombre du fondamental
                 p_final = self.MARKET_WEIGHT * p_market + (1.0 - self.MARKET_WEIGHT) * r["model_prob"]
                 r["estimated_prob"] = round(p_final, 4)
                 r["value_index"] = round(p_final * r["odds"], 2)
@@ -365,7 +382,12 @@ class NewValueEngine:
         value_dict = {str(r["num"]): r["value_index"] for r in scored_runners}
         signal_dict = {str(r["num"]): r["smart_signal"] for r in scored_runners}
 
-        return {
+        # Ombre du fondamental : calculée seulement si les partants portent
+        # leur probabilité fondamentale (le verrouillage ne la pose qu'au
+        # matin) et si le marché est réel. N'influence AUCUN champ publié.
+        ombre = self._ombre_fondamental(scored_runners, valid_runners, market_available)
+
+        prediction = {
             "engine_name": self.engine_name,
             "selection": selection_nums,
             "bases": bases,
@@ -399,4 +421,53 @@ class NewValueEngine:
                 ),
                 "model_probs": {str(r["num"]): r["model_prob"] for r in scored_runners}
             }
+        }
+        if ombre is not None:
+            prediction["metadata"][OMBRE_META] = ombre
+        return prediction
+
+    def _ombre_fondamental(self, scored_runners: List[Dict[str, Any]], valid_runners: List[Dict[str, Any]],
+                           market_available: bool) -> Optional[Dict[str, Any]]:
+        """Recette A de l'ombre : MARKET_WEIGHT × marché + (1 − MARKET_WEIGHT) ×
+        fondamental, à la place du modèle pur. Jamais d'ombre partielle :
+        un partant sans probabilité fondamentale, deux versions du modèle
+        mêlées ou un marché absent => aucune ombre (None). Un non-partant
+        tardif est exclu en amont : le fondamental est renormalisé sur les
+        partants valides. La sélection de l'ombre suit exactement le code et
+        le départage de la production (probabilité, puis indice de value)."""
+        if not market_available or not scored_runners:
+            return None
+        source = {r.get("num"): r for r in valid_runners}
+        fond: Dict[Any, float] = {}
+        versions, trains = set(), set()
+        for sr in scored_runners:
+            runner = source.get(sr["num"])
+            if runner is None or "p_market" not in sr:
+                return None
+            try:
+                p = float(runner.get(CLE_P))
+            except (TypeError, ValueError):
+                return None
+            if not (p > 0.0) or math.isinf(p):
+                return None
+            fond[sr["num"]] = p
+            versions.add(runner.get(CLE_MODEL_VERSION))
+            trains.add(runner.get(CLE_TRAIN_UNTIL))
+        if len(versions) != 1 or len(trains) != 1 or None in versions or None in trains:
+            return None
+        total = sum(fond.values())
+        fond = {n: p / total for n, p in fond.items()}
+        rows = []
+        for sr in scored_runners:
+            p_final = round(self.MARKET_WEIGHT * sr["p_market"] + (1.0 - self.MARKET_WEIGHT) * fond[sr["num"]], 4)
+            rows.append({"num": sr["num"], "estimated_prob": p_final, "value_index": round(p_final * sr["odds"], 2)})
+        ranked = sorted(rows, key=lambda x: (x["estimated_prob"], x["value_index"]), reverse=True)
+        return {
+            "recette": OMBRE_RECETTE,
+            "model_version": versions.pop(),
+            "nve_version": NVE_VERSION,
+            "train_until": trains.pop(),
+            "probabilities": {str(x["num"]): x["estimated_prob"] for x in rows},
+            "selection": [x["num"] for x in ranked[:10]],
+            "fondamental": {str(n): round(p, 6) for n, p in fond.items()},
         }
