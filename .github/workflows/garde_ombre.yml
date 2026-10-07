@@ -1,0 +1,56 @@
+name: Garde de confidentialité de l'ombre
+
+# Contrôle indépendant décidé par Steph le 07/10/2026. Deux fois par jour, il
+# cherche toute trace de l'ombre du fondamental dans ce qui est public : le
+# site publié, les fichiers publics du dépôt (site/, benchmark_report.json,
+# benchmark_dashboard.html) et les lignes ajoutées à ces fichiers par les
+# commits des 14 dernières heures. Il en faut zéro.
+# Il ne touche pas à la chaîne de production : aucune écriture, aucun secret,
+# aucune lecture de la base. Il n'imprime jamais d'extrait, seulement des
+# comptes. Une trace trouvée fait échouer le job : GitHub envoie l'alerte.
+# Les marqueurs sont ceux de la règle gelée (docs/OMBRE_FONDAMENTAL.md) : clé
+# de l'archive, recette, préfixe de model_version ; tests/test_garde_ombre.py
+# vérifie qu'ils sont à jour. Voir turf_lab/garde_ombre.py.
+
+on:
+  schedule:
+    - cron: "41 7 * * *"
+    - cron: "41 19 * * *"
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "turf_lab/garde_ombre.py"
+      - ".github/workflows/garde_ombre.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: garde-ombre
+  cancel-in-progress: false
+
+jobs:
+  garde:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONUNBUFFERED: "1"
+    steps:
+      - name: Checkout Repository (recent history included)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 100
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Search everything public for any trace of the shadow
+        run: >-
+          python -m turf_lab.garde_ombre
+          --site https://prono.elite-turf.fr
+          --heures 14
+          --marqueur ombre_fondamental
+          --marqueur A_lineaire_0.90_0.10
+          --marqueur fond-matin-
