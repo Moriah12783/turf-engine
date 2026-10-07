@@ -33,7 +33,7 @@ import numpy as np
 from turf_lab import ombre
 
 META_OMBRE = "ombre_fondamental"        # {recette, model_version, nve_version, train_until, probabilities, selection, fondamental}
-DEBUT_OMBRE: Optional[str] = None       # premier jour d'ombre (AAAA-MM-JJ), inscrit au gel de la règle
+DEBUT_OMBRE: Optional[str] = "2026-10-08"   # premier jour d'ombre, inscrit au gel de la règle (07/10/2026)
 ENGINE = "NEW_VALUE_ENGINE"
 _RACE_ID = re.compile(r"^R(\d+)C(\d+)_(\d{2})(\d{2})(\d{4})_(.*)$")
 

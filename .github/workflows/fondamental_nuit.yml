@@ -1,10 +1,12 @@
 name: Fondamental de nuit (ombre NVE)
 
-# Règle arrêtée avec le dev NVE le 28/09/2026 : ombre APRÈS le 06/10, rien
-# avant. AUCUN horaire ici tant que la règle n'est pas gelée : le commit de
-# gel (après le 06/10, sur décision écrite de Steph) ajoute les deux horaires
-# de nuit (05h05 et 05h50 UTC) et inscrit DEBUT_OMBRE ; d'ici là le calcul de
-# nuit refuse d'écrire (OMBRE_PAS_OUVERTE), même lancé à la main.
+# Règle arrêtée avec le dev NVE le 28/09/2026, GELÉE le 07/10/2026
+# (docs/OMBRE_FONDAMENTAL.md) : DEBUT_OMBRE = 2026-10-08. Le lancement est
+# fait par l'horloge Cloudflare (turf-horloge) à 05h05 et 05h50 UTC, du 08/10
+# au 24/11. Les horaires GitHub ci-dessous, sur les mêmes jours, ne sont qu'un
+# filet : ils partent souvent avec plusieurs heures de retard. Un horaire
+# GitHub parti après 06h20 UTC ne calcule rien et n'envoie rien
+# (FILET_HORS_DELAI) : le passage de l'horloge du matin fait foi.
 # Nuit : miroir historique (R2 privé, lecture seule) + programme PMU du jour
 # -> table fundamental_probs de turf_bench.db, entre le pull et le push R2.
 # Aucune écriture après 06h20 UTC ni pour une course déjà verrouillée, aucun
@@ -16,6 +18,11 @@ name: Fondamental de nuit (ombre NVE)
 # Voir turf_lab/fondamental_nuit.py.
 
 on:
+  schedule:
+    - cron: "5 5 8-31 10 *"
+    - cron: "50 5 8-31 10 *"
+    - cron: "5 5 1-24 11 *"
+    - cron: "50 5 1-24 11 *"
   workflow_dispatch:
     inputs:
       action:
@@ -46,18 +53,30 @@ jobs:
       R2_BUCKET: ${{ secrets.R2_BUCKET }}
       ACTION: ${{ github.event_name == 'schedule' && 'nuit' || (github.event_name == 'pull_request' && 'controle' || github.event.inputs.action) }}
     steps:
+      - name: Late GitHub safety net (schedule started after 06:20 UTC) - nothing to do
+        if: github.event_name == 'schedule'
+        run: |
+          if (( 10#$(date -u +%H%M) >= 620 )); then
+            echo "FILET_HORS_DELAI : horaire GitHub parti à $(date -u +%H:%M) UTC, après la limite de 06h20. Rien n'est calculé ni envoyé ; le passage de l'horloge Cloudflare fait foi."
+            echo "FILET_HORS_DELAI=1" >> "$GITHUB_ENV"
+          fi
+
       - name: Checkout Repository
+        if: env.FILET_HORS_DELAI != '1'
         uses: actions/checkout@v4
 
       - name: Set up Python
+        if: env.FILET_HORS_DELAI != '1'
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
       - name: Install dependencies
+        if: env.FILET_HORS_DELAI != '1'
         run: pip install -q --retries 10 --timeout 60 "numpy>=1.26,<3" "boto3>=1.36,<2"
 
       - name: Fetch the private history mirror from R2 (read-only)
+        if: env.FILET_HORS_DELAI != '1'
         run: python -m turf_lab.history_export fetch --db turf_history.db
 
       - name: Parity PMU programme <-> Radar mirror (read-only)
@@ -71,15 +90,15 @@ jobs:
           python -m turf_lab.fondamental_nuit essai --historique turf_history.db --banc copie_banc.db --jour demain
 
       - name: Pull the bench from R2 (night only)
-        if: env.ACTION == 'nuit'
+        if: env.ACTION == 'nuit' && env.FILET_HORS_DELAI != '1'
         run: python -m turf_lab.r2_store pull --db turf_bench.db
 
       - name: Compute and write fundamental_probs (night only)
-        if: env.ACTION == 'nuit' && env.R2_MODE == 'r2'
+        if: env.ACTION == 'nuit' && env.R2_MODE == 'r2' && env.FILET_HORS_DELAI != '1'
         run: python -m turf_lab.fondamental_nuit nuit --historique turf_history.db --banc turf_bench.db
 
       - name: Push the bench to R2 (night only, before 06:28 UTC)
-        if: env.ACTION == 'nuit' && env.R2_MODE == 'r2'
+        if: env.ACTION == 'nuit' && env.R2_MODE == 'r2' && env.FILET_HORS_DELAI != '1'
         run: |
           if (( 10#$(date -u +%H%M) >= 628 )); then
             echo "PUSH_REFUSE_HEURE : trop près du verrou du matin (06h30 UTC), rien n'est envoyé."
