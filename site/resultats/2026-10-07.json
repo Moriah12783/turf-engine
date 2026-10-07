@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "714392303866a7fa9e9e6b87f599e1b59c72f8cd",
-  "run_id": "37602882803",
+  "commit": "da72d48448700e47400810a1bf574e7e3b834133",
+  "run_id": "37604595510",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-07",
- "genere_le_utc": "2026-10-07T09:48:01Z",
+ "genere_le_utc": "2026-10-07T10:03:15Z",
  "nb_courses": 24,
  "compte_par_statut": {
   "EN_ATTENTE": 23,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 0,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 1,
   "ANNULEE": 0
  },
- "empreinte_sha256": "4f680384bb16dd0f79e48c7e58ab84b0c78387589832f56cad9719bd87c564c5",
+ "empreinte_sha256": "b8f597bc3f155c5a21d35c85d2b84e718d627c2e6f37976fa030ba08ee0ac820",
  "courses": [
   {
    "course_id": "R1C1_07102026_ENGHIEN",
@@ -491,11 +491,11 @@
     "partants_actifs": 7
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "DEPART_CONFIRME"
+    "pmu_statut": "FIN_COURSE"
    },
    "classement": [
     {
@@ -521,39 +521,81 @@
      "num": 3,
      "nom": "STREET SHOW",
      "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 7,
+     "nom": "TIMES JUBILEE",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 1,
+     "nom": "BOURGOIN",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 4,
+     "nom": "GIZMO",
+     "dead_heat": false
     }
    ],
    "arrivee": [
     5,
     2,
     6,
-    3
+    3,
+    7,
+    1,
+    4
    ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "5": 9.3
+    },
+    "simple_place": {
+     "5": 3.6,
+     "2": 3.4
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_ORDRE",
+      "combinaison": "5-2",
+      "dividende_pour_1_eur": 54.7
+     },
+     {
+      "type_pari": "TRIO_ORDRE",
+      "combinaison": "5-2-6",
+      "dividende_pour_1_eur": 68.9
+     },
+     {
+      "type_pari": "SUPER_QUATRE",
+      "combinaison": "5-2-6-3",
+      "dividende_pour_1_eur": 315.8
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": "PMU_PARTICIPANTS",
+    "canal": "PMU_PROGRAMME",
     "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/07102026"
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-10-07T09:46:30Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-10-07T10:01:42Z",
+    "verifiee_le_utc": "2026-10-07T10:01:42Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-10-07T09:46:30Z",
-    "derniere_verification_utc": "2026-10-07T09:46:30Z"
+    "derniere_modification_utc": "2026-10-07T10:01:42Z",
+    "derniere_verification_utc": "2026-10-07T10:01:42Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -567,6 +609,22 @@
        2,
        6,
        3
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-10-07T10:01:42Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       5,
+       2,
+       6,
+       3,
+       7,
+       1,
+       4
       ]
      }
     ]
@@ -583,9 +641,9 @@
     "libelle": "PRIX DU GRAND VIVIER",
     "discipline": "PLAT",
     "distance_m": 1400,
-    "heure_depart_utc": "2026-10-07T10:17:00Z",
+    "heure_depart_utc": "2026-10-07T10:18:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "10:17 GMT (12:17 Paris)",
+    "heure_depart_affichee": "10:18 GMT (12:18 Paris)",
     "partants_declares": 9,
     "partants_actifs": 9
    },
@@ -594,7 +652,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
