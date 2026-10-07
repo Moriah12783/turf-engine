@@ -40,3 +40,23 @@ def test_horaires_du_plan_identiques_a_wrangler():
     toml = open(os.path.join(DOSSIER, "wrangler.toml"), encoding="utf-8").read()
     crons = set(re.findall(r'"([^"]+)"', toml[toml.index("crons"):]))
     assert {c for c, _, _ in _plan()} == crons == {"17 1 * * *", "5 5 * * *", "50 5 * * *"}
+
+
+def test_filet_github_du_calcul_de_nuit_sur_les_jours_de_l_horloge():
+    """Gel du 07/10 : les horaires GitHub du calcul de nuit sont un filet, sur
+    les mêmes jours que l'horloge (08/10-24/11), et un filet parti après
+    06h20 UTC ne calcule rien et n'envoie rien."""
+    texte = open(os.path.join(DOSSIER, "worker.js"), encoding="utf-8").read()
+    jours = set(re.findall(r'workflow: "fondamental_nuit\.yml".*?du: "([\d-]+)", au: "([\d-]+)"', texte))
+    assert jours == {("2026-10-08", "2026-11-24")}
+    chemin = os.path.join(RACINE, ".github", "workflows", "fondamental_nuit.yml")
+    doc = yaml.safe_load(open(chemin, encoding="utf-8"))
+    declencheurs = doc.get("on", doc.get(True)) or {}
+    assert {c["cron"] for c in declencheurs["schedule"]} == {
+        "5 5 8-31 10 *", "50 5 8-31 10 *", "5 5 1-24 11 *", "50 5 1-24 11 *"}
+    etapes = doc["jobs"]["nuit"]["steps"]
+    garde = etapes[0]
+    assert garde["if"] == "github.event_name == 'schedule'" and ">= 620" in garde["run"]
+    assert "FILET_HORS_DELAI=1" in garde["run"]
+    nuit = [e for e in etapes if "env.ACTION == 'nuit'" in str(e.get("if", ""))]
+    assert len(nuit) == 3 and all("env.FILET_HORS_DELAI != '1'" in e["if"] for e in nuit)

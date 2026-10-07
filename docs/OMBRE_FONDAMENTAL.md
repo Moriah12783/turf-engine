@@ -1,6 +1,17 @@
 # Ombre du fondamental dans NVE : règle pré-enregistrée
 
-**Statut : PROJET du 28/09/2026.** Il reprend :
+**Statut : GELÉE le 07/10/2026.** Premier jour d'ombre : jeudi 08/10/2026.
+
+| Élément gelé | Valeur |
+|---|---|
+| Premier jour d'ombre (`DEBUT_OMBRE`) | 2026-10-08 |
+| Modèle fondamental (`model_version`) | `fond-matin-e570d663793c` |
+| Moteur (`NVE_VERSION`) | `nve-2026-10-07` |
+| Recette | `A_lineaire_0.90_0.10` |
+| Déploiement de la partie moteur et de la partie daily_sync | commit `bab71ce0e5d0` (PR #22), mardi 06/10/2026 à 22h39 UTC |
+| Horloge Cloudflare (`turf-horloge`) | version `7853694e` |
+
+La règle reprend le projet du 28/09/2026, c'est-à-dire :
 
 - les arbitrages du dev NVE sur les sept points ;
 - les décisions de Steph du 28/09 : ombre limitée à l'édition du matin, gel de
@@ -10,31 +21,34 @@
 - les cinq corrections demandées par le dev NVE du 28/09 après sa relecture
   du lecteur scellé : courses à moins de 8 partants, horloge ancrée sur
   `DEBUT_OMBRE`, lecture le 36e jour, étiquette des dead-heats, clause sur la
-  chaîne de verrouillage.
+  chaîne de verrouillage ;
+- le critère « avec et sans ombre » de la répétition (PR #20, 01/10).
 
-La règle sera **gelée** au plus tard la veille du premier jour d'ombre, dans un
-commit daté qui inscrira la date du gel et le premier jour d'ombre
-(`DEBUT_OMBRE`), et qui ajoutera les horaires de nuit. Après le gel, la règle
-ne change plus. Seule une coquille sans effet sur la règle peut encore être
+Le commit de gel inscrit la date du gel et le premier jour d'ombre
+(`DEBUT_OMBRE`), et ajoute les horaires de nuit. Après le gel, la règle ne
+change plus. Seule une coquille sans effet sur la règle peut encore être
 corrigée, avec une justification dans le commit.
 
-L'ombre ne tourne pas avant le 06/10. Seule la répétition générale, sans
-effet sur la production, tourne du 01 au 06/10. Le passage à l'ombre se fait
-sur la décision écrite de Steph et avec le feu vert du dev NVE.
+Le gel est publié sur la décision écrite de Steph, avec le feu vert du dev
+NVE, après la répétition générale du 01 au 06/10 (6 jours sur 6 validés, voir
+l'annexe).
 
-Deux verrous tiennent jusqu'au gel :
+Les deux verrous d'avant le gel sont levés par ce commit :
 
-- **Aucun horaire.** Le workflow de nuit ne tourne pas automatiquement. Le
-  commit de gel ajoute les deux horaires de nuit.
-- **Aucune écriture.** Le calcul de nuit refuse d'écrire tant que `DEBUT_OMBRE`
-  n'est pas inscrit (`OMBRE_PAS_OUVERTE`), même lancé à la main.
+- **Horaires de nuit.** L'horloge Cloudflare lance le calcul de nuit à 05h05
+  et 05h50 UTC, du 08/10 au 24/11. Les horaires GitHub, sur les mêmes jours,
+  servent de filet.
+- **Écriture.** Le calcul de nuit écrit à partir de `DEBUT_OMBRE`. Avant
+  cette date, il refuse toujours (`OMBRE_PAS_OUVERTE`).
 
 ## Calendrier (accepté par Steph le 28/09)
 
 | Étape | Date |
 |---|---|
-| Répétition générale | du jeudi 01/10 au mardi 06/10 |
-| Publication du gel : règle, horaires de nuit, partie moteur | mercredi 07/10 |
+| Répétition générale | du jeudi 01/10 au mardi 06/10 (6 jours sur 6 validés) |
+| Déploiement de `nve-2026-10-07` : partie moteur et partie daily_sync | mardi 06/10, 22h39 UTC |
+| Journée de rodage, sans ombre | mercredi 07/10 |
+| Gel : règle et horaires de nuit | mercredi 07/10 |
 | Premier jour d'ombre (`DEBUT_OMBRE`) | jeudi 08/10 |
 | 35e jour | mercredi 11/11 |
 | Lecture unique, au plus tard | jeudi 12/11 |
@@ -43,7 +57,7 @@ Au rythme observé (environ 29 éditions éligibles par jour), les 1 000 éditio
 arrivent vers le 35e jour : la lecture tombe vers le 12/11 quel que soit le
 critère atteint en premier.
 
-## Répétition générale (01-06/10)
+## Répétition générale (01-06/10, terminée : voir l'annexe)
 
 - **But** : faire tourner toute la chaîne avant le premier jour d'ombre, sans
   toucher à la production. Un bug trouvé après `DEBUT_OMBRE` remettrait
@@ -56,7 +70,7 @@ critère atteint en premier.
   lancement en retard (calcul fini après 06h20) ou un contrôle de PR n'envoie
   rien : la copie du matin reste en place (constaté le 02/10, horaire GitHub
   parti à 10h56).
-- **Matin** : les devs NVE et daily_sync récupèrent la copie
+- **Matin** : les devs NVE et Radar récupèrent la copie
   (`python -m turf_lab.repetition fetch`) et y enchaînent le verrou du matin et
   le moteur avec l'ombre. Ils lancent ensuite le diagnostic
   (`python -m turf_lab.repetition diagnostic --jour AAAA-MM-JJ`).
@@ -84,7 +98,9 @@ critère atteint en premier.
    workflow `fondamental_nuit.yml` à 05h05 UTC, secours à 05h50).
    - Le lancement est fait par l'horloge Cloudflare (Worker `turf-horloge`,
      `docs/HORLOGE_CLOUDFLARE.md`), tenue à la minute. Les horaires GitHub,
-     ajoutés au gel, servent de filet : ils ne sont pas garantis la nuit.
+     ajoutés au gel sur les mêmes jours (du 08/10 au 24/11), servent de
+     filet : ils ne sont pas garantis la nuit. Un horaire GitHub parti après
+     06h20 UTC ne calcule rien et n'envoie rien (`FILET_HORS_DELAI`).
    - Le calcul part du miroir historique Radar arrêté à la veille et du
      programme PMU du jour.
    - Il utilise le modèle « état du matin » : les 5 variables qui changent dans
@@ -101,7 +117,7 @@ critère atteint en premier.
    - Rien n'est écrit si l'audit de fuite est positif ou si l'historique a plus
      de 3 jours de retard. Ce jour-là n'a pas d'ombre et il est compté dans la
      couverture.
-2. **daily_sync** (dev daily_sync) : la ligne ajoutée au verrouillage ne porte
+2. **daily_sync** (dev Radar) : la ligne ajoutée au verrouillage ne porte
    les probabilités fondamentales sur les partants **que lors du verrou
    `T_MATIN`**.
 3. **NVE** (dev NVE) :
@@ -271,7 +287,7 @@ entière manquante, biaiserait l'échantillon.
   d'eux devient inévitable (bug bloquant), il est annoncé et daté dans cette
   règle, et `NVE_VERSION` change dans le même déploiement : c'est le dev
   NVE qui publie ce changement de version, avec le correctif du dev
-  daily_sync. Le compteur et l'horloge repartent alors à zéro (dans la limite
+  Radar. Le compteur et l'horloge repartent alors à zéro (dans la limite
   de la règle de remise à zéro), et on ne mesure jamais deux régimes
   mélangés.
 - **Traçabilité.** Chaque ligne porte `train_until`, pour que tout calcul
@@ -279,7 +295,8 @@ entière manquante, biaiserait l'échantillon.
 
 ## Scellage
 
-- Ce document est daté et committé avant le premier jour d'ombre.
+- Ce document est daté et committé avant le premier jour d'ombre : gel du
+  07/10/2026.
 - `turf_lab/ombre.py` et `turf_lab/ombre_lecture.py` reprennent les constantes
   ci-dessous. `tests/test_ombre_lecture.py` vérifie qu'elles sont identiques à
   ce tableau.
@@ -307,4 +324,71 @@ entière manquante, biaiserait l'échantillon.
 | HEURE_LIMITE_UTC | 06:20 |
 | RETARD_MAX_JOURS | 3 |
 | META_OMBRE | ombre_fondamental |
-| DEBUT_OMBRE | à inscrire au gel |
+| DEBUT_OMBRE | 2026-10-08 |
+
+## Code déployé
+
+Le code publié le 06/10 (commit `bab71ce0e5d0`, PR #22) est identique, octet
+pour octet, à celui de la répétition générale. Le labo l'a vérifié par
+empreinte SHA-256, sur la branche de la PR puis sur `main` :
+
+| Fichier | SHA-256 |
+|---|---|
+| `turf_lab/engine.py` | `bf7193459ab3c82d0ef9ee6b8082e881f5ec423065bfcbdcc388d266c5c9b8ba` |
+| `turf_lab/daily_sync.py` | `f7e3fc3b170f0209a3aa28a6b2de61653f8ec54ed9c35e3504cf59f4002e5395` |
+| `turf_lab/fondamental_verrou.py` | `e5e0f68f7deaee61f343ba7c12c42e5c20635f4bbd962a7f06cb76dd9b2ccfd7` |
+
+Pendant l'ombre, toute empreinte différente sur `main` est un changement de
+code, soumis à la règle des changements de code ci-dessus.
+
+## Annexe : répétition générale du 01 au 06/10
+
+Synthèse du tableau de suivi du labo, en agrégats seulement. Chaque jour est
+compté à son lancement de référence sur le PC de Steph : celui du matin, et à
+partir du 02/10 la tâche automatique de 09h00 UTC.
+
+| Jour | Calcul fini / copie envoyée (UTC) | Courses calculées la nuit | Éditions du matin éligibles avec ombre complète | Différences avec / sans ombre (NVE, ETPE, MARCHÉ) |
+|---|---|---|---|---|
+| jeu. 01/10 | 05h06 / 05h06 | 23 | 23 sur 23 | 0 sur 23 éditions |
+| ven. 02/10 | 05h07 / 05h07 | 48 | 38 sur 38 | 0 sur 38 éditions |
+| sam. 03/10 | 05h06 / 05h07 | 49 | 31 sur 31 | 0 sur 33 éditions |
+| dim. 04/10 | 05h07 / 05h07 | 51 | 19 sur 19 | 0 sur 20 éditions |
+| lun. 05/10 | 05h07 / 05h07 | 33 | 25 sur 25 | 0 sur 25 éditions |
+| mar. 06/10 | 05h06 / 05h06 | 24 | 24 sur 24 | 0 sur 24 éditions |
+| **Total** | **toujours avant 06h20 / 06h28** | **228** | **160 sur 160** | **0 sur 163 éditions** |
+
+- **Fondamental.** Chaque jour, une seule version
+  (`fond-matin-e570d663793c`), avec un historique à jour et une somme de 1
+  par course (écart maximal 0).
+- **Archive.** Une seule clé, la recette A. L'écart à la recette est resté
+  sous 1e-4, pour une tolérance du contrôle de 3e-4.
+- **Production.** Toutes les différences d'empreinte avec la production
+  s'expliquent par les cotes : 0 édition absente, 0 anomalie.
+- **Édition du matin posée tard.** Ce cas se produit quand l'édition du matin
+  part avec le premier horizon de la journée. Il a été rejoué le 05/10 à
+  18h32 UTC : 2 éditions sur 2 avec une ombre complète, 0 différence avec et
+  sans ombre.
+- **02/10.** Le lancement de 06h32 donnait aussi 39 éditions sur 39 et
+  0 différence. Le total retient celui de 09h01.
+
+Défauts trouvés et corrigés avant le gel, sans effet sur la règle :
+
+1. **Horaire GitHub en retard.** Le 02/10, un horaire GitHub parti avec plus
+   de 6 h de retard a écrasé la copie du matin. Correctif : PR #21, qui
+   n'envoie rien hors délai ni depuis un contrôle de PR (`SANS_ENVOI_HORS_DELAI`,
+   `SANS_ENVOI_CONTROLE`). Le même principe s'applique au filet GitHub du calcul
+   de nuit (`FILET_HORS_DELAI`).
+2. **En-tête de `turf_lab/fondamental_verrou.py`.** Le paquet du dev Radar ne
+   portait pas la date de la version de la répétition (« 29/09 »). Le paquet
+   a été réaligné sur cette version.
+3. **Patch du dev Radar.** Il n'était pas aligné sur cette même version. Il a
+   été régénéré, puis vérifié par empreinte.
+
+## Journée de rodage du 07/10
+
+Premier matin produit par `nve-2026-10-07`, sans ombre :
+
+- 24 courses, avec 24 éditions du matin posées à 06h31 UTC ;
+- `FONDAMENTAL_VERROU` au statut `TABLE_ABSENTE` sur les 24, comme prévu ;
+- le correctif du déferrage est actif : `DEFERRE_MIXTE` sur 6 courses de trot ;
+- rien de l'ombre n'apparaît dans l'archive publique du site.
