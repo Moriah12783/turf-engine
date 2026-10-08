@@ -1,0 +1,59 @@
+name: Compteur de l'ombre
+
+# Compteur quotidien décidé par Steph le 08/10/2026. Chaque matin, il lit une
+# COPIE en lecture seule de la base (jamais renvoyée sur R2) et ne publie que
+# des comptes : éditions du matin éligibles, éditions avec une ombre complète
+# de la clé gelée, exclusions du compteur officiel, couverture.
+# Le lecteur scellé est appelé avec la date du jour 1 : aucune lecture ne
+# peut se déclencher ici, et aucune probabilité, aucun écart, aucune
+# sélection n'est imprimée (dépôt public : journaux lisibles par tous).
+# Il ne touche pas à la chaîne de production. Une édition éligible d'hier ou
+# d'aujourd'hui sans ombre complète, une clé différente de la règle gelée ou
+# une couverture sous 90 % font échouer le job : GitHub envoie l'alerte.
+# Jours : de DEBUT_OMBRE (08/10) au 25/11, date de lecture au plus tard en
+# cas de remise à zéro. Voir turf_lab/ombre_compteur.py.
+
+on:
+  schedule:
+    - cron: "23 9 8-31 10 *"
+    - cron: "23 9 1-25 11 *"
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "turf_lab/ombre_compteur.py"
+      - ".github/workflows/ombre_compteur.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ombre-compteur
+  cancel-in-progress: false
+
+jobs:
+  compteur:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONUNBUFFERED: "1"
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET: ${{ secrets.R2_BUCKET }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -q --retries 10 --timeout 60 "numpy>=1.26,<3" "boto3>=1.36,<2"
+
+      - name: Fetch a read-only copy of the bench (never pushed)
+        run: python -m turf_lab.r2_store fetch --db copie_banc.db
+
+      - name: Count the shadow (counts only, no reading possible)
+        run: python -m turf_lab.ombre_compteur --banc copie_banc.db
