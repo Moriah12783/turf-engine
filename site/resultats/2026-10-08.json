@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "ac096b64c950bd62861f3d6e3352e297840fc793",
-  "run_id": "37755488396",
+  "commit": "02375e1fbbefd0581a187ddfa198f1edfabc073c",
+  "run_id": "37757203083",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-08",
- "genere_le_utc": "2026-10-08T09:18:07Z",
+ "genere_le_utc": "2026-10-08T09:32:14Z",
  "nb_courses": 31,
  "compte_par_statut": {
-  "EN_ATTENTE": 29,
+  "EN_ATTENTE": 28,
   "PROVISOIRE": 1,
-  "DEFINITIVE": 1,
+  "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "ba3decc3f4e83d3064b86a3c1d98a861ea4e0e1368b30724dd2b00cbf3ad28fe",
+ "empreinte_sha256": "0d9f09c82c73d2341da209c4a7b791370b8ca4fe170ea235a95a21c2bacb5cb1",
  "courses": [
   {
    "course_id": "R1C1_08102026_SAINT-CLOUD",
@@ -431,11 +431,11 @@
     "partants_actifs": 15
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "FIN_COURSE"
    },
    "classement": [
     {
@@ -467,6 +467,48 @@
      "num": 9,
      "nom": "NESSENCE",
      "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 11,
+     "nom": "NEW STAR QUICK",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 14,
+     "nom": "NEW LIFE CHARDET",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 4,
+     "nom": "NORMA FIRST",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 1,
+     "nom": "NUANCE DU HOULET",
+     "dead_heat": false
+    },
+    {
+     "rang": 10,
+     "num": 10,
+     "nom": "NAPA VALLEY ZEN",
+     "dead_heat": false
+    },
+    {
+     "rang": 11,
+     "num": 2,
+     "nom": "NIZELLA D'AVEL",
+     "dead_heat": false
+    },
+    {
+     "rang": 12,
+     "num": 15,
+     "nom": "NOBILITY",
+     "dead_heat": false
     }
    ],
    "arrivee": [
@@ -474,7 +516,14 @@
     6,
     7,
     13,
-    9
+    9,
+    11,
+    14,
+    4,
+    1,
+    10,
+    2,
+    15
    ],
    "non_classes": [
     {
@@ -500,11 +549,78 @@
     }
    ],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "8": 2.4
+    },
+    "simple_place": {
+     "6": 3.6,
+     "7": 3.1,
+     "8": 1.5
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "8-6",
+      "dividende_pour_1_eur": 19.8
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "6-7",
+      "dividende_pour_1_eur": 12.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "8-6",
+      "dividende_pour_1_eur": 8.2
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "8-7",
+      "dividende_pour_1_eur": 6.5
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "7-13",
+      "dividende_pour_1_eur": 5.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "6-13",
+      "dividende_pour_1_eur": 5.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "6-7",
+      "dividende_pour_1_eur": 5.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "8-13",
+      "dividende_pour_1_eur": 5.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "8-7",
+      "dividende_pour_1_eur": 5.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "8-6",
+      "dividende_pour_1_eur": 5.8
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "8-6-7",
+      "dividende_pour_1_eur": 53.6
+     },
+     {
+      "type_pari": "MULTI",
+      "combinaison": "8-6-7-13",
+      "dividende_pour_1_eur": 8.4
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -514,14 +630,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-10-08T09:16:33Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-10-08T09:31:22Z",
+    "verifiee_le_utc": "2026-10-08T09:31:22Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-10-08T09:16:33Z",
-    "derniere_verification_utc": "2026-10-08T09:16:33Z"
+    "derniere_modification_utc": "2026-10-08T09:31:22Z",
+    "derniere_verification_utc": "2026-10-08T09:31:22Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -536,6 +652,27 @@
        7,
        13,
        9
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-10-08T09:31:22Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       8,
+       6,
+       7,
+       13,
+       9,
+       11,
+       14,
+       4,
+       1,
+       10,
+       2,
+       15
       ]
      }
     ]
@@ -552,9 +689,9 @@
     "libelle": "PRIX DE SAINS RICHAUMONT",
     "discipline": "TROT_ATTELE",
     "distance_m": 2750,
-    "heure_depart_utc": "2026-10-08T09:35:00Z",
+    "heure_depart_utc": "2026-10-08T09:39:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "09:35 GMT (11:35 Paris)",
+    "heure_depart_affichee": "09:39 GMT (11:39 Paris)",
     "partants_declares": 14,
     "partants_actifs": 14
    },
@@ -563,7 +700,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -975,7 +1112,7 @@
     "verifiee_le_utc": "2026-10-08T09:16:33Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-08T09:16:33Z",
-    "derniere_verification_utc": "2026-10-08T09:16:33Z"
+    "derniere_verification_utc": "2026-10-08T09:31:22Z"
    },
    "correction": {
     "version": 2,
@@ -1025,19 +1162,54 @@
     "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "09:22 GMT (11:22 Paris)",
     "partants_declares": 7,
-    "partants_actifs": 7
+    "partants_actifs": 6
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 3,
+     "nom": "SPACE'X",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 1,
+     "nom": "COSMICAL O'CLOCK",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 5,
+     "nom": "JIEPIE ET JO",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 6,
+     "nom": "DULCINA CHOP",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    3,
+    1,
+    5,
+    6
+   ],
    "non_classes": [],
-   "non_partants": [],
+   "non_partants": [
+    {
+     "num": 2,
+     "nom": "MARIONO"
+    }
+   ],
    "rapports": {
     "disponibles": false,
     "unite": "EUR pour 1 EUR de mise",
@@ -1048,21 +1220,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/08102026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-10-08T09:31:22Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-10-08T09:31:22Z",
+    "derniere_verification_utc": "2026-10-08T09:31:22Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-10-08T09:31:22Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       3,
+       1,
+       5,
+       6
+      ]
+     }
+    ]
    }
   },
   {
