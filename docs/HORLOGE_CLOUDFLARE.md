@@ -26,10 +26,19 @@ passent l'un après l'autre, et le second remplace le premier.
 | 01h17 | `history_export.yml` (export de l'historique Radar) | tous les jours |
 | 05h05 et 05h50 | `repetition_ombre.yml` (répétition générale) | du 01/10 au 06/10 |
 | 05h05 et 05h50 | `fondamental_nuit.yml`, action `nuit` (ombre) | du 08/10 au 24/11 |
+| 01h17 | `garde_ombre.yml` (garde de confidentialité de l'ombre) | du 08/10 au 25/11 |
+| 01h17 | `ombre_compteur.yml` (compteur quotidien de l'ombre) | du 08/10 au 25/11 |
 
 Le 24/11 est le dernier jour d'ombre possible avec une remise à zéro (version
 corrigée au 14e jour, puis 35 jours). Avant le gel, le calcul de nuit refuse
 d'écrire (`OMBRE_PAS_OUVERTE`).
+
+La garde et le compteur s'ajoutent le 09/10 (décision de Steph) : leurs
+horaires GitHub partaient avec 4 à 7 heures de retard, et le premier compteur
+programmé n'était toujours pas parti à 15h. Ils prennent le créneau de 01h17
+pour ne pas ajouter de *Cron Trigger* : à cette heure, la journée de la veille
+est complète (éditions du matin, horizons de la journée, arrivées). Les deux
+workflows ne font que lire. Leurs horaires GitHub restent en filet.
 
 ## Ce qu'il ne fait pas
 
@@ -95,6 +104,24 @@ choisis `17 1 * * *` et lance l'événement.
 Si l'aperçu de l'éditeur n'a pas accès au secret (`SANS_JETON`), le vrai test a
 lieu à 01h17 UTC. Le compte rendu du matin le vérifie.
 
+## Mise à jour du 09/10 : garde et compteur de l'ombre (environ 5 minutes)
+
+Aucun nouveau *Cron Trigger*, aucun nouveau secret : seul le code change.
+
+1. Ouvre `infra/cloudflare/horloge/worker.js` sur GitHub (branche `main`),
+   bouton **Raw**, puis copie tout le texte.
+2. dash.cloudflare.com : **Workers & Pages**, `turf-horloge`, **Edit code**.
+   Remplace tout le code par le texte copié, puis clique sur **Deploy**.
+3. Onglet **Deployments** : note l'identifiant de la nouvelle version (les 8
+   premiers caractères) et transmets-le au labo, qui l'inscrit au registre de
+   l'ombre (`docs/OMBRE_REGISTRE.md`).
+4. Vérifie dans **Settings**, **Trigger events** que les trois horaires sont
+   toujours là : `17 1 * * *`, `5 5 * * *` et `50 5 * * *`.
+
+Le lendemain à 01h17 UTC, l'onglet *Actions* de GitHub doit montrer trois
+lancements *workflow_dispatch* : l'export de l'historique, la garde et le
+compteur. Le calcul de nuit de 05h05 et 05h50 ne change pas.
+
 ## Lire les journaux
 
 | Ligne | Sens |
@@ -116,7 +143,7 @@ GitHub.
 - **Si le jeton fuitait**, il ne permettrait que de lancer les workflows de ce
   dépôt : ni lire les secrets, ni modifier le code. Le révoquer suffit
   (GitHub, *Fine-grained tokens*, **Revoke**).
-- **Arrêt :** le plan s'arrête seul après le 24/11. Pour arrêter plus tôt,
+- **Arrêt :** le plan de l'ombre s'arrête seul après le 25/11. Pour arrêter plus tôt,
   supprime les *Cron Triggers* ou le Worker, puis révoque le jeton.
 - **Tests :** `node --test infra/cloudflare/horloge/worker.test.mjs` teste la
   logique du Worker. `tests/test_horloge_cloudflare.py` vérifie que chaque

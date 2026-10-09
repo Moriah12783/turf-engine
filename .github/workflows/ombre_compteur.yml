@@ -11,7 +11,9 @@ name: Compteur de l'ombre
 # d'aujourd'hui sans ombre complète, une clé différente de la règle gelée ou
 # une couverture sous 90 % font échouer le job : GitHub envoie l'alerte.
 # Jours : de DEBUT_OMBRE (08/10) au 25/11, date de lecture au plus tard en
-# cas de remise à zéro. Voir turf_lab/ombre_compteur.py.
+# cas de remise à zéro. Lancement : horloge Cloudflare à 01h17 UTC (journée
+# de la veille complète) ; l'horaire GitHub de 09h23 reste en filet, souvent
+# avec plusieurs heures de retard. Voir turf_lab/ombre_compteur.py.
 
 on:
   schedule:

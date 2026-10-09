@@ -9,7 +9,8 @@
 //
 // Il ne fait rien d'autre : aucune donnée lue ni écrite, aucune page publique
 // (fetch répond 404). Les garde-fous restent dans les workflows eux-mêmes
-// (créneau 00h-05h du Radar, limites de 06h20 et 06h28, OMBRE_PAS_OUVERTE).
+// (créneau 00h-05h du Radar, limites de 06h20 et 06h28, OMBRE_PAS_OUVERTE,
+// lecture impossible pour le compteur de l'ombre).
 // Seul secret : GITHUB_TOKEN, jeton GitHub limité au lancement des workflows
 // de ce dépôt (Actions : lecture et écriture). Il n'est jamais journalisé.
 // Guide : docs/HORLOGE_CLOUDFLARE.md.
@@ -21,6 +22,12 @@ const BRANCHE = "main";
 const PLAN = [
   // Export nocturne de l'historique Radar (créneau 00h-05h vérifié par le workflow).
   { cron: "17 1 * * *", workflow: "history_export.yml", inputs: { action: "run" } },
+  // Ombre : garde de confidentialité et compteur quotidien (décision de Steph du
+  // 09/10). À 01h17, la journée de la veille est complète : éditions du matin,
+  // horizons de la journée, arrivées. Lecture seule ; les horaires GitHub de ces
+  // deux workflows restent en filet. Jusqu'au 25/11, lecture au plus tard.
+  { cron: "17 1 * * *", workflow: "garde_ombre.yml", inputs: {}, du: "2026-10-08", au: "2026-11-25" },
+  { cron: "17 1 * * *", workflow: "ombre_compteur.yml", inputs: {}, du: "2026-10-08", au: "2026-11-25" },
   // Répétition générale de l'ombre (GO de Steph du 28/09).
   { cron: "5 5 * * *", workflow: "repetition_ombre.yml", inputs: { prevu: "05:05" }, du: "2026-10-01", au: "2026-10-06" },
   { cron: "50 5 * * *", workflow: "repetition_ombre.yml", inputs: { prevu: "05:50" }, du: "2026-10-01", au: "2026-10-06" },

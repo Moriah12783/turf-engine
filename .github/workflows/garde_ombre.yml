@@ -1,10 +1,14 @@
 name: Garde de confidentialité de l'ombre
 
-# Contrôle indépendant décidé par Steph le 07/10/2026. Deux fois par jour, il
+# Contrôle indépendant décidé par Steph le 07/10/2026. Chaque nuit, il
 # cherche toute trace de l'ombre du fondamental dans ce qui est public : le
 # site publié, les fichiers publics du dépôt (site/, benchmark_report.json,
 # benchmark_dashboard.html) et les lignes ajoutées à ces fichiers par les
-# commits des 14 dernières heures. Il en faut zéro.
+# commits des 26 dernières heures (une journée entière, avec recouvrement). Il
+# en faut zéro.
+# Lancement : horloge Cloudflare à 01h17 UTC (turf-horloge, à la minute) ; les
+# horaires GitHub ci-dessous restent en filet, souvent avec plusieurs heures de
+# retard.
 # Il ne touche pas à la chaîne de production : aucune écriture, aucun secret,
 # aucune lecture de la base. Il n'imprime jamais d'extrait, seulement des
 # comptes. Une trace trouvée fait échouer le job : GitHub envoie l'alerte.
@@ -39,7 +43,7 @@ jobs:
       - name: Checkout Repository (recent history included)
         uses: actions/checkout@v4
         with:
-          fetch-depth: 100
+          fetch-depth: 150
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -50,7 +54,7 @@ jobs:
         run: >-
           python -m turf_lab.garde_ombre
           --site https://prono.elite-turf.fr
-          --heures 14
+          --heures 26
           --marqueur ombre_fondamental
           --marqueur A_lineaire_0.90_0.10
           --marqueur fond-matin-
