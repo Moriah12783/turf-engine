@@ -22,6 +22,18 @@ test("plan : chaque jour lance les bons workflows", () => {
   assert.deepEqual(taches("50 5 * * *", "2026-10-02")[0].inputs, { prevu: "05:50" });
 });
 
+test("plan : garde et compteur de l'ombre à 01h17, du 08/10 au 25/11", () => {
+  const noms = (jour) => taches("17 1 * * *", jour).map((t) => t.workflow);
+  assert.deepEqual(noms("2026-10-07"), ["history_export.yml"]);
+  assert.deepEqual(noms("2026-10-10"), ["history_export.yml", "garde_ombre.yml", "ombre_compteur.yml"]);
+  assert.deepEqual(noms("2026-11-25"), ["history_export.yml", "garde_ombre.yml", "ombre_compteur.yml"]);
+  assert.deepEqual(noms("2026-11-26"), ["history_export.yml"]);
+  assert.deepEqual(taches("17 1 * * *", "2026-10-10")[2].inputs, {});
+  for (const cron of ["5 5 * * *", "50 5 * * *"]) {                          // créneaux de nuit inchangés
+    assert.deepEqual(taches(cron, "2026-10-10").map((t) => t.workflow), ["fondamental_nuit.yml"]);
+  }
+});
+
 test("lancement : 204 du premier coup, jeton jamais journalisé", async () => {
   const appels = [];
   const logs = [];

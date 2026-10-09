@@ -31,7 +31,8 @@ def _entrees(workflow):
 
 def test_chaque_tache_lance_un_workflow_existant_avec_des_entrees_declarees():
     taches = _plan()
-    assert {w for _, w, _ in taches} == {"history_export.yml", "repetition_ombre.yml", "fondamental_nuit.yml"}
+    assert {w for _, w, _ in taches} == {"history_export.yml", "repetition_ombre.yml", "fondamental_nuit.yml",
+                                        "garde_ombre.yml", "ombre_compteur.yml"}
     for _, workflow, cles in taches:
         assert set(cles) <= _entrees(workflow), (workflow, cles)
 
