@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "25e07ce0defbb66e7a90a1df4a10d73634b649c9",
-  "run_id": "37918143328",
+  "commit": "ef895665fc117fedbe703ba66eb5eae6b7fc82f6",
+  "run_id": "37919598052",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-09",
- "genere_le_utc": "2026-10-09T10:33:25Z",
+ "genere_le_utc": "2026-10-09T10:47:25Z",
  "nb_courses": 33,
  "compte_par_statut": {
   "EN_ATTENTE": 30,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 2,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 3,
   "ANNULEE": 0
  },
- "empreinte_sha256": "6498a56a8f489d0aea72aa1d8b54e5f9d85cbe0b2809010b9e3d8a09496b5804",
+ "empreinte_sha256": "02733859f0a60b296463d6f7406b4b9ccce1c7ab6f2020ab7d50fe538d4322ed",
  "courses": [
   {
    "course_id": "R1C1_09102026_VINCENNES",
@@ -619,7 +619,7 @@
     "verifiee_le_utc": "2026-10-09T09:31:21Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-09T09:31:21Z",
-    "derniere_verification_utc": "2026-10-09T10:31:52Z"
+    "derniere_verification_utc": "2026-10-09T10:46:11Z"
    },
    "correction": {
     "version": 1,
@@ -825,7 +825,7 @@
     "verifiee_le_utc": "2026-10-09T10:01:38Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-09T10:01:38Z",
-    "derniere_verification_utc": "2026-10-09T10:31:52Z"
+    "derniere_verification_utc": "2026-10-09T10:46:11Z"
    },
    "correction": {
     "version": 1,
@@ -868,11 +868,11 @@
     "partants_actifs": 15
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "FIN_COURSE"
    },
    "classement": [
     {
@@ -904,6 +904,24 @@
      "num": 14,
      "nom": "MAPPA DA VINCI",
      "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 3,
+     "nom": "MATA HARI TURGOT",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 9,
+     "nom": "MA BELLE AVENTURE",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 11,
+     "nom": "MOON STRYCK",
+     "dead_heat": false
     }
    ],
    "arrivee": [
@@ -911,7 +929,10 @@
     13,
     1,
     7,
-    14
+    14,
+    3,
+    9,
+    11
    ],
    "non_classes": [
     {
@@ -952,11 +973,78 @@
    ],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "10": 8.4
+    },
+    "simple_place": {
+     "13": 4.3,
+     "10": 2.2,
+     "1": 1.8
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "10-13",
+      "dividende_pour_1_eur": 64.6
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "10-13",
+      "dividende_pour_1_eur": 12.7
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "13-1",
+      "dividende_pour_1_eur": 10.4
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "10-1",
+      "dividende_pour_1_eur": 6.4
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "1-7",
+      "dividende_pour_1_eur": 2.1
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "13-7",
+      "dividende_pour_1_eur": 2.1
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "13-1",
+      "dividende_pour_1_eur": 2.1
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "10-7",
+      "dividende_pour_1_eur": 2.1
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "10-1",
+      "dividende_pour_1_eur": 2.1
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "10-13",
+      "dividende_pour_1_eur": 2.1
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "10-13-1",
+      "dividende_pour_1_eur": 81.0
+     },
+     {
+      "type_pari": "MULTI",
+      "combinaison": "10-13-1-7",
+      "dividende_pour_1_eur": 1.8
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -966,14 +1054,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-10-09T10:31:52Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-10-09T10:46:11Z",
+    "verifiee_le_utc": "2026-10-09T10:46:11Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-10-09T10:31:52Z",
-    "derniere_verification_utc": "2026-10-09T10:31:52Z"
+    "derniere_modification_utc": "2026-10-09T10:46:11Z",
+    "derniere_verification_utc": "2026-10-09T10:46:11Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -988,6 +1076,23 @@
        1,
        7,
        14
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-10-09T10:46:11Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       10,
+       13,
+       1,
+       7,
+       14,
+       3,
+       9,
+       11
       ]
      }
     ]
@@ -1004,9 +1109,9 @@
     "libelle": "PRIX DES CASQUES NACA",
     "discipline": "TROT_MONTE",
     "distance_m": 2850,
-    "heure_depart_utc": "2026-10-09T10:52:00Z",
+    "heure_depart_utc": "2026-10-09T10:54:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "10:52 GMT (12:52 Paris)",
+    "heure_depart_affichee": "10:54 GMT (12:54 Paris)",
     "partants_declares": 9,
     "partants_actifs": 9
    },
@@ -1279,9 +1384,9 @@
     "libelle": "PRIX DE VENETTE",
     "discipline": "PLAT",
     "distance_m": 2000,
-    "heure_depart_utc": "2026-10-09T11:08:00Z",
+    "heure_depart_utc": "2026-10-09T11:10:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "11:08 GMT (13:08 Paris)",
+    "heure_depart_affichee": "11:10 GMT (13:10 Paris)",
     "partants_declares": 8,
     "partants_actifs": 8
    },
