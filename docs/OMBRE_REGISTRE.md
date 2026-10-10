@@ -19,3 +19,5 @@ l'ombre n'y figure avant la lecture.
 | 08/10, 09h31 | Compteur quotidien (lecture seule, aucune lecture de l'ombre possible) | PR #25, `20a04a96` | Aucun |
 | 09/10 | Jour 2 : 31 éditions éligibles sur 31 avec une ombre complète ; couverture officielle de 47 sur 47 | compteur, lancé à la main à 15h15 (horaire GitHub en retard) | — |
 | 09/10 | Horloge Cloudflare : la garde et le compteur sont lancés à 01h17 ; les créneaux de nuit de 05h05 et 05h50 ne changent pas | PR #26 ; nouvelle version à inscrire après le redéploiement (précédente : `7853694e`) | Aucun |
+| 10/10, 01h37 | Bilan des jours 1 et 2 : 61 éditions éligibles sur 61 avec une ombre complète, aucune alerte ; garde de la veille (23h29) : 0 trace | compteur lancé à la main (horloge pas encore redéployée) | — |
+| 10/10 | Horloge redéployée par Steph ; code en ligne vérifié identique à `worker.js` de `main`. Premier lancement de la garde et du compteur par l'horloge : 11/10 à 01h17 | version `0f0006e9` (précédente : `7853694e`) | Aucun |
