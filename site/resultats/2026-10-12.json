@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "d22e9406023f33461c9919095117887ea187aa92",
-  "run_id": "38240478827",
+  "commit": "ac64f518d0997e371e48ef3b7bd70266d015510c",
+  "run_id": "38241462947",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-12",
- "genere_le_utc": "2026-10-12T11:08:05Z",
+ "genere_le_utc": "2026-10-12T11:16:51Z",
  "nb_courses": 37,
  "compte_par_statut": {
-  "EN_ATTENTE": 32,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 31,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 5,
   "ANNULEE": 0
  },
- "empreinte_sha256": "4e66aa0dcceddb70d69103b6b3ecab7efb4f8da0ea6ee0e28eb0349a3488ae44",
+ "empreinte_sha256": "e7a28d91c56fd9fc7cb81c0ed5ed9e9881e42c05a964d6fabb50423be42250e3",
  "courses": [
   {
    "course_id": "R1C1_12102026_BORELY",
@@ -130,7 +130,7 @@
     "verifiee_le_utc": "2026-10-12T10:15:32Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-12T10:15:32Z",
-    "derniere_verification_utc": "2026-10-12T11:06:19Z"
+    "derniere_verification_utc": "2026-10-12T11:15:33Z"
    },
    "correction": {
     "version": 2,
@@ -279,7 +279,7 @@
     "verifiee_le_utc": "2026-10-12T10:45:31Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-12T10:45:31Z",
-    "derniere_verification_utc": "2026-10-12T11:06:19Z"
+    "derniere_verification_utc": "2026-10-12T11:15:33Z"
    },
    "correction": {
     "version": 1,
@@ -321,14 +321,44 @@
     "partants_actifs": 8
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 2,
+     "nom": "SKALI",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 3,
+     "nom": "PIKES PEAK",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 1,
+     "nom": "KRISTAL",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 7,
+     "nom": "MAGENTA MELODY",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    2,
+    3,
+    1,
+    7
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
@@ -341,21 +371,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/12102026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-10-12T11:15:33Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-10-12T11:15:33Z",
+    "derniere_verification_utc": "2026-10-12T11:15:33Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-10-12T11:15:33Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       2,
+       3,
+       1,
+       7
+      ]
+     }
+    ]
    }
   },
   {
@@ -737,7 +781,7 @@
     "verifiee_le_utc": "2026-10-12T10:00:35Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-12T10:00:35Z",
-    "derniere_verification_utc": "2026-10-12T11:06:19Z"
+    "derniere_verification_utc": "2026-10-12T11:15:33Z"
    },
    "correction": {
     "version": 2,
@@ -890,7 +934,7 @@
     "verifiee_le_utc": "2026-10-12T10:30:33Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-12T10:30:33Z",
-    "derniere_verification_utc": "2026-10-12T11:06:19Z"
+    "derniere_verification_utc": "2026-10-12T11:15:33Z"
    },
    "correction": {
     "version": 1,
@@ -994,11 +1038,32 @@
    "non_classes": [],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "3": 2.2
+    },
+    "simple_place": {
+     "3": 1.6,
+     "6": 5.7
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_ORDRE",
+      "combinaison": "3-6",
+      "dividende_pour_1_eur": 34.0
+     },
+     {
+      "type_pari": "TRIO_ORDRE",
+      "combinaison": "3-6-7",
+      "dividende_pour_1_eur": 195.4
+     },
+     {
+      "type_pari": "SUPER_QUATRE",
+      "combinaison": "3-6-7-4",
+      "dividende_pour_1_eur": 599.2
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -1012,7 +1077,7 @@
     "verifiee_le_utc": "2026-10-12T11:06:19Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-12T11:06:19Z",
-    "derniere_verification_utc": "2026-10-12T11:06:19Z"
+    "derniere_verification_utc": "2026-10-12T11:15:33Z"
    },
    "correction": {
     "version": 2,
@@ -1072,7 +1137,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
