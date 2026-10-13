@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "b511cc67f0dcec169a7e4234a5b9ce77dc68e8aa",
-  "run_id": "38376784457",
+  "commit": "4d214c2f501b2d4391b0a3a9d96e5a6cf1789bcd",
+  "run_id": "38378571395",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-13",
- "genere_le_utc": "2026-10-13T09:32:09Z",
+ "genere_le_utc": "2026-10-13T09:47:19Z",
  "nb_courses": 32,
  "compte_par_statut": {
-  "EN_ATTENTE": 30,
+  "EN_ATTENTE": 29,
   "PROVISOIRE": 1,
-  "DEFINITIVE": 1,
+  "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "d07898a982638482d2b898a56b5d746b68804206fb3022f50af0500ead630461",
+ "empreinte_sha256": "b4ef556636cf10d628fcb495b2b1857bd1c624d443295353faf57b3ed9bf8051",
  "courses": [
   {
    "course_id": "R1C1_13102026_ParisLongchamp",
@@ -728,7 +728,7 @@
     "verifiee_le_utc": "2026-10-13T09:30:36Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-13T09:30:36Z",
-    "derniere_verification_utc": "2026-10-13T09:30:36Z"
+    "derniere_verification_utc": "2026-10-13T09:45:34Z"
    },
    "correction": {
     "version": 2,
@@ -789,14 +789,44 @@
     "partants_actifs": 8
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "ARRIVEE_PROVISOIRE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 10,
+     "nom": "DHIFFUSHI",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 8,
+     "nom": "PRINCESS ZALTANA",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 2,
+     "nom": "SBIKHA",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 7,
+     "nom": "SUGAR DADDY",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    10,
+    8,
+    2,
+    7
+   ],
    "non_classes": [],
    "non_partants": [
     {
@@ -818,21 +848,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/13102026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-10-13T09:45:34Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-10-13T09:45:34Z",
+    "derniere_verification_utc": "2026-10-13T09:45:34Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-10-13T09:45:34Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       10,
+       8,
+       2,
+       7
+      ]
+     }
+    ]
    }
   },
   {
@@ -1138,11 +1182,11 @@
     "partants_actifs": 15
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "FIN_COURSE"
    },
    "classement": [
     {
@@ -1174,6 +1218,42 @@
      "num": 15,
      "nom": "HIMEROS DU DOLLAR",
      "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 8,
+     "nom": "HALDO DE LA CLOUE",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 9,
+     "nom": "JAWENN DE KERYANN",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 4,
+     "nom": "IDEAL LOVER",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 1,
+     "nom": "INOPINE",
+     "dead_heat": false
+    },
+    {
+     "rang": 10,
+     "num": 12,
+     "nom": "KAISER DE CHANLECY",
+     "dead_heat": false
+    },
+    {
+     "rang": 11,
+     "num": 10,
+     "nom": "KING DE BASSIERE",
+     "dead_heat": false
     }
    ],
    "arrivee": [
@@ -1181,7 +1261,13 @@
     13,
     14,
     6,
-    15
+    15,
+    8,
+    9,
+    4,
+    1,
+    12,
+    10
    ],
    "non_classes": [
     {
@@ -1212,11 +1298,78 @@
     }
    ],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "5": 1.5
+    },
+    "simple_place": {
+     "5": 1.2,
+     "13": 9.5,
+     "14": 14.9
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "5-13",
+      "dividende_pour_1_eur": 33.5
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "5-13",
+      "dividende_pour_1_eur": 21.6
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "5-14",
+      "dividende_pour_1_eur": 21.9
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "13-14",
+      "dividende_pour_1_eur": 138.9
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "5-13",
+      "dividende_pour_1_eur": 60.3
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "5-14",
+      "dividende_pour_1_eur": 60.3
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "5-6",
+      "dividende_pour_1_eur": 60.3
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "13-14",
+      "dividende_pour_1_eur": 60.3
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "13-6",
+      "dividende_pour_1_eur": 60.3
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "14-6",
+      "dividende_pour_1_eur": 60.3
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "5-13-14",
+      "dividende_pour_1_eur": 1296.7
+     },
+     {
+      "type_pari": "MULTI",
+      "combinaison": "5-13-14-6",
+      "dividende_pour_1_eur": 107.1
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -1226,14 +1379,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-10-13T09:30:36Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-10-13T09:45:34Z",
+    "verifiee_le_utc": "2026-10-13T09:45:34Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-10-13T09:30:36Z",
-    "derniere_verification_utc": "2026-10-13T09:30:36Z"
+    "derniere_modification_utc": "2026-10-13T09:45:34Z",
+    "derniere_verification_utc": "2026-10-13T09:45:34Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -1248,6 +1401,26 @@
        14,
        6,
        15
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-10-13T09:45:34Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       5,
+       13,
+       14,
+       6,
+       15,
+       8,
+       9,
+       4,
+       1,
+       12,
+       10
       ]
      }
     ]
@@ -1264,9 +1437,9 @@
     "libelle": "PRIX DU DONEZAN",
     "discipline": "TROT_ATTELE",
     "distance_m": 2000,
-    "heure_depart_utc": "2026-10-13T09:51:00Z",
+    "heure_depart_utc": "2026-10-13T09:52:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "09:51 GMT (11:51 Paris)",
+    "heure_depart_affichee": "09:52 GMT (11:52 Paris)",
     "partants_declares": 16,
     "partants_actifs": 16
    },
@@ -1275,7 +1448,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
