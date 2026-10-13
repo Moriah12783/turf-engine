@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "62bfc64232bb0a947fa40900e5e5499425749028",
-  "run_id": "38373215373",
+  "commit": "4a8f16e1d2dd11f6d21883ac8c7ea6fab228fad2",
+  "run_id": "38374984179",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-13",
- "genere_le_utc": "2026-10-13T09:02:11Z",
+ "genere_le_utc": "2026-10-13T09:16:33Z",
  "nb_courses": 32,
  "compte_par_statut": {
-  "EN_ATTENTE": 32,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 31,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 0,
   "ANNULEE": 0
  },
- "empreinte_sha256": "4340915e35ce676f8b14c6e14ca6945ffbe1ed52b80410bd80d6b75b1e620ea4",
+ "empreinte_sha256": "515b634dcdd962d73fd3b6ef4b2d93185d7f558d2275fc03b4c6ab57e0ca9135",
  "courses": [
   {
    "course_id": "R1C1_13102026_ParisLongchamp",
@@ -546,14 +546,44 @@
     "partants_actifs": 12
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 4,
+     "nom": "HUNTIQUE",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 6,
+     "nom": "CAMPEONA",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 11,
+     "nom": "LIBELA DES BAMBOUS",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 9,
+     "nom": "CANDELA MES",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    4,
+    6,
+    11,
+    9
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
@@ -566,21 +596,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/13102026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-10-13T09:15:29Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-10-13T09:15:29Z",
+    "derniere_verification_utc": "2026-10-13T09:15:29Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-10-13T09:15:29Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       4,
+       6,
+       11,
+       9
+      ]
+     }
+    ]
    }
   },
   {
