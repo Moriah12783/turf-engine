@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "5d8affe4b20cb7df8e78cdb987350f324d888eaa",
-  "run_id": "38546523879",
+  "commit": "b09f7ea3e2f055f85380a078873d7681a3c3d354",
+  "run_id": "38548324121",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-14",
- "genere_le_utc": "2026-10-14T10:02:43Z",
+ "genere_le_utc": "2026-10-14T10:17:16Z",
  "nb_courses": 33,
  "compte_par_statut": {
-  "EN_ATTENTE": 30,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 29,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 3,
   "ANNULEE": 0
  },
- "empreinte_sha256": "419931df24b489dbd0b994991251ace1a6ff10f8b396095cc8b55644a6261703",
+ "empreinte_sha256": "8ae3118eb65550b531a3776ebee3635bd81696fe5f7b40c424f20d3f15eaff8c",
  "courses": [
   {
    "course_id": "R1C1_14102026_REIMS",
@@ -617,7 +617,7 @@
     "verifiee_le_utc": "2026-10-14T09:16:06Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-14T09:16:06Z",
-    "derniere_verification_utc": "2026-10-14T10:00:54Z"
+    "derniere_verification_utc": "2026-10-14T10:16:01Z"
    },
    "correction": {
     "version": 1,
@@ -850,7 +850,7 @@
     "verifiee_le_utc": "2026-10-14T10:00:54Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-14T10:00:54Z",
-    "derniere_verification_utc": "2026-10-14T10:00:54Z"
+    "derniere_verification_utc": "2026-10-14T10:16:01Z"
    },
    "correction": {
     "version": 2,
@@ -907,15 +907,61 @@
     "partants_actifs": 11
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "DEPART_CONFIRME"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 2,
+     "nom": "KIMFLY",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 8,
+     "nom": "STORLIGHT",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 10,
+     "nom": "DOUCE AMIE",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 6,
+     "nom": "ASTON D'ENOCQ",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    2,
+    8,
+    10,
+    6
+   ],
+   "non_classes": [
+    {
+     "num": 1,
+     "nom": "ZADALL",
+     "incident": "ARRETE"
+    },
+    {
+     "num": 3,
+     "nom": "NOMADE",
+     "incident": "ARRETE"
+    },
+    {
+     "num": 7,
+     "nom": "ALMAGUER",
+     "incident": "ARRETE"
+    }
+   ],
    "non_partants": [
     {
      "num": 4,
@@ -932,21 +978,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PARTICIPANTS",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/14102026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-10-14T10:16:01Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-10-14T10:16:01Z",
+    "derniere_verification_utc": "2026-10-14T10:16:01Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-10-14T10:16:01Z",
+      "source": "PMU_PARTICIPANTS",
+      "classement": [
+       2,
+       8,
+       10,
+       6
+      ]
+     }
+    ]
    }
   },
   {
@@ -1341,7 +1401,7 @@
     "verifiee_le_utc": "2026-10-14T10:00:54Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-14T10:00:54Z",
-    "derniere_verification_utc": "2026-10-14T10:00:54Z"
+    "derniere_verification_utc": "2026-10-14T10:16:01Z"
    },
    "correction": {
     "version": 1,
