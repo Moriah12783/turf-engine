@@ -1,17 +1,18 @@
 # Table `verrous_tentatives` — tentatives de verrou sous le seuil de diffusion
 
-**Statut : PROJET. Rien n'est codé.** La mise en service a lieu le lendemain de
-la lecture unique de l'ombre : le **13/11/2026**, ou le **26/11/2026** si la
-remise à zéro est utilisée. Pas avant : le code touche `turf_lab/daily_sync.py`
-et `turf_lab/database.py`, qui font partie de la chaîne du matin gelée
-(`docs/OMBRE_FONDAMENTAL.md`).
+**Statut : PROJET, version 3 confirmée. Rien n'est codé.** La mise en service
+a lieu le lendemain de la lecture unique de l'ombre : le **13/11/2026**, ou le
+**26/11/2026** si la remise à zéro est utilisée. Pas avant : le code touche
+`turf_lab/daily_sync.py` et `turf_lab/database.py`, qui font partie de la
+chaîne du matin gelée (`docs/OMBRE_FONDAMENTAL.md`).
 
 | Date | Étape |
 |---|---|
-| 14/10/2026 | Spécification transmise par Steph ; précisions du dev NVE ; convergence avec le labo (version 3, ci-dessous) |
+| 14/10/2026 | Spécification transmise par Steph ; précisions du dev NVE ; convergence avec le labo |
 | 14/10/2026 | Décision de Steph : le labo écrit le code, le dev NVE relit la PR et vérifie la concordance chaque mardi |
-| Jour J (13/11 ou 26/11) | Annonce par ligne datée au dev Bases (changement de schéma) et au dev NVE, **avant** toute publication |
-| Jour J et suivants | PR du labo : code, tests, cette documentation passée au statut « en service » ; relecture du dev NVE ; fusion sur l'accord de Steph |
+| 14/10/2026 | Version 3 confirmée par le dev Radar (`daily_sync`, clé `spec_verrous_tentatives_v3`) : trois règles de reproductibilité, concordance C1 à C4, liste « non observée » produite par la requête. Le labo nomme le journal des refus (`verrous_refus`) |
+| Jour J (13/11 ou 26/11) | Annonce par une seule ligne datée au dev Bases (changement de schéma : `verrous_tentatives` et `verrous_refus`), au dev NVE et au dev Radar, **avant** toute publication |
+| Jour J et suivants | PR du labo : code, tests, cette documentation passée au statut « en service » ; relecture du dev Radar et du dev NVE ; fusion sur l'accord de Steph |
 
 ## Pourquoi
 
@@ -57,10 +58,11 @@ Verrou posé avec une part cotée d'au moins 50 % et de moins de 90 %. Ligne
 
 ### `REFUSE`
 
-Moins de 50 % de partants cotés à **chaque** observation de la fenêtre de
-l'horizon. Ligne écrite **à la fermeture de la fenêtre**, avec la part la plus
-haute observée, ses deux nombres et son heure (`heure_max_utc`).
-`decided_at_utc` est l'instant de l'écriture.
+Moins de 50 % de partants cotés à **chaque** passage de la fenêtre de
+l'horizon, et aucun verrou avant le départ. Ligne écrite par le **balayage de
+fin de journée**, depuis le journal `verrous_refus`. `decided_at_utc` est
+l'instant du balayage ; toutes les autres colonnes viennent du journal et ne
+dépendent pas du moment du calcul (règles ci-dessous).
 
 ## Fenêtres
 
@@ -84,62 +86,86 @@ toutes dans la même passe que l'horizon suivant (exemple : Graignes R6C1 le
 la règle est donc la même pour les quatre. Pour ces éditions, `decided_at_utc`
 montre qu'une édition `T90` a été prise à une trentaine de minutes du départ.
 
-## Table de suivi (interne au labo, hors garantie)
+## Journal `verrous_refus` (source des `REFUSE`)
 
+Aucune table ne garde aujourd'hui ce que la porte voit à un passage refusé :
+la seule trace est la ligne de journal `GATE_REFUSED` (`race_id`, `horizon`,
+part arrondie à 3 décimales, `now_utc`), éphémère et sans les deux nombres.
 `odds_snapshots` n'est écrite qu'au verrou (clé `race_id + num + horizon`,
-`INSERT OR IGNORE`) : rien n'y existe pour un horizon refusé, et y écrire les
-passes refusées remplacerait la photo du verrou par la première observation
-refusée. Le `REFUSE` est donc calculé depuis une table de suivi propre au labo,
-qui enregistre ce que la porte a vu à chaque passe pour un horizon dû et pas
-encore verrouillé :
+`INSERT OR IGNORE`) et **n'est ni lue ni écrite par ce chantier** : y écrire
+les passages refusés remplacerait la photo du verrou.
 
-| Colonne | Sens |
-|---|---|
-| `race_id`, `horizon` | clé |
-| `part_max`, `n_partants_max`, `n_cotes_max`, `heure_max_utc` | meilleure observation de la fenêtre |
-| `nb_observations` | nombre de passes où la porte a évalué l'horizon |
-| `premiere_observation_utc`, `derniere_observation_utc` | bornes des observations |
+Le journal est **créé par ce chantier**, dans `turf_bench.db` (donc sur R2,
+lisible par le balayage dans GitHub Actions comme par le dev Bases). Une ligne
+par passage refusé, écrite dans `_lock_horizon`, dans la branche
+`GATE_REFUSED`, à côté de la ligne de journal (qui gagne `n_partants` et
+`n_cotes`) :
 
-Elle est modifiable (une ligne par course et par horizon, mise à jour à chaque
-passe). Ce n'est pas une table de référence : seules `verrous_tentatives` et
-`verrous_non_observes` portent la garantie d'ajout seul.
+| Colonne | Type | Sens |
+|---|---|---|
+| `id` | INTEGER | ordre d'écriture |
+| `race_id`, `horizon` | TEXT | course et horizon refusés |
+| `observed_at_utc` | TEXT ISO | instant du passage (`now_utc` de `GATE_REFUSED`) |
+| `part_cotee` | REAL | `priced_ratio`, arrondie à 4 décimales |
+| `n_partants`, `n_cotes` | INTEGER | les deux nombres de `priced_ratio` |
+| `min_lock_ratio`, `min_priced_ratio` | REAL | seuils en vigueur à ce passage |
+| `gate_version` | TEXT | `publication_gate.GATE_VERSION` à ce passage |
 
-## Écriture du `REFUSE` (proposé par le labo le 14/10, à confirmer à la relecture du dev NVE)
+Contrainte `UNIQUE(race_id, horizon, observed_at_utc)`. **Ajout seul** : deux
+déclencheurs refusent `UPDATE` et `DELETE`. Une erreur d'écriture est
+journalisée (`VERROU_REFUS_ERROR {...}`) et ne change rien au passage. Volume :
+une ligne par course, par horizon dû et non verrouillé, et par passage refusé ;
+mesuré la première semaine.
 
-1. Au **premier passage après le départ** : pour chaque horizon dû, non
-   verrouillé, observé au moins une fois, une ligne `REFUSE`.
-2. **Balayage de fin de journée**, en filet, au premier passage après 23h00
-   UTC, pour toutes les courses du jour.
+## Trois règles de reproductibilité
 
-La clé unique rend la double écriture sans effet : la seconde est ignorée.
+Aucune ligne ne dépend du moment où elle est calculée.
 
-## Table `verrous_non_observes` (proposée par le labo le 14/10, à confirmer)
+1. **Passage retenu.** Pour un `REFUSE`, `part_cotee`, `n_partants`, `n_cotes`
+   et `heure_max_utc` viennent du passage du journal où la part cotée est la
+   plus haute dans la fenêtre ; en cas d'égalité, le plus ancien. Seuls
+   comptent les passages antérieurs au départ, selon l'heure de départ de
+   `races` au moment du balayage.
+2. **Seuils.** `min_lock_ratio`, `min_priced_ratio` et `gate_version` sont
+   ceux du passage retenu, lus dans le journal. Comme le journal les
+   enregistre à chaque passage, un changement de la porte déployé dans la
+   journée (y compris le soir, entre 21h30 et 23h00) ne fausse aucune ligne.
+3. **Balayage.** Le `REFUSE` est écrit par le balayage de fin de journée, au
+   premier passage après 23h00 UTC, pour les courses du jour déjà parties (une
+   course encore à venir est traitée au balayage suivant). Le même calcul
+   relancé plus tard donnerait la même ligne ; la clé unique ignore toute
+   seconde écriture.
 
-Un horizon sans édition et sans observation n'est pas un refus de marché. Il
-est inscrit, au balayage de fin de journée, dans une table séparée, ajout seul
-avec les mêmes deux déclencheurs : `race_id`, `horizon`, `motif`,
-`constate_utc`. `verrous_tentatives` garde ainsi uniquement les décisions de
-la porte.
+## Liste « non observée »
+
+Produite par la requête, sans table : un horizon sans édition NVE et sans
+passage dans le journal. Motifs :
 
 | Motif | Cas |
 |---|---|
-| `ANNULEE` | course annulée avant le départ |
+| `ANNULEE` | course annulée (`races.status`) |
 | `HEURE_INCONNUE` | heure de départ inconnue : la fenêtre ne peut pas se fermer |
-| `AUCUN_PASSAGE` | course connue de la chaîne, mais aucune observation dans la fenêtre (passe manquée, partants absents) |
-| `HORS_PROGRAMME` | course du programme PMU du jour, relu au balayage, jamais reçue par les passes |
+| `AUCUN_PASSAGE` | course connue de la chaîne, aucun passage dans la fenêtre (passe manquée, partants absents) |
 
-Cas test : Moulins R11C1 et Pontchâteau R12C1 du 10/10/2026, dans la base mais
-sans aucune édition. La table de suivi dira si les passes les ont vues.
+Une course du programme PMU jamais reçue par les passes n'est pas dans
+`races` : le balayage compare le programme du jour à `races` et l'écrit dans
+sa ligne de journal (`HORS_PROGRAMME`, comptes et `race_id`). Cas test :
+Moulins R11C1 et Pontchâteau R12C1 du 10/10/2026, dans `races` mais sans
+aucune édition ; le journal dira si les passes les ont vus.
 
-## Concordance
+## Concordance, dans les deux sens, depuis la mise en service
 
-Chaque course et chaque horizon sans édition `NEW_VALUE_ENGINE` figure soit
-dans `verrous_tentatives` (`REFUSE`), soit dans `verrous_non_observes`. Jamais
-silencieusement absent des deux. Le dev NVE joue la requête chaque mardi et
-vérifie que les lignes `PARTIEL` concordent avec les éditions publiées.
+Le dev NVE joue ces requêtes chaque mardi ; chacune doit renvoyer zéro ligne.
+
+| Contrôle | Règle |
+|---|---|
+| C1 | Tout horizon sans édition NVE a une ligne `REFUSE` ou figure dans la liste « non observée » |
+| C2 | Aucune ligne `REFUSE` là où une édition NVE existe |
+| C3 | Toute édition NVE à `odds_real = 0` a sa ligne `PARTIEL` avec la même part et le même instant, et aucune ligne `PARTIEL` n'existe sans elle |
+| C4 | Toute ligne `REFUSE` a une part inférieure à son `min_lock_ratio` ; sinon, c'est la porte qu'il faut examiner |
 
 ```sql
--- Horizons sans édition NVE et sans explication : doit renvoyer zéro ligne.
+-- C1 : horizons sans édition NVE, sans REFUSE et sans motif « non observée ».
 WITH horizons(h) AS (VALUES ('T_MATIN'), ('T90'), ('T30'), ('T15'))
 SELECT r.race_id, h.h AS horizon
 FROM races r CROSS JOIN horizons h
@@ -148,35 +174,54 @@ WHERE r.date >= :mise_en_service          -- AAAA-MM-JJ
                   AND p.horizon = h.h AND p.engine_name = 'NEW_VALUE_ENGINE')
   AND NOT EXISTS (SELECT 1 FROM verrous_tentatives v WHERE v.race_id = r.race_id
                   AND v.horizon = h.h AND v.issue = 'REFUSE')
-  AND NOT EXISTS (SELECT 1 FROM verrous_non_observes n WHERE n.race_id = r.race_id
-                  AND n.horizon = h.h);
+  AND NOT (r.status = 'ANNULEE' OR r.scheduled_start_time IS NULL
+           OR NOT EXISTS (SELECT 1 FROM verrous_refus j WHERE j.race_id = r.race_id
+                          AND j.horizon = h.h));
 
--- PARTIEL : même part que l'édition, même instant.
-SELECT v.race_id, v.horizon
-FROM verrous_tentatives v
+-- C2 : REFUSE là où une édition NVE existe.
+SELECT v.race_id, v.horizon FROM verrous_tentatives v
 JOIN predictions p ON p.race_id = v.race_id AND p.horizon = v.horizon
                   AND p.engine_name = 'NEW_VALUE_ENGINE'
-WHERE v.issue = 'PARTIEL'
-  AND (p.priced_ratio <> v.part_cotee OR p.lock_time_utc <> v.decided_at_utc);   -- zéro ligne
+WHERE v.issue = 'REFUSE';
+
+-- C3 : éditions sans marché sans PARTIEL identique, puis PARTIEL sans édition.
+SELECT p.race_id, p.horizon FROM predictions p
+LEFT JOIN verrous_tentatives v ON v.race_id = p.race_id AND v.horizon = p.horizon
+                              AND v.issue = 'PARTIEL'
+WHERE p.engine_name = 'NEW_VALUE_ENGINE' AND p.odds_real = 0
+  AND p.lock_time_utc >= :mise_en_service
+  AND (v.race_id IS NULL OR v.part_cotee <> p.priced_ratio
+       OR v.decided_at_utc <> p.lock_time_utc);
+SELECT v.race_id, v.horizon FROM verrous_tentatives v
+LEFT JOIN predictions p ON p.race_id = v.race_id AND p.horizon = v.horizon
+                       AND p.engine_name = 'NEW_VALUE_ENGINE' AND p.odds_real = 0
+WHERE v.issue = 'PARTIEL' AND p.race_id IS NULL;
+
+-- C4 : REFUSE au-dessus du seuil de verrou.
+SELECT race_id, horizon FROM verrous_tentatives
+WHERE issue = 'REFUSE' AND part_cotee >= min_lock_ratio;
 ```
+
+Le délai avant le départ se calcule par jointure sur `races`
+(`scheduled_start_time`).
 
 ## Ce que la table ne contient pas
 
 - **Les verrous à 90 % ou plus** : aucune ligne. Leur décision est dans
   `publication_decisions` (motif `OK`). L'absence de ligne ne suffit donc pas
-  à conclure : il faut lire `predictions`, `publication_decisions` et
-  `verrous_non_observes`.
+  à conclure : il faut lire `predictions`, `publication_decisions` et la liste
+  « non observée ».
 - **RADAR_V4**, qui a sa propre porte (`_lock_radar`, 90 %) et n'est jamais
   diffusé.
 - **Le passé** : aucune ligne reconstituée. Seules les fenêtres ouvertes après
   la mise en service sont suivies ; une fenêtre ouverte avant n'a ni `REFUSE`
-  ni ligne « non observée ».
+  ni motif « non observée ».
 - **Rien de l'ombre du fondamental.**
 
 ## Garanties (les mêmes que `publication_decisions`)
 
 - Deux déclencheurs SQLite refusent tout `UPDATE` et tout `DELETE` sur
-  `verrous_tentatives` et sur `verrous_non_observes`.
+  `verrous_tentatives` et sur `verrous_refus`.
 - Enregistrement pur : une erreur d'écriture est journalisée
   (`VERROU_TENTATIVE_ERROR {...}`) et n'annule jamais un verrou. Chaque ligne
   écrite est journalisée (`VERROU_TENTATIVE {...}`), comptes et parts
@@ -188,18 +233,21 @@ WHERE v.issue = 'PARTIEL'
 
 ## Tests prévus
 
-1. `PARTIEL` : `part_cotee` et `decided_at_utc` identiques à l'édition.
+1. `PARTIEL` : `part_cotee` et `decided_at_utc` identiques à l'édition (C3).
 2. Les déclencheurs refusent modification et suppression, sur les deux tables.
-3. Une erreur d'écriture n'annule pas le verrou.
-4. `REFUSE` au premier passage après le départ, avec la part maximale, ses
-   deux nombres et son heure.
-5. Un horizon refusé le matin puis verrouillé plus tard (même dans la passe de
-   l'horizon suivant) n'a jamais de `REFUSE`.
-6. Aucun `REFUSE` sans observation : course annulée, heure inconnue, aucune
-   passe → ligne dans `verrous_non_observes` avec le bon motif.
-7. Aucune reprise du passé : fenêtre ouverte avant la mise en service ignorée.
-8. Verrou à 90 % ou plus : aucune ligne.
-9. Double écriture (passage après le départ puis balayage) : une seule ligne.
-10. Empreinte des deux seuils.
-11. La requête de concordance renvoie zéro ligne sur un banc synthétique
+3. Une erreur d'écriture, dans l'une ou l'autre table, n'annule pas le verrou
+   et ne change rien au passage.
+4. `REFUSE` : valeurs du passage à la part la plus haute, le plus ancien en cas
+   d'égalité, passages après le départ ignorés.
+5. Seuils et `gate_version` du passage retenu, même si la porte change dans la
+   journée.
+6. Un horizon refusé le matin puis verrouillé plus tard (même dans la passe de
+   l'horizon suivant) n'a jamais de `REFUSE` (C2).
+7. Liste « non observée » : course annulée, heure inconnue, aucun passage,
+   chacune avec son motif ; aucune `REFUSE` sans passage au journal (C1).
+8. Aucune reprise du passé : fenêtre ouverte avant la mise en service ignorée.
+9. Verrou à 90 % ou plus : aucune ligne.
+10. Balayage relancé : une seule ligne, identique.
+11. Empreinte des deux seuils.
+12. Les quatre requêtes C1 à C4 renvoient zéro ligne sur un banc synthétique
     complet.
