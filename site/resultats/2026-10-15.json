@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "04e7451e1aadb422680272948ddfabae3c5a66c8",
-  "run_id": "38715298409",
+  "commit": "a654e9eedc768b9fe35b51f9c65382862b75f9d4",
+  "run_id": "38717160631",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-15",
- "genere_le_utc": "2026-10-15T09:47:36Z",
+ "genere_le_utc": "2026-10-15T10:02:49Z",
  "nb_courses": 24,
  "compte_par_statut": {
-  "EN_ATTENTE": 23,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 22,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 1,
   "ANNULEE": 0
  },
- "empreinte_sha256": "b9bd0a59babc51131ef77a5bde691064d43da61306d5a7d944c3fe2dbf7d77bd",
+ "empreinte_sha256": "5172ab8a2d5c720bd9abc767e171ddadc5a15818d981ae1508a2803ecefc226b",
  "courses": [
   {
    "course_id": "R1C1_15102026_CHANTILLY",
@@ -684,7 +684,7 @@
     "verifiee_le_utc": "2026-10-15T09:45:47Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-15T09:45:47Z",
-    "derniere_verification_utc": "2026-10-15T09:45:47Z"
+    "derniere_verification_utc": "2026-10-15T10:01:00Z"
    },
    "correction": {
     "version": 2,
@@ -746,15 +746,61 @@
     "partants_actifs": 12
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 9,
+     "nom": "LASCAR PILE",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 4,
+     "nom": "LOVE ME HAUFOR",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 5,
+     "nom": "LOVELY FOUTEAU",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 10,
+     "nom": "LUDIVINE DE BAILLY",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    9,
+    4,
+    5,
+    10
+   ],
+   "non_classes": [
+    {
+     "num": 2,
+     "nom": "LUCKY BLUE",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 3,
+     "nom": "L'AVIS DU CHAILLOU",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 6,
+     "nom": "LADY DU COUDOU",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [
     {
      "num": 13,
@@ -771,21 +817,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/15102026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-10-15T10:01:00Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-10-15T10:01:00Z",
+    "derniere_verification_utc": "2026-10-15T10:01:00Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-10-15T10:01:00Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       9,
+       4,
+       5,
+       10
+      ]
+     }
+    ]
    }
   },
   {
