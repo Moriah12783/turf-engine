@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "dc97c657b6935f736ecdec0379b66069efb8f37a",
-  "run_id": "38713481848",
+  "commit": "04e7451e1aadb422680272948ddfabae3c5a66c8",
+  "run_id": "38715298409",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-15",
- "genere_le_utc": "2026-10-15T09:32:33Z",
+ "genere_le_utc": "2026-10-15T09:47:36Z",
  "nb_courses": 24,
  "compte_par_statut": {
   "EN_ATTENTE": 23,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 0,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 1,
   "ANNULEE": 0
  },
- "empreinte_sha256": "1a9eafed67c4612b9bae6649fbec74f5ffc8c51a8c4665e6738cc223e4f69316",
+ "empreinte_sha256": "b9bd0a59babc51131ef77a5bde691064d43da61306d5a7d944c3fe2dbf7d77bd",
  "courses": [
   {
    "course_id": "R1C1_15102026_CHANTILLY",
@@ -491,11 +491,11 @@
     "partants_actifs": 13
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -527,6 +527,48 @@
      "num": 6,
      "nom": "JUNIOR D'AVRAN",
      "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 5,
+     "nom": "KODAC DE FIERVILLE",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 14,
+     "nom": "IOKINA DE KERYANN",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 8,
+     "nom": "HORACE DU VIVIER",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 13,
+     "nom": "GRAAL DE MY",
+     "dead_heat": false
+    },
+    {
+     "rang": 10,
+     "num": 2,
+     "nom": "HEROS DE BEAUCAMP",
+     "dead_heat": false
+    },
+    {
+     "rang": 11,
+     "num": 9,
+     "nom": "HOUBLON BLEU",
+     "dead_heat": false
+    },
+    {
+     "rang": 12,
+     "num": 7,
+     "nom": "JALISKA DE LA NADE",
+     "dead_heat": false
     }
    ],
    "arrivee": [
@@ -534,7 +576,14 @@
     11,
     3,
     12,
-    6
+    6,
+    5,
+    14,
+    8,
+    13,
+    2,
+    9,
+    7
    ],
    "non_classes": [
     {
@@ -550,11 +599,78 @@
     }
    ],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "1": 7.9
+    },
+    "simple_place": {
+     "1": 2.2,
+     "11": 2.3,
+     "3": 4.7
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "1-11",
+      "dividende_pour_1_eur": 26.7
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "1-11",
+      "dividende_pour_1_eur": 9.3
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "1-3",
+      "dividende_pour_1_eur": 11.3
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "11-3",
+      "dividende_pour_1_eur": 15.9
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "1-11",
+      "dividende_pour_1_eur": 5.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "1-3",
+      "dividende_pour_1_eur": 5.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "1-12",
+      "dividende_pour_1_eur": 5.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "11-3",
+      "dividende_pour_1_eur": 5.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "11-12",
+      "dividende_pour_1_eur": 5.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "3-12",
+      "dividende_pour_1_eur": 5.0
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "1-11-3",
+      "dividende_pour_1_eur": 172.9
+     },
+     {
+      "type_pari": "MULTI",
+      "combinaison": "1-11-3-12",
+      "dividende_pour_1_eur": 3.6
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -564,14 +680,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-10-15T09:31:04Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-10-15T09:45:47Z",
+    "verifiee_le_utc": "2026-10-15T09:45:47Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-10-15T09:31:04Z",
-    "derniere_verification_utc": "2026-10-15T09:31:04Z"
+    "derniere_modification_utc": "2026-10-15T09:45:47Z",
+    "derniere_verification_utc": "2026-10-15T09:45:47Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -586,6 +702,27 @@
        3,
        12,
        6
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-10-15T09:45:47Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       1,
+       11,
+       3,
+       12,
+       6,
+       5,
+       14,
+       8,
+       13,
+       2,
+       9,
+       7
       ]
      }
     ]
@@ -602,9 +739,9 @@
     "libelle": "PRIX CONCIERGERIE CHEZ'KI",
     "discipline": "TROT_ATTELE",
     "distance_m": 2825,
-    "heure_depart_utc": "2026-10-15T09:51:00Z",
+    "heure_depart_utc": "2026-10-15T09:53:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "09:51 GMT (11:51 Paris)",
+    "heure_depart_affichee": "09:53 GMT (11:53 Paris)",
     "partants_declares": 13,
     "partants_actifs": 12
    },
@@ -613,7 +750,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
