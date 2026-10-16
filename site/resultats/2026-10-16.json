@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "302c9f5ea714fe1a83aecd9582acf92985592704",
-  "run_id": "38887723851",
+  "commit": "724e9ded6f370dd27e84565095656ae6d2bf803d",
+  "run_id": "38889360492",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-16",
- "genere_le_utc": "2026-10-16T10:32:36Z",
+ "genere_le_utc": "2026-10-16T10:47:56Z",
  "nb_courses": 33,
  "compte_par_statut": {
   "EN_ATTENTE": 30,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 2,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 3,
   "ANNULEE": 0
  },
- "empreinte_sha256": "1809ae6a10a266040e60237701b39328e1422ce27f5e0273dcaed5280eb2f310",
+ "empreinte_sha256": "c5e52f6931082314953b3726cf22fa9ffdca8c54e4f8e51d3a06e326e0d6edef",
  "courses": [
   {
    "course_id": "R1C1_16102026_VINCENNES",
@@ -703,7 +703,7 @@
     "verifiee_le_utc": "2026-10-16T09:31:18Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-16T09:31:18Z",
-    "derniere_verification_utc": "2026-10-16T10:31:09Z"
+    "derniere_verification_utc": "2026-10-16T10:46:03Z"
    },
    "correction": {
     "version": 1,
@@ -994,7 +994,7 @@
     "verifiee_le_utc": "2026-10-16T10:01:12Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-16T10:01:12Z",
-    "derniere_verification_utc": "2026-10-16T10:31:09Z"
+    "derniere_verification_utc": "2026-10-16T10:46:03Z"
    },
    "correction": {
     "version": 1,
@@ -1041,11 +1041,11 @@
     "partants_actifs": 16
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE"
+    "pmu_statut": "FIN_COURSE"
    },
    "classement": [
     {
@@ -1077,6 +1077,60 @@
      "num": 16,
      "nom": "MYSTIQUE LOULOU",
      "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 14,
+     "nom": "MONA DU FER",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 15,
+     "nom": "MANDARINE",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 13,
+     "nom": "MAMZELLE CARLESS",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 7,
+     "nom": "MIA FERM",
+     "dead_heat": false
+    },
+    {
+     "rang": 10,
+     "num": 12,
+     "nom": "MACUMBA DESBOIS",
+     "dead_heat": false
+    },
+    {
+     "rang": 11,
+     "num": 8,
+     "nom": "MARGUERITE QUICK",
+     "dead_heat": false
+    },
+    {
+     "rang": 12,
+     "num": 5,
+     "nom": "MYSTESS DE CANI",
+     "dead_heat": false
+    },
+    {
+     "rang": 13,
+     "num": 3,
+     "nom": "MALADETTA DE LOU",
+     "dead_heat": false
+    },
+    {
+     "rang": 14,
+     "num": 9,
+     "nom": "MEA MARIS",
+     "dead_heat": false
     }
    ],
    "arrivee": [
@@ -1084,7 +1138,16 @@
     4,
     6,
     11,
-    16
+    16,
+    14,
+    15,
+    13,
+    7,
+    12,
+    8,
+    5,
+    3,
+    9
    ],
    "non_classes": [
     {
@@ -1100,11 +1163,78 @@
    ],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "2": 11.3
+    },
+    "simple_place": {
+     "2": 4.7,
+     "4": 5.7,
+     "6": 13.5
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "2-4",
+      "dividende_pour_1_eur": 113.2
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "2-4",
+      "dividende_pour_1_eur": 36.9
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "2-6",
+      "dividende_pour_1_eur": 50.4
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "4-6",
+      "dividende_pour_1_eur": 72.6
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "2-4",
+      "dividende_pour_1_eur": 21.9
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "2-6",
+      "dividende_pour_1_eur": 21.9
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "2-11",
+      "dividende_pour_1_eur": 21.9
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "4-6",
+      "dividende_pour_1_eur": 21.9
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "4-11",
+      "dividende_pour_1_eur": 21.9
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "6-11",
+      "dividende_pour_1_eur": 21.9
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "2-4-6",
+      "dividende_pour_1_eur": 389.8
+     },
+     {
+      "type_pari": "MULTI",
+      "combinaison": "2-4-6-11",
+      "dividende_pour_1_eur": 43.2
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -1114,14 +1244,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-10-16T10:31:09Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-10-16T10:46:03Z",
+    "verifiee_le_utc": "2026-10-16T10:46:03Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-10-16T10:31:09Z",
-    "derniere_verification_utc": "2026-10-16T10:31:09Z"
+    "derniere_modification_utc": "2026-10-16T10:46:03Z",
+    "derniere_verification_utc": "2026-10-16T10:46:03Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -1136,6 +1266,29 @@
        6,
        11,
        16
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-10-16T10:46:03Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       2,
+       4,
+       6,
+       11,
+       16,
+       14,
+       15,
+       13,
+       7,
+       12,
+       8,
+       5,
+       3,
+       9
       ]
      }
     ]
@@ -1163,7 +1316,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -1438,7 +1591,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
