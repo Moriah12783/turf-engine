@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "b3a92767f64e3d00da6806f9a3302e2442678ea2",
-  "run_id": "39122518158",
+  "commit": "e663b46599cb61f7bb9a441ea527af3ff454eaa4",
+  "run_id": "39123530947",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-18",
- "genere_le_utc": "2026-10-18T11:18:02Z",
+ "genere_le_utc": "2026-10-18T11:32:44Z",
  "nb_courses": 72,
  "compte_par_statut": {
   "EN_ATTENTE": 67,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 4,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 5,
   "ANNULEE": 0
  },
- "empreinte_sha256": "3a3767819f529336631b6ecb3f440a06e545f24527df795e894dca0a9a0cf894",
+ "empreinte_sha256": "0f0dbba7234f62a47ddb27d24804dadc6a5f0971c7ee006989f82a44ca47d2e5",
  "courses": [
   {
    "course_id": "R1C1_18102026_ParisLongchamp",
@@ -663,7 +663,7 @@
     "verifiee_le_utc": "2026-10-18T09:45:57Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-18T09:45:57Z",
-    "derniere_verification_utc": "2026-10-18T11:15:58Z"
+    "derniere_verification_utc": "2026-10-18T11:31:01Z"
    },
    "correction": {
     "version": 1,
@@ -875,7 +875,7 @@
     "verifiee_le_utc": "2026-10-18T10:16:00Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-18T10:16:00Z",
-    "derniere_verification_utc": "2026-10-18T11:15:58Z"
+    "derniere_verification_utc": "2026-10-18T11:31:01Z"
    },
    "correction": {
     "version": 1,
@@ -1138,7 +1138,7 @@
     "verifiee_le_utc": "2026-10-18T10:45:58Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-18T11:00:56Z",
-    "derniere_verification_utc": "2026-10-18T11:15:58Z"
+    "derniere_verification_utc": "2026-10-18T11:31:01Z"
    },
    "correction": {
     "version": 2,
@@ -1198,7 +1198,7 @@
     "definitive": true,
     "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_DEFINITIVE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -1224,13 +1224,48 @@
      "num": 5,
      "nom": "NEZUKO JIEL",
      "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 4,
+     "nom": "NARISSA DE LOU",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 6,
+     "nom": "NAHINE D'OCCAGNES",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 11,
+     "nom": "NICE CAILLERIE",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 8,
+     "nom": "NOGHERA COUNTESS",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 7,
+     "nom": "NOBLIA",
+     "dead_heat": false
     }
    ],
    "arrivee": [
     2,
     3,
     1,
-    5
+    5,
+    4,
+    6,
+    11,
+    8,
+    7
    ],
    "non_classes": [
     {
@@ -1330,11 +1365,11 @@
     "definitive_depuis_utc": "2026-10-18T11:15:58Z",
     "verifiee_le_utc": "2026-10-18T11:15:58Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-10-18T11:15:58Z",
-    "derniere_verification_utc": "2026-10-18T11:15:58Z"
+    "derniere_modification_utc": "2026-10-18T11:31:01Z",
+    "derniere_verification_utc": "2026-10-18T11:31:01Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -1348,6 +1383,24 @@
        3,
        1,
        5
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "COMPLETION",
+      "horodatage_utc": "2026-10-18T11:31:01Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       2,
+       3,
+       1,
+       5,
+       4,
+       6,
+       11,
+       8,
+       7
       ]
      }
     ]
@@ -1375,7 +1428,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -3271,11 +3324,11 @@
     "partants_actifs": 5
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -3316,11 +3369,27 @@
    ],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "2": 7.1
+    },
+    "simple_place": {
+     "2": 1.7,
+     "1": 1.9
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_ORDRE",
+      "combinaison": "2-1",
+      "dividende_pour_1_eur": 4.9
+     },
+     {
+      "type_pari": "TRIO_ORDRE",
+      "combinaison": "2-1",
+      "dividende_pour_1_eur": 7.9
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -3330,14 +3399,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-10-18T11:15:58Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-10-18T11:31:01Z",
+    "verifiee_le_utc": "2026-10-18T11:31:01Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-10-18T11:15:58Z",
-    "derniere_verification_utc": "2026-10-18T11:15:58Z"
+    "derniere_modification_utc": "2026-10-18T11:31:01Z",
+    "derniere_verification_utc": "2026-10-18T11:31:01Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -3345,6 +3414,18 @@
       "statut": "PROVISOIRE",
       "raison": "INITIAL",
       "horodatage_utc": "2026-10-18T11:15:58Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       2,
+       1,
+       3
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-10-18T11:31:01Z",
       "source": "PMU_PROGRAMME",
       "classement": [
        2,
@@ -3366,9 +3447,9 @@
     "libelle": "PRIX MISSILE",
     "discipline": "OBSTACLE_STEEPLE",
     "distance_m": 3400,
-    "heure_depart_utc": "2026-10-18T11:35:00Z",
+    "heure_depart_utc": "2026-10-18T11:40:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "11:35 GMT (13:35 Paris)",
+    "heure_depart_affichee": "11:40 GMT (13:40 Paris)",
     "partants_declares": 4,
     "partants_actifs": 4
    },
@@ -3827,7 +3908,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -4332,7 +4413,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
