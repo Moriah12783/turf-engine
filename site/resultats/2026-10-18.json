@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "e0c7855fe8a838b8822a59df0c3f73c18d36d80c",
-  "run_id": "39117564887",
+  "commit": "2c6d3cb4db57bf07294bba6661e9e0805b189057",
+  "run_id": "39118548129",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-18",
- "genere_le_utc": "2026-10-18T10:03:01Z",
+ "genere_le_utc": "2026-10-18T10:18:04Z",
  "nb_courses": 72,
  "compte_par_statut": {
-  "EN_ATTENTE": 71,
+  "EN_ATTENTE": 70,
   "PROVISOIRE": 0,
-  "DEFINITIVE": 1,
+  "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "05188296ddb2ea9d997f50ed7cdc10fbef5db6ae09293ff3ae555ad09c2133f7",
+ "empreinte_sha256": "1d8e62974a149b0abd034198358627ad2229726018996d515f395ca3afa571ee",
  "courses": [
   {
    "course_id": "R1C1_18102026_ParisLongchamp",
@@ -663,7 +663,7 @@
     "verifiee_le_utc": "2026-10-18T09:45:57Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-18T09:45:57Z",
-    "derniere_verification_utc": "2026-10-18T10:00:56Z"
+    "derniere_verification_utc": "2026-10-18T10:16:00Z"
    },
    "correction": {
     "version": 1,
@@ -708,41 +708,198 @@
     "partants_actifs": 10
    },
    "statut": {
-    "code": "EN_ATTENTE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "DEPART_DANS_TROIS_MINUTES"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 9,
+     "nom": "OLGAYA",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 7,
+     "nom": "OLGA STAR",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 8,
+     "nom": "OLBIA CASTELETS",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 6,
+     "nom": "OTHELLA DU CAMPUS",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 3,
+     "nom": "OLYMPIQUE BLANCHE",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 5,
+     "nom": "OLYMPE KAYZ",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 4,
+     "nom": "ORADA BELLA",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 1,
+     "nom": "OH SO EASY",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 2,
+     "nom": "OLYMPE DU PRESSOIR",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    9,
+    7,
+    8,
+    6,
+    3,
+    5,
+    4,
+    1,
+    2
+   ],
+   "non_classes": [
+    {
+     "num": 10,
+     "nom": "ONE MORE LIFE",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "9": 2.2
+    },
+    "simple_place": {
+     "9": 1.3,
+     "7": 1.7,
+     "8": 2.4
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "9-7",
+      "dividende_pour_1_eur": 5.1
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "9-7",
+      "dividende_pour_1_eur": 3.4
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "9-8",
+      "dividende_pour_1_eur": 4.8
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "7-8",
+      "dividende_pour_1_eur": 6.3
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "9-7",
+      "dividende_pour_1_eur": 1.4
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "9-8",
+      "dividende_pour_1_eur": 1.4
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "9-6",
+      "dividende_pour_1_eur": 1.4
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "7-8",
+      "dividende_pour_1_eur": 1.4
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "7-6",
+      "dividende_pour_1_eur": 1.4
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "8-6",
+      "dividende_pour_1_eur": 1.4
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "9-7-8",
+      "dividende_pour_1_eur": 19.2
+     },
+     {
+      "type_pari": "MINI_MULTI",
+      "combinaison": "9-7-8-6",
+      "dividende_pour_1_eur": 1.5
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/18102026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "premiere_lecture_utc": "2026-10-18T10:16:00Z",
+    "definitive_depuis_utc": "2026-10-18T10:16:00Z",
+    "verifiee_le_utc": "2026-10-18T10:16:00Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-10-18T10:16:00Z",
+    "derniere_verification_utc": "2026-10-18T10:16:00Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "DEFINITIVE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-10-18T10:16:00Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       9,
+       7,
+       8,
+       6,
+       3,
+       5,
+       4,
+       1,
+       2
+      ]
+     }
+    ]
    }
   },
   {
@@ -767,7 +924,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
