@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "69c103e9d56adf7b71fdc31ed5aa966b28a4aa70",
-  "run_id": "39232456727",
+  "commit": "0ce64f891281efa4d6bdadbaecd22b0fc7c5cd1e",
+  "run_id": "39234320931",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-19",
- "genere_le_utc": "2026-10-19T09:47:28Z",
+ "genere_le_utc": "2026-10-19T10:03:10Z",
  "nb_courses": 41,
  "compte_par_statut": {
-  "EN_ATTENTE": 41,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 40,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 0,
   "ANNULEE": 0
  },
- "empreinte_sha256": "ebdec8d4ab180b1c2c16c7df00d81d3d0413f7950eb822aad162a6d3228cd3ec",
+ "empreinte_sha256": "bec36c769f615109d805cdacc692b8cbe05270e459a108f138274d8c632fedfa",
  "courses": [
   {
    "course_id": "R1C1_19102026_DEAUVILLE",
@@ -545,14 +545,44 @@
     "partants_actifs": 6
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 2,
+     "nom": "LISETTE D'ESTRUVAL",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 3,
+     "nom": "RISKMAN",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 1,
+     "nom": "PORZMAN",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 5,
+     "nom": "ETONNANT",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    2,
+    3,
+    1,
+    5
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
@@ -565,21 +595,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/19102026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-10-19T10:01:06Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-10-19T10:01:06Z",
+    "derniere_verification_utc": "2026-10-19T10:01:06Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-10-19T10:01:06Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       2,
+       3,
+       1,
+       5
+      ]
+     }
+    ]
    }
   },
   {
