@@ -11,6 +11,7 @@ chaîne du matin gelée (`docs/OMBRE_FONDAMENTAL.md`).
 | 14/10/2026 | Spécification transmise par Steph ; précisions du dev NVE ; convergence avec le labo |
 | 14/10/2026 | Décision de Steph : le labo écrit le code, le dev NVE relit la PR et vérifie la concordance chaque mardi |
 | 14/10/2026 | Version 3 confirmée par le dev Radar (`daily_sync`, clé `spec_verrous_tentatives_v3`) : trois règles de reproductibilité, concordance C1 à C4, liste « non observée » produite par la requête. Le labo nomme le journal des refus (`verrous_refus`) |
+| 20/10/2026 | Retouches du dev Radar, acceptées : `REFUSE` calculés à chaque passage (règle 3), ligne de journal `BALAYAGE` quotidienne relue chaque mardi, contrôle C5, cas test synthétique Moulins / Pontchâteau. Décision de Steph confirmée : le labo écrit le code, le dev Radar et le dev NVE relisent la PR |
 | Jour J (13/11 ou 26/11) | Annonce par une seule ligne datée au dev Bases (changement de schéma : `verrous_tentatives` et `verrous_refus`), au dev NVE et au dev Radar, **avant** toute publication |
 | Jour J et suivants | PR du labo : code, tests, cette documentation passée au statut « en service » ; relecture du dev Radar et du dev NVE ; fusion sur l'accord de Steph |
 
@@ -59,9 +60,9 @@ Verrou posé avec une part cotée d'au moins 50 % et de moins de 90 %. Ligne
 ### `REFUSE`
 
 Moins de 50 % de partants cotés à **chaque** passage de la fenêtre de
-l'horizon, et aucun verrou avant le départ. Ligne écrite par le **balayage de
-fin de journée**, depuis le journal `verrous_refus`. `decided_at_utc` est
-l'instant du balayage ; toutes les autres colonnes viennent du journal et ne
+l'horizon, et aucun verrou avant le départ. Ligne écrite **au premier passage
+qui suit le départ**, depuis le journal `verrous_refus`. `decided_at_utc` est
+l'instant de ce passage ; toutes les autres colonnes viennent du journal et ne
 dépendent pas du moment du calcul (règles ci-dessous).
 
 ## Fenêtres
@@ -96,7 +97,7 @@ part arrondie à 3 décimales, `now_utc`), éphémère et sans les deux nombres.
 les passages refusés remplacerait la photo du verrou.
 
 Le journal est **créé par ce chantier**, dans `turf_bench.db` (donc sur R2,
-lisible par le balayage dans GitHub Actions comme par le dev Bases). Une ligne
+lisible par les passages dans GitHub Actions comme par le dev Bases). Une ligne
 par passage refusé, écrite dans `_lock_horizon`, dans la branche
 `GATE_REFUSED`, à côté de la ligne de journal (qui gagne `n_partants` et
 `n_cotes`) :
@@ -117,7 +118,7 @@ journalisée (`VERROU_REFUS_ERROR {...}`) et ne change rien au passage. Volume :
 une ligne par course, par horizon dû et non verrouillé, et par passage refusé ;
 mesuré la première semaine.
 
-## Trois règles de reproductibilité
+## Règles de reproductibilité et de contrôle
 
 Aucune ligne ne dépend du moment où elle est calculée.
 
@@ -125,16 +126,25 @@ Aucune ligne ne dépend du moment où elle est calculée.
    et `heure_max_utc` viennent du passage du journal où la part cotée est la
    plus haute dans la fenêtre ; en cas d'égalité, le plus ancien. Seuls
    comptent les passages antérieurs au départ, selon l'heure de départ de
-   `races` au moment du balayage.
+   `races` au moment du calcul.
 2. **Seuils.** `min_lock_ratio`, `min_priced_ratio` et `gate_version` sont
    ceux du passage retenu, lus dans le journal. Comme le journal les
    enregistre à chaque passage, un changement de la porte déployé dans la
    journée (y compris le soir, entre 21h30 et 23h00) ne fausse aucune ligne.
-3. **Balayage.** Le `REFUSE` est écrit par le balayage de fin de journée, au
-   premier passage après 23h00 UTC, pour les courses du jour déjà parties (une
-   course encore à venir est traitée au balayage suivant). Le même calcul
-   relancé plus tard donnerait la même ligne ; la clé unique ignore toute
-   seconde écriture.
+3. **Calcul à chaque passage.** Chaque passage calcule les `REFUSE` de toutes
+   les courses du jour ou de la veille déjà parties : au moins un passage au
+   journal, aucune édition NVE, pas encore de ligne. Aucun passage n'est
+   journalisé après le départ, donc la ligne est la même quel que soit le
+   moment du calcul ; la clé unique ignore les répétitions. La règle ne dépend
+   d'aucune heure de passage : le métronome qui lance les passes vit hors de ce
+   dépôt (constat du 20/10 dans les journaux Actions : 4 passages par heure,
+   24 h sur 24, mais rien ne le garantit dans le code).
+4. **Ligne `BALAYAGE`.** Le premier passage de chaque jour UTC (de 00h00 à
+   00h15) imprime une ligne de journal pour la veille : date, nombre de `REFUSE`
+   écrits, nombre d'horizons « non observée » par motif, `HORS_PROGRAMME`
+   (comptes et `race_id`). Comptes seulement. Le dev NVE vérifie chaque mardi
+   qu'il trouve au moins une ligne par jour sur les sept derniers jours et relit
+   les `HORS_PROGRAMME` ; les journaux GitHub sont conservés 90 jours.
 
 ## Liste « non observée »
 
@@ -148,10 +158,12 @@ passage dans le journal. Motifs :
 | `AUCUN_PASSAGE` | course connue de la chaîne, aucun passage dans la fenêtre (passe manquée, partants absents) |
 
 Une course du programme PMU jamais reçue par les passes n'est pas dans
-`races` : le balayage compare le programme du jour à `races` et l'écrit dans
-sa ligne de journal (`HORS_PROGRAMME`, comptes et `race_id`). Cas test :
-Moulins R11C1 et Pontchâteau R12C1 du 10/10/2026, dans `races` mais sans
-aucune édition ; le journal dira si les passes les ont vus.
+`races` : la ligne `BALAYAGE` compare le programme de la veille à `races` et
+l'écrit (`HORS_PROGRAMME`, comptes et `race_id`). Cas connu : Moulins R11C1 et
+Pontchâteau R12C1 du 10/10/2026, antérieurs à la mise en service, donc absents
+du journal. La vérification du dev Radar du 14/10 a établi que la porte les a
+refusés jusqu'au départ ; ils deviennent un test synthétique à quatre `REFUSE`
+attendus.
 
 ## Concordance, dans les deux sens, depuis la mise en service
 
@@ -163,6 +175,7 @@ Le dev NVE joue ces requêtes chaque mardi ; chacune doit renvoyer zéro ligne.
 | C2 | Aucune ligne `REFUSE` là où une édition NVE existe |
 | C3 | Toute édition NVE à `odds_real = 0` a sa ligne `PARTIEL` avec la même part et le même instant, et aucune ligne `PARTIEL` n'existe sans elle |
 | C4 | Toute ligne `REFUSE` a une part inférieure à son `min_lock_ratio` ; sinon, c'est la porte qu'il faut examiner |
+| C5 | Toute ligne `PARTIEL` vérifie `min_lock_ratio` ≤ `part_cotee` < `min_priced_ratio` (demandé par le dev NVE) |
 
 ```sql
 -- C1 : horizons sans édition NVE, sans REFUSE et sans motif « non observée ».
@@ -200,6 +213,11 @@ WHERE v.issue = 'PARTIEL' AND p.race_id IS NULL;
 -- C4 : REFUSE au-dessus du seuil de verrou.
 SELECT race_id, horizon FROM verrous_tentatives
 WHERE issue = 'REFUSE' AND part_cotee >= min_lock_ratio;
+
+-- C5 : PARTIEL hors de la bande [seuil de verrou, seuil de diffusion).
+SELECT race_id, horizon FROM verrous_tentatives
+WHERE issue = 'PARTIEL'
+  AND (part_cotee < min_lock_ratio OR part_cotee >= min_priced_ratio);
 ```
 
 Le délai avant le départ se calcule par jointure sur `races`
@@ -247,7 +265,12 @@ Le délai avant le départ se calcule par jointure sur `races`
    chacune avec son motif ; aucune `REFUSE` sans passage au journal (C1).
 8. Aucune reprise du passé : fenêtre ouverte avant la mise en service ignorée.
 9. Verrou à 90 % ou plus : aucune ligne.
-10. Balayage relancé : une seule ligne, identique.
+10. Calcul répété à chaque passage : une seule ligne, identique ; une course
+    de la veille partie après minuit UTC est couverte.
 11. Empreinte des deux seuils.
-12. Les quatre requêtes C1 à C4 renvoient zéro ligne sur un banc synthétique
+12. Les cinq requêtes C1 à C5 renvoient zéro ligne sur un banc synthétique
     complet.
+13. Cas synthétique Moulins / Pontchâteau : une course refusée à chaque passage
+    jusqu'au départ donne quatre `REFUSE` (`T_MATIN`, `T90`, `T30`, `T15`).
+14. Ligne `BALAYAGE` : imprimée par le premier passage du jour UTC, comptes
+    exacts pour la veille, aucune probabilité.
