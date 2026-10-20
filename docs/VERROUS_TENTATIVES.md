@@ -13,6 +13,7 @@ chaîne du matin gelée (`docs/OMBRE_FONDAMENTAL.md`).
 | 14/10/2026 | Version 3 confirmée par le dev Radar (`daily_sync`, clé `spec_verrous_tentatives_v3`) : trois règles de reproductibilité, concordance C1 à C4, liste « non observée » produite par la requête. Le labo nomme le journal des refus (`verrous_refus`) |
 | 20/10/2026 | Retouches du dev Radar, acceptées : `REFUSE` calculés à chaque passage (règle 3), ligne de journal `BALAYAGE` quotidienne relue chaque mardi, contrôle C5, cas test synthétique Moulins / Pontchâteau. Décision de Steph confirmée : le labo écrit le code, le dev Radar et le dev NVE relisent la PR |
 | 20/10/2026 | Relecture du dev NVE, acceptée : marge avant l'écriture d'un `REFUSE` (arrivée enregistrée ou départ connu + 60 min), rapport quotidien committé dans le dépôt à la place de la ligne `BALAYAGE`. Calendrier fixé à partir du 22/10, sauf remise à zéro d'ici le 21/10 |
+| 20/10/2026 | Règle de fermeture du dev Radar, retenue par le dev NVE à la place de la marge de 60 min : un `REFUSE` ne s'écrit que pour une course `FINISHED` ou qui n'est plus datée du jour UTC, jamais pour une course `ANNULEE`. C2 devient impossible par construction. Le premier passage du jour écrit les `REFUSE` de la veille avant son rapport |
 | Jour J (13/11 ou 26/11) | Annonce par une seule ligne datée au dev Bases (changement de schéma : `verrous_tentatives` et `verrous_refus`), au dev NVE et au dev Radar, **avant** toute publication |
 | Jour J et suivants | PR du labo : code, tests, cette documentation passée au statut « en service » ; relecture du dev Radar et du dev NVE ; fusion sur l'accord de Steph |
 
@@ -61,9 +62,9 @@ Verrou posé avec une part cotée d'au moins 50 % et de moins de 90 %. Ligne
 ### `REFUSE`
 
 Moins de 50 % de partants cotés à **chaque** passage de la fenêtre de
-l'horizon, et aucun verrou avant le départ. Ligne écrite **au premier passage
-qui suit l'arrivée enregistrée, ou le départ connu + 60 min** (règle 3),
-depuis le journal `verrous_refus`. `decided_at_utc` est l'instant de ce
+l'horizon, et aucun verrou possible. Ligne écrite **au premier passage où la
+course est `FINISHED` ou n'est plus datée du jour UTC** (règle 3), depuis le
+journal `verrous_refus`. `decided_at_utc` est l'instant de ce
 passage ; toutes les autres colonnes viennent du journal et ne
 dépendent pas du moment du calcul (règles ci-dessous).
 
@@ -133,20 +134,25 @@ Aucune ligne ne dépend du moment où elle est calculée.
    ceux du passage retenu, lus dans le journal. Comme le journal les
    enregistre à chaque passage, un changement de la porte déployé dans la
    journée (y compris le soir, entre 21h30 et 23h00) ne fausse aucune ligne.
-3. **Calcul à chaque passage, avec une marge.** Chaque passage calcule les
-   `REFUSE` de toutes les courses du jour ou de la veille dont l'arrivée est
-   enregistrée (`race_results`), ou dont le départ connu est passé depuis au
-   moins 60 min : au moins un passage au journal, aucune édition NVE, pas
-   encore de ligne. La marge vient de ce que chaque passage réécrit l'heure de
-   départ dans `races` (`INSERT OR REPLACE`) : un départ décalé après
-   l'écriture rendrait l'horizon dû à nouveau, et un verrou suivrait un
-   `REFUSE`, ce que C2 interdit. Un décalage de plus d'une heure sans arrivée
-   reste possible en théorie ; C2 le signalerait. Aucun passage n'est
-   journalisé après le départ, donc la ligne est la même quel que soit le
-   moment du calcul ; la clé unique ignore les répétitions. La règle ne dépend
-   d'aucune heure de passage : le métronome qui lance les passes vit hors de ce
-   dépôt (constat du 20/10 dans les journaux Actions : 4 passages par heure,
-   24 h sur 24, mais rien ne le garantit dans le code).
+3. **Calcul à chaque passage, sur les seules courses fermées.** Chaque
+   passage calcule les `REFUSE` des courses du jour ou de la veille qui ne
+   peuvent plus être verrouillées : au moins un passage au journal, aucune
+   édition NVE, pas encore de ligne. Une course est fermée dans deux cas
+   seulement, pris dans le code (numéros de ligne au 20/10/2026) :
+   - elle est `FINISHED` (arrivée définitive) : la course est gelée et plus
+     aucun pronostic n'est touché (`turf_lab/daily_sync.py`, ligne 659) ;
+   - elle n'est plus datée du jour UTC : `due_horizons` ne rend alors plus
+     aucun horizon (ligne 258).
+
+   Jamais pour une course `ANNULEE`, qui relève de la liste « non observée ».
+   Chaque passage réécrit l'heure de départ dans `races` (`INSERT OR
+   REPLACE`) : une règle fondée sur l'heure de départ laisserait un départ
+   repoussé rendre l'horizon dû à nouveau. Fondée sur ces deux états, elle rend
+   C2 impossible par construction. Aucun passage n'est journalisé après la
+   fermeture, donc la ligne est la même quel que soit le moment du calcul ; la
+   clé unique ignore les répétitions. La règle ne dépend d'aucune heure de
+   passage : le métronome qui lance les passes vit hors de ce dépôt (constat du
+   20/10 dans les journaux Actions : 4 passages par heure, 24 h sur 24).
 4. **Rapport quotidien committé.** La tâche qui a accès à R2 (le passage de
    `daily_sync`) écrit chaque jour, pour la veille, un rapport dans le dépôt :
    `rapports/verrous/AAAA-MM-JJ.md`, committé avec les exports du site. Il
@@ -156,7 +162,9 @@ Aucune ligne ne dépend du moment où elle est calculée.
    seulement : aucune probabilité, rien de l'ombre. Chaque passage régénère le
    rapport de la veille depuis les tables en ajout seul ; Git ne committe que
    s'il a changé, et un envoi refusé (conflit connu) est rattrapé au passage
-   suivant. Le dev NVE relit les sept rapports chaque mardi, sans clé R2 ni
+   suivant. Le premier passage du jour UTC écrit les `REFUSE` de la veille
+   **avant** de calculer le rapport de la veille. Le dev NVE relit les sept
+   rapports chaque mardi, sans clé R2 ni
    journaux Actions. Ce rapport remplace la ligne de journal `BALAYAGE` ;
    aucune table ni aucun changement de schéma de plus.
 
@@ -280,8 +288,9 @@ Le délai avant le départ se calcule par jointure sur `races`
 8. Aucune reprise du passé : fenêtre ouverte avant la mise en service ignorée.
 9. Verrou à 90 % ou plus : aucune ligne.
 10. Calcul répété à chaque passage : une seule ligne, identique ; une course
-    de la veille partie après minuit UTC est couverte ; aucun `REFUSE` avant
-    l'arrivée enregistrée ou le départ connu + 60 min.
+    de la veille partie après minuit UTC est couverte ; aucun `REFUSE` tant que
+    la course n'est ni `FINISHED` ni d'un jour UTC passé ; aucun `REFUSE` pour
+    une course `ANNULEE`.
 11. Empreinte des deux seuils.
 12. Les cinq requêtes C1 à C5 renvoient zéro ligne sur un banc synthétique
     complet.
@@ -291,6 +300,7 @@ Le délai avant le départ se calcule par jointure sur `races`
 14. Rapport quotidien : comptes exacts pour la veille, C1 à C5 avec les couples
     en défaut, aucune probabilité ni marqueur de l'ombre ; régénéré à
     l'identique, rattrapé après un envoi refusé.
-15. Départ décalé de 40 min après une première fermeture apparente : aucun
-    `REFUSE` écrit avant l'arrivée ; si l'horizon est verrouillé entre-temps,
-    aucune ligne `REFUSE` (C2).
+15. Départ repoussé de 2 h après des passages refusés, puis verrou : aucun
+    `REFUSE` (C2).
+16. Arrivée définitive jamais reçue : `REFUSE` écrit au premier passage du jour
+    UTC suivant, avant le rapport de la veille, et compté dans ce rapport.
