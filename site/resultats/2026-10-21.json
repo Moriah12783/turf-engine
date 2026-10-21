@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "af1d15e90176468065bd9b26d6749ae1c8e55b61",
-  "run_id": "39575538634",
+  "commit": "1f54472a868b71c8f9d693d85d4791f2cff99d61",
+  "run_id": "39577486053",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-21",
- "genere_le_utc": "2026-10-21T09:17:58Z",
+ "genere_le_utc": "2026-10-21T09:32:36Z",
  "nb_courses": 32,
  "compte_par_statut": {
   "EN_ATTENTE": 31,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 0,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 1,
   "ANNULEE": 0
  },
- "empreinte_sha256": "4c7d99543037893ce99fdef80b07663e8155ccdbbcd8671aaef32625ee98bdf9",
+ "empreinte_sha256": "b582ad0ba6b1bf25a9c92a26b870a47eae45a738cd5ec0cf27605a4bce6b8ebf",
  "courses": [
   {
    "course_id": "R1C1_21102026_LA CEPIERE",
@@ -476,11 +476,11 @@
     "partants_actifs": 10
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -506,13 +506,55 @@
      "num": 6,
      "nom": "YELLOW DONUTS",
      "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 4,
+     "nom": "KRISS DE VALNOR",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 10,
+     "nom": "ALTA GRACIAS",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 7,
+     "nom": "CAMDEN",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 3,
+     "nom": "PERLE DE LUNE",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 11,
+     "nom": "PARISIENNE",
+     "dead_heat": false
+    },
+    {
+     "rang": 10,
+     "num": 9,
+     "nom": "LE MINOT",
+     "dead_heat": false
     }
    ],
    "arrivee": [
     5,
     2,
     1,
-    6
+    6,
+    4,
+    10,
+    7,
+    3,
+    11,
+    9
    ],
    "non_classes": [],
    "non_partants": [
@@ -522,11 +564,123 @@
     }
    ],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "5": 10.0
+    },
+    "simple_place": {
+     "5": 2.7,
+     "2": 2.5,
+     "1": 1.7
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "5-2",
+      "dividende_pour_1_eur": 31.4
+     },
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "5-NP",
+      "dividende_pour_1_eur": 8.3
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "5-2",
+      "dividende_pour_1_eur": 8.4
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "5-1",
+      "dividende_pour_1_eur": 5.7
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "2-1",
+      "dividende_pour_1_eur": 5.6
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "5-NP",
+      "dividende_pour_1_eur": 2.4
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "2-NP",
+      "dividende_pour_1_eur": 2.4
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "1-NP",
+      "dividende_pour_1_eur": 2.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "5-2",
+      "dividende_pour_1_eur": 3.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "5-1",
+      "dividende_pour_1_eur": 3.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "5-6",
+      "dividende_pour_1_eur": 3.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "2-1",
+      "dividende_pour_1_eur": 3.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "2-6",
+      "dividende_pour_1_eur": 3.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "1-6",
+      "dividende_pour_1_eur": 3.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "5-NP",
+      "dividende_pour_1_eur": 1.5
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "2-NP",
+      "dividende_pour_1_eur": 1.5
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "1-NP",
+      "dividende_pour_1_eur": 1.5
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "6-NP",
+      "dividende_pour_1_eur": 1.5
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "5-2-1",
+      "dividende_pour_1_eur": 46.3
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "5-2-NP",
+      "dividende_pour_1_eur": 23.0
+     },
+     {
+      "type_pari": "MINI_MULTI",
+      "combinaison": "5-2-1-6",
+      "dividende_pour_1_eur": 4.5
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -536,14 +690,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-10-21T09:15:50Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-10-21T09:30:43Z",
+    "verifiee_le_utc": "2026-10-21T09:30:43Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-10-21T09:15:50Z",
-    "derniere_verification_utc": "2026-10-21T09:15:50Z"
+    "derniere_modification_utc": "2026-10-21T09:30:43Z",
+    "derniere_verification_utc": "2026-10-21T09:30:43Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -557,6 +711,25 @@
        2,
        1,
        6
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-10-21T09:30:43Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       5,
+       2,
+       1,
+       6,
+       4,
+       10,
+       7,
+       3,
+       11,
+       9
       ]
      }
     ]
@@ -584,7 +757,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
