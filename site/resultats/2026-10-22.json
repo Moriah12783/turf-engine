@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "2bc429f5a6a780de816f3c495fae89477504fd0b",
-  "run_id": "39752114054",
+  "commit": "245cc25a62138f1ba9803040133a036ee3a6fbd0",
+  "run_id": "39754058213",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-22",
- "genere_le_utc": "2026-10-22T09:03:10Z",
+ "genere_le_utc": "2026-10-22T09:18:11Z",
  "nb_courses": 31,
  "compte_par_statut": {
-  "EN_ATTENTE": 31,
+  "EN_ATTENTE": 30,
   "PROVISOIRE": 0,
-  "DEFINITIVE": 0,
+  "DEFINITIVE": 1,
   "ANNULEE": 0
  },
- "empreinte_sha256": "ed28e57e5c6e2bd10747235a52a7c9a24dca05e494d5d20faed28149e37dd5f0",
+ "empreinte_sha256": "bc52a8e55d4c0e7b0c549b2ebe8d6175a7f6a2e6a6c9ba971a0d7db169d0f810",
  "courses": [
   {
    "course_id": "R1C1_22102026_AUTEUIL",
@@ -481,41 +481,224 @@
     "partants_actifs": 13
    },
    "statut": {
-    "code": "EN_ATTENTE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 9,
+     "nom": "APPEN",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 6,
+     "nom": "WESTMINSTER FIRE",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 8,
+     "nom": "GONAFOOT",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 10,
+     "nom": "MICHELLE",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 13,
+     "nom": "QUEEN STAGE",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 5,
+     "nom": "NYMPHENBURG",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 11,
+     "nom": "SLIPPER ORCHID",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 12,
+     "nom": "BRUJA",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 3,
+     "nom": "SKAROS",
+     "dead_heat": false
+    },
+    {
+     "rang": 10,
+     "num": 4,
+     "nom": "DICANTO",
+     "dead_heat": false
+    },
+    {
+     "rang": 11,
+     "num": 7,
+     "nom": "HERMES DU HAUT",
+     "dead_heat": false
+    },
+    {
+     "rang": 12,
+     "num": 2,
+     "nom": "OROPENDOLA",
+     "dead_heat": false
+    },
+    {
+     "rang": 13,
+     "num": 1,
+     "nom": "THE BLACK FRIDAY",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    9,
+    6,
+    8,
+    10,
+    13,
+    5,
+    11,
+    12,
+    3,
+    4,
+    7,
+    2,
+    1
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "9": 9.0
+    },
+    "simple_place": {
+     "9": 1.8,
+     "6": 5.4,
+     "8": 1.8
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "9-6",
+      "dividende_pour_1_eur": 99.6
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "9-6",
+      "dividende_pour_1_eur": 19.1
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "9-8",
+      "dividende_pour_1_eur": 6.5
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "6-8",
+      "dividende_pour_1_eur": 14.6
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "9-6",
+      "dividende_pour_1_eur": 5.3
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "9-8",
+      "dividende_pour_1_eur": 5.3
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "9-10",
+      "dividende_pour_1_eur": 5.3
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "6-8",
+      "dividende_pour_1_eur": 5.3
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "6-10",
+      "dividende_pour_1_eur": 5.3
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "8-10",
+      "dividende_pour_1_eur": 5.3
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "9-6-8",
+      "dividende_pour_1_eur": 137.1
+     },
+     {
+      "type_pari": "MINI_MULTI",
+      "combinaison": "9-6-8-10",
+      "dividende_pour_1_eur": 49.7
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/22102026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "premiere_lecture_utc": "2026-10-22T09:16:05Z",
+    "definitive_depuis_utc": "2026-10-22T09:16:05Z",
+    "verifiee_le_utc": "2026-10-22T09:16:05Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-10-22T09:16:05Z",
+    "derniere_verification_utc": "2026-10-22T09:16:05Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "DEFINITIVE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-10-22T09:16:05Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       9,
+       6,
+       8,
+       10,
+       13,
+       5,
+       11,
+       12,
+       3,
+       4,
+       7,
+       2,
+       1
+      ]
+     }
+    ]
    }
   },
   {
