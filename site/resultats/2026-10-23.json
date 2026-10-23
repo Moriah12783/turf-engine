@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "60d2a57eb0092f24087d4b3fdea3bc8f0424ff54",
-  "run_id": "39932330420",
+  "commit": "5ac5733b95a3e13dca3c598ba6486745e9f0046a",
+  "run_id": "39934145203",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-23",
- "genere_le_utc": "2026-10-23T09:32:41Z",
+ "genere_le_utc": "2026-10-23T09:47:43Z",
  "nb_courses": 33,
  "compte_par_statut": {
   "EN_ATTENTE": 23,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 0,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 1,
   "ANNULEE": 9
  },
- "empreinte_sha256": "24bfd31e986e56dd1c0cae6ea2e46c58191061b3cebd5b0897d1a67fedbb2f78",
+ "empreinte_sha256": "b695ee3cfd9319ea9028d1bcad72f8e0fc8bd6840994ed449a336c50b647d1f3",
  "courses": [
   {
    "course_id": "R1C1_23102026_VINCENNES",
@@ -33,7 +33,7 @@
     "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "16:23 GMT (18:23 Paris)",
     "partants_declares": 14,
-    "partants_actifs": 14
+    "partants_actifs": 13
    },
    "statut": {
     "code": "EN_ATTENTE",
@@ -45,7 +45,12 @@
    "classement": [],
    "arrivee": [],
    "non_classes": [],
-   "non_partants": [],
+   "non_partants": [
+    {
+     "num": 4,
+     "nom": "L'AMOUR"
+    }
+   ],
    "rapports": {
     "disponibles": false,
     "unite": "EUR pour 1 EUR de mise",
@@ -476,11 +481,11 @@
     "partants_actifs": 14
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -512,6 +517,48 @@
      "num": 1,
      "nom": "KAMARO DU DONJON",
      "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 5,
+     "nom": "KARYNNDO ROBSEN",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 14,
+     "nom": "GIORGIO DU VIVIER",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 6,
+     "nom": "JAMIN DE BRY",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 15,
+     "nom": "HOT SHOT",
+     "dead_heat": false
+    },
+    {
+     "rang": 10,
+     "num": 8,
+     "nom": "JOCKEY CADENCE",
+     "dead_heat": false
+    },
+    {
+     "rang": 11,
+     "num": 2,
+     "nom": "JERIDAN",
+     "dead_heat": false
+    },
+    {
+     "rang": 12,
+     "num": 9,
+     "nom": "HALLO DE MANCHE",
+     "dead_heat": false
     }
    ],
    "arrivee": [
@@ -519,7 +566,14 @@
     12,
     13,
     11,
-    1
+    1,
+    5,
+    14,
+    6,
+    15,
+    8,
+    2,
+    9
    ],
    "non_classes": [
     {
@@ -540,11 +594,123 @@
     }
    ],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "10": 2.0
+    },
+    "simple_place": {
+     "10": 1.3,
+     "12": 5.3,
+     "13": 2.0
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "10-12",
+      "dividende_pour_1_eur": 25.9
+     },
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "10-NP",
+      "dividende_pour_1_eur": 7.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "10-12",
+      "dividende_pour_1_eur": 9.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "10-13",
+      "dividende_pour_1_eur": 4.9
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "12-13",
+      "dividende_pour_1_eur": 15.7
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "10-NP",
+      "dividende_pour_1_eur": 2.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "12-NP",
+      "dividende_pour_1_eur": 3.8
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "13-NP",
+      "dividende_pour_1_eur": 2.3
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "10-12",
+      "dividende_pour_1_eur": 5.6
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "10-13",
+      "dividende_pour_1_eur": 5.6
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "10-11",
+      "dividende_pour_1_eur": 5.6
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "12-13",
+      "dividende_pour_1_eur": 5.6
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "12-11",
+      "dividende_pour_1_eur": 5.6
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "13-11",
+      "dividende_pour_1_eur": 5.6
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "10-NP",
+      "dividende_pour_1_eur": 2.1
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "12-NP",
+      "dividende_pour_1_eur": 2.1
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "13-NP",
+      "dividende_pour_1_eur": 2.1
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "11-NP",
+      "dividende_pour_1_eur": 2.1
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "10-12-13",
+      "dividende_pour_1_eur": 53.6
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "10-12-NP",
+      "dividende_pour_1_eur": 26.4
+     },
+     {
+      "type_pari": "MULTI",
+      "combinaison": "10-12-13-11",
+      "dividende_pour_1_eur": 6.0
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -554,14 +720,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-10-23T09:30:31Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-10-23T09:45:33Z",
+    "verifiee_le_utc": "2026-10-23T09:45:33Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-10-23T09:30:31Z",
-    "derniere_verification_utc": "2026-10-23T09:30:31Z"
+    "derniere_modification_utc": "2026-10-23T09:45:33Z",
+    "derniere_verification_utc": "2026-10-23T09:45:33Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -576,6 +742,27 @@
        13,
        11,
        1
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-10-23T09:45:33Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       10,
+       12,
+       13,
+       11,
+       1,
+       5,
+       14,
+       6,
+       15,
+       8,
+       2,
+       9
       ]
      }
     ]
@@ -592,9 +779,9 @@
     "libelle": "PRIX FLORESTAN",
     "discipline": "TROT_MONTE",
     "distance_m": 2800,
-    "heure_depart_utc": "2026-10-23T09:46:00Z",
+    "heure_depart_utc": "2026-10-23T09:47:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "09:46 GMT (11:46 Paris)",
+    "heure_depart_affichee": "09:47 GMT (11:47 Paris)",
     "partants_declares": 9,
     "partants_actifs": 9
    },
@@ -603,7 +790,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "DEPART_DANS_TROIS_MINUTES"
    },
    "classement": [],
    "arrivee": [],
@@ -1350,11 +1537,41 @@
    "non_classes": [],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "Autres Chevaux": 1.0
+    },
+    "simple_place": {
+     "Autres Chevaux": 1.0
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "MULTI",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -1410,11 +1627,41 @@
     }
    ],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "Autres Chevaux": 1.0
+    },
+    "simple_place": {
+     "Autres Chevaux": 1.0
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "MULTI",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -1465,11 +1712,41 @@
    "non_classes": [],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "Autres Chevaux": 1.0
+    },
+    "simple_place": {
+     "Autres Chevaux": 1.0
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "MULTI",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -1525,11 +1802,46 @@
     }
    ],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "Autres Chevaux": 1.0
+    },
+    "simple_place": {
+     "Autres Chevaux": 1.0
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "MULTI",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "PICK5",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -1580,11 +1892,41 @@
    "non_classes": [],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "Autres Chevaux": 1.0
+    },
+    "simple_place": {
+     "Autres Chevaux": 1.0
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "MULTI",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
