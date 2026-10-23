@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "5ac5733b95a3e13dca3c598ba6486745e9f0046a",
-  "run_id": "39934145203",
+  "commit": "2903e519d7ae6f532f543d05da30c1d02145e243",
+  "run_id": "39935954951",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-23",
- "genere_le_utc": "2026-10-23T09:47:43Z",
+ "genere_le_utc": "2026-10-23T10:02:47Z",
  "nb_courses": 33,
  "compte_par_statut": {
-  "EN_ATTENTE": 23,
+  "EN_ATTENTE": 22,
   "PROVISOIRE": 0,
-  "DEFINITIVE": 1,
+  "DEFINITIVE": 2,
   "ANNULEE": 9
  },
- "empreinte_sha256": "b695ee3cfd9319ea9028d1bcad72f8e0fc8bd6840994ed449a336c50b647d1f3",
+ "empreinte_sha256": "aded7997cf6b7786a7a251f7fbb3456ec9b7abead0166dd9e470b600af6cd031",
  "courses": [
   {
    "course_id": "R1C1_23102026_VINCENNES",
@@ -93,7 +93,7 @@
     "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "16:58 GMT (18:58 Paris)",
     "partants_declares": 15,
-    "partants_actifs": 15
+    "partants_actifs": 14
    },
    "statut": {
     "code": "EN_ATTENTE",
@@ -105,7 +105,12 @@
    "classement": [],
    "arrivee": [],
    "non_classes": [],
-   "non_partants": [],
+   "non_partants": [
+    {
+     "num": 7,
+     "nom": "INSTINCTIF"
+    }
+   ],
    "rapports": {
     "disponibles": false,
     "unite": "EUR pour 1 EUR de mise",
@@ -724,7 +729,7 @@
     "verifiee_le_utc": "2026-10-23T09:45:33Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-23T09:45:33Z",
-    "derniere_verification_utc": "2026-10-23T09:45:33Z"
+    "derniere_verification_utc": "2026-10-23T10:00:36Z"
    },
    "correction": {
     "version": 2,
@@ -786,15 +791,66 @@
     "partants_actifs": 9
    },
    "statut": {
-    "code": "EN_ATTENTE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "DEPART_DANS_TROIS_MINUTES"
+    "pmu_statut": "ARRIVEE_DEFINITIVE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 4,
+     "nom": "LOUISE ATTAQUE ERA",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 2,
+     "nom": "LARGO FLIGNY",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 3,
+     "nom": "LAHRANA DU HAUTY",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 9,
+     "nom": "KAMAY DES CORONS",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    4,
+    2,
+    3,
+    9
+   ],
+   "non_classes": [
+    {
+     "num": 1,
+     "nom": "KOSTA BRAVA",
+     "incident": "ARRETE"
+    },
+    {
+     "num": 6,
+     "nom": "LIGHTNING JIEL",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 7,
+     "nom": "KENTUCKY SCARLET",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 8,
+     "nom": "LE CADOR DE SIMM",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": false,
@@ -806,21 +862,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/23102026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "premiere_lecture_utc": "2026-10-23T10:00:36Z",
+    "definitive_depuis_utc": "2026-10-23T10:00:36Z",
+    "verifiee_le_utc": "2026-10-23T10:00:36Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-10-23T10:00:36Z",
+    "derniere_verification_utc": "2026-10-23T10:00:36Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "DEFINITIVE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-10-23T10:00:36Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       4,
+       2,
+       3,
+       9
+      ]
+     }
+    ]
    }
   },
   {
