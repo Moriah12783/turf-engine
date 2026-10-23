@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "eba599a2ce908247fe6926edc277d5b74fc5ba60",
-  "run_id": "39930520958",
+  "commit": "60d2a57eb0092f24087d4b3fdea3bc8f0424ff54",
+  "run_id": "39932330420",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-23",
- "genere_le_utc": "2026-10-23T09:17:39Z",
+ "genere_le_utc": "2026-10-23T09:32:41Z",
  "nb_courses": 33,
  "compte_par_statut": {
-  "EN_ATTENTE": 29,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 23,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 0,
-  "ANNULEE": 4
+  "ANNULEE": 9
  },
- "empreinte_sha256": "ae36fd3d5d70d03ff689e323c6d9f858c134411531f2dfd8205f00e0a6097a28",
+ "empreinte_sha256": "24bfd31e986e56dd1c0cae6ea2e46c58191061b3cebd5b0897d1a67fedbb2f78",
  "courses": [
   {
    "course_id": "R1C1_23102026_VINCENNES",
@@ -476,15 +476,63 @@
     "partants_actifs": 14
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_DANS_TROIS_MINUTES"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 10,
+     "nom": "KANDAR JIEL",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 12,
+     "nom": "JUST LOVE D'ALSACE",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 13,
+     "nom": "HELLO CAUVELLIERE",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 11,
+     "nom": "HASHTAG DU LION",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 1,
+     "nom": "KAMARO DU DONJON",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    10,
+    12,
+    13,
+    11,
+    1
+   ],
+   "non_classes": [
+    {
+     "num": 3,
+     "nom": "KING GATE",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 7,
+     "nom": "JESSIE METEOR",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [
     {
      "num": 4,
@@ -501,21 +549,36 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/23102026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-10-23T09:30:31Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-10-23T09:30:31Z",
+    "derniere_verification_utc": "2026-10-23T09:30:31Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-10-23T09:30:31Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       10,
+       12,
+       13,
+       11,
+       1
+      ]
+     }
+    ]
    }
   },
   {
@@ -942,11 +1005,41 @@
    "non_classes": [],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "Autres Chevaux": 1.0
+    },
+    "simple_place": {
+     "Autres Chevaux": 1.0
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "MULTI",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -997,11 +1090,41 @@
    "non_classes": [],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "Autres Chevaux": 1.0
+    },
+    "simple_place": {
+     "Autres Chevaux": 1.0
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "MULTI",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -1057,11 +1180,41 @@
     }
    ],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "Autres Chevaux": 1.0
+    },
+    "simple_place": {
+     "Autres Chevaux": 1.0
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "MINI_MULTI",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -1112,11 +1265,41 @@
    "non_classes": [],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "Autres Chevaux": 1.0
+    },
+    "simple_place": {
+     "Autres Chevaux": 1.0
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     },
+     {
+      "type_pari": "MULTI",
+      "combinaison": "Autres Chevaux",
+      "dividende_pour_1_eur": 1.0
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -1156,11 +1339,11 @@
     "partants_actifs": 16
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "ANNULEE",
     "definitive": false,
     "finalite": null,
-    "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "annulee": true,
+    "pmu_statut": "COURSE_ANNULEE"
    },
    "classement": [],
    "arrivee": [],
@@ -1211,11 +1394,11 @@
     "partants_actifs": 15
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "ANNULEE",
     "definitive": false,
     "finalite": null,
-    "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "annulee": true,
+    "pmu_statut": "COURSE_ANNULEE"
    },
    "classement": [],
    "arrivee": [],
@@ -1271,11 +1454,11 @@
     "partants_actifs": 15
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "ANNULEE",
     "definitive": false,
     "finalite": null,
-    "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "annulee": true,
+    "pmu_statut": "COURSE_ANNULEE"
    },
    "classement": [],
    "arrivee": [],
@@ -1326,11 +1509,11 @@
     "partants_actifs": 14
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "ANNULEE",
     "definitive": false,
     "finalite": null,
-    "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "annulee": true,
+    "pmu_statut": "COURSE_ANNULEE"
    },
    "classement": [],
    "arrivee": [],
@@ -1386,11 +1569,11 @@
     "partants_actifs": 16
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "ANNULEE",
     "definitive": false,
     "finalite": null,
-    "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "annulee": true,
+    "pmu_statut": "COURSE_ANNULEE"
    },
    "classement": [],
    "arrivee": [],
