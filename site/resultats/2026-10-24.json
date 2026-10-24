@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "80edbe33778b5615aa30ac116ff9fb4059a5894a",
-  "run_id": "40084169676",
+  "commit": "819e7336fc446b0ca41394cedfe0118a177181da",
+  "run_id": "40085171591",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-24",
- "genere_le_utc": "2026-10-24T10:01:43Z",
+ "genere_le_utc": "2026-10-24T10:16:45Z",
  "nb_courses": 38,
  "compte_par_statut": {
-  "EN_ATTENTE": 35,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 34,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 3,
   "ANNULEE": 0
  },
- "empreinte_sha256": "97ab0eebd48ab1f15fe3353f241322954fdd0a7d296b5bc1c0e19e80543704b3",
+ "empreinte_sha256": "2e010f5f3c5b212df3f2b77323f87ea13bb786b834a9155ddc7d8c75ef96731d",
  "courses": [
   {
    "course_id": "R1C1_24102026_COMPIEGNE",
@@ -575,7 +575,7 @@
     "verifiee_le_utc": "2026-10-24T09:30:31Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-24T09:30:31Z",
-    "derniere_verification_utc": "2026-10-24T10:00:33Z"
+    "derniere_verification_utc": "2026-10-24T10:15:29Z"
    },
    "correction": {
     "version": 1,
@@ -711,7 +711,7 @@
     "verifiee_le_utc": "2026-10-24T10:00:33Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-24T10:00:33Z",
-    "derniere_verification_utc": "2026-10-24T10:00:33Z"
+    "derniere_verification_utc": "2026-10-24T10:15:29Z"
    },
    "correction": {
     "version": 1,
@@ -757,7 +757,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -1093,7 +1093,7 @@
     "verifiee_le_utc": "2026-10-24T09:45:33Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-24T10:00:33Z",
-    "derniere_verification_utc": "2026-10-24T10:00:33Z"
+    "derniere_verification_utc": "2026-10-24T10:15:29Z"
    },
    "correction": {
     "version": 2,
@@ -1150,15 +1150,58 @@
     "partants_actifs": 15
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "CHEVAUX_SOUS_ORDRES"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 7,
+     "nom": "KOUBA BLUE",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 10,
+     "nom": "JULIA DOCTOR",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 4,
+     "nom": "JURITI",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 3,
+     "nom": "JEANNOT DU SABLIER",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 1,
+     "nom": "KALINEO PENEME",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    7,
+    10,
+    4,
+    3,
+    1
+   ],
+   "non_classes": [
+    {
+     "num": 9,
+     "nom": "JOE LOUIS",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": false,
@@ -1170,21 +1213,36 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/24102026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-10-24T10:15:29Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-10-24T10:15:29Z",
+    "derniere_verification_utc": "2026-10-24T10:15:29Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-10-24T10:15:29Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       7,
+       10,
+       4,
+       3,
+       1
+      ]
+     }
+    ]
    }
   },
   {
@@ -1209,7 +1267,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
