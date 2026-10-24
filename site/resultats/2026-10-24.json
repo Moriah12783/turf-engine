@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "b2cf62994130fd21ebc01d23610330b7979815c2",
-  "run_id": "40087158592",
+  "commit": "f61e7a8c4b162f31b9e07e82136a5af54f0cbfe4",
+  "run_id": "40088130787",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-24",
- "genere_le_utc": "2026-10-24T10:47:45Z",
+ "genere_le_utc": "2026-10-24T11:02:21Z",
  "nb_courses": 38,
  "compte_par_statut": {
   "EN_ATTENTE": 32,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 5,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 6,
   "ANNULEE": 0
  },
- "empreinte_sha256": "74c0c3b0eb063dd9b956571b40597e3aedb50c975d8fb0896258979afc8b6bfc",
+ "empreinte_sha256": "fb961861ac7d5dda88e3eb310b372d877d4b19720f29aabaa3cdf76e2fc7a237",
  "courses": [
   {
    "course_id": "R1C1_24102026_COMPIEGNE",
@@ -575,7 +575,7 @@
     "verifiee_le_utc": "2026-10-24T09:30:31Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-24T09:30:31Z",
-    "derniere_verification_utc": "2026-10-24T10:45:32Z"
+    "derniere_verification_utc": "2026-10-24T11:00:36Z"
    },
    "correction": {
     "version": 1,
@@ -711,7 +711,7 @@
     "verifiee_le_utc": "2026-10-24T10:00:33Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-24T10:00:33Z",
-    "derniere_verification_utc": "2026-10-24T10:45:32Z"
+    "derniere_verification_utc": "2026-10-24T11:00:36Z"
    },
    "correction": {
     "version": 1,
@@ -857,7 +857,7 @@
     "verifiee_le_utc": "2026-10-24T10:45:32Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-24T10:45:32Z",
-    "derniere_verification_utc": "2026-10-24T10:45:32Z"
+    "derniere_verification_utc": "2026-10-24T11:00:36Z"
    },
    "correction": {
     "version": 2,
@@ -916,7 +916,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "DEPART_CONFIRME"
    },
    "classement": [],
    "arrivee": [],
@@ -1192,7 +1192,7 @@
     "verifiee_le_utc": "2026-10-24T09:45:33Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-24T10:00:33Z",
-    "derniere_verification_utc": "2026-10-24T10:45:32Z"
+    "derniere_verification_utc": "2026-10-24T11:00:36Z"
    },
    "correction": {
     "version": 2,
@@ -1449,7 +1449,7 @@
     "verifiee_le_utc": "2026-10-24T10:30:29Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-24T10:30:29Z",
-    "derniere_verification_utc": "2026-10-24T10:45:32Z"
+    "derniere_verification_utc": "2026-10-24T11:00:36Z"
    },
    "correction": {
     "version": 2,
@@ -1512,11 +1512,11 @@
     "partants_actifs": 16
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -1548,6 +1548,54 @@
      "num": 11,
      "nom": "MAHRANA DU HAUTY",
      "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 15,
+     "nom": "MINARELLE DE CEREY",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 13,
+     "nom": "MUTINE DU LUDE",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 7,
+     "nom": "MAM'ZELLE LARZIZ",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 1,
+     "nom": "MOISSON DE LA COTE",
+     "dead_heat": false
+    },
+    {
+     "rang": 10,
+     "num": 16,
+     "nom": "MILADY DE NIMES",
+     "dead_heat": false
+    },
+    {
+     "rang": 11,
+     "num": 3,
+     "nom": "MIAMI DREAM",
+     "dead_heat": false
+    },
+    {
+     "rang": 12,
+     "num": 2,
+     "nom": "MEJANES",
+     "dead_heat": false
+    },
+    {
+     "rang": 13,
+     "num": 8,
+     "nom": "MILADY D'ALEX",
+     "dead_heat": false
     }
    ],
    "arrivee": [
@@ -1555,9 +1603,22 @@
     14,
     4,
     9,
-    11
+    11,
+    15,
+    13,
+    7,
+    1,
+    16,
+    3,
+    2,
+    8
    ],
    "non_classes": [
+    {
+     "num": 6,
+     "nom": "MAGIQUE GWENOL",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
     {
      "num": 10,
      "nom": "MISSION DU CHOQUEL",
@@ -1571,11 +1632,78 @@
    ],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "5": 10.8
+    },
+    "simple_place": {
+     "5": 2.4,
+     "14": 3.1,
+     "4": 2.5
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "5-14",
+      "dividende_pour_1_eur": 50.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "5-14",
+      "dividende_pour_1_eur": 12.9
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "5-4",
+      "dividende_pour_1_eur": 12.1
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "14-4",
+      "dividende_pour_1_eur": 14.2
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "5-14",
+      "dividende_pour_1_eur": 4.1
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "5-4",
+      "dividende_pour_1_eur": 4.1
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "5-9",
+      "dividende_pour_1_eur": 4.1
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "14-4",
+      "dividende_pour_1_eur": 4.1
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "14-9",
+      "dividende_pour_1_eur": 4.1
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "4-9",
+      "dividende_pour_1_eur": 4.1
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "5-14-4",
+      "dividende_pour_1_eur": 125.0
+     },
+     {
+      "type_pari": "MULTI",
+      "combinaison": "5-14-4-9",
+      "dividende_pour_1_eur": 4.5
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -1585,14 +1713,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-10-24T10:45:32Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-10-24T11:00:36Z",
+    "verifiee_le_utc": "2026-10-24T11:00:36Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-10-24T10:45:32Z",
-    "derniere_verification_utc": "2026-10-24T10:45:32Z"
+    "derniere_modification_utc": "2026-10-24T11:00:36Z",
+    "derniere_verification_utc": "2026-10-24T11:00:36Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -1607,6 +1735,28 @@
        4,
        9,
        11
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-10-24T11:00:36Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       5,
+       14,
+       4,
+       9,
+       11,
+       15,
+       13,
+       7,
+       1,
+       16,
+       3,
+       2,
+       8
       ]
      }
     ]
@@ -1623,9 +1773,9 @@
     "libelle": "PRIX GERARD NOUGIER",
     "discipline": "TROT_ATTELE",
     "distance_m": 3000,
-    "heure_depart_utc": "2026-10-24T11:06:00Z",
+    "heure_depart_utc": "2026-10-24T11:11:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "11:06 GMT (13:06 Paris)",
+    "heure_depart_affichee": "11:11 GMT (13:11 Paris)",
     "partants_declares": 13,
     "partants_actifs": 13
    },
@@ -2347,14 +2497,14 @@
     "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "11:00 GMT (13:00 Paris)",
     "partants_declares": 14,
-    "partants_actifs": 13
+    "partants_actifs": 12
    },
    "statut": {
     "code": "EN_ATTENTE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "DEPART_DANS_TROIS_MINUTES"
    },
    "classement": [],
    "arrivee": [],
@@ -2363,6 +2513,10 @@
     {
      "num": 2,
      "nom": "NEW TIME DU CANET"
+    },
+    {
+     "num": 5,
+     "nom": "NERAC HERINIERE"
     }
    ],
    "rapports": {
