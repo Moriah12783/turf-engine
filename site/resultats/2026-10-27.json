@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "be7c3ad1e35cc00747e2dee4c75f69578b31e75e",
-  "run_id": "40496625890",
+  "commit": "8ab410145baf486e6992ad90f0c8a875d1c8c72c",
+  "run_id": "40498496608",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-27",
- "genere_le_utc": "2026-10-27T11:32:20Z",
+ "genere_le_utc": "2026-10-27T11:47:17Z",
  "nb_courses": 24,
  "compte_par_statut": {
   "EN_ATTENTE": 21,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 2,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 3,
   "ANNULEE": 0
  },
- "empreinte_sha256": "84f9b1a43f218e71d5867c46e3e6a6f2c78ab99514b3bb105cfe7524cc04f4d2",
+ "empreinte_sha256": "654eb42c51be10b8a6808da45335bda0ce7f928fc508a753c15c524b4a2c4778",
  "courses": [
   {
    "course_id": "R1C1_27102026_DEAUVILLE",
@@ -677,7 +677,7 @@
     "verifiee_le_utc": "2026-10-27T10:45:32Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-27T10:45:32Z",
-    "derniere_verification_utc": "2026-10-27T11:30:32Z"
+    "derniere_verification_utc": "2026-10-27T11:45:30Z"
    },
    "correction": {
     "version": 2,
@@ -972,7 +972,7 @@
     "verifiee_le_utc": "2026-10-27T11:15:31Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-27T11:15:31Z",
-    "derniere_verification_utc": "2026-10-27T11:30:32Z"
+    "derniere_verification_utc": "2026-10-27T11:45:30Z"
    },
    "correction": {
     "version": 2,
@@ -1032,11 +1032,11 @@
     "partants_actifs": 16
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -1068,6 +1068,54 @@
      "num": 12,
      "nom": "NOUGATINE VERGNIER",
      "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 11,
+     "nom": "NARDECH DE HOUELLE",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 9,
+     "nom": "NESTORIUS",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 14,
+     "nom": "NASHVILLE DREAM",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 7,
+     "nom": "NONO LE ROBOT",
+     "dead_heat": false
+    },
+    {
+     "rang": 10,
+     "num": 13,
+     "nom": "NOBLESSE DU GERS",
+     "dead_heat": false
+    },
+    {
+     "rang": 11,
+     "num": 3,
+     "nom": "NELLY JAC",
+     "dead_heat": false
+    },
+    {
+     "rang": 12,
+     "num": 4,
+     "nom": "NEVER GIVE UP",
+     "dead_heat": false
+    },
+    {
+     "rang": 13,
+     "num": 1,
+     "nom": "NOUBA DES GOUJONS",
+     "dead_heat": false
     }
    ],
    "arrivee": [
@@ -1075,7 +1123,15 @@
     8,
     16,
     10,
-    12
+    12,
+    11,
+    9,
+    14,
+    7,
+    13,
+    3,
+    4,
+    1
    ],
    "non_classes": [
     {
@@ -1096,11 +1152,78 @@
    ],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "5": 15.3
+    },
+    "simple_place": {
+     "5": 3.4,
+     "8": 1.5,
+     "16": 2.4
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "5-8",
+      "dividende_pour_1_eur": 17.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "5-8",
+      "dividende_pour_1_eur": 7.3
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "5-16",
+      "dividende_pour_1_eur": 11.8
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "8-16",
+      "dividende_pour_1_eur": 5.5
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "5-8",
+      "dividende_pour_1_eur": 3.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "5-16",
+      "dividende_pour_1_eur": 3.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "5-10",
+      "dividende_pour_1_eur": 3.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "8-16",
+      "dividende_pour_1_eur": 3.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "8-10",
+      "dividende_pour_1_eur": 3.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "16-10",
+      "dividende_pour_1_eur": 3.8
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "5-8-16",
+      "dividende_pour_1_eur": 38.1
+     },
+     {
+      "type_pari": "MULTI",
+      "combinaison": "5-8-16-10",
+      "dividende_pour_1_eur": 2.7
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -1110,14 +1233,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-10-27T11:30:32Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-10-27T11:45:30Z",
+    "verifiee_le_utc": "2026-10-27T11:45:30Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-10-27T11:30:32Z",
-    "derniere_verification_utc": "2026-10-27T11:30:32Z"
+    "derniere_modification_utc": "2026-10-27T11:45:30Z",
+    "derniere_verification_utc": "2026-10-27T11:45:30Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -1132,6 +1255,28 @@
        16,
        10,
        12
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-10-27T11:45:30Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       5,
+       8,
+       16,
+       10,
+       12,
+       11,
+       9,
+       14,
+       7,
+       13,
+       3,
+       4,
+       1
       ]
      }
     ]
@@ -1159,7 +1304,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -1671,7 +1816,7 @@
     "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "17:20 GMT (18:20 Paris)",
     "partants_declares": 18,
-    "partants_actifs": 18
+    "partants_actifs": 17
    },
    "statut": {
     "code": "EN_ATTENTE",
@@ -1683,7 +1828,12 @@
    "classement": [],
    "arrivee": [],
    "non_classes": [],
-   "non_partants": [],
+   "non_partants": [
+    {
+     "num": 17,
+     "nom": "RAGAZZA DU CHENE"
+    }
+   ],
    "rapports": {
     "disponibles": false,
     "unite": "EUR pour 1 EUR de mise",
