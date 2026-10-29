@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "3ff4cfbb3458db3706d0f3c1de76b199ead8be9f",
-  "run_id": "40856108166",
+  "commit": "38c79ae86e3248dc20dd6295bfe8b4f6cb4b0c55",
+  "run_id": "40858091668",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-29",
- "genere_le_utc": "2026-10-29T10:18:07Z",
+ "genere_le_utc": "2026-10-29T10:33:05Z",
  "nb_courses": 31,
  "compte_par_statut": {
   "EN_ATTENTE": 30,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 0,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 1,
   "ANNULEE": 0
  },
- "empreinte_sha256": "ab5c8cce04bdcc860b8c8f194e38bc14da0c253f51dc85f110181344e2be90aa",
+ "empreinte_sha256": "884708e59a5d2b45890420266b9e881f6e2735036e504a062207916e8823b379",
  "courses": [
   {
    "course_id": "R1C1_29102026_VINCENNES",
@@ -476,11 +476,11 @@
     "partants_actifs": 7
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -506,22 +506,64 @@
      "num": 6,
      "nom": "KARMIX",
      "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 2,
+     "nom": "JUNGLE VILLE",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 5,
+     "nom": "AMILY",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 7,
+     "nom": "CHOEUR DE MESC",
+     "dead_heat": false
     }
    ],
    "arrivee": [
     3,
     1,
     4,
-    6
+    6,
+    2,
+    5,
+    7
    ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "3": 5.7
+    },
+    "simple_place": {
+     "3": 2.2,
+     "1": 1.5
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_ORDRE",
+      "combinaison": "3-1",
+      "dividende_pour_1_eur": 17.7
+     },
+     {
+      "type_pari": "TRIO_ORDRE",
+      "combinaison": "3-1-4",
+      "dividende_pour_1_eur": 47.7
+     },
+     {
+      "type_pari": "SUPER_QUATRE",
+      "combinaison": "3-1-4-6",
+      "dividende_pour_1_eur": 109.4
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -531,14 +573,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-10-29T10:15:42Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-10-29T10:30:43Z",
+    "verifiee_le_utc": "2026-10-29T10:30:43Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-10-29T10:15:42Z",
-    "derniere_verification_utc": "2026-10-29T10:15:42Z"
+    "derniere_modification_utc": "2026-10-29T10:30:43Z",
+    "derniere_verification_utc": "2026-10-29T10:30:43Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -552,6 +594,22 @@
        1,
        4,
        6
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-10-29T10:30:43Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       3,
+       1,
+       4,
+       6,
+       2,
+       5,
+       7
       ]
      }
     ]
@@ -568,9 +626,9 @@
     "libelle": "PRIX DU THEATRE IMPERIAL DU CHATEAU DE FONTAINEBLEAU",
     "discipline": "OBSTACLE_STEEPLE",
     "distance_m": 3600,
-    "heure_depart_utc": "2026-10-29T10:35:00Z",
+    "heure_depart_utc": "2026-10-29T10:36:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "10:35 GMT (11:35 Paris)",
+    "heure_depart_affichee": "10:36 GMT (11:36 Paris)",
     "partants_declares": 8,
     "partants_actifs": 7
    },
@@ -579,7 +637,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
    },
    "classement": [],
    "arrivee": [],
