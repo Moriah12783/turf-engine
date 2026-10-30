@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "0e3694906ec2bbd4e2ea0f788bb930ef9c95ffbb",
-  "run_id": "41039444311",
+  "commit": "57d194263deefb926e4c028444875f80fa33399d",
+  "run_id": "41041273769",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-30",
- "genere_le_utc": "2026-10-30T10:18:27Z",
+ "genere_le_utc": "2026-10-30T10:32:14Z",
  "nb_courses": 33,
  "compte_par_statut": {
-  "EN_ATTENTE": 33,
+  "EN_ATTENTE": 32,
   "PROVISOIRE": 0,
-  "DEFINITIVE": 0,
+  "DEFINITIVE": 1,
   "ANNULEE": 0
  },
- "empreinte_sha256": "b4378257f5e91f296024c7f49765973ecf81f701cba25d9b772de323dc188315",
+ "empreinte_sha256": "89433d89490a80c75c5d14b8d79594c31be2b9ce0117b4962aa5a2cc3aa02da1",
  "courses": [
   {
    "course_id": "R1C1_30102026_VINCENNES",
@@ -486,41 +486,162 @@
     "partants_actifs": 9
    },
    "statut": {
-    "code": "EN_ATTENTE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "CHEVAUX_SOUS_ORDRES"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 3,
+     "nom": "NO SOLO",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 5,
+     "nom": "MAGIEL",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 6,
+     "nom": "DO YOU SEA",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 2,
+     "nom": "SI NOIR",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 9,
+     "nom": "PERIWINKLE",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 7,
+     "nom": "FEEL WELL",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 4,
+     "nom": "JEMAA EL FNA",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 1,
+     "nom": "WOODSTARS",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 8,
+     "nom": "LATZIA",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    3,
+    5,
+    6,
+    2,
+    9,
+    7,
+    4,
+    1,
+    8
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "3": 8.8
+    },
+    "simple_place": {
+     "3": 2.9,
+     "5": 2.3,
+     "6": 3.2
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "3-5",
+      "dividende_pour_1_eur": 32.6
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "3-5",
+      "dividende_pour_1_eur": 11.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "3-6",
+      "dividende_pour_1_eur": 9.8
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "5-6",
+      "dividende_pour_1_eur": 13.3
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "3-5-6",
+      "dividende_pour_1_eur": 96.2
+     },
+     {
+      "type_pari": "SUPER_QUATRE",
+      "combinaison": "3-5-6-2",
+      "dividende_pour_1_eur": 3149.0
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/30102026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "premiere_lecture_utc": "2026-10-30T10:30:55Z",
+    "definitive_depuis_utc": "2026-10-30T10:30:55Z",
+    "verifiee_le_utc": "2026-10-30T10:30:55Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-10-30T10:30:55Z",
+    "derniere_verification_utc": "2026-10-30T10:30:55Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "DEFINITIVE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-10-30T10:30:55Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       3,
+       5,
+       6,
+       2,
+       9,
+       7,
+       4,
+       1,
+       8
+      ]
+     }
+    ]
    }
   },
   {
@@ -545,7 +666,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
