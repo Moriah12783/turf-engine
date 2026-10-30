@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "9918c319c242483a074299fc92a99e57ae7c85f9",
-  "run_id": "41050388499",
+  "commit": "118f6a2d5f5cdb94f02ce1142b21a176e0b321a6",
+  "run_id": "41052161286",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-30",
- "genere_le_utc": "2026-10-30T11:47:45Z",
+ "genere_le_utc": "2026-10-30T12:02:51Z",
  "nb_courses": 33,
  "compte_par_statut": {
-  "EN_ATTENTE": 29,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 28,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 4,
   "ANNULEE": 0
  },
- "empreinte_sha256": "a9cb51a6dc6f5eff549b5cef63c232b5cb316a3250c008ef8cb51d6c2a1cf29e",
+ "empreinte_sha256": "b625c7dd1d0441a88e24e305042703dbed70b21d31002dfbe8b738aac2c48643",
  "courses": [
   {
    "course_id": "R1C1_30102026_VINCENNES",
@@ -627,7 +627,7 @@
     "verifiee_le_utc": "2026-10-30T10:30:55Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-30T10:30:55Z",
-    "derniere_verification_utc": "2026-10-30T11:45:57Z"
+    "derniere_verification_utc": "2026-10-30T12:00:56Z"
    },
    "correction": {
     "version": 1,
@@ -759,7 +759,7 @@
     "verifiee_le_utc": "2026-10-30T11:00:56Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-30T11:00:56Z",
-    "derniere_verification_utc": "2026-10-30T11:45:57Z"
+    "derniere_verification_utc": "2026-10-30T12:00:56Z"
    },
    "correction": {
     "version": 1,
@@ -931,7 +931,7 @@
     "verifiee_le_utc": "2026-10-30T11:30:57Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-30T11:30:57Z",
-    "derniere_verification_utc": "2026-10-30T11:45:57Z"
+    "derniere_verification_utc": "2026-10-30T12:00:56Z"
    },
    "correction": {
     "version": 1,
@@ -976,14 +976,44 @@
     "partants_actifs": 9
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 4,
+     "nom": "TRABUCO",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 3,
+     "nom": "PINK MONDAY",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 5,
+     "nom": "LA MAZZI GOGO",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 6,
+     "nom": "TREATWOOD",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    4,
+    3,
+    5,
+    6
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
@@ -996,21 +1026,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/30102026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-10-30T12:00:56Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-10-30T12:00:56Z",
+    "derniere_verification_utc": "2026-10-30T12:00:56Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-10-30T12:00:56Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       4,
+       3,
+       5,
+       6
+      ]
+     }
+    ]
    }
   },
   {
@@ -1198,7 +1242,7 @@
     "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "14:10 GMT (15:10 Paris)",
     "partants_declares": 12,
-    "partants_actifs": 12
+    "partants_actifs": 11
    },
    "statut": {
     "code": "EN_ATTENTE",
@@ -1210,7 +1254,12 @@
    "classement": [],
    "arrivee": [],
    "non_classes": [],
-   "non_partants": [],
+   "non_partants": [
+    {
+     "num": 3,
+     "nom": "BENVENUTO"
+    }
+   ],
    "rapports": {
     "disponibles": false,
     "unite": "EUR pour 1 EUR de mise",
@@ -1422,7 +1471,7 @@
     "verifiee_le_utc": "2026-10-30T11:45:57Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-30T11:45:57Z",
-    "derniere_verification_utc": "2026-10-30T11:45:57Z"
+    "derniere_verification_utc": "2026-10-30T12:00:56Z"
    },
    "correction": {
     "version": 1,
@@ -1460,9 +1509,9 @@
     "libelle": "PRIX DE L'EPINAY",
     "discipline": "PLAT",
     "distance_m": 1900,
-    "heure_depart_utc": "2026-10-30T12:08:00Z",
+    "heure_depart_utc": "2026-10-30T12:10:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "12:08 GMT (13:08 Paris)",
+    "heure_depart_affichee": "12:10 GMT (13:10 Paris)",
     "partants_declares": 8,
     "partants_actifs": 8
    },
@@ -1471,7 +1520,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
