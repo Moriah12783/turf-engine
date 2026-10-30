@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "a7facce1ac14689c48973cb80e988f8901be0b63",
-  "run_id": "41046802829",
+  "commit": "fe9d963dbe6c04a39982a96a82e94456ec02e344",
+  "run_id": "41048583884",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-30",
- "genere_le_utc": "2026-10-30T11:18:21Z",
+ "genere_le_utc": "2026-10-30T11:33:22Z",
  "nb_courses": 33,
  "compte_par_statut": {
-  "EN_ATTENTE": 31,
+  "EN_ATTENTE": 30,
   "PROVISOIRE": 0,
-  "DEFINITIVE": 2,
+  "DEFINITIVE": 3,
   "ANNULEE": 0
  },
- "empreinte_sha256": "415631ee688efa4298b133b8ffa2c5076769fe79d3f86e35278039abb3093e61",
+ "empreinte_sha256": "d19eae32145af792196a0fa080fe09d9b4500d137ace69220aa463455d346ee4",
  "courses": [
   {
    "course_id": "R1C1_30102026_VINCENNES",
@@ -627,7 +627,7 @@
     "verifiee_le_utc": "2026-10-30T10:30:55Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-30T10:30:55Z",
-    "derniere_verification_utc": "2026-10-30T11:15:57Z"
+    "derniere_verification_utc": "2026-10-30T11:30:57Z"
    },
    "correction": {
     "version": 1,
@@ -759,7 +759,7 @@
     "verifiee_le_utc": "2026-10-30T11:00:56Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-30T11:00:56Z",
-    "derniere_verification_utc": "2026-10-30T11:15:57Z"
+    "derniere_verification_utc": "2026-10-30T11:30:57Z"
    },
    "correction": {
     "version": 1,
@@ -800,41 +800,162 @@
     "partants_actifs": 9
    },
    "statut": {
-    "code": "EN_ATTENTE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 2,
+     "nom": "NIAGARA DU SEUIL",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 4,
+     "nom": "NORMANDIE PRETOT",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 7,
+     "nom": "NITRO FOREZ",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 1,
+     "nom": "NALEWA VALLEY",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 3,
+     "nom": "NOCTALI",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 8,
+     "nom": "NOLIKA",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 5,
+     "nom": "NAPPLE'S",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 6,
+     "nom": "NICEE",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 9,
+     "nom": "NEELA",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    2,
+    4,
+    7,
+    1,
+    3,
+    8,
+    5,
+    6,
+    9
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "2": 2.0
+    },
+    "simple_place": {
+     "2": 1.2,
+     "4": 3.0,
+     "7": 4.0
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "2-4",
+      "dividende_pour_1_eur": 17.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "2-4",
+      "dividende_pour_1_eur": 7.5
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "2-7",
+      "dividende_pour_1_eur": 10.2
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "4-7",
+      "dividende_pour_1_eur": 21.2
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "2-4-7",
+      "dividende_pour_1_eur": 78.5
+     },
+     {
+      "type_pari": "SUPER_QUATRE",
+      "combinaison": "2-4-7-1",
+      "dividende_pour_1_eur": 1260.2
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/30102026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "premiere_lecture_utc": "2026-10-30T11:30:57Z",
+    "definitive_depuis_utc": "2026-10-30T11:30:57Z",
+    "verifiee_le_utc": "2026-10-30T11:30:57Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-10-30T11:30:57Z",
+    "derniere_verification_utc": "2026-10-30T11:30:57Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "DEFINITIVE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-10-30T11:30:57Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       2,
+       4,
+       7,
+       1,
+       3,
+       8,
+       5,
+       6,
+       9
+      ]
+     }
+    ]
    }
   },
   {
@@ -1128,9 +1249,9 @@
     "libelle": "PRIX DU BUSTE DE FRANCOIS-ANDRE",
     "discipline": "PLAT",
     "distance_m": 2500,
-    "heure_depart_utc": "2026-10-30T11:34:00Z",
+    "heure_depart_utc": "2026-10-30T11:35:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "11:34 GMT (12:34 Paris)",
+    "heure_depart_affichee": "11:35 GMT (12:35 Paris)",
     "partants_declares": 10,
     "partants_actifs": 9
    },
@@ -1139,7 +1260,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
    },
    "classement": [],
    "arrivee": [],
@@ -1412,7 +1533,7 @@
     "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "14:28 GMT (15:28 Paris)",
     "partants_declares": 10,
-    "partants_actifs": 10
+    "partants_actifs": 9
    },
    "statut": {
     "code": "EN_ATTENTE",
@@ -1424,7 +1545,12 @@
    "classement": [],
    "arrivee": [],
    "non_classes": [],
-   "non_partants": [],
+   "non_partants": [
+    {
+     "num": 6,
+     "nom": "MERI SHAKTI"
+    }
+   ],
    "rapports": {
     "disponibles": false,
     "unite": "EUR pour 1 EUR de mise",
