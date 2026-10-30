@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "160c855cf540fe95e16f03fd1f9ea4e43f3e725e",
-  "run_id": "41043101542",
+  "commit": "c4fe73ae3d94789a5f688ede9e0fa90c0da0793a",
+  "run_id": "41044919542",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-30",
- "genere_le_utc": "2026-10-30T10:48:20Z",
+ "genere_le_utc": "2026-10-30T11:03:25Z",
  "nb_courses": 33,
  "compte_par_statut": {
-  "EN_ATTENTE": 32,
+  "EN_ATTENTE": 31,
   "PROVISOIRE": 0,
-  "DEFINITIVE": 1,
+  "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "273264f6ad857293e95f6db1d8c67f5c2f7346ce94536ccb75a88d40f5953436",
+ "empreinte_sha256": "90c0df3a0914c4251a089e46d601f9406c64b3802c85b60eb09bef99291b5c65",
  "courses": [
   {
    "course_id": "R1C1_30102026_VINCENNES",
@@ -627,7 +627,7 @@
     "verifiee_le_utc": "2026-10-30T10:30:55Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-30T10:30:55Z",
-    "derniere_verification_utc": "2026-10-30T10:45:56Z"
+    "derniere_verification_utc": "2026-10-30T11:00:56Z"
    },
    "correction": {
     "version": 1,
@@ -672,41 +672,114 @@
     "partants_actifs": 5
    },
    "statut": {
-    "code": "EN_ATTENTE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "CHEVAUX_SOUS_ORDRES"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 1,
+     "nom": "PRINCE DES VILLES",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 4,
+     "nom": "MAINTAIN",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 3,
+     "nom": "PLEASEMAN",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 2,
+     "nom": "GOLDEN CALL",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 5,
+     "nom": "PAIUTE",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    1,
+    4,
+    3,
+    2,
+    5
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "1": 5.3
+    },
+    "simple_place": {
+     "1": 2.2,
+     "4": 1.6
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_ORDRE",
+      "combinaison": "1-4",
+      "dividende_pour_1_eur": 14.7
+     },
+     {
+      "type_pari": "TRIO_ORDRE",
+      "combinaison": "1-4-3",
+      "dividende_pour_1_eur": 54.5
+     },
+     {
+      "type_pari": "SUPER_QUATRE",
+      "combinaison": "1-4-3-2",
+      "dividende_pour_1_eur": 56.8
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/30102026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "premiere_lecture_utc": "2026-10-30T11:00:56Z",
+    "definitive_depuis_utc": "2026-10-30T11:00:56Z",
+    "verifiee_le_utc": "2026-10-30T11:00:56Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-10-30T11:00:56Z",
+    "derniere_verification_utc": "2026-10-30T11:00:56Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "DEFINITIVE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-10-30T11:00:56Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       1,
+       4,
+       3,
+       2,
+       5
+      ]
+     }
+    ]
    }
   },
   {
