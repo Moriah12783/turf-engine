@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "c48b3c36ae6338467854e1d3d6c575bbb0a592c2",
-  "run_id": "41194054837",
+  "commit": "41368a87c5055cf3895c592a5b3c980bc2bc84ca",
+  "run_id": "41195051106",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-10-31",
- "genere_le_utc": "2026-10-31T10:48:31Z",
+ "genere_le_utc": "2026-10-31T11:03:08Z",
  "nb_courses": 62,
  "compte_par_statut": {
-  "EN_ATTENTE": 58,
+  "EN_ATTENTE": 57,
   "PROVISOIRE": 1,
-  "DEFINITIVE": 3,
+  "DEFINITIVE": 4,
   "ANNULEE": 0
  },
- "empreinte_sha256": "6d5597e229bd8cbf47c9da4d122488b5f3fc9fb5baa00d6ef9330564e4469b6d",
+ "empreinte_sha256": "b4d8378f90aacf0619ac013e7a3e3d8b15df11ece68a73d158ec19a57e4bef99",
  "courses": [
   {
    "course_id": "R1C1_31102026_DEAUVILLE",
@@ -703,7 +703,7 @@
     "verifiee_le_utc": "2026-10-31T09:30:56Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-31T09:30:56Z",
-    "derniere_verification_utc": "2026-10-31T10:45:57Z"
+    "derniere_verification_utc": "2026-10-31T11:00:58Z"
    },
    "correction": {
     "version": 1,
@@ -934,7 +934,7 @@
     "verifiee_le_utc": "2026-10-31T10:00:54Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-31T10:00:54Z",
-    "derniere_verification_utc": "2026-10-31T10:45:57Z"
+    "derniere_verification_utc": "2026-10-31T11:00:58Z"
    },
    "correction": {
     "version": 1,
@@ -1158,7 +1158,7 @@
     "verifiee_le_utc": "2026-10-31T10:30:56Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-10-31T10:30:56Z",
-    "derniere_verification_utc": "2026-10-31T10:45:57Z"
+    "derniere_verification_utc": "2026-10-31T11:00:58Z"
    },
    "correction": {
     "version": 1,
@@ -1203,14 +1203,44 @@
     "partants_actifs": 9
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 7,
+     "nom": "NO PREVISTO",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 9,
+     "nom": "PRINCE DES DUCS",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 3,
+     "nom": "VICTORSTRUNG",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 4,
+     "nom": "LE TROCA",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    7,
+    9,
+    3,
+    4
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
@@ -1223,21 +1253,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/31102026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-10-31T11:00:58Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-10-31T11:00:58Z",
+    "derniere_verification_utc": "2026-10-31T11:00:58Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-10-31T11:00:58Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       7,
+       9,
+       3,
+       4
+      ]
+     }
+    ]
    }
   },
   {
@@ -1598,11 +1642,11 @@
     "partants_actifs": 16
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -1634,6 +1678,36 @@
      "num": 14,
      "nom": "HELBERT FOUTEAU",
      "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 8,
+     "nom": "JERRY PONT VAUTIER",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 12,
+     "nom": "GALAXIE DU PARC",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 3,
+     "nom": "JET SETTER D'AURCY",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 7,
+     "nom": "JOYEUX DE FONTAINE",
+     "dead_heat": false
+    },
+    {
+     "rang": 10,
+     "num": 10,
+     "nom": "JAZZ SESSION",
+     "dead_heat": false
     }
    ],
    "arrivee": [
@@ -1641,7 +1715,12 @@
     2,
     15,
     4,
-    14
+    14,
+    8,
+    12,
+    3,
+    7,
+    10
    ],
    "non_classes": [
     {
@@ -1657,11 +1736,78 @@
    ],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "16": 2.9
+    },
+    "simple_place": {
+     "16": 1.6,
+     "2": 11.1,
+     "15": 16.0
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "16-2",
+      "dividende_pour_1_eur": 78.3
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "16-2",
+      "dividende_pour_1_eur": 33.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "16-15",
+      "dividende_pour_1_eur": 30.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "2-15",
+      "dividende_pour_1_eur": 237.5
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "16-2",
+      "dividende_pour_1_eur": 22.1
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "16-15",
+      "dividende_pour_1_eur": 22.1
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "16-4",
+      "dividende_pour_1_eur": 22.1
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "2-15",
+      "dividende_pour_1_eur": 22.1
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "2-4",
+      "dividende_pour_1_eur": 22.1
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "15-4",
+      "dividende_pour_1_eur": 22.1
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "16-2-15",
+      "dividende_pour_1_eur": 502.7
+     },
+     {
+      "type_pari": "MULTI",
+      "combinaison": "16-2-15-4",
+      "dividende_pour_1_eur": 56.4
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -1671,14 +1817,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-10-31T10:45:57Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-10-31T11:00:58Z",
+    "verifiee_le_utc": "2026-10-31T11:00:58Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-10-31T10:45:57Z",
-    "derniere_verification_utc": "2026-10-31T10:45:57Z"
+    "derniere_modification_utc": "2026-10-31T11:00:58Z",
+    "derniere_verification_utc": "2026-10-31T11:00:58Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -1693,6 +1839,25 @@
        15,
        4,
        14
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-10-31T11:00:58Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       16,
+       2,
+       15,
+       4,
+       14,
+       8,
+       12,
+       3,
+       7,
+       10
       ]
      }
     ]
@@ -1709,9 +1874,9 @@
     "libelle": "PRIX SANCHO PANCA",
     "discipline": "TROT_MONTE",
     "distance_m": 2875,
-    "heure_depart_utc": "2026-10-31T11:02:00Z",
+    "heure_depart_utc": "2026-10-31T11:05:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "11:02 GMT (12:02 Paris)",
+    "heure_depart_affichee": "11:05 GMT (12:05 Paris)",
     "partants_declares": 17,
     "partants_actifs": 17
    },
@@ -3105,7 +3270,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "CHEVAUX_SOUS_ORDRES"
    },
    "classement": [],
    "arrivee": [],
