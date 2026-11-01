@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "4d113da807430d1ea1a46a261c569768ce603213",
-  "run_id": "41304431471",
+  "commit": "092514ae535ab4dc66e6297cd84bc020cd0279d2",
+  "run_id": "41305638702",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-01",
- "genere_le_utc": "2026-11-01T12:03:48Z",
+ "genere_le_utc": "2026-11-01T12:17:57Z",
  "nb_courses": 74,
  "compte_par_statut": {
-  "EN_ATTENTE": 70,
-  "PROVISOIRE": 0,
-  "DEFINITIVE": 4,
+  "EN_ATTENTE": 67,
+  "PROVISOIRE": 2,
+  "DEFINITIVE": 5,
   "ANNULEE": 0
  },
- "empreinte_sha256": "45dd74409808da9f8f6ae420385707759b47cb83310c0e7694a9396300ab6b5e",
+ "empreinte_sha256": "e5c1ceb2c89c4de0655a5dc864bd4f7fb5d0e85de69df0386dd76a5d2798e92d",
  "courses": [
   {
    "course_id": "R1C1_01112026_LAVAL",
@@ -29,9 +29,9 @@
     "libelle": "PRIX PARIS-TURF",
     "discipline": "TROT_ATTELE",
     "distance_m": 2850,
-    "heure_depart_utc": "2026-11-01T12:23:00Z",
+    "heure_depart_utc": "2026-11-01T12:27:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "12:23 GMT (13:23 Paris)",
+    "heure_depart_affichee": "12:27 GMT (13:27 Paris)",
     "partants_declares": 15,
     "partants_actifs": 15
    },
@@ -613,7 +613,7 @@
     "verifiee_le_utc": "2026-11-01T10:46:06Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-01T10:46:06Z",
-    "derniere_verification_utc": "2026-11-01T12:01:07Z"
+    "derniere_verification_utc": "2026-11-01T12:16:08Z"
    },
    "correction": {
     "version": 1,
@@ -840,7 +840,7 @@
     "verifiee_le_utc": "2026-11-01T11:16:09Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-01T11:16:09Z",
-    "derniere_verification_utc": "2026-11-01T12:01:07Z"
+    "derniere_verification_utc": "2026-11-01T12:16:08Z"
    },
    "correction": {
     "version": 1,
@@ -982,7 +982,7 @@
     "verifiee_le_utc": "2026-11-01T11:46:05Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-01T11:46:05Z",
-    "derniere_verification_utc": "2026-11-01T12:01:07Z"
+    "derniere_verification_utc": "2026-11-01T12:16:08Z"
    },
    "correction": {
     "version": 1,
@@ -1020,19 +1020,54 @@
     "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "12:03 GMT (13:03 Paris)",
     "partants_declares": 12,
-    "partants_actifs": 12
+    "partants_actifs": 11
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_DANS_TROIS_MINUTES"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 9,
+     "nom": "MARANTAO",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 8,
+     "nom": "DJIN'S",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 5,
+     "nom": "MINUTY",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 1,
+     "nom": "TENDER MOMENT",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    9,
+    8,
+    5,
+    1
+   ],
    "non_classes": [],
-   "non_partants": [],
+   "non_partants": [
+    {
+     "num": 10,
+     "nom": "ROTEIRO"
+    }
+   ],
    "rapports": {
     "disponibles": false,
     "unite": "EUR pour 1 EUR de mise",
@@ -1043,21 +1078,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/01112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-01T12:16:08Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-01T12:16:08Z",
+    "derniere_verification_utc": "2026-11-01T12:16:08Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-01T12:16:08Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       9,
+       8,
+       5,
+       1
+      ]
+     }
+    ]
    }
   },
   {
@@ -1702,41 +1751,216 @@
     "partants_actifs": 15
    },
    "statut": {
-    "code": "EN_ATTENTE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "DEPART_DANS_TROIS_MINUTES"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 8,
+     "nom": "NUTELLA DU CAMPUS",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 7,
+     "nom": "NAOMI D'HUIN",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 14,
+     "nom": "NESMILE",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 13,
+     "nom": "NOT FOR SALE",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 10,
+     "nom": "NOBLESSE CHATAULT",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 4,
+     "nom": "NANTILLA",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 5,
+     "nom": "NACRE DE BUSSET",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 1,
+     "nom": "NANA DE MARS",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 3,
+     "nom": "NATIVE DU VAL",
+     "dead_heat": false
+    },
+    {
+     "rang": 10,
+     "num": 12,
+     "nom": "NIKITA SKILL",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    8,
+    7,
+    14,
+    13,
+    10,
+    4,
+    5,
+    1,
+    3,
+    12
+   ],
+   "non_classes": [
+    {
+     "num": 2,
+     "nom": "NAIRA D'HUIN",
+     "incident": "ARRETE"
+    },
+    {
+     "num": 6,
+     "nom": "NAHITIS D'ALCI",
+     "incident": "ARRETE"
+    },
+    {
+     "num": 9,
+     "nom": "NALA DU VAUTOUR",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "8": 2.9
+    },
+    "simple_place": {
+     "8": 2.0,
+     "7": 3.1,
+     "14": 8.2
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "8-7",
+      "dividende_pour_1_eur": 18.7
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "8-7",
+      "dividende_pour_1_eur": 10.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "8-14",
+      "dividende_pour_1_eur": 20.6
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "7-14",
+      "dividende_pour_1_eur": 25.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "8-7",
+      "dividende_pour_1_eur": 5.9
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "8-14",
+      "dividende_pour_1_eur": 5.9
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "8-13",
+      "dividende_pour_1_eur": 5.9
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "7-14",
+      "dividende_pour_1_eur": 5.9
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "7-13",
+      "dividende_pour_1_eur": 5.9
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "14-13",
+      "dividende_pour_1_eur": 5.9
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "8-7-14",
+      "dividende_pour_1_eur": 122.6
+     },
+     {
+      "type_pari": "MULTI",
+      "combinaison": "8-7-14-13",
+      "dividende_pour_1_eur": 4.5
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/01112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "premiere_lecture_utc": "2026-11-01T12:16:08Z",
+    "definitive_depuis_utc": "2026-11-01T12:16:08Z",
+    "verifiee_le_utc": "2026-11-01T12:16:08Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-01T12:16:08Z",
+    "derniere_verification_utc": "2026-11-01T12:16:08Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "DEFINITIVE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-01T12:16:08Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       8,
+       7,
+       14,
+       13,
+       10,
+       4,
+       5,
+       1,
+       3,
+       12
+      ]
+     }
+    ]
    }
   },
   {
@@ -1750,9 +1974,9 @@
     "libelle": "PRIX CIDRE DE THIERACHE",
     "discipline": "TROT_ATTELE",
     "distance_m": 2750,
-    "heure_depart_utc": "2026-11-01T12:30:00Z",
+    "heure_depart_utc": "2026-11-01T12:32:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "12:30 GMT (13:30 Paris)",
+    "heure_depart_affichee": "12:32 GMT (13:32 Paris)",
     "partants_declares": 14,
     "partants_actifs": 14
    },
@@ -1761,7 +1985,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -2274,7 +2498,7 @@
     "verifiee_le_utc": "2026-11-01T12:01:07Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-01T12:01:07Z",
-    "derniere_verification_utc": "2026-11-01T12:01:07Z"
+    "derniere_verification_utc": "2026-11-01T12:16:08Z"
    },
    "correction": {
     "version": 1,
@@ -2319,7 +2543,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "DEPART_CONFIRME"
    },
    "classement": [],
    "arrivee": [],
@@ -3209,7 +3433,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "DEPART_CONFIRME"
    },
    "classement": [],
    "arrivee": [],
@@ -3705,15 +3929,44 @@
     "partants_actifs": 11
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "ARRIVEE_PROVISOIRE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 6,
+     "nom": "ORO DU RILER",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 5,
+     "nom": "ORCRUXE DU GARDEN",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 1,
+     "nom": "ONESCO",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    6,
+    5,
+    1
+   ],
+   "non_classes": [
+    {
+     "num": 3,
+     "nom": "OPERA ROCK",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": false,
@@ -3725,21 +3978,34 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/01112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-01T12:16:08Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-01T12:16:08Z",
+    "derniere_verification_utc": "2026-11-01T12:16:08Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-01T12:16:08Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       6,
+       5,
+       1
+      ]
+     }
+    ]
    }
   },
   {
