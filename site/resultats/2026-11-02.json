@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "6bcb4d9009a59caefbe37365233e0bebb720b1ab",
-  "run_id": "41435412111",
+  "commit": "8a18ae4ae50e838a02ee640090e0e49d5fe923c6",
+  "run_id": "41437422980",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-02",
- "genere_le_utc": "2026-11-02T11:18:47Z",
+ "genere_le_utc": "2026-11-02T11:32:43Z",
  "nb_courses": 48,
  "compte_par_statut": {
-  "EN_ATTENTE": 46,
+  "EN_ATTENTE": 45,
   "PROVISOIRE": 0,
-  "DEFINITIVE": 2,
+  "DEFINITIVE": 3,
   "ANNULEE": 0
  },
- "empreinte_sha256": "5c0790659780d1d3c966a07b20b3bcb1466f4257739f28db1a002ddd22240d40",
+ "empreinte_sha256": "5ea9b2e99bee70ca9936729016528402651a495b7c8fb4524413751c6d3f136f",
  "courses": [
   {
    "course_id": "R1C1_02112026_FONTAINEBLEAU",
@@ -29,9 +29,9 @@
     "libelle": "PRIX DES ALISIERS",
     "discipline": "PLAT",
     "distance_m": 1200,
-    "heure_depart_utc": "2026-11-02T11:35:00Z",
+    "heure_depart_utc": "2026-11-02T11:36:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "11:35 GMT (12:35 Paris)",
+    "heure_depart_affichee": "11:36 GMT (12:36 Paris)",
     "partants_declares": 11,
     "partants_actifs": 11
    },
@@ -587,7 +587,7 @@
     "verifiee_le_utc": "2026-11-02T10:31:12Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-02T10:31:12Z",
-    "derniere_verification_utc": "2026-11-02T11:16:07Z"
+    "derniere_verification_utc": "2026-11-02T11:31:12Z"
    },
    "correction": {
     "version": 1,
@@ -826,7 +826,7 @@
     "verifiee_le_utc": "2026-11-02T11:01:12Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-02T11:01:12Z",
-    "derniere_verification_utc": "2026-11-02T11:16:07Z"
+    "derniere_verification_utc": "2026-11-02T11:31:12Z"
    },
    "correction": {
     "version": 1,
@@ -876,14 +876,58 @@
     "partants_actifs": 6
    },
    "statut": {
-    "code": "EN_ATTENTE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 4,
+     "nom": "BEVAN",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 5,
+     "nom": "LOVE IS GOLD",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 6,
+     "nom": "SEONA",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 2,
+     "nom": "JOHNNY HAMMER",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 1,
+     "nom": "MERANO",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 3,
+     "nom": "CHERGUI",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    4,
+    5,
+    6,
+    2,
+    1,
+    3
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
@@ -896,21 +940,37 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/02112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "premiere_lecture_utc": "2026-11-02T11:31:12Z",
+    "definitive_depuis_utc": "2026-11-02T11:31:12Z",
+    "verifiee_le_utc": "2026-11-02T11:31:12Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-02T11:31:12Z",
+    "derniere_verification_utc": "2026-11-02T11:31:12Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "DEFINITIVE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-02T11:31:12Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       4,
+       5,
+       6,
+       2,
+       1,
+       3
+      ]
+     }
+    ]
    }
   },
   {
@@ -2550,7 +2610,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "DEPART_CONFIRME"
    },
    "classement": [],
    "arrivee": [],
