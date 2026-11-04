@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "3da00d1503fffb96cd25c2f1be147d9f0395dd64",
-  "run_id": "41821374097",
+  "commit": "0ea545b928b4c547b91d0b85095b0733140ae156",
+  "run_id": "41823460690",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-04",
- "genere_le_utc": "2026-11-04T11:33:03Z",
+ "genere_le_utc": "2026-11-04T11:47:35Z",
  "nb_courses": 23,
  "compte_par_statut": {
   "EN_ATTENTE": 21,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 1,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "07a91401bf014d360f0e1d4f345ca2f214ccd3a7d8ef057cfd098cf0ce955ba4",
+ "empreinte_sha256": "4f7d95a28ad197d350441e2f7cf234a4ef7264dda9777c0f1d8b6a16b956477d",
  "courses": [
   {
    "course_id": "R1C1_04112026_NANTES",
@@ -592,7 +592,7 @@
     "verifiee_le_utc": "2026-11-04T11:00:23Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-04T11:00:23Z",
-    "derniere_verification_utc": "2026-11-04T11:30:24Z"
+    "derniere_verification_utc": "2026-11-04T11:45:21Z"
    },
    "correction": {
     "version": 1,
@@ -635,11 +635,11 @@
     "partants_actifs": 7
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -665,13 +665,20 @@
      "num": 2,
      "nom": "SPANISH BOY",
      "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 4,
+     "nom": "NELSON DU SEUIL",
+     "dead_heat": false
     }
    ],
    "arrivee": [
     1,
     3,
     7,
-    2
+    2,
+    4
    ],
    "non_classes": [
     {
@@ -687,11 +694,32 @@
    ],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "1": 7.0
+    },
+    "simple_place": {
+     "1": 2.5,
+     "3": 1.8
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_ORDRE",
+      "combinaison": "1-3",
+      "dividende_pour_1_eur": 19.9
+     },
+     {
+      "type_pari": "TRIO_ORDRE",
+      "combinaison": "1-3-7",
+      "dividende_pour_1_eur": 93.8
+     },
+     {
+      "type_pari": "SUPER_QUATRE",
+      "combinaison": "1-3-7-2",
+      "dividende_pour_1_eur": 732.3
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -701,14 +729,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-11-04T11:30:24Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-11-04T11:45:21Z",
+    "verifiee_le_utc": "2026-11-04T11:45:21Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-11-04T11:30:24Z",
-    "derniere_verification_utc": "2026-11-04T11:30:24Z"
+    "derniere_modification_utc": "2026-11-04T11:45:21Z",
+    "derniere_verification_utc": "2026-11-04T11:45:21Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -722,6 +750,20 @@
        3,
        7,
        2
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-11-04T11:45:21Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       1,
+       3,
+       7,
+       2,
+       4
       ]
      }
     ]
@@ -738,9 +780,9 @@
     "libelle": "PRIX TRIQUERVILLE",
     "discipline": "OBSTACLE_STEEPLE",
     "distance_m": 4400,
-    "heure_depart_utc": "2026-11-04T11:52:00Z",
+    "heure_depart_utc": "2026-11-04T11:55:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "11:52 GMT (12:52 Paris)",
+    "heure_depart_affichee": "11:55 GMT (12:55 Paris)",
     "partants_declares": 6,
     "partants_actifs": 6
    },
@@ -749,7 +791,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "JOKEYS_MONTENT_A_CHEVAL"
    },
    "classement": [],
    "arrivee": [],
