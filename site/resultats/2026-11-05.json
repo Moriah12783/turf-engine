@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "fb9a1981d7919887e52882d2ac6071d98c396c20",
-  "run_id": "42011207227",
+  "commit": "91b732d29e07552ed0a9649d4dee2e64a4e62504",
+  "run_id": "42013292538",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-05",
- "genere_le_utc": "2026-11-05T10:32:10Z",
+ "genere_le_utc": "2026-11-05T10:48:07Z",
  "nb_courses": 32,
  "compte_par_statut": {
-  "EN_ATTENTE": 31,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 30,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 1,
   "ANNULEE": 0
  },
- "empreinte_sha256": "182ba6cc6a999562872fb0790985bda45371f7235a63cd921402de2b70d4368c",
+ "empreinte_sha256": "4e3e3f32056c8e865010cbb98fa644f330fa02ace6a20cb3b5073d1678d3e5d4",
  "courses": [
   {
    "course_id": "R1C1_05112026_VINCENNES",
@@ -661,7 +661,7 @@
     "verifiee_le_utc": "2026-11-05T10:15:51Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-05T10:15:51Z",
-    "derniere_verification_utc": "2026-11-05T10:30:31Z"
+    "derniere_verification_utc": "2026-11-05T10:45:22Z"
    },
    "correction": {
     "version": 1,
@@ -708,14 +708,44 @@
     "partants_actifs": 12
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 6,
+     "nom": "ZASYMOKA",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 4,
+     "nom": "LA BELLE HELENE",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 1,
+     "nom": "DORIANELLO",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 2,
+     "nom": "LE CORSAIRE",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    6,
+    4,
+    1,
+    2
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
@@ -728,21 +758,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/05112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-05T10:45:22Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-05T10:45:22Z",
+    "derniere_verification_utc": "2026-11-05T10:45:22Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-05T10:45:22Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       6,
+       4,
+       1,
+       2
+      ]
+     }
+    ]
    }
   },
   {
