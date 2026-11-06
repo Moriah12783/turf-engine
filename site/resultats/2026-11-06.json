@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "13821403186b3d65e543c75c0435e52ccbe7d289",
-  "run_id": "42201216758",
+  "commit": "23b75014f9fc019dfef0738f208ac280afbdd0da",
+  "run_id": "42203136694",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-06",
- "genere_le_utc": "2026-11-06T10:18:12Z",
+ "genere_le_utc": "2026-11-06T10:33:02Z",
  "nb_courses": 31,
  "compte_par_statut": {
-  "EN_ATTENTE": 31,
+  "EN_ATTENTE": 30,
   "PROVISOIRE": 0,
-  "DEFINITIVE": 0,
+  "DEFINITIVE": 1,
   "ANNULEE": 0
  },
- "empreinte_sha256": "fd081dac82cc67d554326b4a57ef78cf41443b8e7f75d32d770758fd4e4e4a24",
+ "empreinte_sha256": "c69e4800cbe436d204bda86115566fa83ace128b8a2c7bee3fd21efaa6fbfa4f",
  "courses": [
   {
    "course_id": "R1C1_06112026_VINCENNES",
@@ -481,41 +481,112 @@
     "partants_actifs": 5
    },
    "statut": {
-    "code": "EN_ATTENTE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "DEPART_CONFIRME"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 2,
+     "nom": "IMAGINATION",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 1,
+     "nom": "POLO DANCER",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 5,
+     "nom": "FORTUNA",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 3,
+     "nom": "FLEURIEU",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    2,
+    1,
+    5,
+    3
+   ],
+   "non_classes": [
+    {
+     "num": 4,
+     "nom": "MOONRAKER CHIC",
+     "incident": "TOMBE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "2": 1.8
+    },
+    "simple_place": {
+     "2": 1.4,
+     "1": 2.6
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_ORDRE",
+      "combinaison": "2-1",
+      "dividende_pour_1_eur": 6.9
+     },
+     {
+      "type_pari": "TRIO_ORDRE",
+      "combinaison": "2-1-5",
+      "dividende_pour_1_eur": 14.6
+     },
+     {
+      "type_pari": "SUPER_QUATRE",
+      "combinaison": "2-1-5-3",
+      "dividende_pour_1_eur": 34.1
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/06112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "premiere_lecture_utc": "2026-11-06T10:30:22Z",
+    "definitive_depuis_utc": "2026-11-06T10:30:22Z",
+    "verifiee_le_utc": "2026-11-06T10:30:22Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-06T10:30:22Z",
+    "derniere_verification_utc": "2026-11-06T10:30:22Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "DEFINITIVE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-06T10:30:22Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       2,
+       1,
+       5,
+       3
+      ]
+     }
+    ]
    }
   },
   {
