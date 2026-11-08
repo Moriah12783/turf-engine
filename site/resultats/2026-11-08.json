@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "f2238a4f23bc1af2121002cf3eebf7822685211d",
-  "run_id": "42478181276",
+  "commit": "6e649e44a63c8aad3e886af00f131c1d019f0a2b",
+  "run_id": "42479344205",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-08",
- "genere_le_utc": "2026-11-08T12:02:00Z",
+ "genere_le_utc": "2026-11-08T12:16:57Z",
  "nb_courses": 71,
  "compte_par_statut": {
-  "EN_ATTENTE": 67,
-  "PROVISOIRE": 0,
-  "DEFINITIVE": 4,
+  "EN_ATTENTE": 64,
+  "PROVISOIRE": 2,
+  "DEFINITIVE": 5,
   "ANNULEE": 0
  },
- "empreinte_sha256": "2cc035689be7b9a8b0180b0ae8872779787459f5f7d4fbfc1c20ab568fe46e7b",
+ "empreinte_sha256": "d0d82a02eac7c7f1d96e5bf273d10653ff6bd9eef0c67ab4b7e73d1e69a273b0",
  "courses": [
   {
    "course_id": "R1C1_08112026_SAINT-CLOUD",
@@ -204,7 +204,7 @@
     "verifiee_le_utc": "2026-11-08T12:00:23Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-08T12:00:23Z",
-    "derniere_verification_utc": "2026-11-08T12:00:23Z"
+    "derniere_verification_utc": "2026-11-08T12:15:19Z"
    },
    "correction": {
     "version": 1,
@@ -254,7 +254,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
    },
    "classement": [],
    "arrivee": [],
@@ -810,7 +810,7 @@
     "verifiee_le_utc": "2026-11-08T11:00:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-08T11:00:24Z",
-    "derniere_verification_utc": "2026-11-08T12:00:23Z"
+    "derniere_verification_utc": "2026-11-08T12:15:19Z"
    },
    "correction": {
     "version": 2,
@@ -995,7 +995,7 @@
     "verifiee_le_utc": "2026-11-08T11:15:20Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-08T11:15:20Z",
-    "derniere_verification_utc": "2026-11-08T12:00:23Z"
+    "derniere_verification_utc": "2026-11-08T12:15:19Z"
    },
    "correction": {
     "version": 1,
@@ -1210,7 +1210,7 @@
     "verifiee_le_utc": "2026-11-08T11:45:21Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-08T11:45:21Z",
-    "derniere_verification_utc": "2026-11-08T12:00:23Z"
+    "derniere_verification_utc": "2026-11-08T12:15:19Z"
    },
    "correction": {
     "version": 1,
@@ -1255,15 +1255,73 @@
     "partants_actifs": 14
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "ARRIVEE_PROVISOIRE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 7,
+     "nom": "MUSICIENNE",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 5,
+     "nom": "MONJAMA",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 10,
+     "nom": "MIRAGE RENARDIER",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 8,
+     "nom": "MYSTERE DE MAGNY",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 11,
+     "nom": "MALIDOR MARANDAIS",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    7,
+    5,
+    10,
+    8,
+    11
+   ],
+   "non_classes": [
+    {
+     "num": 1,
+     "nom": "MAMZELLE BLANCHE",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 2,
+     "nom": "MIRA DES ILES",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 6,
+     "nom": "MEANDRE",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 9,
+     "nom": "MAROILLES DE KIDOR",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [
     {
      "num": 4,
@@ -1280,21 +1338,36 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/08112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-08T12:15:19Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-08T12:15:19Z",
+    "derniere_verification_utc": "2026-11-08T12:15:19Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-08T12:15:19Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       7,
+       5,
+       10,
+       8,
+       11
+      ]
+     }
+    ]
    }
   },
   {
@@ -1989,7 +2062,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -2374,7 +2447,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -3195,15 +3268,69 @@
     "partants_actifs": 11
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "ARRIVEE_PROVISOIRE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 10,
+     "nom": "NEW LOVE BECO",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 11,
+     "nom": "NEVERMIND DAY",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 8,
+     "nom": "NIGLO DE BELLANDE",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    10,
+    11,
+    8
+   ],
+   "non_classes": [
+    {
+     "num": 3,
+     "nom": "NINJA D'AMARO",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 4,
+     "nom": "NINO DE LOSQUE",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 5,
+     "nom": "NOE DE LA ROUVRE",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 6,
+     "nom": "NEVER CRY",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 7,
+     "nom": "NAOS D'AURALIE",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 12,
+     "nom": "NASDAQ DE BUSSET",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [
     {
      "num": 2,
@@ -3220,21 +3347,34 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/08112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-08T12:15:19Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-08T12:15:19Z",
+    "derniere_verification_utc": "2026-11-08T12:15:19Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-08T12:15:19Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       10,
+       11,
+       8
+      ]
+     }
+    ]
    }
   },
   {
@@ -3699,7 +3839,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "DEPART_DANS_TROIS_MINUTES"
    },
    "classement": [],
    "arrivee": [],
@@ -4145,15 +4285,115 @@
     "partants_actifs": 15
    },
    "statut": {
-    "code": "EN_ATTENTE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "CHEVAUX_SOUS_ORDRES"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 7,
+     "nom": "NOUREYEV",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 2,
+     "nom": "NEVERMIND ORADEL",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 11,
+     "nom": "NAPOLON NUMBER",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 15,
+     "nom": "NINO NAKANO",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 16,
+     "nom": "NARCISSE D'IDEF",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 6,
+     "nom": "NOBLE D'EBENE",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 3,
+     "nom": "NIAGARA",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 1,
+     "nom": "NAJA MAJERO",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 5,
+     "nom": "NOBEL DE MARCAY",
+     "dead_heat": false
+    },
+    {
+     "rang": 10,
+     "num": 8,
+     "nom": "NAT KING SNOB",
+     "dead_heat": false
+    },
+    {
+     "rang": 11,
+     "num": 13,
+     "nom": "NEW LOOK BOSS",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    7,
+    2,
+    11,
+    15,
+    16,
+    6,
+    3,
+    1,
+    5,
+    8,
+    13
+   ],
+   "non_classes": [
+    {
+     "num": 4,
+     "nom": "NIRVANA BAM",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 10,
+     "nom": "NUMEROBIS DEVITRAY",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 12,
+     "nom": "NOT ALONE DE CHENU",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 14,
+     "nom": "NOUVEAU MAYENNAIS",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [
     {
      "num": 9,
@@ -4170,21 +4410,42 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/08112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "premiere_lecture_utc": "2026-11-08T12:15:19Z",
+    "definitive_depuis_utc": "2026-11-08T12:15:19Z",
+    "verifiee_le_utc": "2026-11-08T12:15:19Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-08T12:15:19Z",
+    "derniere_verification_utc": "2026-11-08T12:15:19Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "DEFINITIVE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-08T12:15:19Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       7,
+       2,
+       11,
+       15,
+       16,
+       6,
+       3,
+       1,
+       5,
+       8,
+       13
+      ]
+     }
+    ]
    }
   },
   {
