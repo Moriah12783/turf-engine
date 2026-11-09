@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "07aeb73bcea10b8e1759a8e09150869031e61fa5",
-  "run_id": "42593896638",
+  "commit": "a0db087468e2806a2c8c02333318f97a71b07f9f",
+  "run_id": "42595787378",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-09",
- "genere_le_utc": "2026-11-09T09:31:59Z",
+ "genere_le_utc": "2026-11-09T09:47:38Z",
  "nb_courses": 40,
  "compte_par_statut": {
   "EN_ATTENTE": 39,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 0,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 1,
   "ANNULEE": 0
  },
- "empreinte_sha256": "d9ef3d32ebd31ea3d7b2361d20ec49ac6b88f0e8acd256b3c06d07497031465c",
+ "empreinte_sha256": "e7513d890023f9698ca9f731a51f82bfb190d6c449a1dc9f1a024f79ec6156f8",
  "courses": [
   {
    "course_id": "R1C1_09112026_LE BOUSCAT",
@@ -476,24 +476,24 @@
     "partants_actifs": 10
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_AVEC_PHOTO"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
      "rang": 1,
-     "num": 3,
-     "nom": "MISSIS SURF",
-     "dead_heat": true
-    },
-    {
-     "rang": 1,
      "num": 5,
      "nom": "CORTINA DU BERLAIS",
-     "dead_heat": true
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 3,
+     "nom": "MISSIS SURF",
+     "dead_heat": false
     },
     {
      "rang": 3,
@@ -506,13 +506,41 @@
      "num": 10,
      "nom": "ABONDENSE",
      "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 4,
+     "nom": "MR NOBODY",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 8,
+     "nom": "BALKIOLO DE PAIX",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 7,
+     "nom": "DEMASKETOI",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 9,
+     "nom": "MY JO OF COURSE",
+     "dead_heat": false
     }
    ],
    "arrivee": [
-    3,
     5,
+    3,
     1,
-    10
+    10,
+    4,
+    8,
+    7,
+    9
    ],
    "non_classes": [
     {
@@ -533,11 +561,78 @@
     }
    ],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "5": 1.9
+    },
+    "simple_place": {
+     "5": 1.2,
+     "3": 1.4,
+     "1": 2.8
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "5-3",
+      "dividende_pour_1_eur": 4.5
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "5-3",
+      "dividende_pour_1_eur": 2.4
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "5-1",
+      "dividende_pour_1_eur": 5.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "3-1",
+      "dividende_pour_1_eur": 6.5
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "5-3",
+      "dividende_pour_1_eur": 1.5
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "5-1",
+      "dividende_pour_1_eur": 1.5
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "5-10",
+      "dividende_pour_1_eur": 1.5
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "3-1",
+      "dividende_pour_1_eur": 1.5
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "3-10",
+      "dividende_pour_1_eur": 1.5
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "1-10",
+      "dividende_pour_1_eur": 1.5
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "5-3-1",
+      "dividende_pour_1_eur": 15.1
+     },
+     {
+      "type_pari": "MINI_MULTI",
+      "combinaison": "5-3-1-10",
+      "dividende_pour_1_eur": 1.2
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -547,15 +642,15 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-11-09T09:30:24Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-11-09T09:45:25Z",
+    "verifiee_le_utc": "2026-11-09T09:45:25Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-11-09T09:30:24Z",
-    "derniere_verification_utc": "2026-11-09T09:30:24Z"
+    "derniere_modification_utc": "2026-11-09T09:45:25Z",
+    "derniere_verification_utc": "2026-11-09T09:45:25Z"
    },
    "correction": {
-    "version": 1,
-    "nb_corrections": 0,
+    "version": 2,
+    "nb_corrections": 1,
     "historique": [
      {
       "version": 1,
@@ -568,6 +663,23 @@
        5,
        1,
        10
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "CORRECTION_CLASSEMENT",
+      "horodatage_utc": "2026-11-09T09:45:25Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       5,
+       3,
+       1,
+       10,
+       4,
+       8,
+       7,
+       9
       ]
      }
     ]
@@ -584,9 +696,9 @@
     "libelle": "GRANDE COURSE DE HAIES DE L'OUEST",
     "discipline": "OBSTACLE_HAIE",
     "distance_m": 3500,
-    "heure_depart_utc": "2026-11-09T09:52:00Z",
+    "heure_depart_utc": "2026-11-09T09:55:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "09:52 GMT (10:52 Paris)",
+    "heure_depart_affichee": "09:55 GMT (10:55 Paris)",
     "partants_declares": 8,
     "partants_actifs": 8
    },
@@ -595,7 +707,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
