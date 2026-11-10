@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "a735d58c5e4c46d8c38d31fcd22b081bd1fc82e5",
-  "run_id": "42818411105",
+  "commit": "b665237a852b18b87ac9aa797c79fb9b33e17edb",
+  "run_id": "42820536357",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-10",
- "genere_le_utc": "2026-11-10T12:48:17Z",
+ "genere_le_utc": "2026-11-10T13:03:13Z",
  "nb_courses": 32,
  "compte_par_statut": {
-  "EN_ATTENTE": 26,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 25,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 6,
   "ANNULEE": 0
  },
- "empreinte_sha256": "df0cc00293b8cd79becadf246053314816553ea4f69e64d6c5fbb44ec3cf3594",
+ "empreinte_sha256": "b86b17354a51616711b2eab8c91fb2566d2933111458ce017eb20eba3e3e1bd5",
  "courses": [
   {
    "course_id": "R1C1_10112026_FONTAINEBLEAU",
@@ -137,7 +137,7 @@
     "verifiee_le_utc": "2026-11-10T11:15:22Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-10T11:15:22Z",
-    "derniere_verification_utc": "2026-11-10T12:45:26Z"
+    "derniere_verification_utc": "2026-11-10T13:00:26Z"
    },
    "correction": {
     "version": 1,
@@ -355,7 +355,7 @@
     "verifiee_le_utc": "2026-11-10T11:45:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-10T11:45:24Z",
-    "derniere_verification_utc": "2026-11-10T12:45:26Z"
+    "derniere_verification_utc": "2026-11-10T13:00:26Z"
    },
    "correction": {
     "version": 1,
@@ -577,7 +577,7 @@
     "verifiee_le_utc": "2026-11-10T12:30:27Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-10T12:30:27Z",
-    "derniere_verification_utc": "2026-11-10T12:45:26Z"
+    "derniere_verification_utc": "2026-11-10T13:00:26Z"
    },
    "correction": {
     "version": 2,
@@ -637,14 +637,51 @@
     "partants_actifs": 16
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 4,
+     "nom": "MISTER CHANG",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 9,
+     "nom": "SCHUMAN",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 15,
+     "nom": "PAINTELLO",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 5,
+     "nom": "MARBELLESA",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 13,
+     "nom": "ZAHARA",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    4,
+    9,
+    15,
+    5,
+    13
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
@@ -657,21 +694,36 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/10112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-10T13:00:26Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-10T13:00:26Z",
+    "derniere_verification_utc": "2026-11-10T13:00:26Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-10T13:00:26Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       4,
+       9,
+       15,
+       5,
+       13
+      ]
+     }
+    ]
    }
   },
   {
@@ -1172,7 +1224,7 @@
     "verifiee_le_utc": "2026-11-10T11:30:23Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-10T11:45:24Z",
-    "derniere_verification_utc": "2026-11-10T12:45:26Z"
+    "derniere_verification_utc": "2026-11-10T13:00:26Z"
    },
    "correction": {
     "version": 2,
@@ -1419,7 +1471,7 @@
     "verifiee_le_utc": "2026-11-10T12:15:28Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-10T12:15:28Z",
-    "derniere_verification_utc": "2026-11-10T12:45:26Z"
+    "derniere_verification_utc": "2026-11-10T13:00:26Z"
    },
    "correction": {
     "version": 2,
@@ -1719,7 +1771,7 @@
     "verifiee_le_utc": "2026-11-10T12:45:26Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-10T12:45:26Z",
-    "derniere_verification_utc": "2026-11-10T12:45:26Z"
+    "derniere_verification_utc": "2026-11-10T13:00:26Z"
    },
    "correction": {
     "version": 1,
@@ -1759,9 +1811,9 @@
     "libelle": "PRIX ALBERT LIBEER",
     "discipline": "TROT_MONTE",
     "distance_m": 2850,
-    "heure_depart_utc": "2026-11-10T13:12:00Z",
+    "heure_depart_utc": "2026-11-10T13:13:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "13:12 GMT (14:12 Paris)",
+    "heure_depart_affichee": "13:13 GMT (14:13 Paris)",
     "partants_declares": 15,
     "partants_actifs": 15
    },
