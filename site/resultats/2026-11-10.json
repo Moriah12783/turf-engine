@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "dd8dcf6289c8a983be79e4a0bdffd906b24e73e7",
-  "run_id": "42805925611",
+  "commit": "370505cd09634a0675c3b245acabbef887ff8aba",
+  "run_id": "42807964597",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-10",
- "genere_le_utc": "2026-11-10T11:17:29Z",
+ "genere_le_utc": "2026-11-10T11:32:30Z",
  "nb_courses": 32,
  "compte_par_statut": {
-  "EN_ATTENTE": 31,
+  "EN_ATTENTE": 30,
   "PROVISOIRE": 0,
-  "DEFINITIVE": 1,
+  "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "8a4730d61e0536e0bcdc9f210b1903e95386672a97b65905a7776b2b924e080d",
+ "empreinte_sha256": "60839572890a951dc4e693792fad00b67e74abcd467b01a5dae7e618d7ec71c6",
  "courses": [
   {
    "course_id": "R1C1_10112026_FONTAINEBLEAU",
@@ -137,7 +137,7 @@
     "verifiee_le_utc": "2026-11-10T11:15:22Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-10T11:15:22Z",
-    "derniere_verification_utc": "2026-11-10T11:15:22Z"
+    "derniere_verification_utc": "2026-11-10T11:30:23Z"
    },
    "correction": {
     "version": 1,
@@ -184,7 +184,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
    },
    "classement": [],
    "arrivee": [],
@@ -630,41 +630,166 @@
     "partants_actifs": 14
    },
    "statut": {
-    "code": "EN_ATTENTE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "ARRIVEE_DEFINITIVE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 10,
+     "nom": "OCTAVE QUARTO",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 1,
+     "nom": "OSCAR FOUGERAY",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 4,
+     "nom": "OPUS DES COUPERIES",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 9,
+     "nom": "OCELOT DU PONT",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 12,
+     "nom": "OVER THE HILL",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    10,
+    1,
+    4,
+    9,
+    12
+   ],
+   "non_classes": [
+    {
+     "num": 2,
+     "nom": "OLD SOUL",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "10": 4.2
+    },
+    "simple_place": {
+     "10": 1.9,
+     "1": 2.7,
+     "4": 3.2
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "10-1",
+      "dividende_pour_1_eur": 17.9
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "10-1",
+      "dividende_pour_1_eur": 7.2
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "10-4",
+      "dividende_pour_1_eur": 7.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "1-4",
+      "dividende_pour_1_eur": 10.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "10-1",
+      "dividende_pour_1_eur": 3.2
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "10-4",
+      "dividende_pour_1_eur": 3.2
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "10-9",
+      "dividende_pour_1_eur": 3.2
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "1-4",
+      "dividende_pour_1_eur": 3.2
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "1-9",
+      "dividende_pour_1_eur": 3.2
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "4-9",
+      "dividende_pour_1_eur": 3.2
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "10-1-4",
+      "dividende_pour_1_eur": 29.9
+     },
+     {
+      "type_pari": "MULTI",
+      "combinaison": "10-1-4-9",
+      "dividende_pour_1_eur": 1.5
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/10112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "premiere_lecture_utc": "2026-11-10T11:30:23Z",
+    "definitive_depuis_utc": "2026-11-10T11:30:23Z",
+    "verifiee_le_utc": "2026-11-10T11:30:23Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-10T11:30:23Z",
+    "derniere_verification_utc": "2026-11-10T11:30:23Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "DEFINITIVE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-10T11:30:23Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       10,
+       1,
+       4,
+       9,
+       12
+      ]
+     }
+    ]
    }
   },
   {
@@ -689,7 +814,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
