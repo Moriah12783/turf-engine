@@ -1,0 +1,88 @@
+name: Lecture unique de l'ombre
+
+# Lecture scellée unique de l'ombre du fondamental (règle gelée le 07/10/2026,
+# commit d8cc8ec4 ; DEBUT_OMBRE 08/10 ; 35 jours jusqu'au 11/11 ; lecture au
+# plus tard le 12/11, 36e jour). Décision de Steph du 12/11 : publication le
+# jour même, agrégats et verdict seulement (dépôt public).
+#
+# Ce workflow ne se lance qu'à la main, une seule fois, depuis main :
+#   - aucun déclenchement sur pull_request ni sur horaire ;
+#   - il refuse de tourner si une exécution précédente a réussi, ou si
+#     docs/OMBRE_LECTURE.md existe déjà ;
+#   - il vérifie dans le run les empreintes sha256 du lecteur scellé et de
+#     ses modules, identiques à celles du gel ;
+#   - il lit une COPIE en lecture seule de la base (jamais renvoyée sur R2)
+#     et appelle le lecteur gelé tel quel. Sa ligne OMBRE_LECTURE ne contient
+#     que des agrégats : aucune probabilité, aucun écart course par course.
+# Il ne touche pas à la chaîne de production.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: ombre-lecture
+  cancel-in-progress: false
+
+jobs:
+  lecture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PYTHONUNBUFFERED: "1"
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET: ${{ secrets.R2_BUCKET }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Single reading guard
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if [ "$GITHUB_REF" != "refs/heads/main" ]; then
+            echo "LECTURE_REFUSEE : lancement autorisé depuis main uniquement ($GITHUB_REF)"; exit 1
+          fi
+          if [ -e docs/OMBRE_LECTURE.md ]; then
+            echo "LECTURE_REFUSEE : docs/OMBRE_LECTURE.md existe, la lecture unique est déjà publiée"; exit 1
+          fi
+          deja=$(gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/ombre_lecture.yml/runs?status=success&per_page=1" --jq '.total_count')
+          if [ "$deja" != "0" ]; then
+            echo "LECTURE_REFUSEE : $deja exécution(s) réussie(s) de ce workflow, la lecture unique a déjà eu lieu"; exit 1
+          fi
+          echo "LECTURE_UNIQUE : aucune exécution réussie antérieure ; commit $GITHUB_SHA ; $(date -u +%FT%TZ)"
+
+      - name: Check frozen fingerprints (rule frozen at d8cc8ec4)
+        run: |
+          sha256sum -c - <<'EOF'
+          5c3b379b903378ac471c5e66562a51eeac23697d64b8ac94fe9f49dfee58fa61  turf_lab/ombre_lecture.py
+          79fee2b28ba07e1577a705086ae3866b3158cee0bf5813b3ad06dc74785fb5b7  turf_lab/ombre.py
+          4f3d5c4471dca1a15119bd15e65479d8cacb64b9eda272206d59c5edeaeb9a80  turf_lab/r2_store.py
+          EOF
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -q --retries 10 --timeout 60 "numpy>=1.26,<3" "boto3>=1.36,<2"
+
+      - name: Fetch a read-only copy of the bench (never pushed)
+        run: |
+          python -m turf_lab.r2_store fetch --db copie_banc.db
+          echo "COPIE_BANC sha256 $(sha256sum copie_banc.db | cut -c1-64)"
+
+      - name: Single sealed reading (aggregates and verdict only)
+        run: |
+          set -euo pipefail
+          python -m turf_lab.ombre_lecture --banc copie_banc.db | tee sortie_lecture.txt
+          if ! grep -q '^OMBRE_LECTURE ' sortie_lecture.txt; then
+            echo "AUCUNE_LECTURE : le lecteur n'a pas produit de ligne OMBRE_LECTURE"; exit 1
+          fi
