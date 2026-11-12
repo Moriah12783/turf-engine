@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "6a88ba01db38f43e8ba171b47cc7855e4da4fd7e",
-  "run_id": "43232698584",
+  "commit": "c6266c1e16f3d9a1315de978cfddb3253c86cebf",
+  "run_id": "43235241743",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-12",
- "genere_le_utc": "2026-11-12T14:02:03Z",
+ "genere_le_utc": "2026-11-12T14:16:57Z",
  "nb_courses": 25,
  "compte_par_statut": {
-  "EN_ATTENTE": 18,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 17,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 7,
   "ANNULEE": 0
  },
- "empreinte_sha256": "bc2b0a7b391dde4c01bfb9db23864065ac9f2ea8b90621f4f2b8a71f0d641f67",
+ "empreinte_sha256": "7668e3da0d42196d7ecbb2b927a3c6e745804ebb8f18fb0c968fd0bfb3c0d129",
  "courses": [
   {
    "course_id": "R1C1_12112026_VINCENNES",
@@ -293,7 +293,7 @@
     "verifiee_le_utc": "2026-11-12T13:15:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-12T13:15:24Z",
-    "derniere_verification_utc": "2026-11-12T14:00:28Z"
+    "derniere_verification_utc": "2026-11-12T14:15:29Z"
    },
    "correction": {
     "version": 2,
@@ -553,7 +553,7 @@
     "verifiee_le_utc": "2026-11-12T13:45:26Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-12T13:45:26Z",
-    "derniere_verification_utc": "2026-11-12T14:00:28Z"
+    "derniere_verification_utc": "2026-11-12T14:15:29Z"
    },
    "correction": {
     "version": 1,
@@ -603,15 +603,56 @@
     "partants_actifs": 12
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 4,
+     "nom": "NINA TIME",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 11,
+     "nom": "NACRE DU MOUTHIEUX",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 13,
+     "nom": "NIKKI BEACH JISCE",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 9,
+     "nom": "NOIRE INTENSE",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    4,
+    11,
+    13,
+    9
+   ],
+   "non_classes": [
+    {
+     "num": 5,
+     "nom": "NISSA LA BELLA",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 7,
+     "nom": "NEW WAVE",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [
     {
      "num": 2,
@@ -628,21 +669,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/12112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-12T14:15:29Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-12T14:15:29Z",
+    "derniere_verification_utc": "2026-11-12T14:15:29Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-12T14:15:29Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       4,
+       11,
+       13,
+       9
+      ]
+     }
+    ]
    }
   },
   {
@@ -667,7 +722,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -1117,7 +1172,7 @@
     "verifiee_le_utc": "2026-11-12T11:30:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-12T11:30:24Z",
-    "derniere_verification_utc": "2026-11-12T14:00:28Z"
+    "derniere_verification_utc": "2026-11-12T14:15:29Z"
    },
    "correction": {
     "version": 1,
@@ -1285,7 +1340,7 @@
     "verifiee_le_utc": "2026-11-12T12:15:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-12T12:15:24Z",
-    "derniere_verification_utc": "2026-11-12T14:00:28Z"
+    "derniere_verification_utc": "2026-11-12T14:15:29Z"
    },
    "correction": {
     "version": 2,
@@ -1473,7 +1528,7 @@
     "verifiee_le_utc": "2026-11-12T12:45:22Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-12T12:45:22Z",
-    "derniere_verification_utc": "2026-11-12T14:00:28Z"
+    "derniere_verification_utc": "2026-11-12T14:15:29Z"
    },
    "correction": {
     "version": 1,
@@ -1649,7 +1704,7 @@
     "verifiee_le_utc": "2026-11-12T13:30:25Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-12T13:30:25Z",
-    "derniere_verification_utc": "2026-11-12T14:00:28Z"
+    "derniere_verification_utc": "2026-11-12T14:15:29Z"
    },
    "correction": {
     "version": 1,
@@ -1883,7 +1938,7 @@
     "verifiee_le_utc": "2026-11-12T14:00:28Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-12T14:00:28Z",
-    "derniere_verification_utc": "2026-11-12T14:00:28Z"
+    "derniere_verification_utc": "2026-11-12T14:15:29Z"
    },
    "correction": {
     "version": 1,
@@ -1936,7 +1991,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
    },
    "classement": [],
    "arrivee": [],
