@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "1f345371f884fe47c1ba4393ad5d4650cb31df6b",
-  "run_id": "43213957687",
+  "commit": "a19dc6c33a2bfd4718cc461b7576d8455c7b14b5",
+  "run_id": "43216186783",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-12",
- "genere_le_utc": "2026-11-12T12:03:23Z",
+ "genere_le_utc": "2026-11-12T12:17:38Z",
  "nb_courses": 25,
  "compte_par_statut": {
   "EN_ATTENTE": 23,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 1,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "1b59ddeca6de0ce6240a3ffb1ee74cb27a8b32fd901f65a582198118a7b075bf",
+ "empreinte_sha256": "b373fe1e8bc31e4519277851eaa75f3b597b9288c9db8f279ef306280ad704a9",
  "courses": [
   {
    "course_id": "R1C1_12112026_VINCENNES",
@@ -665,7 +665,7 @@
     "verifiee_le_utc": "2026-11-12T11:30:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-12T11:30:24Z",
-    "derniere_verification_utc": "2026-11-12T12:00:26Z"
+    "derniere_verification_utc": "2026-11-12T12:15:24Z"
    },
    "correction": {
     "version": 1,
@@ -709,11 +709,11 @@
     "partants_actifs": 8
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -739,22 +739,87 @@
      "num": 7,
      "nom": "ZARALADY",
      "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 2,
+     "nom": "OCTOBRE ROSE",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 6,
+     "nom": "RUSH TO WAIT",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 5,
+     "nom": "MISS HENGE",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 3,
+     "nom": "VILLA ADRIENNE",
+     "dead_heat": false
     }
    ],
    "arrivee": [
     4,
     1,
     8,
-    7
+    7,
+    2,
+    6,
+    5,
+    3
    ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "4": 15.7
+    },
+    "simple_place": {
+     "4": 5.4,
+     "1": 6.1,
+     "8": 3.6
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "4-1",
+      "dividende_pour_1_eur": 96.2
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "4-1",
+      "dividende_pour_1_eur": 22.5
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "4-8",
+      "dividende_pour_1_eur": 14.3
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "1-8",
+      "dividende_pour_1_eur": 16.9
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "4-1-8",
+      "dividende_pour_1_eur": 239.0
+     },
+     {
+      "type_pari": "SUPER_QUATRE",
+      "combinaison": "4-1-8-7",
+      "dividende_pour_1_eur": 13670.8
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -764,14 +829,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-11-12T12:00:26Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-11-12T12:15:24Z",
+    "verifiee_le_utc": "2026-11-12T12:15:24Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-11-12T12:00:26Z",
-    "derniere_verification_utc": "2026-11-12T12:00:26Z"
+    "derniere_modification_utc": "2026-11-12T12:15:24Z",
+    "derniere_verification_utc": "2026-11-12T12:15:24Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -785,6 +850,23 @@
        1,
        8,
        7
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-11-12T12:15:24Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       4,
+       1,
+       8,
+       7,
+       2,
+       6,
+       5,
+       3
       ]
      }
     ]
@@ -812,7 +894,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
