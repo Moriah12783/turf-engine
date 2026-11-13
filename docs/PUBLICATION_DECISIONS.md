@@ -14,13 +14,13 @@ Une ligne par course et par horizon, écrite **à l'instant où l'horizon est ve
 | `publishable` | INTEGER 0/1 | 1 si la porte autorisait la diffusion |
 | `reason` | TEXT | vocabulaire existant de `can_publish` (voir plus bas) |
 | `decided_at_utc` | TEXT ISO | instant du verrou, **égal** à `predictions.lock_time_utc` de l'édition NVE |
-| `gate_version` | TEXT | version des règles de la porte (`PG1` au 27/09/2026) |
+| `gate_version` | TEXT | version des règles de la porte (`PG1` au 27/09/2026, `PG2` en novembre 2026) |
 
 Contrainte `UNIQUE(race_id, horizon)` : la première décision est définitive. **Ajout seul garanti par la base** : deux déclencheurs SQLite refusent tout `UPDATE` et tout `DELETE`.
 
 ## Vocabulaire de `reason`
 
-`OK`, `PRICED_RATIO_LOW`, `ODDS_DEFAULT`, `BEFORE_0630`, `STALE_ODDS`, `NO_LOCK_PROOF`, `NOT_LOCKED`, `START_UNKNOWN`, `RACE_STARTED`, `RACE_CANCELLED`, `RACE_UNKNOWN`. Libellés dans `REASON_LABELS`. Au verrou, les cas attendus en pratique sont `OK` (marché coté à ≥ 90 %) et `PRICED_RATIO_LOW` (édition posée entre 50 et 90 %, `odds_real = 0`).
+`OK`, `PRICED_RATIO_LOW`, `ODDS_DEFAULT`, `BEFORE_MORNING_FLOOR` (règle `PG2` ; `BEFORE_0630` sur les lignes `PG1`, n'est plus émis), `STALE_ODDS`, `NO_LOCK_PROOF`, `NOT_LOCKED`, `START_UNKNOWN`, `RACE_STARTED`, `RACE_CANCELLED`, `RACE_UNKNOWN`. Libellés dans `REASON_LABELS`. Au verrou, les cas attendus en pratique sont `OK` (marché coté à ≥ 90 %) et `PRICED_RATIO_LOW` (édition posée entre 50 et 90 %, `odds_real = 0`).
 
 ## Ce que la table ne contient pas
 
@@ -31,7 +31,7 @@ Contrainte `UNIQUE(race_id, horizon)` : la première décision est définitive. 
 
 ## `gate_version` et l'empreinte des règles
 
-`publication_gate.GATE_VERSION` est écrite avec chaque ligne. `GATE_FINGERPRINT` est l'empreinte des règles : constantes (`MIN_PRICED_RATIO`, `MAX_ODDS_AGE_MINUTES`, plancher 06h30, bornes de cotes, liste des motifs) et code des fonctions qui décident (`can_publish` et ses auxiliaires, `priced_ratio`, `all_default_odds`, `odds_age_minutes`, repli `minutes_to_start`), commentaires et docstrings exclus. Le test `test_empreinte_de_la_porte` (dans `tests/test_publication_gate.py`, joué par `tester_correctif_resultats.bat`) **échoue dès qu'une règle change sans nouvelle version**. Procédure : nouvelle `GATE_VERSION`, nouvelle `GATE_FINGERPRINT`, ligne datée annoncée avant publication, ligne ajoutée à l'historique dans `publication_gate.py`.
+`publication_gate.GATE_VERSION` est écrite avec chaque ligne. `GATE_FINGERPRINT` est l'empreinte des règles : constantes (`MIN_PRICED_RATIO`, `MAX_ODDS_AGE_MINUTES`, plancher du matin et date de bascule de `turf_lab/plancher_matin.py`, bornes de cotes, liste des motifs) et code des fonctions qui décident (`can_publish` et ses auxiliaires, le calcul du plancher de `plancher_matin.py`, `priced_ratio`, `all_default_odds`, `odds_age_minutes`, repli `minutes_to_start`), commentaires et docstrings exclus. Le test `test_empreinte_de_la_porte` (dans `tests/test_publication_gate.py`, joué par `tester_correctif_resultats.bat`) **échoue dès qu'une règle change sans nouvelle version**. Procédure : nouvelle `GATE_VERSION`, nouvelle `GATE_FINGERPRINT`, ligne datée annoncée avant publication, ligne ajoutée à l'historique dans `publication_gate.py`.
 
 Engagement : tout changement de la porte est annoncé par ligne datée au moins jusqu'au **20/10/2026**, date du verdict de Bases, y compris après la lecture du pont du 06/10.
 

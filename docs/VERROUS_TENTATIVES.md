@@ -45,7 +45,7 @@ Contrainte `UNIQUE(race_id, horizon)` : la première ligne est définitive.
 | `heure_max_utc` | TEXT ISO | instant où la part retenue a été observée |
 | `min_lock_ratio` | REAL | seuil de verrou en vigueur (`odds_quality.MIN_LOCK_RATIO`, 0,50) |
 | `min_priced_ratio` | REAL | seuil de diffusion en vigueur (`odds_quality.MIN_PRICED_RATIO`, 0,90) |
-| `gate_version` | TEXT | version des règles de diffusion (`publication_gate.GATE_VERSION`, `PG1`) |
+| `gate_version` | TEXT | version des règles de diffusion (`publication_gate.GATE_VERSION` : `PG1`, puis `PG2`) |
 
 `part_cotee`, `n_partants` et `n_cotes` suivent la définition de
 `odds_quality.priced_ratio` : une cote manquante sur 7 partants et quatre sur 28
@@ -76,7 +76,7 @@ horizons :
 
 | Horizon | Ouverture |
 |---|---|
-| `T_MATIN` | 06h30 UTC le jour de la course |
+| `T_MATIN` | plancher du matin le jour de la course : 08h30 heure de Paris à partir du 23/11/2026 (06h30 UTC avant), lu dans `turf_lab/plancher_matin.py` par `due_horizons`, jamais codé en dur |
 | `T90` | 100 min avant le départ |
 | `T30` | 35 min avant le départ |
 | `T15` | 18 min avant le départ |

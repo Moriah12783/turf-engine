@@ -10,7 +10,8 @@ Ce paquet REMPLACE le zip « correctif-editions-immuables » précédent
 A. ÉDITIONS IMMUABLES : plus aucun pronostic verrouillé après le départ ni
    rétroactivement ; tableau « Éditions verrouillées » dans chaque fiche
    (Matin/T-90/T-30/T-15 avec heure de verrou, Moteur 8 + Marché 8) ; badge
-   reflétant l'édition réellement en base ; édition Matin posée dès 06h30 GMT.
+   reflétant l'édition réellement en base ; édition Matin posée dès 06h30 GMT,
+   puis dès 08h30 heure de Paris à partir du 23/11/2026 (turf_lab/plancher_matin.py).
 B. RÉGLAGE D'ENSEMBLE : disciplines normalisées (déferrage et pondérations
    trot réactivés sur la moitié des courses), vraie cote de référence PMU,
    vrai chrono trot, vraie valeur handicap, poids en kg, gains réels,

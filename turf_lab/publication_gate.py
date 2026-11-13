@@ -11,7 +11,12 @@ et un log `PUBLICATION_REFUSED {...}` avec la raison.
 Raisons possibles (stables, à ne pas renommer — utilisées par n8n/tests) :
     RACE_UNKNOWN       course inconnue en base
     RACE_STARTED       course partie (ou terminée) — jamais de diffusion rétroactive
-    BEFORE_0630        avant 06:30 GMT le jour de la course (plancher), ou verrou posé avant
+    BEFORE_MORNING_FLOOR  avant le plancher du matin le jour de la course, ou verrou posé
+                       avant (règle PG2 ; heure et date de bascule du 23/11/2026 lues dans
+                       turf_lab/plancher_matin.py, source unique)
+    BEFORE_0630        règle PG1 seulement (lignes antérieures à PG2) : n'est plus émis,
+                       reste lu pour l'historique. Les automates (n8n) qui testaient
+                       BEFORE_0630 doivent accepter BEFORE_MORNING_FLOOR.
     ODDS_DEFAULT       aucune cote réelle (édition posée avant l'ouverture du marché)
     PRICED_RATIO_LOW   moins de 90 % des partants actifs cotés
     NOT_LOCKED         l'horizon demandé n'est pas verrouillé pour cette course
@@ -36,10 +41,9 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from turf_lab.database import TurfDatabase
 from turf_lab.odds_quality import MAX_ODDS_AGE_MINUTES, MIN_PRICED_RATIO, odds_age_minutes, priced_ratio
+from turf_lab import plancher_matin as pm
 
 ENGINE_NAME = "NEW_VALUE_ENGINE"
-MORNING_FLOOR_HOUR = 6
-MORNING_FLOOR_MINUTE = 30
 
 # ── VERSION DES RÈGLES DE LA PORTE (28/09/2026) ─────────────────────────
 # Écrite avec chaque décision dans la table publication_decisions.
@@ -53,13 +57,21 @@ MORNING_FLOOR_MINUTE = 30
 #                    90 % de partants cotés, plancher 06h30 GMT, preuve du
 #                    verrou (odds_real, priced_ratio, lock_time_utc), cotes
 #                    capturées depuis ≤ 90 min.
-GATE_VERSION = "PG1"
-GATE_FINGERPRINT = "1c543d493df43d44"
+#   PG2  11/2026     plancher de diffusion lu dans turf_lab/plancher_matin.py
+#                    (source unique, décision de Steph du 12/11/2026) : 06h30
+#                    UTC jusqu'au 22/11/2026, 08h30 heure de Paris à partir du
+#                    23/11/2026. Motif BEFORE_MORNING_FLOOR (remplace
+#                    BEFORE_0630, toujours lu pour les lignes PG1). Ligne datée
+#                    au dev Bases la veille de la fusion. Les autres règles
+#                    sont inchangées.
+GATE_VERSION = "PG2"
+GATE_FINGERPRINT = "8757be850d645ae7"
 
 REASON_LABELS = {
     "RACE_UNKNOWN": "course inconnue",
     "RACE_STARTED": "course partie — aucune diffusion rétroactive",
-    "BEFORE_0630": "avant 06h30 GMT le jour de la course",
+    "BEFORE_MORNING_FLOOR": "avant l'ouverture de l'édition du matin le jour de la course",
+    "BEFORE_0630": "avant 06h30 GMT le jour de la course (règle PG1)",
     "ODDS_DEFAULT": "cotes non ouvertes (valeurs par défaut)",
     "PRICED_RATIO_LOW": "moins de 90 % des partants cotés",
     "NOT_LOCKED": "horizon non verrouillé",
@@ -73,10 +85,9 @@ REASON_LABELS = {
 
 def _floor_datetime(race_date_db: str) -> Optional[datetime]:
     try:
-        d = datetime.strptime(race_date_db, "%Y-%m-%d")
+        return pm.plancher_matin_utc(race_date_db)
     except Exception:
         return None
-    return d.replace(hour=MORNING_FLOOR_HOUR, minute=MORNING_FLOOR_MINUTE, second=0, microsecond=0)
 
 
 def _parse_iso(value: Any) -> Optional[datetime]:
@@ -114,12 +125,13 @@ def can_publish(db: TurfDatabase, race_id: str, horizon: str = "T_MATIN",
     """Décide si la sélection (moteur NEW_VALUE_ENGINE, horizon donné) d'une
     course peut être diffusée MAINTENANT. Exige :
       - course connue et non partie ;
-      - now ≥ 06:30 GMT le jour de la course (plancher) ;
+      - now ≥ plancher du matin le jour de la course (turf_lab/plancher_matin.py) ;
       - cotes réelles sur ≥ 90 % des partants actifs (état courant en base) ;
       - horizon verrouillé, avec odds_real = true, priced_ratio ≥ 0.90 et
-        lock_time_utc ≥ 06:30 GMT (état persisté au verrou)."""
+        lock_time_utc ≥ plancher du matin (état persisté au verrou)."""
     if now_utc is None:
         now_utc = datetime.utcnow()
+    now_utc = pm.en_utc_naif(now_utc)      # heure avec fuseau acceptée, comparée en UTC sans fuseau
 
     def refuse(reason: str, **extra: Any) -> Tuple[bool, str]:
         if log:
@@ -143,7 +155,7 @@ def can_publish(db: TurfDatabase, race_id: str, horizon: str = "T_MATIN",
 
     floor_dt = _floor_datetime(str(race.get("date", "")))
     if floor_dt is not None and now_utc < floor_dt:
-        return refuse("BEFORE_0630")
+        return refuse("BEFORE_MORNING_FLOOR", plancher_utc=floor_dt.isoformat())
 
     runners = db.get_runners(race_id)
     ratio_now = priced_ratio(runners)
@@ -169,8 +181,8 @@ def can_publish(db: TurfDatabase, race_id: str, horizon: str = "T_MATIN",
         return refuse("ODDS_DEFAULT", priced_ratio=locked_ratio)
     if float(locked_ratio) < MIN_PRICED_RATIO:
         return refuse("PRICED_RATIO_LOW", priced_ratio=round(float(locked_ratio), 3))
-    if floor_dt is not None and lock_dt < floor_dt:
-        return refuse("BEFORE_0630", lock_time_utc=lock_dt.isoformat())
+    if floor_dt is not None and pm.en_utc_naif(lock_dt) < floor_dt:
+        return refuse("BEFORE_MORNING_FLOOR", lock_time_utc=lock_dt.isoformat(), plancher_utc=floor_dt.isoformat())
 
     age = odds_age_minutes(runners, now_utc=now_utc)
     if age is not None and age > MAX_ODDS_AGE_MINUTES:
@@ -213,7 +225,8 @@ def _gate_constants() -> Dict[str, Any]:
     from turf_lab import odds_quality as oq
     return {
         "ENGINE_NAME": ENGINE_NAME,
-        "MORNING_FLOOR": [MORNING_FLOOR_HOUR, MORNING_FLOOR_MINUTE],
+        "MORNING_FLOOR": {"bascule": pm.BASCULE.isoformat(), "avant_utc": list(pm.ANCIEN_PLANCHER_UTC),
+                          "a_partir_paris": list(pm.PLANCHER_PARIS), "fuseau": pm.FUSEAU},
         "MIN_PRICED_RATIO": oq.MIN_PRICED_RATIO,
         "MAX_ODDS_AGE_MINUTES": oq.MAX_ODDS_AGE_MINUTES,
         "MIN_VALID_ODDS": oq.MIN_VALID_ODDS,
@@ -258,6 +271,8 @@ def gate_fingerprint() -> str:
     from turf_lab import odds_quality as oq
     from turf_lab.daily_sync import DailySyncManager
     funcs = [can_publish, _minutes_to_start, _floor_datetime, _parse_iso,
+             pm.plancher_matin_utc, pm._plancher_paris_utc, pm.decalage_regle_ue, pm._dernier_dimanche,
+             pm._jour, pm.en_utc_naif,
              oq.priced_ratio, oq.active_runners, oq.all_default_odds, oq.is_valid_odds,
              oq.odds_age_minutes, DailySyncManager.minutes_to_start]
     parts = [json.dumps(_gate_constants(), sort_keys=True)]

@@ -5,13 +5,19 @@ name: Fondamental de nuit (ombre NVE)
 # fait par l'horloge Cloudflare (turf-horloge) à 05h05 et 05h50 UTC, du 08/10
 # au 24/11. Les horaires GitHub ci-dessous, sur les mêmes jours, ne sont qu'un
 # filet : ils partent souvent avec plusieurs heures de retard. Un horaire
-# GitHub parti après 06h20 UTC ne calcule rien et n'envoie rien
-# (FILET_HORS_DELAI) : le passage de l'horloge du matin fait foi.
+# GitHub parti après la limite d'écriture du jour ne calcule rien et n'envoie
+# rien (FILET_HORS_DELAI) : le passage de l'horloge du matin fait foi.
 # Nuit : miroir historique (R2 privé, lecture seule) + programme PMU du jour
 # -> table fundamental_probs de turf_bench.db, entre le pull et le push R2.
-# Aucune écriture après 06h20 UTC ni pour une course déjà verrouillée, aucun
-# push après 06h28 (verrou du matin : 06h30). Le passage de 05h50 refait le
-# calcul (historique le plus frais) et remplace celui de 05h05.
+# Limites du jour, lues dans turf_lab/plancher_matin.py (source unique) :
+# aucune écriture après le plancher du matin − 10 min ni pour une course déjà
+# verrouillée, aucun push après le plancher − 2 min. Plancher : 06h30 UTC
+# jusqu'au 22/11/2026, 08h30 heure de Paris à partir du 23/11/2026 (07h30 UTC
+# en hiver). Refus par défaut : si le module ne répond pas explicitement
+# (import en échec, Python absent, sortie illisible), rien n'est calculé par
+# le filet et rien n'est envoyé. L'horloge Cloudflare reste en UTC. Le passage
+# de 05h50 refait le calcul (historique le plus frais) et remplace celui de
+# 05h05.
 # Sur une PR : parité PMU <-> Radar et essai sur le programme du lendemain,
 # dans une COPIE locale de la base (lecture seule, jamais renvoyée).
 # Dépôt public : journal = agrégats seulement ; aucun artefact, aucun commit.
@@ -53,23 +59,24 @@ jobs:
       R2_BUCKET: ${{ secrets.R2_BUCKET }}
       ACTION: ${{ github.event_name == 'schedule' && 'nuit' || (github.event_name == 'pull_request' && 'controle' || github.event.inputs.action) }}
     steps:
-      - name: Late GitHub safety net (schedule started after 06:20 UTC) - nothing to do
-        if: github.event_name == 'schedule'
-        run: |
-          if (( 10#$(date -u +%H%M) >= 620 )); then
-            echo "FILET_HORS_DELAI : horaire GitHub parti à $(date -u +%H:%M) UTC, après la limite de 06h20. Rien n'est calculé ni envoyé ; le passage de l'horloge Cloudflare fait foi."
-            echo "FILET_HORS_DELAI=1" >> "$GITHUB_ENV"
-          fi
-
       - name: Checkout Repository
-        if: env.FILET_HORS_DELAI != '1'
         uses: actions/checkout@v4
 
       - name: Set up Python
-        if: env.FILET_HORS_DELAI != '1'
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
+      - name: Late GitHub safety net (schedule started after the write limit of the day) - nothing to do
+        if: github.event_name == 'schedule'
+        run: |
+          # Refus par défaut : seule une réponse explicite du module autorise le calcul.
+          if verdict=$(python -m turf_lab.plancher_matin ecriture) && [[ "$verdict" == "ECRITURE_AUTORISEE "* ]]; then
+            echo "$verdict"
+          else
+            echo "FILET_HORS_DELAI : horaire GitHub parti à $(date -u +%H:%M) UTC, hors de la limite d'écriture du jour (${verdict:-aucune réponse de plancher_matin}). Rien n'est calculé ni envoyé ; le passage de l'horloge Cloudflare fait foi."
+            echo "FILET_HORS_DELAI=1" >> "$GITHUB_ENV"
+          fi
 
       - name: Install dependencies
         if: env.FILET_HORS_DELAI != '1'
@@ -97,11 +104,14 @@ jobs:
         if: env.ACTION == 'nuit' && env.R2_MODE == 'r2' && env.FILET_HORS_DELAI != '1'
         run: python -m turf_lab.fondamental_nuit nuit --historique turf_history.db --banc turf_bench.db
 
-      - name: Push the bench to R2 (night only, before 06:28 UTC)
+      - name: Push the bench to R2 (night only, before the send limit of the day)
         if: env.ACTION == 'nuit' && env.R2_MODE == 'r2' && env.FILET_HORS_DELAI != '1'
         run: |
-          if (( 10#$(date -u +%H%M) >= 628 )); then
-            echo "PUSH_REFUSE_HEURE : trop près du verrou du matin (06h30 UTC), rien n'est envoyé."
+          # Refus par défaut : seule une réponse explicite du module autorise l'envoi.
+          if verdict=$(python -m turf_lab.plancher_matin envoi) && [[ "$verdict" == "ENVOI_AUTORISE "* ]]; then
+            echo "$verdict"
+          else
+            echo "PUSH_REFUSE_HEURE : trop près du verrou du matin, ou limite d'envoi illisible (${verdict:-aucune réponse de plancher_matin}) ; rien n'est envoyé."
             exit 1
           fi
           python -m turf_lab.r2_store push --db turf_bench.db

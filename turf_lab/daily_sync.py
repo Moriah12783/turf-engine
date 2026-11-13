@@ -16,6 +16,7 @@ from turf_lab.fondamental_verrou import porter_fondamental
 from turf_lab.odds_quality import MIN_LOCK_RATIO, MIN_PRICED_RATIO, neutralize_odds, priced_ratio
 from turf_lab.radar_bridge import ENGINE_NAME as RADAR_ENGINE, RadarV4Engine
 from turf_lab import secure_http
+from turf_lab.plancher_matin import en_utc_naif, plancher_matin_utc
 from turf_lab.results_reader import (
     SOURCE_COURSE, SOURCE_PROGRAMME, STATUT_ANNULEE, STATUT_DEFINITIVE, STATUT_PROVISOIRE,
     ArrivalReading, read_arrival,
@@ -249,6 +250,7 @@ class DailySyncManager:
         """
         if now_utc is None:
             now_utc = datetime.utcnow()
+        now_utc = en_utc_naif(now_utc)     # heure avec fuseau acceptée : comparée en UTC sans fuseau
         today_db = now_utc.strftime("%Y-%m-%d")
 
         # INTÉGRITÉ ÉDITORIALE : aucun verrou rétroactif, jamais.
@@ -263,11 +265,13 @@ class DailySyncManager:
             return []  # course partie : plus aucun verrouillage
 
         due = []
-        # T_MATIN = édition du MATIN : posée à partir de 06:30 GMT le jour de la
-        # course. Le programme PMU apparaît dès la veille au soir, mais les cotes
-        # n'ouvrent vraiment que le matin — verrouiller pendant la nuit figerait
-        # des cotes par défaut (15.0) et fausserait le signal Smart Money.
-        if now_utc.hour > 6 or (now_utc.hour == 6 and now_utc.minute >= 30):
+        # T_MATIN = édition du MATIN : posée à partir du plancher du matin le
+        # jour de la course (turf_lab/plancher_matin.py : 06h30 UTC jusqu'au
+        # 22/11/2026, 08h30 heure de Paris à partir du 23/11/2026). Le programme
+        # PMU apparaît dès la veille au soir, mais les cotes n'ouvrent vraiment
+        # que le matin — verrouiller pendant la nuit figerait des cotes par
+        # défaut (15.0) et fausserait le signal Smart Money.
+        if now_utc >= plancher_matin_utc(race_date_db):
             due.append("T_MATIN")
 
         if diff is None:
@@ -299,7 +303,8 @@ class DailySyncManager:
         #    calculent SANS marché (cotes neutralisées → modèle pur, marché
         #    nominal), jamais sur un mélange de vraies cotes et de sentinelles ;
         #    can_publish la refuse (PRICED_RATIO_LOW / ODDS_DEFAULT).
-        # La règle 06h30 de due_horizons() reste le PLANCHER horaire.
+        # Le plancher du matin de due_horizons() (plancher_matin.py) reste le
+        # PLANCHER horaire.
         ratio = priced_ratio(runners)
         if now_utc is None:
             now_utc = datetime.utcnow()

@@ -163,13 +163,14 @@ def test_edition_reelle_verrouillee_et_publiable():
 
 
 def test_avant_0630_refusee_puis_acceptee():
-    """Édition réelle à 06h10 → refusée (BEFORE_0630) ; acceptée à la passe suivante."""
+    """Édition réelle à 06h10 → refusée (BEFORE_MORNING_FLOOR, plancher 06h30 UTC avant le
+    23/11/2026) ; acceptée à la passe suivante."""
     db, mgr, race, runners = _setup(priced=10)
     t0610 = datetime(2026, 9, 7, 6, 10)
     t0631 = datetime(2026, 9, 7, 6, 31)
     # Plancher horaire : T_MATIN n'est pas dû à 06h10 (aucun verrou posé)
     assert "T_MATIN" not in mgr.due_horizons(race["scheduled_start_time"], RACE_DATE, t0610)
-    assert can_publish(db, RACE_ID, "T_MATIN", now_utc=t0610, log=False) == (False, "BEFORE_0630")
+    assert can_publish(db, RACE_ID, "T_MATIN", now_utc=t0610, log=False) == (False, "BEFORE_MORNING_FLOOR")
     # Passe suivante (≥ 06h30) : dû, verrouillé, diffusable
     assert "T_MATIN" in mgr.due_horizons(race["scheduled_start_time"], RACE_DATE, t0631)
     assert _lock(mgr, race, runners) == 1
@@ -183,7 +184,7 @@ def test_verrou_avant_0630_persiste_refuse():
     with db.transaction() as conn:
         conn.execute("UPDATE predictions SET lock_time_utc = ? WHERE race_id = ?",
                      ("2026-09-07T06:10:00", RACE_ID))
-    assert can_publish(db, RACE_ID, "T_MATIN", now_utc=NOON, log=False) == (False, "BEFORE_0630")
+    assert can_publish(db, RACE_ID, "T_MATIN", now_utc=NOON, log=False) == (False, "BEFORE_MORNING_FLOOR")
 
 
 def test_course_partie_refusee():

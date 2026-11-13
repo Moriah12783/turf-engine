@@ -9,6 +9,10 @@ import os
 import re
 from typing import Any, Dict, List
 
+from datetime import timedelta
+
+from turf_lab.plancher_matin import libelle_plancher, maintenant_utc, plancher_matin_utc
+
 # Favicon 32×32 (PNG, 2972 caractères base64) : fer à cheval or (#f59e0b) sur
 # fond nuit (#0b1120), généré depuis site/favicon.svg. Embarqué dans la page pour
 # ne dépendre d'aucun fichier binaire au déploiement.
@@ -314,8 +318,19 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
             f'<td>{d.get("courses", 0)}<br><span style="font-size:0.72rem; color:var(--text-muted);">appr. {d.get("train", 0)} · test {d.get("test", 0)}</span></td>'
             f'{cells}<td style="font-size:0.78rem; color:var(--text-muted);">{coef_txt}</td></tr>')
     horizon_rows_html = []
+    # Heure d'ouverture de l'édition du matin (source unique :
+    # turf_lab/plancher_matin.py). Le site est régénéré à chaque passage.
+    # Libellé général : celui de la PROCHAINE édition du matin (le 22/11 au
+    # soir, celle du 23/11). Par course : celui de la date de la course.
+    maintenant = maintenant_utc()
+    prochain_matin = maintenant.date() if maintenant < plancher_matin_utc(maintenant.date()) \
+        else maintenant.date() + timedelta(days=1)
+    plancher_libelle = libelle_plancher(prochain_matin)
+    plancher_par_jour_js = json.dumps({(maintenant.date() + timedelta(days=k)).isoformat():
+                                       libelle_plancher(maintenant.date() + timedelta(days=k)) for k in range(-1, 3)},
+                                      ensure_ascii=False, sort_keys=True)
     horizon_titles = [
-        ("T_MATIN", "📡 Édition Matin", "verrouillée dès 06h30 GMT"),
+        ("T_MATIN", "📡 Édition Matin", f"verrouillée dès {plancher_libelle}"),
         ("T90", "📢 Édition T-90", "~90 min avant le départ"),
         ("T30", "⚡ Édition T-30", "~30 min avant le départ"),
         ("T15", "🔒 Édition T-15", "~15 min avant le départ")
@@ -741,6 +756,9 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
             renderTable();
         }}
 
+        // Heure d'ouverture de l'édition du matin par date de course (veille à J+2).
+        const PLANCHER_PAR_JOUR = {plancher_par_jour_js};
+
         const HORIZON_META = {{
             "T15":     {{ code: "T15", label: "🔒 T-15 Live", badgeClass: "couv-1", header: "Cote T-15 Directe", fullText: "🔒 Horizon T-15 (Direct Live & Smart Money)", info: "Dernières minutes avant le départ. Cotes ultra-directes et mouvements Smart Money verrouillés à T-15." }},
             "T30":     {{ code: "T30", label: "⚡ T-30 Live", badgeClass: "couv-5", header: "Cote T-30 (Live)", fullText: "⚡ Cockpit Live (T-30 LONACI Online)", info: "Cockpit Live verrouillé à T-30 min pour prise de jeu en ligne (LONACI Online). Smart Money capté à plus de 80%." }},
@@ -779,7 +797,7 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
             if (item.display_horizon && HORIZON_META[item.display_horizon]) {{
                 return HORIZON_META[item.display_horizon];
             }}
-            return {{ code: "AUCUN", label: "⏳ Édition à venir", badgeClass: "couv-2", header: "Cote", fullText: "⏳ Aucune édition verrouillée pour l'instant", info: "L'édition du matin sera posée à partir de 06h30 GMT, puis T-90, T-30 et T-15 à l'approche du départ." }};
+            return {{ code: "AUCUN", label: "⏳ Édition à venir", badgeClass: "couv-2", header: "Cote", fullText: "⏳ Aucune édition verrouillée pour l'instant", info: "L'édition du matin sera posée à partir de " + (PLANCHER_PAR_JOUR[item.date] || "{plancher_libelle}") + ", puis T-90, T-30 et T-15 à l'approche du départ." }};
         }}
 
         // Jour J±n en GMT (heure d'Abidjan) pour les libellés « Aujourd'hui » / « Hier ».
@@ -956,6 +974,7 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                 "NOT_LOCKED": "aucune édition du matin verrouillée",
                 "ODDS_DEFAULT": "cotes PMU non ouvertes au verrou (valeurs par défaut)",
                 "PRICED_RATIO_LOW": "moins de 90 % des partants cotés",
+                "BEFORE_MORNING_FLOOR": "avant l'ouverture de l'édition du matin",
                 "BEFORE_0630": "avant 06h30 GMT"
             }};
 
