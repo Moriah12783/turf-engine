@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "4196c8f95a9c1ebe732e9759a99cf44f86c92320",
-  "run_id": "43409518192",
+  "commit": "e7000d01f3d38d525647b492a581ec68360202ef",
+  "run_id": "43411492687",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-13",
- "genere_le_utc": "2026-11-13T10:32:39Z",
+ "genere_le_utc": "2026-11-13T10:48:14Z",
  "nb_courses": 33,
  "compte_par_statut": {
   "EN_ATTENTE": 31,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 1,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "bdc3b3054c6e84662b686333704a55df02548a4533243092b95f4ca0783dc1d8",
+ "empreinte_sha256": "6fe68ff5f4430ea1554968dc91fe4a760f8ebbbb4d71b75e0ca3c292b6cd5ccf",
  "courses": [
   {
    "course_id": "R1C1_13112026_VINCENNES",
@@ -653,7 +653,7 @@
     "verifiee_le_utc": "2026-11-13T10:00:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-13T10:00:24Z",
-    "derniere_verification_utc": "2026-11-13T10:30:23Z"
+    "derniere_verification_utc": "2026-11-13T10:45:21Z"
    },
    "correction": {
     "version": 2,
@@ -711,11 +711,11 @@
     "partants_actifs": 15
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -747,6 +747,42 @@
      "num": 6,
      "nom": "NOVA DE VISAIS",
      "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 3,
+     "nom": "NOW AND THEN",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 16,
+     "nom": "NEWTON CASTELETS",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 9,
+     "nom": "NUNZIATA",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 14,
+     "nom": "NOVERRIO",
+     "dead_heat": false
+    },
+    {
+     "rang": 10,
+     "num": 2,
+     "nom": "NEXPRESSO BLEU",
+     "dead_heat": false
+    },
+    {
+     "rang": 11,
+     "num": 15,
+     "nom": "NEED YOU SAMAC",
+     "dead_heat": false
     }
    ],
    "arrivee": [
@@ -754,7 +790,13 @@
     4,
     13,
     11,
-    6
+    6,
+    3,
+    16,
+    9,
+    14,
+    2,
+    15
    ],
    "non_classes": [
     {
@@ -785,11 +827,123 @@
     }
    ],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "5": 2.4
+    },
+    "simple_place": {
+     "5": 1.3,
+     "4": 2.0,
+     "13": 3.1
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "5-4",
+      "dividende_pour_1_eur": 8.0
+     },
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "5-NP",
+      "dividende_pour_1_eur": 2.5
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "5-4",
+      "dividende_pour_1_eur": 5.5
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "5-13",
+      "dividende_pour_1_eur": 9.7
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "4-13",
+      "dividende_pour_1_eur": 16.5
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "5-NP",
+      "dividende_pour_1_eur": 2.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "4-NP",
+      "dividende_pour_1_eur": 2.5
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "13-NP",
+      "dividende_pour_1_eur": 4.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "5-4",
+      "dividende_pour_1_eur": 2.7
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "5-13",
+      "dividende_pour_1_eur": 2.7
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "5-11",
+      "dividende_pour_1_eur": 2.7
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "4-13",
+      "dividende_pour_1_eur": 2.7
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "4-11",
+      "dividende_pour_1_eur": 2.7
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "13-11",
+      "dividende_pour_1_eur": 2.7
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "5-NP",
+      "dividende_pour_1_eur": 1.3
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "4-NP",
+      "dividende_pour_1_eur": 1.3
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "13-NP",
+      "dividende_pour_1_eur": 1.3
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "11-NP",
+      "dividende_pour_1_eur": 1.3
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "5-4-13",
+      "dividende_pour_1_eur": 51.4
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "5-4-NP",
+      "dividende_pour_1_eur": 20.4
+     },
+     {
+      "type_pari": "MULTI",
+      "combinaison": "5-4-13-11",
+      "dividende_pour_1_eur": 1.5
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -799,14 +953,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-11-13T10:30:23Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-11-13T10:45:21Z",
+    "verifiee_le_utc": "2026-11-13T10:45:21Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-11-13T10:30:23Z",
-    "derniere_verification_utc": "2026-11-13T10:30:23Z"
+    "derniere_modification_utc": "2026-11-13T10:45:21Z",
+    "derniere_verification_utc": "2026-11-13T10:45:21Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -821,6 +975,26 @@
        13,
        11,
        6
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-11-13T10:45:21Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       5,
+       4,
+       13,
+       11,
+       6,
+       3,
+       16,
+       9,
+       14,
+       2,
+       15
       ]
      }
     ]
@@ -848,7 +1022,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "DEPART_CONFIRME"
    },
    "classement": [],
    "arrivee": [],
