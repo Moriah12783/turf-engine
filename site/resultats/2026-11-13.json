@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "cceed14955cd47f59d1d176dfa93faa6a0601ec0",
-  "run_id": "43403917645",
+  "commit": "ca0fb55180e2e2d4692209737bc3e8beb6e78d5d",
+  "run_id": "43405701333",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-13",
- "genere_le_utc": "2026-11-13T09:47:42Z",
+ "genere_le_utc": "2026-11-13T10:03:19Z",
  "nb_courses": 33,
  "compte_par_statut": {
   "EN_ATTENTE": 32,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 0,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 1,
   "ANNULEE": 0
  },
- "empreinte_sha256": "3b06ed840b3ca9def9c912b60476607afc06ffc045b1fa865e6a125db47d0ec9",
+ "empreinte_sha256": "d0b864f9bdf62e049ff265eb09120073aafabf789f804df37ac7cc150a5e0d62",
  "courses": [
   {
    "course_id": "R1C1_13112026_VINCENNES",
@@ -481,11 +481,11 @@
     "partants_actifs": 11
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -511,13 +511,48 @@
      "num": 3,
      "nom": "LISE DE LA MARFEE",
      "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 10,
+     "nom": "MAGYC BERRY",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 2,
+     "nom": "MAJESTRIA FILI",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 9,
+     "nom": "MERARU QUANDO",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 1,
+     "nom": "MOLENE DE L'ITON",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 7,
+     "nom": "LOOK DES FANES",
+     "dead_heat": false
     }
    ],
    "arrivee": [
     8,
     6,
     4,
-    3
+    3,
+    10,
+    2,
+    9,
+    1,
+    7
    ],
    "non_classes": [
     {
@@ -533,11 +568,78 @@
    ],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "8": 2.9
+    },
+    "simple_place": {
+     "8": 1.1,
+     "6": 1.4,
+     "4": 1.3
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "8-6",
+      "dividende_pour_1_eur": 7.1
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "8-6",
+      "dividende_pour_1_eur": 2.2
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "8-4",
+      "dividende_pour_1_eur": 1.8
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "6-4",
+      "dividende_pour_1_eur": 2.4
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "8-6",
+      "dividende_pour_1_eur": 1.3
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "8-4",
+      "dividende_pour_1_eur": 1.3
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "8-3",
+      "dividende_pour_1_eur": 1.3
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "6-4",
+      "dividende_pour_1_eur": 1.3
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "6-3",
+      "dividende_pour_1_eur": 1.3
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "4-3",
+      "dividende_pour_1_eur": 1.3
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "8-6-4",
+      "dividende_pour_1_eur": 4.2
+     },
+     {
+      "type_pari": "MINI_MULTI",
+      "combinaison": "8-6-4-3",
+      "dividende_pour_1_eur": 1.7
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -547,14 +649,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-11-13T09:45:26Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-11-13T10:00:24Z",
+    "verifiee_le_utc": "2026-11-13T10:00:24Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-11-13T09:45:26Z",
-    "derniere_verification_utc": "2026-11-13T09:45:26Z"
+    "derniere_modification_utc": "2026-11-13T10:00:24Z",
+    "derniere_verification_utc": "2026-11-13T10:00:24Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -568,6 +670,24 @@
        6,
        4,
        3
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-11-13T10:00:24Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       8,
+       6,
+       4,
+       3,
+       10,
+       2,
+       9,
+       1,
+       7
       ]
      }
     ]
@@ -588,19 +708,24 @@
     "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "10:11 GMT (11:11 Paris)",
     "partants_declares": 16,
-    "partants_actifs": 16
+    "partants_actifs": 15
    },
    "statut": {
     "code": "EN_ATTENTE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
    "non_classes": [],
-   "non_partants": [],
+   "non_partants": [
+    {
+     "num": 7,
+     "nom": "NIKITA DU PONT"
+    }
+   ],
    "rapports": {
     "disponibles": false,
     "unite": "EUR pour 1 EUR de mise",
