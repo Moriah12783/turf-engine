@@ -497,7 +497,7 @@ class TurfBenchmarkLab:
                 provisoire_reason = "NOT_LOCKED"
             elif not shown_odds_real:
                 provisoire_reason = "ODDS_DEFAULT"
-            elif publication_reason in ("ODDS_DEFAULT", "PRICED_RATIO_LOW", "BEFORE_0630", "NOT_LOCKED"):
+            elif publication_reason in ("ODDS_DEFAULT", "PRICED_RATIO_LOW", "BEFORE_MORNING_FLOOR", "BEFORE_0630", "NOT_LOCKED"):
                 provisoire_reason = publication_reason
             else:
                 provisoire_reason = None

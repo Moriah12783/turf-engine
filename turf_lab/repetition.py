@@ -45,10 +45,10 @@ from datetime import datetime, timedelta, timezone
 from typing import Any, Callable, Dict, List, Optional
 
 from turf_lab import fondamental_nuit, ombre, ombre_lecture, r2_store
+from turf_lab.plancher_matin import limite_ecriture_nuit_utc, limite_envoi_utc
 
 FENETRE = ("2026-10-01", "2026-10-06")          # répétition : du jeudi 01/10 au mardi 06/10
 REPETITION_KEY = "lab/repetition/turf_bench.db"  # clé privée distincte de la base de production
-LIMITE_ENVOI_UTC = (6, 28)                       # comme la nuit de l'ombre : aucun envoi après 06h28
 TOLERANCE_SOMME = 1e-4                           # probabilités fondamentales : somme 1 par course
 
 
@@ -120,7 +120,8 @@ def nuit(history_path: str, copie_path: str, fetcher, client, bucket: str, prevu
     if calc.get("refus"):
         rep["refus_calcul"] = calc["refus"]                 # en production : pas d'ombre ce jour-là
     if not controle:
-        rep["calcul_avant_06h20"] = (fin.hour, fin.minute) < fondamental_nuit.HEURE_LIMITE_UTC
+        lim = limite_ecriture_nuit_utc(jour)          # source unique : turf_lab/plancher_matin.py
+        rep["calcul_avant_06h20"] = (fin.hour, fin.minute) < (lim.hour, lim.minute)
     if rep["ecrit"] and controle and dans_la_fenetre(today.isoformat()):
         rep["envoi"] = "SANS_ENVOI_CONTROLE"                # pendant la répétition, la copie du matin reste en place
     elif rep["ecrit"] and not controle and not rep["calcul_avant_06h20"]:
@@ -130,7 +131,8 @@ def nuit(history_path: str, copie_path: str, fetcher, client, bucket: str, prevu
         envoi = horloge()
         rep["envoi_utc"] = envoi.strftime("%H:%M:%S")
         if not controle:
-            rep["envoi_avant_06h28"] = (envoi.hour, envoi.minute) < LIMITE_ENVOI_UTC
+            lim_envoi = limite_envoi_utc(jour)
+            rep["envoi_avant_06h28"] = (envoi.hour, envoi.minute) < (lim_envoi.hour, lim_envoi.minute)
     ok = rep["ecrit"] and (controle or (rep["calcul_avant_06h20"] and rep.get("envoi_avant_06h28", False)))
     rep["verdict"] = "OK" if ok else "A_EXPLIQUER"
     _log("REPETITION_NUIT", rep)

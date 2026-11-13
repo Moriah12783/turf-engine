@@ -15,8 +15,9 @@ avant). Chaque nuit, entre le pull et le push R2 de ``turf_bench.db``
      remet le compteur de l'ombre à zéro), ``computed_at``, ``train_until``.
 
 Garde-fous : rien n'est écrit tant que la règle n'est pas gelée
-(``DEBUT_OMBRE``, turf_lab/ombre_lecture.py) ; aucune écriture après 06h20
-UTC ni pour une course déjà verrouillée ; audit de fuite négatif obligatoire ;
+(``DEBUT_OMBRE``, turf_lab/ombre_lecture.py) ; aucune écriture après la
+limite du jour (plancher du matin − 10 min, turf_lab/plancher_matin.py) ni
+pour une course déjà verrouillée ; audit de fuite négatif obligatoire ;
 historique en retard de plus de 3 jours => rien n'est écrit (jour compté hors
 couverture). Journal : agrégats seulement (dépôt public).
 
@@ -44,9 +45,9 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple
 import numpy as np
 
 from turf_lab import benter_lab as lab
+from turf_lab.plancher_matin import en_utc_naif, limite_ecriture_nuit_utc
 
 MORNING_FEATURES = tuple(n for n in lab.FEATURES if n not in lab.INTRADAY_FEATURES)
-HEURE_LIMITE_UTC = (6, 20)              # aucune écriture après 06h20 UTC (verrou du matin : 06h30)
 RETARD_MAX_JOURS = 3                    # historique plus ancien : rien n'est écrit
 MIN_TRAIN_RACES = 200
 PAUSE_S = 0.2                           # entre deux requêtes PMU
@@ -237,8 +238,10 @@ def write_probs(bench_path: str, rows: Sequence[Tuple[str, Sequence[int], np.nda
     return stats
 
 
-def _too_late(now_utc: datetime) -> bool:
-    return (now_utc.hour, now_utc.minute) >= HEURE_LIMITE_UTC
+def _too_late(now_utc: datetime, day: str) -> bool:
+    """Limite d'écriture du jour : plancher du matin − 10 min (source unique,
+    turf_lab/plancher_matin.py). Heure avec ou sans fuseau : comparée en UTC."""
+    return en_utc_naif(now_utc) >= limite_ecriture_nuit_utc(day)
 
 
 def shadow_open(day: str) -> bool:
@@ -264,7 +267,7 @@ def run_night(history_path: str, bench_path: str, fetcher, now_utc: Optional[dat
         report["refus"] = "OMBRE_PAS_OUVERTE"
         _log("NUIT_FONDAMENTAL_REFUS", report)
         return report
-    if enforce_hour and _too_late(clock):
+    if enforce_hour and _too_late(clock, day):
         report["refus"] = "HEURE_LIMITE_DEPASSEE"
         _log("NUIT_FONDAMENTAL_REFUS", report)
         return report
@@ -301,7 +304,7 @@ def run_night(history_path: str, bench_path: str, fetcher, now_utc: Optional[dat
         rows.append((race.race_id, [int(r["num_pmu"]) for r in race.runners], probs))
 
     computed = datetime.now(timezone.utc) if now_utc is None else clock
-    if enforce_hour and _too_late(computed):
+    if enforce_hour and _too_late(computed, day):
         report["refus"] = "HEURE_LIMITE_DEPASSEE"
         _log("NUIT_FONDAMENTAL_REFUS", report)
         return report

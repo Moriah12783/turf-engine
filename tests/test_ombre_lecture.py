@@ -17,6 +17,7 @@ np = pytest.importorskip("numpy")
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from turf_lab import fondamental_nuit, ombre, ombre_lecture as lecture
+from turf_lab.plancher_matin import limite_ecriture_nuit_utc
 
 DOC = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "docs", "OMBRE_FONDAMENTAL.md")
 DEBUT = "2026-10-07"
@@ -35,7 +36,13 @@ def test_constantes_identiques_au_document():
     assert tuple(rows["HORIZONS_SECONDAIRES"].split(", ")) == ombre.HORIZONS_SECONDAIRES == ("T_MATIN",)
     assert int(rows["REMISES_MAX"]) == ombre.REMISES_MAX and int(rows["DELAI_REMISE_JOURS"]) == ombre.DELAI_REMISE_JOURS
     assert int(rows["BOOTSTRAP_TIRAGES"]) == ombre.BOOTSTRAP_TIRAGES and int(rows["GRAINE"]) == ombre.GRAINE
-    assert tuple(int(x) for x in rows["HEURE_LIMITE_UTC"].split(":")) == fondamental_nuit.HEURE_LIMITE_UTC
+    # Limite d'écriture gelée (06h20 UTC) : respectée chaque jour de la mesure,
+    # du 08/10 au 11/11. Depuis le 12/11, elle est lue dans plancher_matin.py.
+    limite_gelee = tuple(int(x) for x in rows["HEURE_LIMITE_UTC"].split(":"))
+    for k in range(35):
+        jour = date(2026, 10, 8) + timedelta(days=k)
+        lim = limite_ecriture_nuit_utc(jour)
+        assert (lim.hour, lim.minute) == limite_gelee, jour
     assert int(rows["RETARD_MAX_JOURS"]) == fondamental_nuit.RETARD_MAX_JOURS
     assert rows["META_OMBRE"] == lecture.META_OMBRE
     debut = rows["DEBUT_OMBRE"]

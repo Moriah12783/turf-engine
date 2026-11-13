@@ -8,8 +8,8 @@ name: Répétition générale de l'ombre (01-06/10)
 #   - envoi sur une clé privée distincte (lab/repetition/turf_bench.db).
 # Les devs NVE et daily_sync récupèrent la copie, enchaînent chez eux le
 # verrou du matin et le moteur, puis lancent le diagnostic de la chaîne.
-# Hors de la fenêtre, le script refuse. Sur une PR : contrôle du circuit sur
-# le programme du lendemain. Dépôt public : journal = agrégats seulement.
+# Hors de la fenêtre, le script refuse. Dépôt public : journal = agrégats
+# seulement.
 # Voir turf_lab/repetition.py et docs/OMBRE_FONDAMENTAL.md.
 
 on:
@@ -24,10 +24,9 @@ on:
         description: "Horaire prévu (05:05 ou 05:50), pour mesurer le retard de déclenchement"
         required: false
         default: "05:05"
-  pull_request:
-    paths:
-      - "turf_lab/repetition.py"
-      - ".github/workflows/repetition_ombre.yml"
+  # Plus de contrôle sur PR depuis le 13/11/2026 : la répétition est close
+  # depuis le 06/10 et le script refuse hors de sa fenêtre (HORS_FENETRE),
+  # si bien qu'un contrôle sur PR ne pouvait plus qu'échouer.
 
 permissions:
   contents: read

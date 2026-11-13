@@ -9,6 +9,8 @@ import os
 import re
 from typing import Any, Dict, List
 
+from turf_lab.plancher_matin import libelle_plancher, maintenant_utc
+
 # Favicon 32×32 (PNG, 2972 caractères base64) : fer à cheval or (#f59e0b) sur
 # fond nuit (#0b1120), généré depuis site/favicon.svg. Embarqué dans la page pour
 # ne dépendre d'aucun fichier binaire au déploiement.
@@ -314,8 +316,11 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
             f'<td>{d.get("courses", 0)}<br><span style="font-size:0.72rem; color:var(--text-muted);">appr. {d.get("train", 0)} · test {d.get("test", 0)}</span></td>'
             f'{cells}<td style="font-size:0.78rem; color:var(--text-muted);">{coef_txt}</td></tr>')
     horizon_rows_html = []
+    # Heure d'ouverture de l'édition du matin du jour (source unique :
+    # turf_lab/plancher_matin.py). Le site est régénéré à chaque passage.
+    plancher_libelle = libelle_plancher(maintenant_utc().date())
     horizon_titles = [
-        ("T_MATIN", "📡 Édition Matin", "verrouillée dès 06h30 GMT"),
+        ("T_MATIN", "📡 Édition Matin", f"verrouillée dès {plancher_libelle}"),
         ("T90", "📢 Édition T-90", "~90 min avant le départ"),
         ("T30", "⚡ Édition T-30", "~30 min avant le départ"),
         ("T15", "🔒 Édition T-15", "~15 min avant le départ")
@@ -779,7 +784,7 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
             if (item.display_horizon && HORIZON_META[item.display_horizon]) {{
                 return HORIZON_META[item.display_horizon];
             }}
-            return {{ code: "AUCUN", label: "⏳ Édition à venir", badgeClass: "couv-2", header: "Cote", fullText: "⏳ Aucune édition verrouillée pour l'instant", info: "L'édition du matin sera posée à partir de 06h30 GMT, puis T-90, T-30 et T-15 à l'approche du départ." }};
+            return {{ code: "AUCUN", label: "⏳ Édition à venir", badgeClass: "couv-2", header: "Cote", fullText: "⏳ Aucune édition verrouillée pour l'instant", info: "L'édition du matin sera posée à partir de {plancher_libelle}, puis T-90, T-30 et T-15 à l'approche du départ." }};
         }}
 
         // Jour J±n en GMT (heure d'Abidjan) pour les libellés « Aujourd'hui » / « Hier ».
@@ -956,6 +961,7 @@ def generate_html_dashboard(report_data: Dict[str, Any], output_path: str = "ben
                 "NOT_LOCKED": "aucune édition du matin verrouillée",
                 "ODDS_DEFAULT": "cotes PMU non ouvertes au verrou (valeurs par défaut)",
                 "PRICED_RATIO_LOW": "moins de 90 % des partants cotés",
+                "BEFORE_MORNING_FLOOR": "avant l'ouverture de l'édition du matin ({plancher_libelle})",
                 "BEFORE_0630": "avant 06h30 GMT"
             }};
 
