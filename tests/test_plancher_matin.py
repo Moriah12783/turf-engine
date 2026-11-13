@@ -365,3 +365,34 @@ def test_filet_github_refuse_par_defaut(cas):
 def test_filet_github_calcule_sur_reponse_explicite():
     code, sortie, env = _jouer(_etape("Late GitHub safety net"), "oui", "ECRITURE_AUTORISEE", "ECRITURE_REFUSEE")
     assert code == 0 and "FILET_HORS_DELAI" not in sortie and env == ""
+
+
+# ── Libellés du site (remarque du dev NVE du 13/11) ──────────────────────
+
+@pytest.mark.parametrize("maintenant,entete,par_jour", [
+    # 22/11 au soir : l'en-tête annonce déjà l'édition du 23/11 ; chaque course garde le plancher de sa date
+    (datetime(2026, 11, 22, 20, 0), "verrouillée dès 08h30 heure de Paris (07h30 GMT)",
+     {"2026-11-22": "06h30 GMT", "2026-11-23": "08h30 heure de Paris (07h30 GMT)"}),
+    # 22/11 à 05h00 UTC : l'édition du jour n'est pas encore posée, ancienne règle
+    (datetime(2026, 11, 22, 5, 0), "verrouillée dès 06h30 GMT",
+     {"2026-11-22": "06h30 GMT", "2026-11-23": "08h30 heure de Paris (07h30 GMT)"}),
+    # 27/03/2027 au soir : le lendemain passe à l'heure d'été
+    (datetime(2027, 3, 27, 20, 0), "verrouillée dès 08h30 heure de Paris (06h30 GMT)",
+     {"2027-03-27": "08h30 heure de Paris (07h30 GMT)", "2027-03-28": "08h30 heure de Paris (06h30 GMT)"}),
+])
+def test_libelles_du_site(monkeypatch, tmp_path, maintenant, entete, par_jour):
+    import json as _json
+    from turf_lab import html_report
+    monkeypatch.setattr(html_report, "maintenant_utc", lambda: maintenant)
+    out = tmp_path / "index.html"
+    with redirect_stdout(io.StringIO()):
+        html_report.generate_html_dashboard({"evaluations": {}, "total_finished_races": 0, "historical_logs": []},
+                                            output_path=str(out))
+    page = out.read_text(encoding="utf-8")
+    assert entete in page
+    m = re.search(r"const PLANCHER_PAR_JOUR = (\{.*?\});", page)
+    assert m, "table des planchers par date absente du site"
+    table = _json.loads(m.group(1))
+    for jour, libelle in par_jour.items():
+        assert table[jour] == libelle
+    assert 'PLANCHER_PAR_JOUR[item.date]' in page
