@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "1c8d31457875c16a342ebc503a3ccba7bfbce07a",
-  "run_id": "43586746071",
+  "commit": "d1b3771974d04cff358dd1344ebe4563ef70b711",
+  "run_id": "43587891114",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-14",
- "genere_le_utc": "2026-11-14T10:47:03Z",
+ "genere_le_utc": "2026-11-14T11:02:03Z",
  "nb_courses": 43,
  "compte_par_statut": {
   "EN_ATTENTE": 40,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 2,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 3,
   "ANNULEE": 0
  },
- "empreinte_sha256": "1b9d729ab8a4efe036941f6397d6c7efa2fc0d70576db4d8c1f5a9ede8e74f25",
+ "empreinte_sha256": "11d1b25237f8d3565536fd0a6a1819a0494c8b4f0bedb41c1aa33c14efe6910b",
  "courses": [
   {
    "course_id": "R1C1_14112026_VINCENNES",
@@ -665,7 +665,7 @@
     "verifiee_le_utc": "2026-11-14T10:00:32Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-14T10:00:32Z",
-    "derniere_verification_utc": "2026-11-14T10:45:28Z"
+    "derniere_verification_utc": "2026-11-14T11:00:23Z"
    },
    "correction": {
     "version": 2,
@@ -887,7 +887,7 @@
     "verifiee_le_utc": "2026-11-14T10:30:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-14T10:30:24Z",
-    "derniere_verification_utc": "2026-11-14T10:45:28Z"
+    "derniere_verification_utc": "2026-11-14T11:00:23Z"
    },
    "correction": {
     "version": 2,
@@ -944,11 +944,11 @@
     "partants_actifs": 8
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -974,13 +974,20 @@
      "num": 3,
      "nom": "MADE IN CARLESS",
      "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 6,
+     "nom": "MAITRE D'HOULBEC",
+     "dead_heat": false
     }
    ],
    "arrivee": [
     8,
     5,
     1,
-    3
+    3,
+    6
    ],
    "non_classes": [
     {
@@ -992,15 +999,57 @@
      "num": 4,
      "nom": "MAASAI",
      "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 7,
+     "nom": "MIDNIGHT EXPRESS",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
     }
    ],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "8": 1.6
+    },
+    "simple_place": {
+     "8": 1.4,
+     "5": 3.1,
+     "1": 6.8
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "8-5",
+      "dividende_pour_1_eur": 12.6
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "8-5",
+      "dividende_pour_1_eur": 7.2
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "8-1",
+      "dividende_pour_1_eur": 18.5
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "5-1",
+      "dividende_pour_1_eur": 33.3
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "8-5-1",
+      "dividende_pour_1_eur": 104.5
+     },
+     {
+      "type_pari": "SUPER_QUATRE",
+      "combinaison": "8-5-1-3",
+      "dividende_pour_1_eur": 2330.4
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -1010,14 +1059,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-11-14T10:45:28Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-11-14T11:00:23Z",
+    "verifiee_le_utc": "2026-11-14T11:00:23Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-11-14T10:45:28Z",
-    "derniere_verification_utc": "2026-11-14T10:45:28Z"
+    "derniere_modification_utc": "2026-11-14T11:00:23Z",
+    "derniere_verification_utc": "2026-11-14T11:00:23Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -1031,6 +1080,20 @@
        5,
        1,
        3
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-11-14T11:00:23Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       8,
+       5,
+       1,
+       3,
+       6
       ]
      }
     ]
@@ -1047,9 +1110,9 @@
     "libelle": "PRIX DU CERCLE DES PHOCEENS",
     "discipline": "TROT_ATTELE",
     "distance_m": 2300,
-    "heure_depart_utc": "2026-11-14T11:10:00Z",
+    "heure_depart_utc": "2026-11-14T11:12:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "11:10 GMT (12:10 Paris)",
+    "heure_depart_affichee": "11:12 GMT (12:12 Paris)",
     "partants_declares": 16,
     "partants_actifs": 14
    },
@@ -1058,7 +1121,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -1342,7 +1405,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "DEPART_CONFIRME"
    },
    "classement": [],
    "arrivee": [],
@@ -2301,7 +2364,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "CHEVAUX_SOUS_ORDRES"
    },
    "classement": [],
    "arrivee": [],
