@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "b676b23bf4dba66b957c7ed6f391bec81025ebf9",
-  "run_id": "43584374892",
+  "commit": "a6bf8e6908dce55cfffa4b5fa504dd8889703acf",
+  "run_id": "43585561849",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-14",
- "genere_le_utc": "2026-11-14T10:18:23Z",
+ "genere_le_utc": "2026-11-14T10:31:59Z",
  "nb_courses": 43,
  "compte_par_statut": {
   "EN_ATTENTE": 41,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 1,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "693f5a7785f4c16050424982d0772c4323391094de9a96e5258d17917e4092ba",
+ "empreinte_sha256": "12ea98dba2bda987bad02a18588c809688a152ffbc7ee6f9eee8dab36ec48652",
  "courses": [
   {
    "course_id": "R1C1_14112026_VINCENNES",
@@ -665,7 +665,7 @@
     "verifiee_le_utc": "2026-11-14T10:00:32Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-14T10:00:32Z",
-    "derniere_verification_utc": "2026-11-14T10:15:22Z"
+    "derniere_verification_utc": "2026-11-14T10:30:24Z"
    },
    "correction": {
     "version": 2,
@@ -722,11 +722,11 @@
     "partants_actifs": 10
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -752,13 +752,41 @@
      "num": 1,
      "nom": "NOLANN DES AGETS",
      "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 5,
+     "nom": "NICKEL CHROME",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 2,
+     "nom": "NUMERO DE LAUMONT",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 3,
+     "nom": "NELSON D'HERMES",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 7,
+     "nom": "NORIA DE BERTRANGE",
+     "dead_heat": false
     }
    ],
    "arrivee": [
     10,
     6,
     8,
-    1
+    1,
+    5,
+    2,
+    3,
+    7
    ],
    "non_classes": [
     {
@@ -774,11 +802,78 @@
    ],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "10": 9.9
+    },
+    "simple_place": {
+     "10": 2.4,
+     "6": 2.0,
+     "8": 1.8
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "10-6",
+      "dividende_pour_1_eur": 19.8
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "10-6",
+      "dividende_pour_1_eur": 5.2
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "10-8",
+      "dividende_pour_1_eur": 5.6
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "6-8",
+      "dividende_pour_1_eur": 4.7
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "10-6",
+      "dividende_pour_1_eur": 3.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "10-8",
+      "dividende_pour_1_eur": 3.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "10-1",
+      "dividende_pour_1_eur": 3.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "6-8",
+      "dividende_pour_1_eur": 3.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "6-1",
+      "dividende_pour_1_eur": 3.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "8-1",
+      "dividende_pour_1_eur": 3.8
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "10-6-8",
+      "dividende_pour_1_eur": 25.8
+     },
+     {
+      "type_pari": "MINI_MULTI",
+      "combinaison": "10-6-8-1",
+      "dividende_pour_1_eur": 37.1
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -788,14 +883,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-11-14T10:15:22Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-11-14T10:30:24Z",
+    "verifiee_le_utc": "2026-11-14T10:30:24Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-11-14T10:15:22Z",
-    "derniere_verification_utc": "2026-11-14T10:15:22Z"
+    "derniere_modification_utc": "2026-11-14T10:30:24Z",
+    "derniere_verification_utc": "2026-11-14T10:30:24Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -809,6 +904,23 @@
        6,
        8,
        1
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-11-14T10:30:24Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       10,
+       6,
+       8,
+       1,
+       5,
+       2,
+       3,
+       7
       ]
      }
     ]
@@ -825,9 +937,9 @@
     "libelle": "PRIX JEAN BOILLEREAU",
     "discipline": "TROT_ATTELE",
     "distance_m": 3000,
-    "heure_depart_utc": "2026-11-14T10:38:00Z",
+    "heure_depart_utc": "2026-11-14T10:40:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "10:38 GMT (11:38 Paris)",
+    "heure_depart_affichee": "10:40 GMT (11:40 Paris)",
     "partants_declares": 8,
     "partants_actifs": 8
    },
@@ -836,7 +948,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -1164,9 +1276,9 @@
     "libelle": "PRIX NUPSALA",
     "discipline": "OBSTACLE_STEEPLE",
     "distance_m": 4400,
-    "heure_depart_utc": "2026-11-14T10:54:00Z",
+    "heure_depart_utc": "2026-11-14T10:56:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "10:54 GMT (11:54 Paris)",
+    "heure_depart_affichee": "10:56 GMT (11:56 Paris)",
     "partants_declares": 10,
     "partants_actifs": 10
    },
@@ -1175,7 +1287,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
