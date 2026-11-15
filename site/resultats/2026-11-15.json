@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "11e97932d9814b910243d18bdeb14f64904e048f",
-  "run_id": "43704363498",
+  "commit": "e7af595177e9daa881c44f63d5c1edf68afdb3c5",
+  "run_id": "43705578611",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-15",
- "genere_le_utc": "2026-11-15T10:32:31Z",
+ "genere_le_utc": "2026-11-15T10:48:39Z",
  "nb_courses": 85,
  "compte_par_statut": {
-  "EN_ATTENTE": 84,
-  "PROVISOIRE": 0,
-  "DEFINITIVE": 1,
+  "EN_ATTENTE": 82,
+  "PROVISOIRE": 1,
+  "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "6ad3aa2d79568114fb41d0ae68004f09a13b7aeef434a371702d09a5a683f7bb",
+ "empreinte_sha256": "2dc927a83bb4679ae565f5c18f3d4bad5529ea4589339e09e6d314cad7d07954",
  "courses": [
   {
    "course_id": "R1C1_15112026_AUTEUIL",
@@ -657,7 +657,7 @@
     "verifiee_le_utc": "2026-11-15T10:15:21Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-15T10:15:21Z",
-    "derniere_verification_utc": "2026-11-15T10:30:22Z"
+    "derniere_verification_utc": "2026-11-15T10:45:22Z"
    },
    "correction": {
     "version": 2,
@@ -717,41 +717,160 @@
     "partants_actifs": 9
    },
    "statut": {
-    "code": "EN_ATTENTE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "DEPART_CONFIRME"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 6,
+     "nom": "NOSTARMAGNAC",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 9,
+     "nom": "NANO UP STAR",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 5,
+     "nom": "NOUBA D'ATOUT",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 7,
+     "nom": "NUIT A LA GRAVE",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 8,
+     "nom": "NOT ALONE",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 4,
+     "nom": "NIGHT DE JANEIRO",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 3,
+     "nom": "NOUMEA D'AMOUR",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 1,
+     "nom": "NINON DU GUELIER",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    6,
+    9,
+    5,
+    7,
+    8,
+    4,
+    3,
+    1
+   ],
+   "non_classes": [
+    {
+     "num": 2,
+     "nom": "NEW D'ARAC",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "6": 10.8
+    },
+    "simple_place": {
+     "6": 1.7,
+     "9": 1.2,
+     "5": 1.4
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "6-9",
+      "dividende_pour_1_eur": 4.9
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "6-9",
+      "dividende_pour_1_eur": 2.5
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "6-5",
+      "dividende_pour_1_eur": 3.5
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "9-5",
+      "dividende_pour_1_eur": 2.2
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "6-9-5",
+      "dividende_pour_1_eur": 8.0
+     },
+     {
+      "type_pari": "SUPER_QUATRE",
+      "combinaison": "6-9-5-7",
+      "dividende_pour_1_eur": 262.5
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/15112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "premiere_lecture_utc": "2026-11-15T10:45:22Z",
+    "definitive_depuis_utc": "2026-11-15T10:45:22Z",
+    "verifiee_le_utc": "2026-11-15T10:45:22Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-15T10:45:22Z",
+    "derniere_verification_utc": "2026-11-15T10:45:22Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "DEFINITIVE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-15T10:45:22Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       6,
+       9,
+       5,
+       7,
+       8,
+       4,
+       3,
+       1
+      ]
+     }
+    ]
    }
   },
   {
@@ -765,9 +884,9 @@
     "libelle": "PRIX AUTO OUSTRIC",
     "discipline": "TROT_ATTELE",
     "distance_m": 2550,
-    "heure_depart_utc": "2026-11-15T10:55:00Z",
+    "heure_depart_utc": "2026-11-15T10:58:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "10:55 GMT (11:55 Paris)",
+    "heure_depart_affichee": "10:58 GMT (11:58 Paris)",
     "partants_declares": 14,
     "partants_actifs": 14
    },
@@ -776,7 +895,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -879,7 +998,7 @@
     "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "12:05 GMT (13:05 Paris)",
     "partants_declares": 16,
-    "partants_actifs": 15
+    "partants_actifs": 14
    },
    "statut": {
     "code": "EN_ATTENTE",
@@ -892,6 +1011,10 @@
    "arrivee": [],
    "non_classes": [],
    "non_partants": [
+    {
+     "num": 1,
+     "nom": "IBIS QUICK"
+    },
     {
      "num": 13,
      "nom": "GALOPIN DES CHAMPS"
@@ -4017,15 +4140,49 @@
     "partants_actifs": 11
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "CHEVAUX_SOUS_ORDRES"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 11,
+     "nom": "NINA DE MALAC",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 5,
+     "nom": "NEZIRO JOSSELYN",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 2,
+     "nom": "NEOUIMINE DE L'AA",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    11,
+    5,
+    2
+   ],
+   "non_classes": [
+    {
+     "num": 6,
+     "nom": "NOSY FIX",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 10,
+     "nom": "NINA DE JUPILLES",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [
     {
      "num": 3,
@@ -4042,21 +4199,34 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/15112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-15T10:45:22Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-15T10:45:22Z",
+    "derniere_verification_utc": "2026-11-15T10:45:22Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-15T10:45:22Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       11,
+       5,
+       2
+      ]
+     }
+    ]
    }
   },
   {
@@ -4081,7 +4251,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
