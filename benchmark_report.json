@@ -15778,8 +15778,8 @@
       "priced_ratio": 1.0,
       "edition_provisoire": false,
       "provisoire_reason": null,
-      "publishable": true,
-      "publication_reason": "OK",
+      "publishable": false,
+      "publication_reason": "RACE_STARTED",
       "display_horizon": "T15",
       "editions_moteur": {
         "T_MATIN": {
@@ -15843,9 +15843,9 @@
       "autostart": false,
       "scheduled_start_time": "19:30 GMT (20:30 Paris)",
       "is_finished": false,
-      "status": "PROGRAMMÉE",
+      "status": "PARTIE",
       "is_cancelled": false,
-      "is_started": false,
+      "is_started": true,
       "start_time_utc": "2026-11-15T19:30:00Z",
       "contract_recorded": true,
       "confidence_stars": 3,
@@ -16000,7 +16000,7 @@
       "couv_moteur_count": 0,
       "couv_marche": "0/5",
       "couv_marche_count": 0,
-      "couverture_label": "Course à venir",
+      "couverture_label": "Course partie",
       "decision": "⭐ COUPLE MAITRE: 2 - 4",
       "decision_badge": "badge-master",
       "runners": [
@@ -16158,7 +16158,7 @@
       "provisoire_reason": null,
       "publishable": true,
       "publication_reason": "OK",
-      "display_horizon": "T90",
+      "display_horizon": "T30",
       "editions_moteur": {
         "T_MATIN": {
           "sel": "7-4-6-3-5-1-2",
@@ -16173,6 +16173,13 @@
           "lock": "18:30",
           "priced_ratio": 1.0,
           "odds_real": true
+        },
+        "T30": {
+          "sel": "7-4-3-1-6-5-2",
+          "nominal": false,
+          "lock": "19:30",
+          "priced_ratio": 1.0,
+          "odds_real": true
         }
       },
       "editions_marche": {
@@ -16180,6 +16187,13 @@
           "sel": "7-4-3-6-1-5-2",
           "nominal": false,
           "lock": "18:30",
+          "priced_ratio": 1.0,
+          "odds_real": true
+        },
+        "T30": {
+          "sel": "7-4-3-1-5-6-2",
+          "nominal": false,
+          "lock": "19:30",
           "priced_ratio": 1.0,
           "odds_real": true
         }
@@ -16203,13 +16217,13 @@
       "is_no_bet": false,
       "is_master": true,
       "np_nums": [],
-      "sel_moteur": "7-4-3-6-1-5-2",
+      "sel_moteur": "7-4-3-1-6-5-2",
       "sel_moteur_list": [
         7,
         4,
         3,
-        6,
         1,
+        6,
         5,
         2
       ],
@@ -16217,7 +16231,7 @@
         7,
         4
       ],
-      "outsider_num": 2,
+      "outsider_num": 6,
       "regrets": [],
       "smart_tickets": {
         "contract": 2,
@@ -16248,21 +16262,21 @@
             "chevaux": [
               7,
               4,
-              2
+              6
             ],
             "bases": [
               7,
               4
             ],
             "associes": [
-              2
+              6
             ],
             "combinaisons": 1,
             "mise_unitaire_eur": 1.5,
             "cout_total_eur": null,
             "eligible": false,
             "motif_ineligibilite": "PARI_NON_OUVERT",
-            "texte": "7 - 4 - 2"
+            "texte": "7 - 4 - 6"
           },
           {
             "produit": "QUINTE_PLUS",
@@ -16271,8 +16285,8 @@
               7,
               4,
               3,
-              6,
               1,
+              6,
               5
             ],
             "bases": [
@@ -16281,8 +16295,8 @@
             ],
             "associes": [
               3,
-              6,
               1,
+              6,
               5
             ],
             "combinaisons": 4,
@@ -16290,7 +16304,7 @@
             "cout_total_eur": null,
             "eligible": false,
             "motif_ineligibilite": "MOINS_DE_8_PARTANTS",
-            "texte": "7 - 4 - X - X - X / 3, 6, 1, 5"
+            "texte": "7 - 4 - X - X - X / 3, 1, 6, 5"
           }
         ],
         "ticket_securite": {
@@ -16307,9 +16321,9 @@
           "chevaux": [
             7,
             4,
-            2
+            6
           ],
-          "formule": "7 - 4 - 2",
+          "formule": "7 - 4 - 6",
           "mise_base_eur": 1.5
         },
         "quinte_champ_reduit": {
@@ -16320,23 +16334,23 @@
           ],
           "associes": [
             3,
-            6,
             1,
+            6,
             5
           ],
-          "formule": "7 - 4 - X - X - X / 3, 6, 1, 5",
+          "formule": "7 - 4 - X - X - X / 3, 1, 6, 5",
           "combinaisons": 4,
           "budget_conseille_eur": null
         }
       },
-      "sel_marche": "7-4-3-6-1-5-2",
+      "sel_marche": "7-4-3-1-5-6-2",
       "sel_marche_list": [
         7,
         4,
         3,
-        6,
         1,
         5,
+        6,
         2
       ],
       "common_count": 7,
@@ -16362,9 +16376,9 @@
           "morning_odds": 11.0,
           "live_odds": 2.0,
           "o_t90": 1.8,
-          "o_t30": null,
+          "o_t30": 2.0,
           "o_t15": null,
-          "prob_pct": 45.3,
+          "prob_pct": 40.8,
           "value_index": 0.82,
           "smart_signal": "FORTE_BAISSE_INSIDER",
           "is_np": false,
@@ -16380,10 +16394,10 @@
           "morning_odds": 22.0,
           "live_odds": 4.9,
           "o_t90": 6.6,
-          "o_t30": null,
+          "o_t30": 4.9,
           "o_t15": null,
-          "prob_pct": 14.1,
-          "value_index": 0.93,
+          "prob_pct": 18.0,
+          "value_index": 0.88,
           "smart_signal": "FORTE_BAISSE_INSIDER",
           "is_np": false,
           "odds_real": true
@@ -16396,30 +16410,12 @@
           "draw": 6,
           "music": "2p1p0p8p3p1p1p5p(25)6p",
           "morning_odds": 1.1,
-          "live_odds": 6.9,
+          "live_odds": 7.0,
           "o_t90": 7.7,
-          "o_t30": null,
+          "o_t30": 7.0,
           "o_t15": null,
-          "prob_pct": 10.5,
-          "value_index": 0.81,
-          "smart_signal": "FORTE_HAUSSE_DELAISSE",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 6,
-          "name": "HINSILAYA AA",
-          "driver": "A.CRASTUS",
-          "shoeing": "FERRE",
-          "draw": 2,
-          "music": "4p2p2p1p5p2p8p(25)3p1p",
-          "morning_odds": 1.1,
-          "live_odds": 9.9,
-          "o_t90": 8.1,
-          "o_t30": null,
-          "o_t15": null,
-          "prob_pct": 10.4,
-          "value_index": 0.84,
+          "prob_pct": 11.4,
+          "value_index": 0.8,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -16432,13 +16428,31 @@
           "draw": 3,
           "music": "3p1p5p5p7p4p6p4p(25)4p",
           "morning_odds": 26.0,
-          "live_odds": 9.7,
+          "live_odds": 9.3,
           "o_t90": 9.4,
-          "o_t30": null,
+          "o_t30": 9.3,
           "o_t15": null,
           "prob_pct": 9.5,
           "value_index": 0.89,
           "smart_signal": "FORTE_BAISSE_INSIDER",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 6,
+          "name": "HINSILAYA AA",
+          "driver": "A.CRASTUS",
+          "shoeing": "FERRE",
+          "draw": 2,
+          "music": "4p2p2p1p5p2p8p(25)3p1p",
+          "morning_odds": 1.1,
+          "live_odds": 10.0,
+          "o_t90": 8.1,
+          "o_t30": 10.0,
+          "o_t15": null,
+          "prob_pct": 8.5,
+          "value_index": 0.85,
+          "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
         },
@@ -16450,12 +16464,12 @@
           "draw": 5,
           "music": "8p3p1p9p1p5p4p2p9p",
           "morning_odds": 1.7,
-          "live_odds": 12.0,
+          "live_odds": 10.0,
           "o_t90": 12.0,
-          "o_t30": null,
+          "o_t30": 10.0,
           "o_t15": null,
-          "prob_pct": 6.9,
-          "value_index": 0.83,
+          "prob_pct": 8.1,
+          "value_index": 0.81,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -16468,12 +16482,12 @@
           "draw": 7,
           "music": "7p6p7p6p5p6p4p(25)1p1p",
           "morning_odds": 26.0,
-          "live_odds": 24.0,
+          "live_odds": 23.0,
           "o_t90": 26.0,
-          "o_t30": null,
+          "o_t30": 23.0,
           "o_t15": null,
-          "prob_pct": 3.2,
-          "value_index": 0.85,
+          "prob_pct": 3.6,
+          "value_index": 0.83,
           "smart_signal": "STABLE",
           "is_np": false,
           "odds_real": true
