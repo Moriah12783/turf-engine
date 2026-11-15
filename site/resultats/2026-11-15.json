@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "85e75001ed2f78db9fb3642f32958cb4b0364c5b",
-  "run_id": "43700737046",
+  "commit": "288eade93a691456ff0b8605def74751a038a697",
+  "run_id": "43701915178",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-15",
- "genere_le_utc": "2026-11-15T09:47:33Z",
+ "genere_le_utc": "2026-11-15T10:02:02Z",
  "nb_courses": 85,
  "compte_par_statut": {
-  "EN_ATTENTE": 85,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 84,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 0,
   "ANNULEE": 0
  },
- "empreinte_sha256": "616c479a5dd39416975bb7c407608cc5139af2195bc8cfb5953fd64a88aada9a",
+ "empreinte_sha256": "05620e616863626ce88eac2c6399b55e6364fcc6370f77edc86b0d270c988061",
  "courses": [
   {
    "course_id": "R1C1_15112026_AUTEUIL",
@@ -476,15 +476,51 @@
     "partants_actifs": 12
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 12,
+     "nom": "MANHATTAN EMGE",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 3,
+     "nom": "MISTER JENILOU",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 11,
+     "nom": "MISTER DU CHOQUEL",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 10,
+     "nom": "MALICE D'ATOUT",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    12,
+    3,
+    11,
+    10
+   ],
+   "non_classes": [
+    {
+     "num": 6,
+     "nom": "MARAVILLA DU METZ",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": false,
@@ -496,21 +532,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/15112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-15T10:00:22Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-15T10:00:22Z",
+    "derniere_verification_utc": "2026-11-15T10:00:22Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-15T10:00:22Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       12,
+       3,
+       11,
+       10
+      ]
+     }
+    ]
    }
   },
   {
@@ -535,7 +585,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
