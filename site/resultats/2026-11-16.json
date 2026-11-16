@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "7b4d385a19439057335e3aabb614e990451acf87",
-  "run_id": "43864858993",
+  "commit": "5997a2e5d4dfc44fc4155af6bf22cbc576b59258",
+  "run_id": "43867131229",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-16",
- "genere_le_utc": "2026-11-16T12:17:05Z",
+ "genere_le_utc": "2026-11-16T12:33:09Z",
  "nb_courses": 48,
  "compte_par_statut": {
-  "EN_ATTENTE": 43,
-  "PROVISOIRE": 0,
-  "DEFINITIVE": 5,
+  "EN_ATTENTE": 41,
+  "PROVISOIRE": 1,
+  "DEFINITIVE": 6,
   "ANNULEE": 0
  },
- "empreinte_sha256": "4a64eda215b54d50d137a6242ded8c594eb8e0f5fa4a2b93f63a703a2668c158",
+ "empreinte_sha256": "c2df4ecc509367671266228f2c5ced713f98926ab963caedc4c8ac554b1c5ad9",
  "courses": [
   {
    "course_id": "R1C1_16112026_VINCENNES",
@@ -662,7 +662,7 @@
     "verifiee_le_utc": "2026-11-16T11:00:25Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-16T11:15:24Z",
-    "derniere_verification_utc": "2026-11-16T12:15:22Z"
+    "derniere_verification_utc": "2026-11-16T12:30:24Z"
    },
    "correction": {
     "version": 2,
@@ -823,7 +823,7 @@
     "verifiee_le_utc": "2026-11-16T11:45:27Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-16T11:45:27Z",
-    "derniere_verification_utc": "2026-11-16T12:15:22Z"
+    "derniere_verification_utc": "2026-11-16T12:30:24Z"
    },
    "correction": {
     "version": 2,
@@ -973,7 +973,7 @@
     "verifiee_le_utc": "2026-11-16T12:15:22Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-16T12:15:22Z",
-    "derniere_verification_utc": "2026-11-16T12:15:22Z"
+    "derniere_verification_utc": "2026-11-16T12:30:24Z"
    },
    "correction": {
     "version": 2,
@@ -1032,7 +1032,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "DEPART_CONFIRME"
    },
    "classement": [],
    "arrivee": [],
@@ -2323,7 +2323,7 @@
     "verifiee_le_utc": "2026-11-16T12:00:27Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-16T12:00:27Z",
-    "derniere_verification_utc": "2026-11-16T12:15:22Z"
+    "derniere_verification_utc": "2026-11-16T12:30:24Z"
    },
    "correction": {
     "version": 1,
@@ -2367,15 +2367,98 @@
     "partants_actifs": 12
    },
    "statut": {
-    "code": "EN_ATTENTE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "CHEVAUX_SOUS_ORDRES"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 7,
+     "nom": "MILZANO DU BOSSU",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 12,
+     "nom": "MUFASA ACE",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 10,
+     "nom": "MALICE DU GERS",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 3,
+     "nom": "MASSETTA BELLA",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 9,
+     "nom": "MISS DE GUEZ",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 11,
+     "nom": "MUSE DU LOISIR",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 6,
+     "nom": "MAEVA",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 8,
+     "nom": "MAGIC DE BELAISE",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 5,
+     "nom": "MISTER DE HOUELLE",
+     "dead_heat": false
+    },
+    {
+     "rang": 10,
+     "num": 2,
+     "nom": "MYLOVELYMATCH",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    7,
+    12,
+    10,
+    3,
+    9,
+    11,
+    6,
+    8,
+    5,
+    2
+   ],
+   "non_classes": [
+    {
+     "num": 1,
+     "nom": "MERVEILLE DU FRENE",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 4,
+     "nom": "MAC GYVER",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": false,
@@ -2387,21 +2470,41 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/16112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "premiere_lecture_utc": "2026-11-16T12:30:24Z",
+    "definitive_depuis_utc": "2026-11-16T12:30:24Z",
+    "verifiee_le_utc": "2026-11-16T12:30:24Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-16T12:30:24Z",
+    "derniere_verification_utc": "2026-11-16T12:30:24Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "DEFINITIVE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-16T12:30:24Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       7,
+       12,
+       10,
+       3,
+       9,
+       11,
+       6,
+       8,
+       5,
+       2
+      ]
+     }
+    ]
    }
   },
   {
@@ -2426,7 +2529,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -2903,7 +3006,7 @@
     "verifiee_le_utc": "2026-11-16T12:00:27Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-16T12:00:27Z",
-    "derniere_verification_utc": "2026-11-16T12:15:22Z"
+    "derniere_verification_utc": "2026-11-16T12:30:24Z"
    },
    "correction": {
     "version": 1,
@@ -2948,15 +3051,54 @@
     "partants_actifs": 13
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_DANS_TROIS_MINUTES"
+    "pmu_statut": "ARRIVEE_PROVISOIRE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 5,
+     "nom": "NUIT D'ORTUGE",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 7,
+     "nom": "NACREE DES ARRIS",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 12,
+     "nom": "NOBLESSE DELA COUR",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    5,
+    7,
+    12
+   ],
+   "non_classes": [
+    {
+     "num": 1,
+     "nom": "NINO MOUROTAIS",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 10,
+     "nom": "NEPTUNE DE DUSSAC",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 13,
+     "nom": "NUEVA CHICA GIO",
+     "incident": "ARRETE"
+    }
+   ],
    "non_partants": [
     {
      "num": 2,
@@ -2973,21 +3115,34 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/16112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-16T12:30:24Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-16T12:30:24Z",
+    "derniere_verification_utc": "2026-11-16T12:30:24Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-16T12:30:24Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       5,
+       7,
+       12
+      ]
+     }
+    ]
    }
   },
   {
@@ -3012,7 +3167,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
