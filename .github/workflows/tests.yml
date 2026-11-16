@@ -45,3 +45,6 @@ jobs:
 
       - name: Run the test suite (tests/ and turf_lab/tests/)
         run: python -m pytest -q -p no:cacheprovider -rs tests turf_lab/tests
+
+      - name: Run the Cloudflare clock tests (node, preinstalled on the runner)
+        run: node --test infra/cloudflare/horloge/worker.test.mjs

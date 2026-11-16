@@ -25,13 +25,22 @@ passent l'un après l'autre, et le second remplace le premier.
 |---|---|---|
 | 01h17 | `history_export.yml` (export de l'historique Radar) | tous les jours |
 | 05h05 et 05h50 | `repetition_ombre.yml` (répétition générale) | du 01/10 au 06/10 |
-| 05h05 et 05h50 | `fondamental_nuit.yml`, action `nuit` (ombre) | du 08/10 au 24/11 |
+| 05h05 et 05h50 | `fondamental_nuit.yml`, action `nuit` (calcul de nuit du fondamental) | depuis le 08/10, sans date de fin |
 | 01h17 | `garde_ombre.yml` (garde de confidentialité de l'ombre) | du 08/10 au 25/11 |
 | 01h17 | `ombre_compteur.yml` (compteur quotidien de l'ombre) | du 08/10 au 25/11 |
+| 07h50 | `recette_compteur.yml`, mode `matin` (recette A / repli du jour) | à partir du 30/11 |
+| 01h17 | `recette_compteur.yml`, mode `jour` (veille complète) | à partir du 01/12 |
 
-Le 24/11 est le dernier jour d'ombre possible avec une remise à zéro (version
-corrigée au 14e jour, puis 35 jours). Avant le gel, le calcul de nuit refuse
-d'écrire (`OMBRE_PAS_OUVERTE`).
+Décision de Steph du 13/11 : recette A en production sur l'édition du matin à
+partir du 30/11, calcul de nuit maintenu après le 24/11. Le calcul de nuit n'a
+donc plus de date de fin. Avant le gel, il refusait d'écrire
+(`OMBRE_PAS_OUVERTE`). L'horloge reste en UTC : aucune date de bascule du
+verrou du matin n'y est écrite (décision de Steph du 12/11).
+
+Le compteur de la recette A ne lit que des marqueurs et ne publie que des
+comptes. Son passage de 07h50 UTC tombe après le verrou du matin (06h30 UTC en
+été, 07h30 UTC en hiver, base envoyée sur R2 quelques minutes après) et avant
+la passe du dev Bases (09h05 UTC).
 
 La garde et le compteur s'ajoutent le 09/10 (décision de Steph) : leurs
 horaires GitHub partaient avec 4 à 7 heures de retard, et le premier compteur
@@ -122,6 +131,32 @@ Le lendemain à 01h17 UTC, l'onglet *Actions* de GitHub doit montrer trois
 lancements *workflow_dispatch* : l'export de l'historique, la garde et le
 compteur. Le calcul de nuit de 05h05 et 05h50 ne change pas.
 
+## Mise à jour du 22/11 : calcul de nuit permanent et compteur de la recette A (environ 10 minutes)
+
+À faire le dimanche 22/11, dans la journée (décision de Steph du 13/11). Un
+seul redéploiement : il couvre le calcul de nuit après le 24/11 et le compteur
+de la recette A, actif seul à partir du 30/11. Aucun nouveau secret.
+
+1. Ouvre `infra/cloudflare/horloge/worker.js` sur GitHub (branche `main`),
+   bouton **Raw**, puis copie tout le texte.
+2. dash.cloudflare.com : **Workers & Pages**, `turf-horloge`, **Edit code**.
+   Remplace tout le code par le texte copié, puis clique sur **Deploy**.
+3. **Settings**, **Trigger events** (*Cron Triggers*), **Add** : ajoute un
+   quatrième horaire, `50 7 * * *`. Les quatre horaires doivent être :
+   `17 1 * * *`, `5 5 * * *`, `50 5 * * *` et `50 7 * * *` (le forfait
+   gratuit en permet cinq par compte).
+4. Onglet **Deployments** : note l'identifiant de la nouvelle version (les 8
+   premiers caractères) et transmets-le au labo, qui l'inscrit au registre.
+
+Vérifications :
+- le 23/11 et les jours suivants à 05h05 et 05h50 UTC : l'onglet *Actions* de
+  GitHub montre toujours le calcul de nuit lancé par *workflow_dispatch* ;
+- le 26/11 à 01h17 UTC : seul l'export de l'historique est lancé (la garde et
+  le compteur de l'ombre se sont arrêtés après le 25/11) ;
+- du 22/11 au 29/11, l'horaire de 07h50 n'a rien à lancer (`RIEN_A_LANCER`
+  dans les journaux du Worker) ; le 30/11 à 07h50 UTC, le premier
+  « Compteur de la recette A » part.
+
 ## Lire les journaux
 
 | Ligne | Sens |
@@ -143,8 +178,10 @@ GitHub.
 - **Si le jeton fuitait**, il ne permettrait que de lancer les workflows de ce
   dépôt : ni lire les secrets, ni modifier le code. Le révoquer suffit
   (GitHub, *Fine-grained tokens*, **Revoke**).
-- **Arrêt :** le plan de l'ombre s'arrête seul après le 25/11. Pour arrêter plus tôt,
-  supprime les *Cron Triggers* ou le Worker, puis révoque le jeton.
+- **Arrêt :** la garde et le compteur de l'ombre s'arrêtent seuls après le
+  25/11. Le calcul de nuit et le compteur de la recette A n'ont pas de date de
+  fin (production). Pour tout arrêter, supprime les *Cron Triggers* ou le
+  Worker, puis révoque le jeton.
 - **Tests :** `node --test infra/cloudflare/horloge/worker.test.mjs` teste la
   logique du Worker. `tests/test_horloge_cloudflare.py` vérifie que chaque
   workflow lancé déclare les entrées envoyées, et que les horaires du plan sont

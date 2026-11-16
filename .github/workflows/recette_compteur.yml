@@ -1,0 +1,69 @@
+name: Compteur de la recette A (édition du matin)
+
+# Décision de Steph du 13/11/2026 : recette A en production sur l'édition du
+# matin à compter du 30/11. Ce compteur lit une COPIE en lecture seule de la
+# base (jamais renvoyée sur R2) et ne publie que des comptes : éditions du
+# matin, à marché réel, en recette A, en repli (par motif, avec les courses en
+# repli), sans marqueur, et les versions portées. Aucune probabilité, aucun
+# témoin : aucune lecture intermédiaire de la règle d'arrêt (dépôt public).
+# Lancement : horloge Cloudflare à 07h50 UTC (mode matin, à partir du 30/11)
+# et à 01h17 UTC (mode jour, veille complète, à partir du 01/12) ; les
+# horaires GitHub ci-dessous restent en filet. Avant le 30/11, il ne compte
+# rien (AVANT_PRODUCTION). Une alerte fait échouer le job : GitHub prévient.
+# Voir turf_lab/recette_compteur.py.
+
+on:
+  schedule:
+    - cron: "35 8 * * *"
+    - cron: "23 9 * * *"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "matin (jour courant, après le verrou) | jour (veille complète)"
+        required: false
+        default: "jour"
+  pull_request:
+    paths:
+      - "turf_lab/recette_compteur.py"
+      - ".github/workflows/recette_compteur.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: recette-compteur
+  cancel-in-progress: false
+
+jobs:
+  compteur:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONUNBUFFERED: "1"
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET: ${{ secrets.R2_BUCKET }}
+      MODE: ${{ github.event.inputs.mode || (github.event.schedule == '35 8 * * *' && 'matin' || 'jour') }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -q --retries 10 --timeout 60 "numpy>=1.26,<3" "boto3>=1.36,<2"
+
+      - name: Fetch a read-only copy of the bench (never pushed)
+        run: python -m turf_lab.r2_store fetch --db copie_banc.db
+
+      - name: Count the morning editions (counts only)
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            python -m turf_lab.recette_compteur --banc copie_banc.db --mode jour --essai
+          else
+            python -m turf_lab.recette_compteur --banc copie_banc.db --mode "$MODE"
+          fi

@@ -18,7 +18,9 @@ test("plan : chaque jour lance les bons workflows", () => {
   assert.deepEqual(noms("5 5 * * *", "2026-10-07"), []);                     // jour du gel : rien
   assert.deepEqual(noms("5 5 * * *", "2026-10-08"), ["fondamental_nuit.yml"]);
   assert.deepEqual(noms("50 5 * * *", "2026-11-24"), ["fondamental_nuit.yml"]);
-  assert.deepEqual(noms("5 5 * * *", "2026-11-25"), []);
+  // Décision de Steph du 13/11 : calcul de nuit maintenu après le 24/11, sans date de fin.
+  assert.deepEqual(noms("5 5 * * *", "2026-11-25"), ["fondamental_nuit.yml"]);
+  assert.deepEqual(noms("50 5 * * *", "2027-06-01"), ["fondamental_nuit.yml"]);
   assert.deepEqual(taches("50 5 * * *", "2026-10-02")[0].inputs, { prevu: "05:50" });
 });
 
@@ -28,6 +30,7 @@ test("plan : garde et compteur de l'ombre à 01h17, du 08/10 au 25/11", () => {
   assert.deepEqual(noms("2026-10-10"), ["history_export.yml", "garde_ombre.yml", "ombre_compteur.yml"]);
   assert.deepEqual(noms("2026-11-25"), ["history_export.yml", "garde_ombre.yml", "ombre_compteur.yml"]);
   assert.deepEqual(noms("2026-11-26"), ["history_export.yml"]);
+  assert.deepEqual(noms("2026-11-30"), ["history_export.yml"]);
   assert.deepEqual(taches("17 1 * * *", "2026-10-10")[2].inputs, {});
   for (const cron of ["5 5 * * *", "50 5 * * *"]) {                          // créneaux de nuit inchangés
     assert.deepEqual(taches(cron, "2026-10-10").map((t) => t.workflow), ["fondamental_nuit.yml"]);
@@ -106,4 +109,15 @@ test("événement programmé : lance le plan du jour via waitUntil", async () =>
     globalThis.fetch = orig;
   }
   assert.deepEqual(urls, ["https://api.github.com/repos/Moriah12783/turf-engine/actions/workflows/fondamental_nuit.yml/dispatches"]);
+});
+
+test("plan : compteur de la recette A, matin dès le 30/11 et veille dès le 01/12", () => {
+  const noms = (cron, jour) => taches(cron, jour).map((t) => t.workflow);
+  assert.deepEqual(noms("50 7 * * *", "2026-11-22"), []);                    // déployé le 22/11, inactif
+  assert.deepEqual(noms("50 7 * * *", "2026-11-29"), []);
+  assert.deepEqual(noms("50 7 * * *", "2026-11-30"), ["recette_compteur.yml"]);
+  assert.deepEqual(taches("50 7 * * *", "2026-11-30")[0].inputs, { mode: "matin" });
+  assert.deepEqual(noms("17 1 * * *", "2026-12-01"), ["history_export.yml", "recette_compteur.yml"]);
+  assert.deepEqual(taches("17 1 * * *", "2026-12-01")[1].inputs, { mode: "jour" });
+  assert.deepEqual(noms("50 7 * * *", "2027-06-01"), ["recette_compteur.yml"]);
 });
