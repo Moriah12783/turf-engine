@@ -32,7 +32,7 @@ def _entrees(workflow):
 def test_chaque_tache_lance_un_workflow_existant_avec_des_entrees_declarees():
     taches = _plan()
     assert {w for _, w, _ in taches} == {"history_export.yml", "repetition_ombre.yml", "fondamental_nuit.yml",
-                                        "garde_ombre.yml", "ombre_compteur.yml"}
+                                        "garde_ombre.yml", "ombre_compteur.yml", "recette_compteur.yml"}
     for _, workflow, cles in taches:
         assert set(cles) <= _entrees(workflow), (workflow, cles)
 
@@ -40,22 +40,28 @@ def test_chaque_tache_lance_un_workflow_existant_avec_des_entrees_declarees():
 def test_horaires_du_plan_identiques_a_wrangler():
     toml = open(os.path.join(DOSSIER, "wrangler.toml"), encoding="utf-8").read()
     crons = set(re.findall(r'"([^"]+)"', toml[toml.index("crons"):]))
-    assert {c for c, _, _ in _plan()} == crons == {"17 1 * * *", "5 5 * * *", "50 5 * * *"}
+    assert {c for c, _, _ in _plan()} == crons == {"17 1 * * *", "5 5 * * *", "50 5 * * *", "50 7 * * *"}
+    assert len(crons) <= 5                                   # limite du forfait gratuit : 5 déclencheurs par compte
+
+
+def _lignes(workflow):
+    texte = open(os.path.join(DOSSIER, "worker.js"), encoding="utf-8").read()
+    return [l for l in texte.splitlines() if f'workflow: "{workflow}"' in l and l.strip().startswith("{")]
 
 
 def test_filet_github_du_calcul_de_nuit_sur_les_jours_de_l_horloge():
-    """Gel du 07/10 : les horaires GitHub du calcul de nuit sont un filet, sur
-    les mêmes jours que l'horloge (08/10-24/11), et un filet parti après la
-    limite d'écriture du jour (turf_lab/plancher_matin.py) ne calcule rien et
+    """Décision de Steph du 13/11 : calcul de nuit maintenu après le 24/11,
+    sans date de fin (recette A en production au 30/11). Les horaires GitHub
+    restent un filet, chaque jour, et un filet parti après la limite
+    d'écriture du jour (turf_lab/plancher_matin.py) ne calcule rien et
     n'envoie rien."""
-    texte = open(os.path.join(DOSSIER, "worker.js"), encoding="utf-8").read()
-    jours = set(re.findall(r'workflow: "fondamental_nuit\.yml".*?du: "([\d-]+)", au: "([\d-]+)"', texte))
-    assert jours == {("2026-10-08", "2026-11-24")}
+    lignes = _lignes("fondamental_nuit.yml")
+    assert len(lignes) == 2
+    assert all('du: "2026-10-08"' in l and "au:" not in l for l in lignes)
     chemin = os.path.join(RACINE, ".github", "workflows", "fondamental_nuit.yml")
     doc = yaml.safe_load(open(chemin, encoding="utf-8"))
     declencheurs = doc.get("on", doc.get(True)) or {}
-    assert {c["cron"] for c in declencheurs["schedule"]} == {
-        "5 5 8-31 10 *", "50 5 8-31 10 *", "5 5 1-24 11 *", "50 5 1-24 11 *"}
+    assert {c["cron"] for c in declencheurs["schedule"]} == {"5 5 * * *", "50 5 * * *"}
     etapes = doc["jobs"]["nuit"]["steps"]
     garde = [e for e in etapes if str(e.get("name", "")).startswith("Late GitHub safety net")]
     assert len(garde) == 1
@@ -68,3 +74,16 @@ def test_filet_github_du_calcul_de_nuit_sur_les_jours_de_l_horloge():
     assert [e.get("name") for e in etapes[:etapes.index(garde)]] == ["Checkout Repository", "Set up Python"]
     nuit = [e for e in etapes if "env.ACTION == 'nuit'" in str(e.get("if", ""))]
     assert len(nuit) == 3 and all("env.FILET_HORS_DELAI != '1'" in e["if"] for e in nuit)
+
+
+def test_compteur_de_la_recette_a_dans_le_deploiement_du_22_11():
+    """Le compteur recette A / repli est dans le plan dès le redéploiement du
+    22/11, avec ses dates de début : aucun second redéploiement."""
+    lignes = _lignes("recette_compteur.yml")
+    assert len(lignes) == 2 and all("au:" not in l for l in lignes)
+    matin = [l for l in lignes if 'cron: "50 7 * * *"' in l]
+    nuit = [l for l in lignes if 'cron: "17 1 * * *"' in l]
+    assert len(matin) == 1 and 'mode: "matin"' in matin[0] and 'du: "2026-11-30"' in matin[0]
+    assert len(nuit) == 1 and 'mode: "jour"' in nuit[0] and 'du: "2026-12-01"' in nuit[0]
+    from turf_lab import recette_compteur
+    assert recette_compteur.DEBUT_PRODUCTION == "2026-11-30"

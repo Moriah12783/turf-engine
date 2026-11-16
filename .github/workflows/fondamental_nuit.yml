@@ -2,9 +2,11 @@ name: Fondamental de nuit (ombre NVE)
 
 # Règle arrêtée avec le dev NVE le 28/09/2026, GELÉE le 07/10/2026
 # (docs/OMBRE_FONDAMENTAL.md) : DEBUT_OMBRE = 2026-10-08. Le lancement est
-# fait par l'horloge Cloudflare (turf-horloge) à 05h05 et 05h50 UTC, du 08/10
-# au 24/11. Les horaires GitHub ci-dessous, sur les mêmes jours, ne sont qu'un
-# filet : ils partent souvent avec plusieurs heures de retard. Un horaire
+# fait par l'horloge Cloudflare (turf-horloge) à 05h05 et 05h50 UTC, chaque
+# jour depuis le 08/10 et sans date de fin : décision de Steph du 13/11, recette
+# A en production sur l'édition du matin à partir du 30/11, calcul de nuit
+# maintenu après le 24/11. Les horaires GitHub ci-dessous, chaque jour, ne sont
+# qu'un filet : ils partent souvent avec plusieurs heures de retard. Un horaire
 # GitHub parti après la limite d'écriture du jour ne calcule rien et n'envoie
 # rien (FILET_HORS_DELAI) : le passage de l'horloge du matin fait foi.
 # Nuit : miroir historique (R2 privé, lecture seule) + programme PMU du jour
@@ -25,10 +27,8 @@ name: Fondamental de nuit (ombre NVE)
 
 on:
   schedule:
-    - cron: "5 5 8-31 10 *"
-    - cron: "50 5 8-31 10 *"
-    - cron: "5 5 1-24 11 *"
-    - cron: "50 5 1-24 11 *"
+    - cron: "5 5 * * *"
+    - cron: "50 5 * * *"
   workflow_dispatch:
     inputs:
       action:

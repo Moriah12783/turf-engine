@@ -9,8 +9,9 @@
 //
 // Il ne fait rien d'autre : aucune donnée lue ni écrite, aucune page publique
 // (fetch répond 404). Les garde-fous restent dans les workflows eux-mêmes
-// (créneau 00h-05h du Radar, limites de 06h20 et 06h28, OMBRE_PAS_OUVERTE,
-// lecture impossible pour le compteur de l'ombre).
+// (créneau 00h-05h du Radar, limites d'écriture et d'envoi lues dans
+// turf_lab/plancher_matin.py, OMBRE_PAS_OUVERTE, lecture impossible pour les
+// compteurs). Aucune date de bascule n'est écrite ici : l'horloge reste en UTC.
 // Seul secret : GITHUB_TOKEN, jeton GitHub limité au lancement des workflows
 // de ce dépôt (Actions : lecture et écriture). Il n'est jamais journalisé.
 // Guide : docs/HORLOGE_CLOUDFLARE.md.
@@ -28,14 +29,23 @@ const PLAN = [
   // deux workflows restent en filet. Jusqu'au 25/11, lecture au plus tard.
   { cron: "17 1 * * *", workflow: "garde_ombre.yml", inputs: {}, du: "2026-10-08", au: "2026-11-25" },
   { cron: "17 1 * * *", workflow: "ombre_compteur.yml", inputs: {}, du: "2026-10-08", au: "2026-11-25" },
+  // Recette A en production sur l'édition du matin (décision de Steph du 13/11) :
+  // compteur recette A / repli, en comptes seulement. À 01h17, la veille
+  // complète, à partir du lendemain du premier jour de production.
+  { cron: "17 1 * * *", workflow: "recette_compteur.yml", inputs: { mode: "jour" }, du: "2026-12-01" },
   // Répétition générale de l'ombre (GO de Steph du 28/09).
   { cron: "5 5 * * *", workflow: "repetition_ombre.yml", inputs: { prevu: "05:05" }, du: "2026-10-01", au: "2026-10-06" },
   { cron: "50 5 * * *", workflow: "repetition_ombre.yml", inputs: { prevu: "05:50" }, du: "2026-10-01", au: "2026-10-06" },
-  // Ombre : calcul de nuit du fondamental, du premier jour d'ombre (08/10) au
-  // dernier jour possible avec une remise à zéro (version corrigée au 14e jour,
-  // puis 35 jours : 24/11). Avant le gel, le calcul refuse (OMBRE_PAS_OUVERTE).
-  { cron: "5 5 * * *", workflow: "fondamental_nuit.yml", inputs: { action: "nuit" }, du: "2026-10-08", au: "2026-11-24" },
-  { cron: "50 5 * * *", workflow: "fondamental_nuit.yml", inputs: { action: "nuit" }, du: "2026-10-08", au: "2026-11-24" },
+  // Calcul de nuit du fondamental, depuis le premier jour d'ombre (08/10) et
+  // sans date de fin : recette A en production sur l'édition du matin à partir
+  // du 30/11 (décision de Steph du 13/11 : calcul de nuit maintenu après le
+  // 24/11). Avant le gel, le calcul refusait (OMBRE_PAS_OUVERTE).
+  { cron: "5 5 * * *", workflow: "fondamental_nuit.yml", inputs: { action: "nuit" }, du: "2026-10-08" },
+  { cron: "50 5 * * *", workflow: "fondamental_nuit.yml", inputs: { action: "nuit" }, du: "2026-10-08" },
+  // Compteur recette A / repli du jour, après le verrou du matin (06h30 UTC en
+  // été, 07h30 UTC en hiver ; envoi de la base sur R2 quelques minutes après)
+  // et avant la passe du dev Bases (09h05 UTC). À partir du 30/11.
+  { cron: "50 7 * * *", workflow: "recette_compteur.yml", inputs: { mode: "matin" }, du: "2026-11-30" },
 ];
 
 export function taches(cron, jour) {

@@ -56,3 +56,4 @@ def test_python_311_et_suite_sans_le_test_horaire():
     commandes = " ".join(str(e.get("run", "")) for e in etapes)
     assert "pytest" in commandes and "tests turf_lab/tests" in commandes
     assert "test_verrouillage_t15" not in commandes
+    assert "node --test infra/cloudflare/horloge/worker.test.mjs" in commandes   # logique de l'horloge
