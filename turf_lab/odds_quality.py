@@ -112,6 +112,15 @@ def priced_ratio(runners: Iterable[Dict[str, Any]]) -> float:
     return priced / len(active)
 
 
+def priced_counts(runners: Iterable[Dict[str, Any]]) -> "tuple[int, int]":
+    """(partants actifs, partants actifs dont au moins une cote est réelle) :
+    les deux nombres de ``priced_ratio``, même définition (verrous_tentatives).
+    Une cote manquante sur 7 partants et quatre sur 28 donnent des parts
+    voisines ; les deux nombres les distinguent."""
+    active = active_runners(runners)
+    return len(active), sum(1 for r in active if not all_default_odds(r))
+
+
 def odds_are_real(runners: Iterable[Dict[str, Any]], threshold: float = MIN_PRICED_RATIO) -> bool:
     """True si la course est suffisamment cotée pour être verrouillée / diffusée."""
     return priced_ratio(runners) >= threshold

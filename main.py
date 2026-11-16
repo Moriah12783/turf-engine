@@ -11,7 +11,7 @@ from turf_lab.benchmark import TurfBenchmarkLab
 from turf_lab.simulator import RaceSimulator
 from turf_lab.html_report import generate_html_dashboard, export_site_archives
 from turf_lab.daily_sync import DailySyncManager
-from turf_lab import plancher_matin
+from turf_lab import plancher_matin, verrous
 from turf_lab.cloudflare_deploy import CloudflarePagesDeployer
 from turf_lab.results_export import export_results_json
 from turf_lab.radar_bridge import push_report_summary
@@ -156,6 +156,11 @@ def main():
 
         # (Transparence) Plus aucune injection de reunions de reference :
         # seules les courses reelles du flux PMU alimentent la base.
+
+        # verrous_tentatives (docs/VERROUS_TENTATIVES.md) : REFUSE des courses
+        # fermees, PUIS rapport de la veille (rapports/verrous/AAAA-MM-JJ.md,
+        # committe avec les exports du site). Jamais d'erreur remontee.
+        verrous.passage(db, manager, os.path.dirname(os.path.abspath(__file__)))
 
     elif action == "verify":
         # Re-verification des arrivees (suivi des corrections) : une seule
