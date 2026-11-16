@@ -23,9 +23,17 @@ l'ombre : `docs/OMBRE_FONDAMENTAL.md`.
 
   Le moteur importe les constantes de `turf_lab.fondamental_verrou` : un
   changement de nom ne se fait qu'à un seul endroit.
-- **Rien ne change** si la table est absente, s'il n'y a aucune ligne pour la
-  course, ou si la course a plusieurs `model_version` ou plusieurs
-  `train_until` : les moteurs reçoivent la même liste qu'avant.
+- **Quatrième clé, `fondamental_statut` (`CLE_STATUT`)**, pour la recette A en
+  production au 30/11/2026 (décision de Steph du 13/11) : chaque partant de la
+  copie porte le statut de la ligne (`PORTE`, `TABLE_ABSENTE`, `AUCUNE_LIGNE`,
+  `VERSIONS_MULTIPLES`, `TRAIN_UNTIL_MULTIPLES`, `ERREUR`), dans tous les cas.
+  Le moteur, qui ne connaît pas l'horizon, sait ainsi qu'il calcule une
+  édition du matin et peut la marquer `REPLI_NVE` avec son motif quand rien
+  n'a pu être porté. `CLES` reste les trois clés du fondamental.
+- **Aucune probabilité n'est portée** si la table est absente, s'il n'y a
+  aucune ligne pour la course, ou si la course a plusieurs `model_version` ou
+  plusieurs `train_until` : les moteurs reçoivent une copie des partants qui
+  ne porte que le statut.
 - **Aucun filtre, aucun calcul** : un partant absent de la table ne porte
   rien. C'est le moteur qui décide (jamais d'ombre partielle, marché réel
   exigé, renormalisation sur les partants valides).
@@ -78,5 +86,5 @@ au moins une valeur mixte.
 
 ## Tests
 
-`tests/test_ombre_daily_sync.py` : 15 tests (11 pour la ligne du verrou,
+`tests/test_ombre_daily_sync.py` : 16 tests (12 pour la ligne du verrou,
 4 pour le déferrage), ajoutés en 10/10 à `tester_correctif_resultats.bat`.

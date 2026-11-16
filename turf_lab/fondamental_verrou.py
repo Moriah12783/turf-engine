@@ -15,15 +15,27 @@ COPIE des partants passés aux moteurs, jamais sur les partants d'origine :
   CLE_MODEL_VERSION  -> model_version
   CLE_TRAIN_UNTIL    -> train_until
 
+Quatrième clé (recette A en production au 30/11/2026, décision de Steph du
+13/11), posée sur CHAQUE partant de la copie, dans TOUS les cas :
+
+  CLE_STATUT         -> le statut de la ligne, celui du journal (PORTE,
+                        TABLE_ABSENTE, AUCUNE_LIGNE, VERSIONS_MULTIPLES,
+                        TRAIN_UNTIL_MULTIPLES, ERREUR)
+
+Le moteur n'a aucune logique d'horizon : c'est cette clé qui lui dit qu'il
+calcule une édition du matin, y compris quand aucune probabilité n'a pu être
+portée. Il peut alors marquer l'édition ``REPLI_NVE`` avec son motif.
+
 Cette ligne ne filtre rien et ne calcule rien. C'est le moteur qui décide :
-ombre complète ou rien, marché réel exigé, renormalisation sur les partants
+recette complète ou rien, marché réel exigé, renormalisation sur les partants
 valides, cas comptés.
 
 Garanties :
 
 - table absente, aucune ligne pour la course, plusieurs ``model_version`` ou
-  plusieurs ``train_until`` pour la course : les partants passent tels quels
-  (la même liste), le cas est journalisé ;
+  plusieurs ``train_until`` pour la course, erreur de lecture : aucune
+  probabilité n'est portée, la copie des partants ne porte que le statut, le
+  cas est journalisé ;
 - les partants d'origine ne sont jamais modifiés. Ils servent aux horizons
   suivants de la même passe (T90 peut être dû dans la passe qui pose
   T_MATIN) et au pont RADAR_V4. Le moteur n'ayant aucune logique d'horizon,
@@ -42,12 +54,28 @@ CLE_P = "p_fondamental"
 CLE_MODEL_VERSION = "fondamental_model_version"
 CLE_TRAIN_UNTIL = "fondamental_train_until"
 CLES = (CLE_P, CLE_MODEL_VERSION, CLE_TRAIN_UNTIL)
+CLE_STATUT = "fondamental_statut"       # hors de CLES : ce n'est pas une donnée du fondamental
+STATUT_PORTE = "PORTE"                  # seul statut sous lequel les trois clés sont portées
 
 
 def porter_fondamental(db, race_id: str,
                        runners: List[Dict[str, Any]]) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
-    """Partants du verrou T_MATIN -> (partants à passer aux moteurs, info de
-    journal). Sans probabilités exploitables, renvoie ``runners`` lui-même."""
+    """Partants du verrou T_MATIN -> (copie des partants à passer aux moteurs,
+    info de journal). Chaque partant de la copie porte ``CLE_STATUT`` ; les
+    trois clés du fondamental ne sont portées que si le statut est ``PORTE``."""
+    partants, info = _lire_et_porter(db, race_id, runners)
+    try:
+        statut = info.get("statut")
+        return [dict(r, **{CLE_STATUT: statut}) for r in partants], info
+    except Exception as exc:  # jamais d'erreur remontée au verrou
+        info["statut_non_porte"] = str(exc)[:200]
+        return partants, info
+
+
+def _lire_et_porter(db, race_id: str,
+                    runners: List[Dict[str, Any]]) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
+    """Lecture de la table et portage des trois clés (corps inchangé depuis le
+    gel du 07/10). Sans probabilités exploitables, renvoie ``runners`` lui-même."""
     info: Dict[str, Any] = {"race_id": race_id, "horizon": HORIZON}
     try:
         conn = db.get_connection()
