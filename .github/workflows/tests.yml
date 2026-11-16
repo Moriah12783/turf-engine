@@ -1,0 +1,47 @@
+name: Tests (Python 3.11)
+
+# Décision de Steph du 16/11/2026 : la suite de tests tourne sur chaque PR,
+# sous Linux avec Python 3.11, la plateforme des passages de production.
+# Conditions du dev NVE (dépôt public) :
+#   - déclencheur pull_request, jamais pull_request_target : le code d'une PR
+#     ne reçoit ni secret ni droit d'écriture ;
+#   - permissions en lecture seule, aucun secret, aucune variable de R2 ;
+#   - groupe de concurrence propre, distinct de turf-sync : un test ne fait
+#     jamais attendre un passage de production.
+# test_verrouillage_t15.py (racine) dépend de l'heure réelle et échouerait la
+# nuit : il n'est pas lancé ici et reste dans tester_correctif_resultats.bat.
+# Voir tests/test_tests_automatiques.py, qui garde ces conditions.
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PYTHONUNBUFFERED: "1"
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install test dependencies
+        run: pip install -q --retries 10 --timeout 60 "numpy>=1.26,<3" "pyyaml>=6,<7" "pytest>=8,<10" "boto3>=1.36,<2" "moto[s3]>=5,<6"
+
+      - name: Run the test suite (tests/ and turf_lab/tests/)
+        run: python -m pytest -q -p no:cacheprovider -rs tests turf_lab/tests
