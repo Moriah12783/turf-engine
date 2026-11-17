@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "d548ec43db7cfe8ea753eb7b1383645042f61767",
-  "run_id": "44063068612",
+  "commit": "344bb5189e99932e9dd4e518130895eee0f27f25",
+  "run_id": "44064027983",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-17",
- "genere_le_utc": "2026-11-17T10:18:30Z",
+ "genere_le_utc": "2026-11-17T10:23:06Z",
  "nb_courses": 32,
  "compte_par_statut": {
-  "EN_ATTENTE": 32,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 31,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 0,
   "ANNULEE": 0
  },
- "empreinte_sha256": "559e897998d7d2a2a0ae70de09dfa2be313ecff4d982241478eaee26649f6f66",
+ "empreinte_sha256": "e2bbe6461550424dee39000ab262f2f2fb33fa07d6e16f0068c6f6663bb3225b",
  "courses": [
   {
    "course_id": "R1C1_17112026_CHANTILLY",
@@ -481,14 +481,44 @@
     "partants_actifs": 7
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_CONFIRME"
+    "pmu_statut": "ARRIVEE_PROVISOIRE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 2,
+     "nom": "ALLEZ PAPA",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 1,
+     "nom": "KERHOULEN",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 7,
+     "nom": "ELLYRA",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 4,
+     "nom": "NO PREVISTO",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    2,
+    1,
+    7,
+    4
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
@@ -501,21 +531,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/17112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-17T10:21:29Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-17T10:21:29Z",
+    "derniere_verification_utc": "2026-11-17T10:21:29Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-17T10:21:29Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       2,
+       1,
+       7,
+       4
+      ]
+     }
+    ]
    }
   },
   {
