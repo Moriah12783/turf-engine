@@ -15203,7 +15203,7 @@
       "autostart": false,
       "scheduled_start_time": "18:17 GMT (19:17 Paris)",
       "is_finished": false,
-      "status": "PARTIE",
+      "status": "ARRIVÉE PROVISOIRE",
       "is_cancelled": false,
       "is_started": true,
       "start_time_utc": "2026-11-17T18:17:00Z",
@@ -15498,7 +15498,7 @@
       "provisoire_reason": null,
       "publishable": true,
       "publication_reason": "OK",
-      "display_horizon": "T30",
+      "display_horizon": "T15",
       "editions_moteur": {
         "T_MATIN": {
           "sel": "4-1-3-2-6-5",
@@ -15520,6 +15520,13 @@
           "lock": "18:07",
           "priced_ratio": 1.0,
           "odds_real": true
+        },
+        "T15": {
+          "sel": "4-5-2-1-3-6",
+          "nominal": false,
+          "lock": "18:22",
+          "priced_ratio": 1.0,
+          "odds_real": true
         }
       },
       "editions_marche": {
@@ -15534,6 +15541,13 @@
           "sel": "4-2-5-1-3-6",
           "nominal": false,
           "lock": "18:07",
+          "priced_ratio": 1.0,
+          "odds_real": true
+        },
+        "T15": {
+          "sel": "4-5-2-1-3-6",
+          "nominal": false,
+          "lock": "18:22",
           "priced_ratio": 1.0,
           "odds_real": true
         }
@@ -15557,20 +15571,20 @@
       "is_no_bet": false,
       "is_master": false,
       "np_nums": [],
-      "sel_moteur": "4-2-5-1-3-6",
+      "sel_moteur": "4-5-2-1-3-6",
       "sel_moteur_list": [
         4,
-        2,
         5,
+        2,
         1,
         3,
         6
       ],
       "bases": [
         4,
-        2
+        5
       ],
-      "outsider_num": 3,
+      "outsider_num": 6,
       "regrets": [],
       "smart_tickets": {
         "contract": 2,
@@ -15581,11 +15595,11 @@
             "libelle": "Couplé Placé (ou 2sur4)",
             "chevaux": [
               4,
-              2
+              5
             ],
             "bases": [
               4,
-              2
+              5
             ],
             "associes": [],
             "combinaisons": 1,
@@ -15593,47 +15607,47 @@
             "cout_total_eur": null,
             "eligible": false,
             "motif_ineligibilite": "PARI_NON_OUVERT",
-            "texte": "4 - 2"
+            "texte": "4 - 5"
           },
           {
             "produit": "TRIO",
             "libelle": "Trio (Couplé Gagnant)",
             "chevaux": [
               4,
-              2,
-              3
+              5,
+              6
             ],
             "bases": [
               4,
-              2
+              5
             ],
             "associes": [
-              3
+              6
             ],
             "combinaisons": 1,
             "mise_unitaire_eur": 1.5,
             "cout_total_eur": null,
             "eligible": false,
             "motif_ineligibilite": "PARI_NON_OUVERT",
-            "texte": "4 - 2 - 3"
+            "texte": "4 - 5 - 6"
           },
           {
             "produit": "QUINTE_PLUS",
             "libelle": "Quinté+ champ réduit",
             "chevaux": [
               4,
-              2,
               5,
+              2,
               1,
               3,
               6
             ],
             "bases": [
               4,
-              2
+              5
             ],
             "associes": [
-              5,
+              2,
               1,
               3,
               6
@@ -15643,50 +15657,50 @@
             "cout_total_eur": null,
             "eligible": false,
             "motif_ineligibilite": "MOINS_DE_8_PARTANTS",
-            "texte": "4 - 2 - X - X - X / 5, 1, 3, 6"
+            "texte": "4 - 5 - X - X - X / 2, 1, 3, 6"
           }
         ],
         "ticket_securite": {
           "pari": "Couplé Placé (ou 2sur4)",
           "chevaux": [
             4,
-            2
+            5
           ],
-          "formule": "4 - 2",
+          "formule": "4 - 5",
           "mise_base_eur": 1.5
         },
         "ticket_trio": {
           "pari": "Trio (Couplé Gagnant)",
           "chevaux": [
             4,
-            2,
-            3
+            5,
+            6
           ],
-          "formule": "4 - 2 - 3",
+          "formule": "4 - 5 - 6",
           "mise_base_eur": 1.5
         },
         "quinte_champ_reduit": {
           "pari": "Quinté+ champ réduit",
           "bases_fixes": [
             4,
-            2
+            5
           ],
           "associes": [
-            5,
+            2,
             1,
             3,
             6
           ],
-          "formule": "4 - 2 - X - X - X / 5, 1, 3, 6",
+          "formule": "4 - 5 - X - X - X / 2, 1, 3, 6",
           "combinaisons": 4,
           "budget_conseille_eur": null
         }
       },
-      "sel_marche": "4-2-5-1-3-6",
+      "sel_marche": "4-5-2-1-3-6",
       "sel_marche_list": [
         4,
-        2,
         5,
+        2,
         1,
         3,
         6
@@ -15701,7 +15715,7 @@
       "couv_marche": "0/5",
       "couv_marche_count": 0,
       "couverture_label": "Course à venir",
-      "decision": "Bases: 4 - 2",
+      "decision": "Bases: 4 - 5",
       "decision_badge": "badge-base",
       "runners": [
         {
@@ -15712,31 +15726,13 @@
           "draw": 1,
           "music": "1p2p5p1p3p1p1p(25)0p2p",
           "morning_odds": 1.3,
-          "live_odds": 2.5,
+          "live_odds": 1.8,
           "o_t90": 2.4,
           "o_t30": 2.4,
-          "o_t15": null,
-          "prob_pct": 34.3,
-          "value_index": 0.82,
-          "smart_signal": "FORTE_HAUSSE_DELAISSE",
-          "is_np": false,
-          "odds_real": true
-        },
-        {
-          "num": 2,
-          "name": "WATT OHM",
-          "driver": "L.LE GEAY",
-          "shoeing": "FERRE",
-          "draw": 3,
-          "music": "9p6p1p3p2p4p6p7p0p3p",
-          "morning_odds": 18.0,
-          "live_odds": 3.9,
-          "o_t90": 4.1,
-          "o_t30": 3.9,
-          "o_t15": null,
-          "prob_pct": 21.8,
-          "value_index": 0.85,
-          "smart_signal": "FORTE_BAISSE_INSIDER",
+          "o_t15": 1.8,
+          "prob_pct": 44.9,
+          "value_index": 0.81,
+          "smart_signal": "LEGERE_HAUSSE",
           "is_np": false,
           "odds_real": true
         },
@@ -15748,12 +15744,30 @@
           "draw": 5,
           "music": "6p9p0p3p2p2p0p6p0p4p",
           "morning_odds": 6.0,
-          "live_odds": 3.8,
+          "live_odds": 4.5,
           "o_t90": 3.3,
           "o_t30": 4.0,
-          "o_t15": null,
-          "prob_pct": 20.7,
-          "value_index": 0.83,
+          "o_t15": 4.5,
+          "prob_pct": 18.1,
+          "value_index": 0.81,
+          "smart_signal": "BAISSE_CONFIRMEE",
+          "is_np": false,
+          "odds_real": true
+        },
+        {
+          "num": 2,
+          "name": "WATT OHM",
+          "driver": "L.LE GEAY",
+          "shoeing": "FERRE",
+          "draw": 3,
+          "music": "9p6p1p3p2p4p6p7p0p3p",
+          "morning_odds": 18.0,
+          "live_odds": 4.8,
+          "o_t90": 4.1,
+          "o_t30": 3.9,
+          "o_t15": 4.8,
+          "prob_pct": 17.9,
+          "value_index": 0.86,
           "smart_signal": "FORTE_BAISSE_INSIDER",
           "is_np": false,
           "odds_real": true
@@ -15766,12 +15780,12 @@
           "draw": 4,
           "music": "4p1p4p0p8p5p0p0p5p7p",
           "morning_odds": 1.1,
-          "live_odds": 7.5,
+          "live_odds": 9.5,
           "o_t90": 9.3,
           "o_t30": 7.4,
-          "o_t15": null,
-          "prob_pct": 11.5,
-          "value_index": 0.85,
+          "o_t15": 9.5,
+          "prob_pct": 9.1,
+          "value_index": 0.86,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -15784,13 +15798,13 @@
           "draw": 6,
           "music": "0p3p7h1h6h6hAh3h0p",
           "morning_odds": 9.0,
-          "live_odds": 13.0,
+          "live_odds": 15.0,
           "o_t90": 15.0,
           "o_t30": 13.0,
-          "o_t15": null,
-          "prob_pct": 7.3,
-          "value_index": 0.95,
-          "smart_signal": "LEGERE_HAUSSE",
+          "o_t15": 15.0,
+          "prob_pct": 6.2,
+          "value_index": 0.92,
+          "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
         },
@@ -15802,12 +15816,12 @@
           "draw": 2,
           "music": "Ah7h3p0p9p1p(25)0p",
           "morning_odds": 6.0,
-          "live_odds": 18.0,
+          "live_odds": 24.0,
           "o_t90": 23.0,
           "o_t30": 21.0,
-          "o_t15": null,
-          "prob_pct": 4.4,
-          "value_index": 0.93,
+          "o_t15": 24.0,
+          "prob_pct": 3.9,
+          "value_index": 0.94,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
