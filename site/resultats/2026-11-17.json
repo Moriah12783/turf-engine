@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "1ae5ecee2d523feab34fb74b2024aabad4edf1e5",
-  "run_id": "44077844966",
+  "commit": "3e97bebba86d84b6dc25184d2013d00a4c2a86ce",
+  "run_id": "44079038403",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-17",
- "genere_le_utc": "2026-11-17T11:54:47Z",
+ "genere_le_utc": "2026-11-17T12:02:25Z",
  "nb_courses": 32,
  "compte_par_statut": {
-  "EN_ATTENTE": 27,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 26,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 5,
   "ANNULEE": 0
  },
- "empreinte_sha256": "31f1def87aca5189f4deb3f1790f2e291f2e06e5fec1f42dd6dc0a41ed62b7f2",
+ "empreinte_sha256": "cab729afa56899e7d67215fec39b789c20db83ab7033654e36fae15ffa32ac3f",
  "courses": [
   {
    "course_id": "R1C1_17112026_CHANTILLY",
@@ -137,7 +137,7 @@
     "verifiee_le_utc": "2026-11-17T11:15:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-17T11:15:24Z",
-    "derniere_verification_utc": "2026-11-17T11:52:19Z"
+    "derniere_verification_utc": "2026-11-17T12:00:34Z"
    },
    "correction": {
     "version": 2,
@@ -368,7 +368,7 @@
     "verifiee_le_utc": "2026-11-17T11:52:19Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-17T11:52:19Z",
-    "derniere_verification_utc": "2026-11-17T11:52:19Z"
+    "derniere_verification_utc": "2026-11-17T12:00:34Z"
    },
    "correction": {
     "version": 2,
@@ -864,7 +864,7 @@
     "verifiee_le_utc": "2026-11-17T10:30:30Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-17T10:30:30Z",
-    "derniere_verification_utc": "2026-11-17T11:52:19Z"
+    "derniere_verification_utc": "2026-11-17T12:00:34Z"
    },
    "correction": {
     "version": 2,
@@ -1095,7 +1095,7 @@
     "verifiee_le_utc": "2026-11-17T11:00:28Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-17T11:00:28Z",
-    "derniere_verification_utc": "2026-11-17T11:52:19Z"
+    "derniere_verification_utc": "2026-11-17T12:00:34Z"
    },
    "correction": {
     "version": 1,
@@ -1345,7 +1345,7 @@
     "verifiee_le_utc": "2026-11-17T11:45:23Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-17T11:45:23Z",
-    "derniere_verification_utc": "2026-11-17T11:52:19Z"
+    "derniere_verification_utc": "2026-11-17T12:00:34Z"
    },
    "correction": {
     "version": 2,
@@ -1410,14 +1410,44 @@
     "partants_actifs": 9
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 5,
+     "nom": "BLUFF",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 7,
+     "nom": "ONE EYE JACK",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 2,
+     "nom": "TEARDROP EXPLODES",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 8,
+     "nom": "SCAT LADY",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    5,
+    7,
+    2,
+    8
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
@@ -1430,21 +1460,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/17112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-17T12:00:34Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-17T12:00:34Z",
+    "derniere_verification_utc": "2026-11-17T12:00:34Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-17T12:00:34Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       5,
+       7,
+       2,
+       8
+      ]
+     }
+    ]
    }
   },
   {
