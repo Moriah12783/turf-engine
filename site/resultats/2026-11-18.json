@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "4cd1787f1ac37721f6ea6a373aa69fa7200b566a",
-  "run_id": "44299753524",
+  "commit": "d3f95864c0f0c1ed3d8bd93bfb6299a350feab0c",
+  "run_id": "44300694340",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-18",
- "genere_le_utc": "2026-11-18T12:03:42Z",
+ "genere_le_utc": "2026-11-18T12:09:32Z",
  "nb_courses": 31,
  "compte_par_statut": {
-  "EN_ATTENTE": 30,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 28,
+  "PROVISOIRE": 2,
   "DEFINITIVE": 1,
   "ANNULEE": 0
  },
- "empreinte_sha256": "5fcb77866552567049f223ea9d409d315a8beb4b8f334b221e84ef7a0c3cec31",
+ "empreinte_sha256": "d88244d7f29fcf6b997c7a78a08363494a6ee8b883a183b159d269962856fb1b",
  "courses": [
   {
    "course_id": "R1C1_18112026_MAUQUENCHY",
@@ -577,7 +577,7 @@
     "verifiee_le_utc": "2026-11-18T11:45:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-18T11:45:24Z",
-    "derniere_verification_utc": "2026-11-18T12:00:27Z"
+    "derniere_verification_utc": "2026-11-18T12:06:19Z"
    },
    "correction": {
     "version": 2,
@@ -633,14 +633,44 @@
     "partants_actifs": 6
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_CONFIRME"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 2,
+     "nom": "ZAKYNA AL ZARAYAN",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 3,
+     "nom": "AGANDJIR",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 4,
+     "nom": "CHAKIFA",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 1,
+     "nom": "SKA DE L'AIGLE",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    2,
+    3,
+    4,
+    1
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
@@ -653,21 +683,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/18112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-18T12:06:19Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-18T12:06:19Z",
+    "derniere_verification_utc": "2026-11-18T12:06:19Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-18T12:06:19Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       2,
+       3,
+       4,
+       1
+      ]
+     }
+    ]
    }
   },
   {
@@ -1446,15 +1490,51 @@
     "partants_actifs": 10
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_DANS_TROIS_MINUTES"
+    "pmu_statut": "ARRIVEE_PROVISOIRE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 4,
+     "nom": "ODESSA ELLIS",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 3,
+     "nom": "OSCAR DES CHARMES",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 5,
+     "nom": "OVERTON SEVEN",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 10,
+     "nom": "ODALYS DE COUZAN",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    4,
+    3,
+    5,
+    10
+   ],
+   "non_classes": [
+    {
+     "num": 1,
+     "nom": "ONDINE FRANCE",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": false,
@@ -1466,21 +1546,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/18112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-18T12:06:19Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-18T12:06:19Z",
+    "derniere_verification_utc": "2026-11-18T12:06:19Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-18T12:06:19Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       4,
+       3,
+       5,
+       10
+      ]
+     }
+    ]
    }
   },
   {
