@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "57e0e1bb3c94c5d2693818a0fa67db68e5ecc9d9",
-  "run_id": "44314329990",
+  "commit": "bcf85bbecc27327494496937ab1447a30f78ed9c",
+  "run_id": "44315345144",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-18",
- "genere_le_utc": "2026-11-18T13:33:35Z",
+ "genere_le_utc": "2026-11-18T13:39:28Z",
  "nb_courses": 31,
  "compte_par_statut": {
-  "EN_ATTENTE": 16,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 14,
+  "PROVISOIRE": 2,
   "DEFINITIVE": 8,
   "ANNULEE": 7
  },
- "empreinte_sha256": "c5f9c24bcc42b449051b1d98c8586c51e0801ffe486a8c469fc141a1249c6f05",
+ "empreinte_sha256": "64300f9ac4699007e01cceb17e58c2e45a501233f6de64464d3b7cb2c9c43aa4",
  "courses": [
   {
    "course_id": "R1C1_18112026_MAUQUENCHY",
@@ -305,7 +305,7 @@
     "verifiee_le_utc": "2026-11-18T13:15:26Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-18T13:15:26Z",
-    "derniere_verification_utc": "2026-11-18T13:30:25Z"
+    "derniere_verification_utc": "2026-11-18T13:36:19Z"
    },
    "correction": {
     "version": 2,
@@ -373,15 +373,68 @@
     "partants_actifs": 16
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_DANS_TROIS_MINUTES"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 9,
+     "nom": "KIMMAJO",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 8,
+     "nom": "KING OF RACE",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 1,
+     "nom": "KLASS D'ESPOIR",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 16,
+     "nom": "ILLICO DE VAU",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 14,
+     "nom": "IL MIO",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    9,
+    8,
+    1,
+    16,
+    14
+   ],
+   "non_classes": [
+    {
+     "num": 3,
+     "nom": "JODLEUSE MAG",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 7,
+     "nom": "JOKER DU DOLLAR",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 12,
+     "nom": "KAMIKAZE",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": false,
@@ -393,21 +446,36 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/18112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-18T13:36:19Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-18T13:36:19Z",
+    "derniere_verification_utc": "2026-11-18T13:36:19Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-18T13:36:19Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       9,
+       8,
+       1,
+       16,
+       14
+      ]
+     }
+    ]
    }
   },
   {
@@ -859,7 +927,7 @@
     "verifiee_le_utc": "2026-11-18T11:45:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-18T11:45:24Z",
-    "derniere_verification_utc": "2026-11-18T13:30:25Z"
+    "derniere_verification_utc": "2026-11-18T13:36:19Z"
    },
    "correction": {
     "version": 2,
@@ -1009,7 +1077,7 @@
     "verifiee_le_utc": "2026-11-18T12:15:31Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-18T12:15:31Z",
-    "derniere_verification_utc": "2026-11-18T13:30:25Z"
+    "derniere_verification_utc": "2026-11-18T13:36:19Z"
    },
    "correction": {
     "version": 2,
@@ -1218,7 +1286,7 @@
     "verifiee_le_utc": "2026-11-18T12:45:22Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-18T12:45:22Z",
-    "derniere_verification_utc": "2026-11-18T13:30:25Z"
+    "derniere_verification_utc": "2026-11-18T13:36:19Z"
    },
    "correction": {
     "version": 2,
@@ -1459,7 +1527,7 @@
     "verifiee_le_utc": "2026-11-18T13:30:25Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-18T13:30:25Z",
-    "derniere_verification_utc": "2026-11-18T13:30:25Z"
+    "derniere_verification_utc": "2026-11-18T13:36:19Z"
    },
    "correction": {
     "version": 2,
@@ -2525,7 +2593,7 @@
     "verifiee_le_utc": "2026-11-18T12:15:31Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-18T12:15:31Z",
-    "derniere_verification_utc": "2026-11-18T13:30:25Z"
+    "derniere_verification_utc": "2026-11-18T13:36:19Z"
    },
    "correction": {
     "version": 2,
@@ -2782,7 +2850,7 @@
     "verifiee_le_utc": "2026-11-18T12:45:22Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-18T12:45:22Z",
-    "derniere_verification_utc": "2026-11-18T13:30:25Z"
+    "derniere_verification_utc": "2026-11-18T13:36:19Z"
    },
    "correction": {
     "version": 2,
@@ -3062,7 +3130,7 @@
     "verifiee_le_utc": "2026-11-18T13:15:26Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-18T13:15:26Z",
-    "derniere_verification_utc": "2026-11-18T13:30:25Z"
+    "derniere_verification_utc": "2026-11-18T13:36:19Z"
    },
    "correction": {
     "version": 2,
@@ -3120,15 +3188,73 @@
     "partants_actifs": 14
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_DANS_TROIS_MINUTES"
+    "pmu_statut": "ARRIVEE_PROVISOIRE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 14,
+     "nom": "LE POULIGUEN",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 13,
+     "nom": "LOVE SHACK",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 4,
+     "nom": "LIGHTNING",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 5,
+     "nom": "LUPIN DOUZOU",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 7,
+     "nom": "LEXO JELOCA",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    14,
+    13,
+    4,
+    5,
+    7
+   ],
+   "non_classes": [
+    {
+     "num": 2,
+     "nom": "LOOPING DE MA",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 3,
+     "nom": "LAGON BLEU",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 9,
+     "nom": "LITTLE ATOUT",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 11,
+     "nom": "LOVICTORY WILLIAMS",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": false,
@@ -3140,21 +3266,36 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/18112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-18T13:36:19Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-18T13:36:19Z",
+    "derniere_verification_utc": "2026-11-18T13:36:19Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-18T13:36:19Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       14,
+       13,
+       4,
+       5,
+       7
+      ]
+     }
+    ]
    }
   },
   {
