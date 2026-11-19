@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "d478573758fc9577ad6e43cf26d1f0d3bd876030",
-  "run_id": "44506230157",
+  "commit": "7264b2c6f09d23566b2528f24c1ea4e645ed22cc",
+  "run_id": "44507167905",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-19",
- "genere_le_utc": "2026-11-19T10:33:40Z",
+ "genere_le_utc": "2026-11-19T10:38:51Z",
  "nb_courses": 33,
  "compte_par_statut": {
-  "EN_ATTENTE": 32,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 31,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 1,
   "ANNULEE": 0
  },
- "empreinte_sha256": "36ec6839309429426024826442696d105bac0815a2965b18e4697818fa5aeaf7",
+ "empreinte_sha256": "3556aa097b7fc24703fadadbe0abd9e7994a46d5c43f593f690c0aad739a286d",
  "courses": [
   {
    "course_id": "R1C1_19112026_SAINT-CLOUD",
@@ -195,7 +195,7 @@
     "verifiee_le_utc": "2026-11-19T10:15:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-19T10:15:24Z",
-    "derniere_verification_utc": "2026-11-19T10:30:23Z"
+    "derniere_verification_utc": "2026-11-19T10:36:20Z"
    },
    "correction": {
     "version": 2,
@@ -252,14 +252,44 @@
     "partants_actifs": 12
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_CONFIRME"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 3,
+     "nom": "CREW DRAGON",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 2,
+     "nom": "MISTER SKETCH",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 9,
+     "nom": "CORTADO",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 1,
+     "nom": "MY UNIVERSE",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    3,
+    2,
+    9,
+    1
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
@@ -272,21 +302,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/19112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-19T10:36:20Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-19T10:36:20Z",
+    "derniere_verification_utc": "2026-11-19T10:36:20Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-19T10:36:20Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       3,
+       2,
+       9,
+       1
+      ]
+     }
+    ]
    }
   },
   {
@@ -761,7 +805,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "JOKEYS_MONTENT_A_CHEVAL"
    },
    "classement": [],
    "arrivee": [],
