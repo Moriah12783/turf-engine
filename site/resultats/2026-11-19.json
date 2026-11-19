@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "32f5d1200bca5a7a672bb9aa04a15a7ec9d8d9f0",
-  "run_id": "44508542069",
+  "commit": "fd420b06be009f0d3810a0495c26790bbe927870",
+  "run_id": "44509444219",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-19",
- "genere_le_utc": "2026-11-19T10:47:03Z",
+ "genere_le_utc": "2026-11-19T10:54:34Z",
  "nb_courses": 33,
  "compte_par_statut": {
-  "EN_ATTENTE": 31,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 30,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "f1522f31ad3f90e2ee463d5f6b1de75af468fa3e4b9054b36b16702dfa690cb0",
+ "empreinte_sha256": "a8a68f674df149df85c198c2370ead52ab8e975933ccea4f8a4c708d1cba67ab",
  "courses": [
   {
    "course_id": "R1C1_19112026_SAINT-CLOUD",
@@ -195,7 +195,7 @@
     "verifiee_le_utc": "2026-11-19T10:15:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-19T10:15:24Z",
-    "derniere_verification_utc": "2026-11-19T10:45:24Z"
+    "derniere_verification_utc": "2026-11-19T10:51:21Z"
    },
    "correction": {
     "version": 2,
@@ -434,7 +434,7 @@
     "verifiee_le_utc": "2026-11-19T10:45:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-19T10:45:24Z",
-    "derniere_verification_utc": "2026-11-19T10:45:24Z"
+    "derniere_verification_utc": "2026-11-19T10:51:21Z"
    },
    "correction": {
     "version": 2,
@@ -499,7 +499,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
    },
    "classement": [],
    "arrivee": [],
@@ -945,15 +945,51 @@
     "partants_actifs": 5
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_CONFIRME"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 3,
+     "nom": "ELCOND'OR FORLONGE",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 1,
+     "nom": "SATURNE PELEM",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 5,
+     "nom": "KARMIX",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 6,
+     "nom": "HILLICO CONTI",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    3,
+    1,
+    5,
+    6
+   ],
+   "non_classes": [
+    {
+     "num": 2,
+     "nom": "GIROLLE DE SIVOLA",
+     "incident": "TOMBE"
+    }
+   ],
    "non_partants": [
     {
      "num": 4,
@@ -970,21 +1006,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/19112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-19T10:51:21Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-19T10:51:21Z",
+    "derniere_verification_utc": "2026-11-19T10:51:21Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-19T10:51:21Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       3,
+       1,
+       5,
+       6
+      ]
+     }
+    ]
    }
   },
   {
@@ -1009,7 +1059,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
