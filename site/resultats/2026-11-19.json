@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "cef79ec1bf2488b1112cee1941feaaad802e84d2",
-  "run_id": "44520733201",
+  "commit": "264fd0e6d2c46064daa6e97951c21a4170a6aba4",
+  "run_id": "44522133516",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-19",
- "genere_le_utc": "2026-11-19T12:09:29Z",
+ "genere_le_utc": "2026-11-19T12:17:56Z",
  "nb_courses": 33,
  "compte_par_statut": {
-  "EN_ATTENTE": 26,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 25,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 7,
   "ANNULEE": 0
  },
- "empreinte_sha256": "e9c2ea45725067ee655afd71020e9bda9046092b1613839037e82638d3ab8469",
+ "empreinte_sha256": "d95c8af018089cba5fa4ad8f6d1a8d0672c4c1328f381ae601ee889be09b3a83",
  "courses": [
   {
    "course_id": "R1C1_19112026_SAINT-CLOUD",
@@ -195,7 +195,7 @@
     "verifiee_le_utc": "2026-11-19T10:15:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-19T10:15:24Z",
-    "derniere_verification_utc": "2026-11-19T12:06:18Z"
+    "derniere_verification_utc": "2026-11-19T12:15:25Z"
    },
    "correction": {
     "version": 2,
@@ -434,7 +434,7 @@
     "verifiee_le_utc": "2026-11-19T10:45:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-19T10:45:24Z",
-    "derniere_verification_utc": "2026-11-19T12:06:18Z"
+    "derniere_verification_utc": "2026-11-19T12:15:25Z"
    },
    "correction": {
     "version": 2,
@@ -703,7 +703,7 @@
     "verifiee_le_utc": "2026-11-19T11:15:22Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-19T11:15:22Z",
-    "derniere_verification_utc": "2026-11-19T12:06:18Z"
+    "derniere_verification_utc": "2026-11-19T12:15:25Z"
    },
    "correction": {
     "version": 2,
@@ -978,7 +978,7 @@
     "verifiee_le_utc": "2026-11-19T11:45:30Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-19T11:45:30Z",
-    "derniere_verification_utc": "2026-11-19T12:06:18Z"
+    "derniere_verification_utc": "2026-11-19T12:15:25Z"
    },
    "correction": {
     "version": 1,
@@ -1030,14 +1030,51 @@
     "partants_actifs": 16
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 4,
+     "nom": "YOKEN",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 1,
+     "nom": "BAILEYS BACHELOR",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 9,
+     "nom": "GARRIS",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 8,
+     "nom": "DANELO",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 7,
+     "nom": "GOUTTES DE DIEU",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    4,
+    1,
+    9,
+    8,
+    7
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
@@ -1050,21 +1087,36 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/19112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-19T12:15:25Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-19T12:15:25Z",
+    "derniere_verification_utc": "2026-11-19T12:15:25Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-19T12:15:25Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       4,
+       1,
+       9,
+       8,
+       7
+      ]
+     }
+    ]
    }
   },
   {
@@ -1456,7 +1508,7 @@
     "verifiee_le_utc": "2026-11-19T11:00:29Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-19T11:00:29Z",
-    "derniere_verification_utc": "2026-11-19T12:06:18Z"
+    "derniere_verification_utc": "2026-11-19T12:15:25Z"
    },
    "correction": {
     "version": 2,
@@ -1607,7 +1659,7 @@
     "verifiee_le_utc": "2026-11-19T11:36:28Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-19T11:36:28Z",
-    "derniere_verification_utc": "2026-11-19T12:06:18Z"
+    "derniere_verification_utc": "2026-11-19T12:15:25Z"
    },
    "correction": {
     "version": 2,
@@ -1835,7 +1887,7 @@
     "verifiee_le_utc": "2026-11-19T12:06:18Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-19T12:06:18Z",
-    "derniere_verification_utc": "2026-11-19T12:06:18Z"
+    "derniere_verification_utc": "2026-11-19T12:15:25Z"
    },
    "correction": {
     "version": 2,
@@ -2451,7 +2503,7 @@
     "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "18:30 GMT (19:30 Paris)",
     "partants_declares": 12,
-    "partants_actifs": 11
+    "partants_actifs": 10
    },
    "statut": {
     "code": "EN_ATTENTE",
@@ -2467,6 +2519,10 @@
     {
      "num": 1,
      "nom": "KELIA DES TOUCHES"
+    },
+    {
+     "num": 6,
+     "nom": "KADO DES MOLLES"
     }
    ],
    "rapports": {
