@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "7264b2c6f09d23566b2528f24c1ea4e645ed22cc",
-  "run_id": "44507167905",
+  "commit": "32f5d1200bca5a7a672bb9aa04a15a7ec9d8d9f0",
+  "run_id": "44508542069",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-19",
- "genere_le_utc": "2026-11-19T10:38:51Z",
+ "genere_le_utc": "2026-11-19T10:47:03Z",
  "nb_courses": 33,
  "compte_par_statut": {
   "EN_ATTENTE": 31,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 1,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "3556aa097b7fc24703fadadbe0abd9e7994a46d5c43f593f690c0aad739a286d",
+ "empreinte_sha256": "f1522f31ad3f90e2ee463d5f6b1de75af468fa3e4b9054b36b16702dfa690cb0",
  "courses": [
   {
    "course_id": "R1C1_19112026_SAINT-CLOUD",
@@ -195,7 +195,7 @@
     "verifiee_le_utc": "2026-11-19T10:15:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-19T10:15:24Z",
-    "derniere_verification_utc": "2026-11-19T10:36:20Z"
+    "derniere_verification_utc": "2026-11-19T10:45:24Z"
    },
    "correction": {
     "version": 2,
@@ -252,11 +252,11 @@
     "partants_actifs": 12
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -282,22 +282,145 @@
      "num": 1,
      "nom": "MY UNIVERSE",
      "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 4,
+     "nom": "CIEL DE PARIS",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 11,
+     "nom": "THALIA",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 7,
+     "nom": "MARLOWE",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 12,
+     "nom": "SHEARKAN",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 6,
+     "nom": "MORGAN BAY",
+     "dead_heat": false
+    },
+    {
+     "rang": 10,
+     "num": 8,
+     "nom": "DURYTHME",
+     "dead_heat": false
+    },
+    {
+     "rang": 11,
+     "num": 5,
+     "nom": "DISTOR",
+     "dead_heat": false
+    },
+    {
+     "rang": 12,
+     "num": 10,
+     "nom": "ASHERAH",
+     "dead_heat": false
     }
    ],
    "arrivee": [
     3,
     2,
     9,
-    1
+    1,
+    4,
+    11,
+    7,
+    12,
+    6,
+    8,
+    5,
+    10
    ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "3": 10.5
+    },
+    "simple_place": {
+     "3": 3.2,
+     "2": 1.9,
+     "9": 4.2
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "3-2",
+      "dividende_pour_1_eur": 31.8
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "3-2",
+      "dividende_pour_1_eur": 12.4
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "3-9",
+      "dividende_pour_1_eur": 15.1
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "2-9",
+      "dividende_pour_1_eur": 11.2
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "3-2",
+      "dividende_pour_1_eur": 12.7
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "3-9",
+      "dividende_pour_1_eur": 12.7
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "3-1",
+      "dividende_pour_1_eur": 12.7
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "2-9",
+      "dividende_pour_1_eur": 12.7
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "2-1",
+      "dividende_pour_1_eur": 12.7
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "9-1",
+      "dividende_pour_1_eur": 12.7
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "3-2-9",
+      "dividende_pour_1_eur": 91.0
+     },
+     {
+      "type_pari": "MINI_MULTI",
+      "combinaison": "3-2-9-1",
+      "dividende_pour_1_eur": 51.7
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -307,14 +430,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-11-19T10:36:20Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-11-19T10:45:24Z",
+    "verifiee_le_utc": "2026-11-19T10:45:24Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-11-19T10:36:20Z",
-    "derniere_verification_utc": "2026-11-19T10:36:20Z"
+    "derniere_modification_utc": "2026-11-19T10:45:24Z",
+    "derniere_verification_utc": "2026-11-19T10:45:24Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -328,6 +451,27 @@
        2,
        9,
        1
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-11-19T10:45:24Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       3,
+       2,
+       9,
+       1,
+       4,
+       11,
+       7,
+       12,
+       6,
+       8,
+       5,
+       10
       ]
      }
     ]
@@ -355,7 +499,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -805,7 +949,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "JOKEYS_MONTENT_A_CHEVAL"
+    "pmu_statut": "DEPART_CONFIRME"
    },
    "classement": [],
    "arrivee": [],
@@ -968,7 +1112,7 @@
     "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "12:27 GMT (13:27 Paris)",
     "partants_declares": 12,
-    "partants_actifs": 12
+    "partants_actifs": 11
    },
    "statut": {
     "code": "EN_ATTENTE",
@@ -980,7 +1124,12 @@
    "classement": [],
    "arrivee": [],
    "non_classes": [],
-   "non_partants": [],
+   "non_partants": [
+    {
+     "num": 5,
+     "nom": "LOCK HEART"
+    }
+   ],
    "rapports": {
     "disponibles": false,
     "unite": "EUR pour 1 EUR de mise",
