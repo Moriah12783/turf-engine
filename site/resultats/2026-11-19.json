@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "704794274df28fa55f59808ba8a3c06b5f53f171",
-  "run_id": "44501524570",
+  "commit": "aafcfb4a721e9274f2f8ab2f696ee501cfefd762",
+  "run_id": "44502468745",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-19",
- "genere_le_utc": "2026-11-19T10:03:37Z",
+ "genere_le_utc": "2026-11-19T10:09:53Z",
  "nb_courses": 33,
  "compte_par_statut": {
-  "EN_ATTENTE": 33,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 32,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 0,
   "ANNULEE": 0
  },
- "empreinte_sha256": "26bfaa1cf5d5fa53017ac5b8b357465837e09e40431fc03d10e519c3027711af",
+ "empreinte_sha256": "7963bc885bc9e96a8137c2712e0aa19e4652fc10001897c15e46f7efb13d3ed4",
  "courses": [
   {
    "course_id": "R1C1_19112026_SAINT-CLOUD",
@@ -36,14 +36,44 @@
     "partants_actifs": 8
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_CONFIRME"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 8,
+     "nom": "JANAH",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 3,
+     "nom": "ORION ROCK",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 1,
+     "nom": "SONNAZ",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 5,
+     "nom": "AVANT L'ORAGE",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    8,
+    3,
+    1,
+    5
+   ],
    "non_classes": [],
    "non_partants": [
     {
@@ -61,21 +91,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/19112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-19T10:06:32Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-19T10:06:32Z",
+    "derniere_verification_utc": "2026-11-19T10:06:32Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-19T10:06:32Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       8,
+       3,
+       1,
+       5
+      ]
+     }
+    ]
    }
   },
   {
