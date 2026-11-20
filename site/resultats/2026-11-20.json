@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "15cd60ed5a30ac41d5d2cb2f78371b6f4e1725cd",
-  "run_id": "44728104804",
+  "commit": "d369d61352bb7759ecbe3ae477ab56aeeeaef2ab",
+  "run_id": "44730127698",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-20",
- "genere_le_utc": "2026-11-20T11:32:07Z",
+ "genere_le_utc": "2026-11-20T11:47:26Z",
  "nb_courses": 32,
  "compte_par_statut": {
-  "EN_ATTENTE": 29,
+  "EN_ATTENTE": 28,
   "PROVISOIRE": 0,
-  "DEFINITIVE": 3,
+  "DEFINITIVE": 4,
   "ANNULEE": 0
  },
- "empreinte_sha256": "7d72f44f624f96fe69bfdb5378d7a3217367c1dc9d0be57941d4aa19c8e5fe3e",
+ "empreinte_sha256": "796b3b33b9f2c240e795c1d2d3d49802e1c54466f05fb51c5711f68b525f5d79",
  "courses": [
   {
    "course_id": "R1C1_20112026_VINCENNES",
@@ -577,7 +577,7 @@
     "verifiee_le_utc": "2026-11-20T10:30:23Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T10:30:23Z",
-    "derniere_verification_utc": "2026-11-20T11:30:24Z"
+    "derniere_verification_utc": "2026-11-20T11:45:31Z"
    },
    "correction": {
     "version": 1,
@@ -707,7 +707,7 @@
     "verifiee_le_utc": "2026-11-20T11:00:27Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T11:00:27Z",
-    "derniere_verification_utc": "2026-11-20T11:30:24Z"
+    "derniere_verification_utc": "2026-11-20T11:45:31Z"
    },
    "correction": {
     "version": 1,
@@ -878,7 +878,7 @@
     "verifiee_le_utc": "2026-11-20T11:30:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T11:30:24Z",
-    "derniere_verification_utc": "2026-11-20T11:30:24Z"
+    "derniere_verification_utc": "2026-11-20T11:45:31Z"
    },
    "correction": {
     "version": 1,
@@ -915,9 +915,9 @@
     "libelle": "PRIX FERDINAND REGIS",
     "discipline": "PLAT",
     "distance_m": 1400,
-    "heure_depart_utc": "2026-11-20T11:50:00Z",
+    "heure_depart_utc": "2026-11-20T11:52:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "11:50 GMT (12:50 Paris)",
+    "heure_depart_affichee": "11:52 GMT (12:52 Paris)",
     "partants_declares": 9,
     "partants_actifs": 9
    },
@@ -926,7 +926,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
    },
    "classement": [],
    "arrivee": [],
@@ -1194,22 +1194,77 @@
     "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "11:33 GMT (12:33 Paris)",
     "partants_declares": 9,
-    "partants_actifs": 8
+    "partants_actifs": 7
    },
    "statut": {
-    "code": "EN_ATTENTE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 1,
+     "nom": "MONSIEUR CHARLIE",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 8,
+     "nom": "DRYAS",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 7,
+     "nom": "NO TIE",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 9,
+     "nom": "THE PYRENEES",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 3,
+     "nom": "TOLOMEIH",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 2,
+     "nom": "LIKER",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 5,
+     "nom": "IRISH LEGEND JR",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    1,
+    8,
+    7,
+    9,
+    3,
+    2,
+    5
+   ],
    "non_classes": [],
    "non_partants": [
     {
      "num": 4,
      "nom": "ITOS"
+    },
+    {
+     "num": 6,
+     "nom": "ALL BLACK"
     }
    ],
    "rapports": {
@@ -1222,21 +1277,38 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/20112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "premiere_lecture_utc": "2026-11-20T11:45:31Z",
+    "definitive_depuis_utc": "2026-11-20T11:45:31Z",
+    "verifiee_le_utc": "2026-11-20T11:45:31Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-20T11:45:31Z",
+    "derniere_verification_utc": "2026-11-20T11:45:31Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "DEFINITIVE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-20T11:45:31Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       1,
+       8,
+       7,
+       9,
+       3,
+       2,
+       5
+      ]
+     }
+    ]
    }
   },
   {
