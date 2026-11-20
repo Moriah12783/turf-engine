@@ -280,6 +280,58 @@ class TurfDatabase:
             BEGIN SELECT RAISE(ABORT, 'publication_decisions : ajout seul, suppression interdite'); END
             """)
 
+            # TENTATIVES DE VERROU SOUS LE SEUIL DE DIFFUSION (spécification
+            # docs/VERROUS_TENTATIVES.md, version 3, mise en service après la
+            # lecture de l'ombre) : verrous_tentatives (PARTIEL au verrou,
+            # REFUSE pour une course fermée) et verrous_refus (une ligne par
+            # passage refusé, source des REFUSE). AJOUT SEUL, garanti par la
+            # base : UPDATE et DELETE sont refusés, comme publication_decisions.
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS verrous_tentatives (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                race_id TEXT NOT NULL,
+                horizon TEXT NOT NULL,
+                issue TEXT NOT NULL CHECK (issue IN ('PARTIEL', 'REFUSE')),
+                part_cotee REAL NOT NULL,
+                n_partants INTEGER NOT NULL,
+                n_cotes INTEGER NOT NULL,
+                decided_at_utc TEXT NOT NULL,
+                heure_max_utc TEXT NOT NULL,
+                min_lock_ratio REAL NOT NULL,
+                min_priced_ratio REAL NOT NULL,
+                gate_version TEXT NOT NULL,
+                UNIQUE(race_id, horizon)
+            )
+            """)
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS verrous_refus (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                race_id TEXT NOT NULL,
+                horizon TEXT NOT NULL,
+                observed_at_utc TEXT NOT NULL,
+                part_cotee REAL NOT NULL,
+                n_partants INTEGER NOT NULL,
+                n_cotes INTEGER NOT NULL,
+                min_lock_ratio REAL NOT NULL,
+                min_priced_ratio REAL NOT NULL,
+                gate_version TEXT NOT NULL,
+                UNIQUE(race_id, horizon, observed_at_utc)
+            )
+            """)
+            cursor.execute("CREATE INDEX IF NOT EXISTS idx_vtent_race ON verrous_tentatives (race_id)")
+            cursor.execute("CREATE INDEX IF NOT EXISTS idx_vrefus_race ON verrous_refus (race_id, horizon)")
+            for table in ("verrous_tentatives", "verrous_refus"):
+                cursor.execute(f"""
+                CREATE TRIGGER IF NOT EXISTS {table}_no_update
+                BEFORE UPDATE ON {table}
+                BEGIN SELECT RAISE(ABORT, '{table} : ajout seul, modification interdite'); END
+                """)
+                cursor.execute(f"""
+                CREATE TRIGGER IF NOT EXISTS {table}_no_delete
+                BEFORE DELETE ON {table}
+                BEGIN SELECT RAISE(ABORT, '{table} : ajout seul, suppression interdite'); END
+                """)
+
             # Reprise idempotente des lignes antérieures au versionnage : le
             # classement plat devient un classement structuré (rangs 1..n, sans
             # dead-heat connu), statut DEFINITIVE (c'est ainsi que le banc les a
@@ -773,6 +825,36 @@ class TurfDatabase:
             else:
                 cursor.execute("SELECT * FROM publication_decisions WHERE race_id = ? ORDER BY id", (race_id,))
             return [dict(row) for row in cursor.fetchall()]
+
+    def save_verrou_tentative(self, ligne: Dict[str, Any]) -> bool:
+        """Ligne PARTIEL ou REFUSE de verrous_tentatives (docs/VERROUS_TENTATIVES.md).
+        INSERT OR IGNORE : la première ligne d'un couple (course, horizon) est
+        définitive. Retourne True si une ligne a été ajoutée."""
+        with self.transaction() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+            INSERT OR IGNORE INTO verrous_tentatives
+                (race_id, horizon, issue, part_cotee, n_partants, n_cotes, decided_at_utc, heure_max_utc,
+                 min_lock_ratio, min_priced_ratio, gate_version)
+            VALUES (:race_id, :horizon, :issue, :part_cotee, :n_partants, :n_cotes, :decided_at_utc, :heure_max_utc,
+                    :min_lock_ratio, :min_priced_ratio, :gate_version)
+            """, ligne)
+            return cursor.rowcount == 1
+
+    def save_verrou_refus(self, ligne: Dict[str, Any]) -> bool:
+        """Ligne du journal verrous_refus : un passage refusé par la porte de
+        verrou (moins de MIN_LOCK_RATIO de partants cotés). INSERT OR IGNORE sur
+        (course, horizon, instant). Retourne True si une ligne a été ajoutée."""
+        with self.transaction() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+            INSERT OR IGNORE INTO verrous_refus
+                (race_id, horizon, observed_at_utc, part_cotee, n_partants, n_cotes,
+                 min_lock_ratio, min_priced_ratio, gate_version)
+            VALUES (:race_id, :horizon, :observed_at_utc, :part_cotee, :n_partants, :n_cotes,
+                    :min_lock_ratio, :min_priced_ratio, :gate_version)
+            """, ligne)
+            return cursor.rowcount == 1
 
     def save_odds_snapshots(self, race_id: str, horizon: str, odds_map: Dict[int, float]):
         """Persist the odds of every runner at a given horizon (T_MATIN/T90/T30/T15).

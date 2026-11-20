@@ -1,10 +1,12 @@
 # Table `verrous_tentatives` — tentatives de verrou sous le seuil de diffusion
 
-**Statut : PROJET, version 3 confirmée. Rien n'est codé.** La mise en service
-a lieu le lendemain de la lecture unique de l'ombre : le **13/11/2026**, ou le
-**26/11/2026** si la remise à zéro est utilisée. Pas avant : le code touche
-`turf_lab/daily_sync.py` et `turf_lab/database.py`, qui font partie de la
-chaîne du matin gelée (`docs/OMBRE_FONDAMENTAL.md`).
+**Statut : CODÉ, en relecture (PR du labo du 16/11/2026), version 3.** La
+lecture unique de l'ombre a eu lieu le 12/11 ; décision de Steph du 12/11 : la
+PR du verrou T_MATIN passe d'abord (fusionnée le 13/11), celle-ci ensuite. Le
+premier jour de course suivi est `MISE_EN_SERVICE` (`turf_lab/verrous.py`,
+2026-11-21), le lendemain de la fusion : la constante est ajustée si la fusion
+a lieu plus tard. Mise en œuvre et points à valider : section « Mise en œuvre »
+en fin de document.
 
 | Date | Étape |
 |---|---|
@@ -14,8 +16,9 @@ chaîne du matin gelée (`docs/OMBRE_FONDAMENTAL.md`).
 | 20/10/2026 | Retouches du dev Radar, acceptées : `REFUSE` calculés à chaque passage (règle 3), ligne de journal `BALAYAGE` quotidienne relue chaque mardi, contrôle C5, cas test synthétique Moulins / Pontchâteau. Décision de Steph confirmée : le labo écrit le code, le dev Radar et le dev NVE relisent la PR |
 | 20/10/2026 | Relecture du dev NVE, acceptée : marge avant l'écriture d'un `REFUSE` (arrivée enregistrée ou départ connu + 60 min), rapport quotidien committé dans le dépôt à la place de la ligne `BALAYAGE`. Calendrier fixé à partir du 22/10, sauf remise à zéro d'ici le 21/10 |
 | 20/10/2026 | Règle de fermeture du dev Radar, retenue par le dev NVE à la place de la marge de 60 min : un `REFUSE` ne s'écrit que pour une course `FINISHED` ou qui n'est plus datée du jour UTC, jamais pour une course `ANNULEE`. C2 devient impossible par construction. Le premier passage du jour écrit les `REFUSE` de la veille avant son rapport |
-| Jour J (13/11 ou 26/11) | Annonce par une seule ligne datée au dev Bases (changement de schéma : `verrous_tentatives` et `verrous_refus`), au dev NVE et au dev Radar, **avant** toute publication |
-| Jour J et suivants | PR du labo : code, tests, cette documentation passée au statut « en service » ; relecture du dev Radar et du dev NVE ; fusion sur l'accord de Steph |
+| 12/11/2026 | Décision de Steph : la PR du verrou T_MATIN à 08h30 heure de Paris passe avant celle-ci ; l'ouverture de T_MATIN se lit dans `due_horizons` (`turf_lab/plancher_matin.py`) |
+| 16/11/2026 | PR du labo : code, 19 tests, cette documentation ; relecture du dev Radar et du dev NVE ; fusion sur l'accord de Steph |
+| Veille de la fusion | Annonce par une seule ligne datée au dev Bases (changement de schéma : `verrous_tentatives` et `verrous_refus`), au dev NVE et au dev Radar, **avant** toute publication |
 
 ## Pourquoi
 
@@ -304,3 +307,43 @@ Le délai avant le départ se calcule par jointure sur `races`
     `REFUSE` (C2).
 16. Arrivée définitive jamais reçue : `REFUSE` écrit au premier passage du jour
     UTC suivant, avant le rapport de la veille, et compté dans ce rapport.
+
+## Mise en œuvre (labo, 16/11/2026)
+
+| Fichier | Rôle |
+|---|---|
+| `turf_lab/database.py` | les deux tables, leurs index et leurs déclencheurs (ajout seul) ; `save_verrou_tentative`, `save_verrou_refus` (`INSERT OR IGNORE`) |
+| `turf_lab/odds_quality.py` | `priced_counts` : les deux nombres de `priced_ratio`, même définition ; `priced_ratio` n'est pas modifié (empreinte PG2 inchangée) |
+| `turf_lab/daily_sync.py` | `_lock_horizon` : ligne `GATE_REFUSED` avec `n_partants` et `n_cotes`, journal `verrous_refus` dans cette branche, ligne `PARTIEL` après un verrou sous 90 % ; `_reunion_suivie` (périmètre des passes, extrait de `sync_date` sans changement de règle) et `programme_race_ids` |
+| `turf_lab/verrous.py` | écritures au verrou, `REFUSE` (règles 1 à 3), liste « non observée », C1 à C5, rapport quotidien |
+| `main.py` | fin de chaque passage : `REFUSE` des courses fermées, **puis** rapport de la veille |
+| `.github/workflows/daily_sync.yml` | `rapports/verrous/` committé avec les exports du site |
+| `tests/test_verrous_tentatives.py` | les 16 tests prévus, plus la ligne `GATE_REFUSED`, un rapport avec couple en défaut, la garde de la bande `PARTIEL` et le départ avancé après les refus ; les dates des tests sont dérivées de `MISE_EN_SERVICE` (jamais avant le 23/11) : décaler la mise en service tient en une ligne |
+
+Points d'interprétation, à valider par le dev Radar et le dev NVE :
+
+1. **C1 et la règle 3.** La requête C1 ci-dessus exclut les courses sans
+   `scheduled_start_time`, héritage de la règle de fermeture par l'heure de
+   départ. Avec la règle 3 (fermeture par `FINISHED` ou par la date), une
+   course à l'heure inconnue mais refusée au moins une fois reçoit un
+   `REFUSE` une fois fermée. C1 vérifie donc, dans le code : aucune édition,
+   aucun `REFUSE`, course non annulée, et au moins un passage au journal
+   **antérieur au départ** enregistré dans `races` (règle 1). Un horizon dont
+   tous les passages refusés sont postérieurs au départ (départ avancé après
+   les refus) n'a pas de `REFUSE` et relève de `AUCUN_PASSAGE` : jamais absent
+   des deux (correction du dev Radar du 20/11). `HEURE_INCONNUE` ne vaut qu'en
+   l'absence de passage.
+2. **Annulation.** Un horizon sans édition d'une course `ANNULEE` figure dans
+   la liste « non observée » au motif `ANNULEE`, qu'il ait eu des passages
+   refusés ou non : il n'a jamais de `REFUSE`.
+3. **Bornes des contrôles.** Le rapport de la veille calcule C1 à C5 sur les
+   courses datées de `MISE_EN_SERVICE` à la veille : une course du jour encore
+   ouverte n'est jamais un faux défaut, et le rapport se régénère à
+   l'identique.
+4. **HORS_PROGRAMME.** Chaque passage relit le programme PMU de la veille (une
+   requête), avec la règle de périmètre de `sync_date`. Si le programme est
+   illisible, le rapport n'est pas réécrit à ce passage (rien d'écrit à
+   moitié) ; le passage suivant le rattrape.
+
+Chaque ligne écrite est journalisée (`VERROU_TENTATIVE {...}`, comptes et
+parts seulement) ; chaque passage se termine par `VERROUS_PASSAGE {...}`.

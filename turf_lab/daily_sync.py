@@ -13,10 +13,11 @@ from turf_lab.engine import NewValueEngine
 from turf_lab.baselines import ETPEEngineProxy, MarketOddsEngine
 from turf_lab.human_stats import HumanStatsBook
 from turf_lab.fondamental_verrou import porter_fondamental
-from turf_lab.odds_quality import MIN_LOCK_RATIO, MIN_PRICED_RATIO, neutralize_odds, priced_ratio
+from turf_lab.odds_quality import MIN_LOCK_RATIO, MIN_PRICED_RATIO, neutralize_odds, priced_counts, priced_ratio
 from turf_lab.radar_bridge import ENGINE_NAME as RADAR_ENGINE, RadarV4Engine
 from turf_lab import secure_http
 from turf_lab.plancher_matin import en_utc_naif, plancher_matin_utc
+from turf_lab import verrous
 from turf_lab.results_reader import (
     SOURCE_COURSE, SOURCE_PROGRAMME, STATUT_ANNULEE, STATUT_DEFINITIVE, STATUT_PROVISOIRE,
     ArrivalReading, read_arrival,
@@ -306,14 +307,19 @@ class DailySyncManager:
         # Le plancher du matin de due_horizons() (plancher_matin.py) reste le
         # PLANCHER horaire.
         ratio = priced_ratio(runners)
+        compte = priced_counts(runners)                 # (partants actifs, partants cotés) de ce même ratio
         if now_utc is None:
             now_utc = datetime.utcnow()
         if ratio < MIN_LOCK_RATIO:
             self.gate_refused += 1
             print("GATE_REFUSED " + json.dumps({
                 "race_id": race_id, "horizon": horizon,
-                "priced_ratio": round(ratio, 3), "now_utc": now_utc.isoformat()
+                "priced_ratio": round(ratio, 3), "n_partants": compte[0], "n_cotes": compte[1],
+                "now_utc": now_utc.isoformat()
             }))
+            # Journal verrous_refus (docs/VERROUS_TENTATIVES.md) : source des
+            # REFUSE. Enregistrement pur : une erreur ne change rien au passage.
+            verrous.journaliser_refus(self.db, race_data, horizon, ratio, compte, now_utc)
             return 0
         lock_time_utc = now_utc.isoformat()
         odds_real = ratio >= MIN_PRICED_RATIO
@@ -375,6 +381,11 @@ class DailySyncManager:
             print("PUBLICATION_DECISION_ERROR " + json.dumps({
                 "race_id": race_id, "horizon": horizon, "error": str(exc)[:200]
             }, ensure_ascii=False))
+        # Verrou sous le seuil de diffusion : ligne PARTIEL de
+        # verrous_tentatives, APRÈS le verrou, même part et même instant que
+        # l'édition. Une erreur est journalisée et n'annule jamais le verrou.
+        if not odds_real:
+            verrous.enregistrer_partiel(self.db, race_data, horizon, ratio, compte, lock_time_utc)
         return 1
 
     def _lock_radar(self, race_data: Dict[str, Any], runners: List[Dict[str, Any]], horizon: str,
@@ -568,6 +579,37 @@ class DailySyncManager:
         stats.update(secure_http.STATS.as_dict())
         return stats
 
+    def _reunion_suivie(self, r: Dict[str, Any], date_str_api: str) -> bool:
+        """Parité LONACI (périmètre abonnés) : réunion française (ou d'un pays
+        de SUBSCRIBER_COUNTRIES), ou réunion hors périmètre dont une course est
+        DÉJÀ en base (clause de transition). Même règle pour sync_date et pour
+        la liste HORS_PROGRAMME du rapport verrous_tentatives."""
+        pays_code = str((r.get("pays") or {}).get("code", "FRA")).upper()
+        if pays_code in self.SUBSCRIBER_COUNTRIES:
+            return True
+        courses = r.get("courses", [])
+        r_num = r.get("numOfficiel", 1)
+        hippo = r.get("hippodrome", {}).get("libelleCourt", "HIPPO")
+        first_course_num = courses[0].get("numOrdre", 1) if courses else 1
+        return bool(self.db.get_race(f"R{r_num}C{first_course_num}_{date_str_api}_{hippo}"))
+
+    def programme_race_ids(self, target_date: datetime) -> Optional[List[str]]:
+        """Identifiants des courses du programme PMU d'une date, dans le
+        périmètre des passes (même règle que sync_date). None si le programme
+        est illisible. Sert à la liste HORS_PROGRAMME du rapport quotidien."""
+        date_str_api = target_date.strftime("%d%m%Y")
+        programme = self.fetcher.fetch_programme(date_str_api)
+        if not programme or not isinstance(programme, dict) or "programme" not in programme:
+            return None
+        ids: List[str] = []
+        for r in programme.get("programme", {}).get("reunions", []):
+            if not self._reunion_suivie(r, date_str_api):
+                continue
+            r_num = r.get("numOfficiel", 1)
+            hippo = r.get("hippodrome", {}).get("libelleCourt", "HIPPO")
+            ids += [f"R{r_num}C{c.get('numOrdre', 1)}_{date_str_api}_{hippo}" for c in r.get("courses", [])]
+        return ids
+
     def sync_date(self, target_date: Optional[datetime] = None) -> Dict[str, int]:
         if target_date is None:
             target_date = datetime.now()
@@ -610,12 +652,8 @@ class DailySyncManager:
             # courses sont DÉJÀ en base (verrouillées avant ce réglage)
             # reste traitée jusqu'à résolution de ses arrivées — on ne
             # laisse jamais une course « En attente » pour toujours.
-            pays_code = str((r.get("pays") or {}).get("code", "FRA")).upper()
-            if pays_code not in self.SUBSCRIBER_COUNTRIES:
-                first_course_num = courses[0].get("numOrdre", 1) if courses else 1
-                probe_id = f"R{r_num}C{first_course_num}_{date_str_api}_{hippo}"
-                if not self.db.get_race(probe_id):
-                    continue  # réunion hors périmètre, jamais ingérée : ignorée
+            if not self._reunion_suivie(r, date_str_api):
+                continue  # réunion hors périmètre, jamais ingérée : ignorée
 
             for c in courses:
                 c_num = c.get("numOrdre", 1)

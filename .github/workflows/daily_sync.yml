@@ -116,6 +116,9 @@ jobs:
           else
             git add turf_bench.db benchmark_report.json benchmark_dashboard.html site/
           fi
+          # Rapport quotidien de verrous_tentatives (docs/VERROUS_TENTATIVES.md) :
+          # comptes et identifiants seulement, régénéré à chaque passage.
+          if [ -d rapports/verrous ]; then git add rapports/verrous/; fi
           # Ne committe que s'il y a un vrai changement (évite les commits vides)
           if git diff --staged --quiet; then
             echo "[*] Aucun changement à committer."
