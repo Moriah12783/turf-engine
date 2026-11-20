@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "dc35319ad3be5e53a750e06ee5d8fa340a17907b",
-  "run_id": "44730638548",
+  "commit": "7ac031dcef0e5695439422f7a93c43ab52d4c4c4",
+  "run_id": "44732123085",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-20",
- "genere_le_utc": "2026-11-20T11:51:43Z",
+ "genere_le_utc": "2026-11-20T12:03:39Z",
  "nb_courses": 32,
  "compte_par_statut": {
-  "EN_ATTENTE": 28,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 27,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 4,
   "ANNULEE": 0
  },
- "empreinte_sha256": "77d6816d0f14cf925b25bc2045114e39f01e91cf7408fddc49b9eef2418477d3",
+ "empreinte_sha256": "b92975d1789c809521672ee9a8796624fb498624903006fdafa0d4edbac71652",
  "courses": [
   {
    "course_id": "R1C1_20112026_VINCENNES",
@@ -577,7 +577,7 @@
     "verifiee_le_utc": "2026-11-20T10:30:23Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T10:30:23Z",
-    "derniere_verification_utc": "2026-11-20T11:49:10Z"
+    "derniere_verification_utc": "2026-11-20T12:00:25Z"
    },
    "correction": {
     "version": 1,
@@ -707,7 +707,7 @@
     "verifiee_le_utc": "2026-11-20T11:00:27Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T11:00:27Z",
-    "derniere_verification_utc": "2026-11-20T11:49:10Z"
+    "derniere_verification_utc": "2026-11-20T12:00:25Z"
    },
    "correction": {
     "version": 1,
@@ -878,7 +878,7 @@
     "verifiee_le_utc": "2026-11-20T11:30:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T11:30:24Z",
-    "derniere_verification_utc": "2026-11-20T11:49:10Z"
+    "derniere_verification_utc": "2026-11-20T12:00:25Z"
    },
    "correction": {
     "version": 1,
@@ -922,14 +922,44 @@
     "partants_actifs": 9
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 7,
+     "nom": "BAZOUKA",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 2,
+     "nom": "FLEUR CELESTE",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 4,
+     "nom": "OPIUM OF SUCCESS",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 3,
+     "nom": "EL TELENO",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    7,
+    2,
+    4,
+    3
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
@@ -942,21 +972,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/20112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-20T12:00:25Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-20T12:00:25Z",
+    "derniere_verification_utc": "2026-11-20T12:00:25Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-20T12:00:25Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       7,
+       2,
+       4,
+       3
+      ]
+     }
+    ]
    }
   },
   {
@@ -1353,7 +1397,7 @@
     "verifiee_le_utc": "2026-11-20T11:45:31Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T11:45:31Z",
-    "derniere_verification_utc": "2026-11-20T11:49:10Z"
+    "derniere_verification_utc": "2026-11-20T12:00:25Z"
    },
    "correction": {
     "version": 1,
@@ -1400,7 +1444,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "JOKEYS_MONTENT_A_CHEVAL"
    },
    "classement": [],
    "arrivee": [],
