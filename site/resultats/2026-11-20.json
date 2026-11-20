@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "4d388d152757b5fe192e133c8b5272d9bd65b7ca",
-  "run_id": "44738390748",
+  "commit": "b1274fde37a63d1d72455fb72f11534d0538ba73",
+  "run_id": "44739220278",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-20",
- "genere_le_utc": "2026-11-20T12:47:50Z",
+ "genere_le_utc": "2026-11-20T12:53:20Z",
  "nb_courses": 32,
  "compte_par_statut": {
-  "EN_ATTENTE": 25,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 24,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 7,
   "ANNULEE": 0
  },
- "empreinte_sha256": "083a8dc4505437df5e03e2a6a17ffa44f5bd3f0e46dccc92024ffc2e03c88190",
+ "empreinte_sha256": "c198925fff9e6583b2cff7320cc3126a93dfca690c2a80239ecd9da6bb982a8e",
  "courses": [
   {
    "course_id": "R1C1_20112026_VINCENNES",
@@ -577,7 +577,7 @@
     "verifiee_le_utc": "2026-11-20T10:30:23Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T10:30:23Z",
-    "derniere_verification_utc": "2026-11-20T12:45:23Z"
+    "derniere_verification_utc": "2026-11-20T12:51:22Z"
    },
    "correction": {
     "version": 1,
@@ -707,7 +707,7 @@
     "verifiee_le_utc": "2026-11-20T11:00:27Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T11:00:27Z",
-    "derniere_verification_utc": "2026-11-20T12:45:23Z"
+    "derniere_verification_utc": "2026-11-20T12:51:22Z"
    },
    "correction": {
     "version": 1,
@@ -878,7 +878,7 @@
     "verifiee_le_utc": "2026-11-20T11:30:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T11:30:24Z",
-    "derniere_verification_utc": "2026-11-20T12:45:23Z"
+    "derniere_verification_utc": "2026-11-20T12:51:22Z"
    },
    "correction": {
     "version": 1,
@@ -1053,7 +1053,7 @@
     "verifiee_le_utc": "2026-11-20T12:06:23Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T12:06:23Z",
-    "derniere_verification_utc": "2026-11-20T12:45:23Z"
+    "derniere_verification_utc": "2026-11-20T12:51:22Z"
    },
    "correction": {
     "version": 2,
@@ -1226,7 +1226,7 @@
     "verifiee_le_utc": "2026-11-20T12:45:23Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T12:45:23Z",
-    "derniere_verification_utc": "2026-11-20T12:45:23Z"
+    "derniere_verification_utc": "2026-11-20T12:51:22Z"
    },
    "correction": {
     "version": 1,
@@ -1261,9 +1261,9 @@
     "libelle": "PRIX SERGE LORAND",
     "discipline": "PLAT",
     "distance_m": 1400,
-    "heure_depart_utc": "2026-11-20T13:00:00Z",
+    "heure_depart_utc": "2026-11-20T13:04:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "13:00 GMT (14:00 Paris)",
+    "heure_depart_affichee": "13:04 GMT (14:04 Paris)",
     "partants_declares": 12,
     "partants_actifs": 12
    },
@@ -1589,7 +1589,7 @@
     "verifiee_le_utc": "2026-11-20T11:45:31Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T11:45:31Z",
-    "derniere_verification_utc": "2026-11-20T12:45:23Z"
+    "derniere_verification_utc": "2026-11-20T12:51:22Z"
    },
    "correction": {
     "version": 1,
@@ -1850,7 +1850,7 @@
     "verifiee_le_utc": "2026-11-20T12:21:18Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T12:21:18Z",
-    "derniere_verification_utc": "2026-11-20T12:45:23Z"
+    "derniere_verification_utc": "2026-11-20T12:51:22Z"
    },
    "correction": {
     "version": 2,
@@ -1909,14 +1909,44 @@
     "partants_actifs": 6
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_DANS_TROIS_MINUTES"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 1,
+     "nom": "WYKEHURST PARK",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 2,
+     "nom": "ALIAS",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 5,
+     "nom": "CORAL COVE",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 4,
+     "nom": "TOSCA NO CANDIS",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    1,
+    2,
+    5,
+    4
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
@@ -1929,21 +1959,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/20112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-20T12:51:22Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-20T12:51:22Z",
+    "derniere_verification_utc": "2026-11-20T12:51:22Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-20T12:51:22Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       1,
+       2,
+       5,
+       4
+      ]
+     }
+    ]
    }
   },
   {
