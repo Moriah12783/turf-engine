@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "93e071a0e23f6de50c299bec3e240bbb76b970c7",
-  "run_id": "44782434530",
+  "commit": "9bfcf83f55f0c1fe63f65ba28e80d5abedc0aed6",
+  "run_id": "44783877336",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-20",
- "genere_le_utc": "2026-11-20T17:23:09Z",
+ "genere_le_utc": "2026-11-20T17:33:44Z",
  "nb_courses": 32,
  "compte_par_statut": {
-  "EN_ATTENTE": 11,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 10,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 21,
   "ANNULEE": 0
  },
- "empreinte_sha256": "f2b7a60b3ee32e8e2a22d4e0a89f5a2812231067efdc202a3feff4d32a91ccf1",
+ "empreinte_sha256": "3f3835fb310e2de39d55430750218654b9cf17500d1346c1e83f36f4fc2f4e1e",
  "courses": [
   {
    "course_id": "R1C1_20112026_VINCENNES",
@@ -36,15 +36,63 @@
     "partants_actifs": 14
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_DANS_TROIS_MINUTES"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 3,
+     "nom": "LADY BIRD JENILAT",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 1,
+     "nom": "LERIKA DU CHENE",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 11,
+     "nom": "LETTRE D'AMOUR",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 13,
+     "nom": "LAMBADA GIRL",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 6,
+     "nom": "LOVELY DU VALLON",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    3,
+    1,
+    11,
+    13,
+    6
+   ],
+   "non_classes": [
+    {
+     "num": 8,
+     "nom": "LELIA FRANCE",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 12,
+     "nom": "LIBERTY PAT",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": false,
@@ -56,21 +104,36 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/20112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-20T17:30:31Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-20T17:30:31Z",
+    "derniere_verification_utc": "2026-11-20T17:30:31Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-20T17:30:31Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       3,
+       1,
+       11,
+       13,
+       6
+      ]
+     }
+    ]
    }
   },
   {
@@ -95,7 +158,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -582,7 +645,7 @@
     "verifiee_le_utc": "2026-11-20T10:30:23Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T10:30:23Z",
-    "derniere_verification_utc": "2026-11-20T17:21:18Z"
+    "derniere_verification_utc": "2026-11-20T17:30:31Z"
    },
    "correction": {
     "version": 1,
@@ -712,7 +775,7 @@
     "verifiee_le_utc": "2026-11-20T11:00:27Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T11:00:27Z",
-    "derniere_verification_utc": "2026-11-20T17:21:18Z"
+    "derniere_verification_utc": "2026-11-20T17:30:31Z"
    },
    "correction": {
     "version": 1,
@@ -883,7 +946,7 @@
     "verifiee_le_utc": "2026-11-20T11:30:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T11:30:24Z",
-    "derniere_verification_utc": "2026-11-20T17:21:18Z"
+    "derniere_verification_utc": "2026-11-20T17:30:31Z"
    },
    "correction": {
     "version": 1,
@@ -1058,7 +1121,7 @@
     "verifiee_le_utc": "2026-11-20T12:06:23Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T12:06:23Z",
-    "derniere_verification_utc": "2026-11-20T17:21:18Z"
+    "derniere_verification_utc": "2026-11-20T17:30:31Z"
    },
    "correction": {
     "version": 2,
@@ -1231,7 +1294,7 @@
     "verifiee_le_utc": "2026-11-20T12:45:23Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T12:45:23Z",
-    "derniere_verification_utc": "2026-11-20T17:21:18Z"
+    "derniere_verification_utc": "2026-11-20T17:30:31Z"
    },
    "correction": {
     "version": 1,
@@ -1455,7 +1518,7 @@
     "verifiee_le_utc": "2026-11-20T13:15:25Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T13:15:25Z",
-    "derniere_verification_utc": "2026-11-20T17:21:18Z"
+    "derniere_verification_utc": "2026-11-20T17:30:31Z"
    },
    "correction": {
     "version": 2,
@@ -1707,7 +1770,7 @@
     "verifiee_le_utc": "2026-11-20T13:51:20Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T13:51:20Z",
-    "derniere_verification_utc": "2026-11-20T17:21:18Z"
+    "derniere_verification_utc": "2026-11-20T17:30:31Z"
    },
    "correction": {
     "version": 2,
@@ -1935,7 +1998,7 @@
     "verifiee_le_utc": "2026-11-20T14:30:37Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T14:30:37Z",
-    "derniere_verification_utc": "2026-11-20T17:21:18Z"
+    "derniere_verification_utc": "2026-11-20T17:30:31Z"
    },
    "correction": {
     "version": 2,
@@ -2150,7 +2213,7 @@
     "verifiee_le_utc": "2026-11-20T11:45:31Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T11:45:31Z",
-    "derniere_verification_utc": "2026-11-20T17:21:18Z"
+    "derniere_verification_utc": "2026-11-20T17:30:31Z"
    },
    "correction": {
     "version": 1,
@@ -2411,7 +2474,7 @@
     "verifiee_le_utc": "2026-11-20T12:21:18Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T12:21:18Z",
-    "derniere_verification_utc": "2026-11-20T17:21:18Z"
+    "derniere_verification_utc": "2026-11-20T17:30:31Z"
    },
    "correction": {
     "version": 2,
@@ -2564,7 +2627,7 @@
     "verifiee_le_utc": "2026-11-20T13:00:25Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T13:00:25Z",
-    "derniere_verification_utc": "2026-11-20T17:21:18Z"
+    "derniere_verification_utc": "2026-11-20T17:30:31Z"
    },
    "correction": {
     "version": 2,
@@ -2827,7 +2890,7 @@
     "verifiee_le_utc": "2026-11-20T13:45:25Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T13:45:25Z",
-    "derniere_verification_utc": "2026-11-20T17:21:18Z"
+    "derniere_verification_utc": "2026-11-20T17:30:31Z"
    },
    "correction": {
     "version": 2,
@@ -3016,7 +3079,7 @@
     "verifiee_le_utc": "2026-11-20T14:06:19Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T14:06:19Z",
-    "derniere_verification_utc": "2026-11-20T17:21:18Z"
+    "derniere_verification_utc": "2026-11-20T17:30:31Z"
    },
    "correction": {
     "version": 2,
@@ -3283,7 +3346,7 @@
     "verifiee_le_utc": "2026-11-20T14:45:40Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T14:45:40Z",
-    "derniere_verification_utc": "2026-11-20T17:21:18Z"
+    "derniere_verification_utc": "2026-11-20T17:30:31Z"
    },
    "correction": {
     "version": 2,
@@ -3557,7 +3620,7 @@
     "verifiee_le_utc": "2026-11-20T15:15:22Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T15:21:20Z",
-    "derniere_verification_utc": "2026-11-20T17:21:18Z"
+    "derniere_verification_utc": "2026-11-20T17:30:31Z"
    },
    "correction": {
     "version": 2,
@@ -3832,7 +3895,7 @@
     "verifiee_le_utc": "2026-11-20T15:51:26Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T15:51:26Z",
-    "derniere_verification_utc": "2026-11-20T17:21:18Z"
+    "derniere_verification_utc": "2026-11-20T17:30:31Z"
    },
    "correction": {
     "version": 2,
@@ -4042,7 +4105,7 @@
     "verifiee_le_utc": "2026-11-20T15:00:28Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T15:00:28Z",
-    "derniere_verification_utc": "2026-11-20T17:21:18Z"
+    "derniere_verification_utc": "2026-11-20T17:30:31Z"
    },
    "correction": {
     "version": 2,
@@ -4292,7 +4355,7 @@
     "verifiee_le_utc": "2026-11-20T15:45:32Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T15:45:32Z",
-    "derniere_verification_utc": "2026-11-20T17:21:18Z"
+    "derniere_verification_utc": "2026-11-20T17:30:31Z"
    },
    "correction": {
     "version": 2,
@@ -4493,7 +4556,7 @@
     "verifiee_le_utc": "2026-11-20T16:15:23Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T16:15:23Z",
-    "derniere_verification_utc": "2026-11-20T17:21:18Z"
+    "derniere_verification_utc": "2026-11-20T17:30:31Z"
    },
    "correction": {
     "version": 2,
@@ -4716,7 +4779,7 @@
     "verifiee_le_utc": "2026-11-20T16:51:20Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T16:51:20Z",
-    "derniere_verification_utc": "2026-11-20T17:21:18Z"
+    "derniere_verification_utc": "2026-11-20T17:30:31Z"
    },
    "correction": {
     "version": 2,
@@ -4947,7 +5010,7 @@
     "verifiee_le_utc": "2026-11-20T17:15:34Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-20T17:15:34Z",
-    "derniere_verification_utc": "2026-11-20T17:21:18Z"
+    "derniere_verification_utc": "2026-11-20T17:30:31Z"
    },
    "correction": {
     "version": 2,
