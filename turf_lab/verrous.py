@@ -92,17 +92,18 @@ def journaliser_refus(db, race_data: Dict[str, Any], horizon: str, ratio: float,
                       compte: Tuple[int, int], now_utc: datetime) -> bool:
     """Un passage refusé par la porte de verrou : une ligne au journal. Jamais
     d'erreur remontée : le passage continue comme avant."""
-    if not suivie(race_data.get("date")):
-        return False
-    ligne = {"race_id": race_data.get("race_id"), "horizon": horizon,
-             "observed_at_utc": _naif(now_utc).isoformat(), "part_cotee": round(float(ratio), 4),
-             "n_partants": int(compte[0]), "n_cotes": int(compte[1]),
-             "min_lock_ratio": MIN_LOCK_RATIO, "min_priced_ratio": MIN_PRICED_RATIO}
     try:
-        ligne["gate_version"] = _gate_version()
+        if not suivie(race_data.get("date")):
+            return False
+        ligne = {"race_id": race_data.get("race_id"), "horizon": horizon,
+                 "observed_at_utc": _naif(now_utc).isoformat(), "part_cotee": round(float(ratio), 4),
+                 "n_partants": int(compte[0]), "n_cotes": int(compte[1]),
+                 "min_lock_ratio": MIN_LOCK_RATIO, "min_priced_ratio": MIN_PRICED_RATIO,
+                 "gate_version": _gate_version()}
         return bool(db.save_verrou_refus(ligne))
     except Exception as exc:
-        _log("VERROU_REFUS_ERROR", {"race_id": ligne["race_id"], "horizon": horizon, "erreur": str(exc)[:200]})
+        _log("VERROU_REFUS_ERROR", {"race_id": (race_data or {}).get("race_id"), "horizon": horizon,
+                                    "erreur": str(exc)[:200]})
         return False
 
 
@@ -111,21 +112,21 @@ def enregistrer_partiel(db, race_data: Dict[str, Any], horizon: str, ratio: floa
     """Verrou posé sous le seuil de diffusion : ligne PARTIEL, écrite après le
     verrou. Même part que ``predictions.priced_ratio``, même instant que
     ``lock_time_utc``. Une erreur est journalisée et n'annule jamais le verrou."""
-    if not suivie(race_data.get("date")) or ratio >= MIN_PRICED_RATIO or ratio < MIN_LOCK_RATIO:
-        return False
-    ligne = {"race_id": race_data.get("race_id"), "horizon": horizon, "issue": "PARTIEL",
-             "part_cotee": round(float(ratio), 4), "n_partants": int(compte[0]), "n_cotes": int(compte[1]),
-             "decided_at_utc": lock_time_utc, "heure_max_utc": lock_time_utc,
-             "min_lock_ratio": MIN_LOCK_RATIO, "min_priced_ratio": MIN_PRICED_RATIO}
     try:
-        ligne["gate_version"] = _gate_version()
+        if not suivie(race_data.get("date")) or ratio >= MIN_PRICED_RATIO or ratio < MIN_LOCK_RATIO:
+            return False
+        ligne = {"race_id": race_data.get("race_id"), "horizon": horizon, "issue": "PARTIEL",
+                 "part_cotee": round(float(ratio), 4), "n_partants": int(compte[0]), "n_cotes": int(compte[1]),
+                 "decided_at_utc": lock_time_utc, "heure_max_utc": lock_time_utc,
+                 "min_lock_ratio": MIN_LOCK_RATIO, "min_priced_ratio": MIN_PRICED_RATIO,
+                 "gate_version": _gate_version()}
         ajoutee = bool(db.save_verrou_tentative(ligne))
         if ajoutee:
             _log("VERROU_TENTATIVE", _publiable(ligne))
         return ajoutee
     except Exception as exc:
-        _log("VERROU_TENTATIVE_ERROR", {"race_id": ligne["race_id"], "horizon": horizon, "issue": "PARTIEL",
-                                        "erreur": str(exc)[:200]})
+        _log("VERROU_TENTATIVE_ERROR", {"race_id": (race_data or {}).get("race_id"), "horizon": horizon,
+                                        "issue": "PARTIEL", "erreur": str(exc)[:200]})
         return False
 
 
@@ -219,6 +220,23 @@ def _editions(conn) -> set:
         "SELECT race_id, horizon FROM predictions WHERE engine_name = ?", (ENGINE,))}
 
 
+def _journal(conn, debut: str, fin: str) -> Dict[Tuple[str, str], List[Dict[str, Any]]]:
+    """Passages du journal des courses datées de ``debut`` à ``fin``."""
+    out: Dict[Tuple[str, str], List[Dict[str, Any]]] = {}
+    for r in conn.execute("""
+            SELECT j.* FROM verrous_refus j JOIN races r ON r.race_id = j.race_id
+            WHERE r.date >= ? AND r.date <= ? ORDER BY j.id""", (max(debut, MISE_EN_SERVICE), fin)):
+        out.setdefault((r["race_id"], r["horizon"]), []).append(dict(r))
+    return out
+
+
+def _observe(race: Dict[str, Any], passages: Sequence[Dict[str, Any]]) -> bool:
+    """Au moins un passage refusé avant le départ enregistré dans ``races`` (règle
+    1) : un REFUSE est alors attendu une fois la course fermée. Sinon l'horizon
+    relève de la liste « non observée », jamais absent des deux."""
+    return passage_retenu(passages, depart_utc(race)) is not None
+
+
 def non_observes(db, debut: str, fin: Optional[str] = None) -> List[Dict[str, str]]:
     """Horizons sans édition NVE et sans passage au journal (motif ANNULEE,
     HEURE_INCONNUE ou AUCUN_PASSAGE), plus les horizons sans édition d'une
@@ -227,8 +245,7 @@ def non_observes(db, debut: str, fin: Optional[str] = None) -> List[Dict[str, st
     with db.transaction() as conn:
         courses = _courses(conn, debut, fin)
         editions = _editions(conn)
-        journal = {(r["race_id"], r["horizon"]) for r in conn.execute(
-            "SELECT DISTINCT race_id, horizon FROM verrous_refus")}
+        journal = _journal(conn, debut, fin)
     out = []
     for race in courses:
         for h in HORIZONS:
@@ -237,12 +254,12 @@ def non_observes(db, debut: str, fin: Optional[str] = None) -> List[Dict[str, st
                 continue
             if str(race.get("status") or "").upper() == "ANNULEE":
                 motif = "ANNULEE"
-            elif cle in journal:
+            elif _observe(race, journal.get(cle, [])):
                 continue                                   # un REFUSE est attendu (ou en défaut C1)
             elif depart_utc(race) is None:
                 motif = "HEURE_INCONNUE"
             else:
-                motif = "AUCUN_PASSAGE"
+                motif = "AUCUN_PASSAGE"                    # aucun passage, ou seulement après le départ
             out.append({"race_id": race["race_id"], "horizon": h, "motif": motif})
     return out
 
@@ -254,17 +271,17 @@ def controles(db, debut: str, fin: str) -> Dict[str, List[Tuple[str, str]]]:
     with db.transaction() as conn:
         def q(sql: str, *params) -> List[Tuple[str, str]]:
             return sorted({(r[0], r[1]) for r in conn.execute(sql, params)})
-        c1 = q("""
-            WITH horizons(h) AS (VALUES ('T_MATIN'), ('T90'), ('T30'), ('T15'))
-            SELECT r.race_id, h.h FROM races r CROSS JOIN horizons h
-            WHERE r.date >= ? AND r.date <= ?
-              AND NOT EXISTS (SELECT 1 FROM predictions p WHERE p.race_id = r.race_id
-                              AND p.horizon = h.h AND p.engine_name = ?)
-              AND NOT EXISTS (SELECT 1 FROM verrous_tentatives v WHERE v.race_id = r.race_id
-                              AND v.horizon = h.h AND v.issue = 'REFUSE')
-              AND COALESCE(UPPER(r.status), '') <> 'ANNULEE'
-              AND EXISTS (SELECT 1 FROM verrous_refus j WHERE j.race_id = r.race_id AND j.horizon = h.h)""",
-               d, f, ENGINE)
+        # C1, en Python avec la règle 1 : un horizon sans édition NVE, sans
+        # REFUSE, d'une course non annulée, et dont un passage refusé précède
+        # le départ. Les autres relèvent de la liste « non observée ».
+        editions = _editions(conn)
+        refuses = {(r["race_id"], r["horizon"]) for r in conn.execute(
+            "SELECT race_id, horizon FROM verrous_tentatives WHERE issue = 'REFUSE'")}
+        journal = _journal(conn, d, f)
+        c1 = sorted((race["race_id"], h) for race in _courses(conn, d, f) for h in HORIZONS
+                    if (race["race_id"], h) not in editions and (race["race_id"], h) not in refuses
+                    and str(race.get("status") or "").upper() != "ANNULEE"
+                    and _observe(race, journal.get((race["race_id"], h), [])))
         c2 = q("""
             SELECT v.race_id, v.horizon FROM verrous_tentatives v
             JOIN races r ON r.race_id = v.race_id

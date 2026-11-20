@@ -318,7 +318,7 @@ Le délai avant le départ se calcule par jointure sur `races`
 | `turf_lab/verrous.py` | écritures au verrou, `REFUSE` (règles 1 à 3), liste « non observée », C1 à C5, rapport quotidien |
 | `main.py` | fin de chaque passage : `REFUSE` des courses fermées, **puis** rapport de la veille |
 | `.github/workflows/daily_sync.yml` | `rapports/verrous/` committé avec les exports du site |
-| `tests/test_verrous_tentatives.py` | les 16 tests prévus, plus la ligne `GATE_REFUSED`, un rapport avec couple en défaut et la garde de la bande `PARTIEL` |
+| `tests/test_verrous_tentatives.py` | les 16 tests prévus, plus la ligne `GATE_REFUSED`, un rapport avec couple en défaut, la garde de la bande `PARTIEL` et le départ avancé après les refus ; les dates des tests sont dérivées de `MISE_EN_SERVICE` (jamais avant le 23/11) : décaler la mise en service tient en une ligne |
 
 Points d'interprétation, à valider par le dev Radar et le dev NVE :
 
@@ -327,8 +327,12 @@ Points d'interprétation, à valider par le dev Radar et le dev NVE :
    départ. Avec la règle 3 (fermeture par `FINISHED` ou par la date), une
    course à l'heure inconnue mais refusée au moins une fois reçoit un
    `REFUSE` une fois fermée. C1 vérifie donc, dans le code : aucune édition,
-   aucun `REFUSE`, course non annulée, et au moins un passage au journal.
-   `HEURE_INCONNUE` ne vaut qu'en l'absence de passage.
+   aucun `REFUSE`, course non annulée, et au moins un passage au journal
+   **antérieur au départ** enregistré dans `races` (règle 1). Un horizon dont
+   tous les passages refusés sont postérieurs au départ (départ avancé après
+   les refus) n'a pas de `REFUSE` et relève de `AUCUN_PASSAGE` : jamais absent
+   des deux (correction du dev Radar du 20/11). `HEURE_INCONNUE` ne vaut qu'en
+   l'absence de passage.
 2. **Annulation.** Un horizon sans édition d'une course `ANNULEE` figure dans
    la liste « non observée » au motif `ANNULEE`, qu'il ait eu des passages
    refusés ou non : il n'a jamais de `REFUSE`.

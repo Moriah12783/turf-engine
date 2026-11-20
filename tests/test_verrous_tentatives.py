@@ -10,7 +10,7 @@ import sqlite3
 import sys
 import tempfile
 from contextlib import redirect_stdout
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 
 import pytest
 
@@ -22,8 +22,14 @@ from turf_lab.database import TurfDatabase
 from turf_lab.odds_quality import DEFAULT_ODDS, MIN_LOCK_RATIO, MIN_PRICED_RATIO
 from turf_lab.publication_gate import GATE_VERSION
 
-JOUR = "2026-11-24"                     # après la mise en service et après la bascule du plancher (07h30 UTC)
-LENDEMAIN = "2026-11-25"
+# Dérivés de MISE_EN_SERVICE (correction du dev Radar du 20/11) : le décalage
+# de la mise en service tient en une ligne. Jamais avant la bascule du plancher
+# du matin (23/11 : 07h30 UTC en hiver), dont dépend le cas Moulins/Pontchâteau.
+_JOUR = max(date.fromisoformat(verrous.MISE_EN_SERVICE), date(2026, 11, 23))
+JOUR = _JOUR.isoformat()
+LENDEMAIN = (_JOUR + timedelta(days=1)).isoformat()
+AVANT = (date.fromisoformat(verrous.MISE_EN_SERVICE) - timedelta(days=1)).isoformat()   # course non suivie
+J_API, AVANT_API = _JOUR.strftime("%d%m%Y"), date.fromisoformat(AVANT).strftime("%d%m%Y")
 
 
 def _t(hm, jour=JOUR):
@@ -32,7 +38,7 @@ def _t(hm, jour=JOUR):
     return d.replace(hour=h, minute=m)
 
 
-def _race(rid="R1C1_24112026_TESTVILLE", jour=JOUR, depart="14:00", status="SCHEDULED", start_utc=True):
+def _race(rid=f"R1C1_{J_API}_TESTVILLE", jour=JOUR, depart="14:00", status="SCHEDULED", start_utc=True):
     return {
         "race_id": rid, "date": jour, "meeting_number": 1, "race_number": 1, "name": "Prix Test",
         "hippodrome": "TESTVILLE", "discipline": "TROT_ATTELE", "distance": 2700, "track_type": "SABLE",
@@ -217,9 +223,9 @@ def test_refuse_puis_verrouille_jamais_de_refuse(banc):
 # 7 ─────────────────────────────────────────────────────────────────────
 def test_liste_non_observee_et_c1(banc):
     db, mgr = banc
-    annulee = _race("R2C1_24112026_TESTVILLE")
-    inconnue = _race("R2C2_24112026_TESTVILLE", depart=None)
-    sans_passage = _race("R2C3_24112026_TESTVILLE")
+    annulee = _race(f"R2C1_{J_API}_TESTVILLE")
+    inconnue = _race(f"R2C2_{J_API}_TESTVILLE", depart=None)
+    sans_passage = _race(f"R2C3_{J_API}_TESTVILLE")
     for r in (annulee, inconnue, sans_passage):
         _ajoute(db, r, _runners())
     _verrou(mgr, annulee, _runners(10, 2), "T_MATIN", _t("07:30"))        # refusée le matin…
@@ -236,13 +242,13 @@ def test_liste_non_observee_et_c1(banc):
 # 8 ─────────────────────────────────────────────────────────────────────
 def test_aucune_reprise_du_passe(banc):
     db, mgr = banc
-    jour = "2026-11-20"                                                   # avant la mise en service
-    race = _race("R1C1_20112026_TESTVILLE", jour=jour)
+    jour = AVANT                                                          # avant la mise en service
+    race = _race(f"R1C1_{AVANT_API}_TESTVILLE", jour=jour)
     _ajoute(db, race, _runners())
     _verrou(mgr, race, _runners(10, 2), "T_MATIN", _t("06:30", jour))
     _verrou(mgr, race, _runners(10, 7), "T90", _t("12:21", jour))
     assert _lignes(db, "verrous_refus") == [] and _lignes(db, "verrous_tentatives") == []
-    assert _refuses(db, _t("00:10", "2026-11-21")) == 0
+    assert _refuses(db, _t("00:10", verrous.MISE_EN_SERVICE)) == 0
     assert verrous.non_observes(db, jour) == []
     assert verrous.controles(db, verrous.MISE_EN_SERVICE, jour) == {f"C{i}": [] for i in range(1, 6)}
 
@@ -262,8 +268,8 @@ def test_calcul_repete_et_courses_fermees(banc):
     db, mgr = banc
     # Course datée du 24/11, partie le 25/11 à 00h20 UTC : refusée en T-30 avant
     # minuit, puis plus aucun horizon dû après minuit (elle n'est plus du jour).
-    tardive = dict(_race("R3C1_24112026_TESTVILLE", depart="00:20"), start_time_utc=f"{LENDEMAIN}T00:20:00Z")
-    ouverte = _race("R3C2_24112026_TESTVILLE")
+    tardive = dict(_race(f"R3C1_{J_API}_TESTVILLE", depart="00:20"), start_time_utc=f"{LENDEMAIN}T00:20:00Z")
+    ouverte = _race(f"R3C2_{J_API}_TESTVILLE")
     for r in (tardive, ouverte):
         _ajoute(db, r, _runners())
     _verrou(mgr, tardive, _runners(10, 2), "T30", _t("23:50"))
@@ -290,8 +296,8 @@ def test_empreinte_des_deux_seuils():
 def _journee_complete(db, mgr):
     """Une journée variée : verrous pleins, partiels, refus jusqu'au départ,
     annulation, heure inconnue, course jamais passée."""
-    pleine, partielle, refusee = (_race(f"R4C{i}_24112026_TESTVILLE") for i in (1, 2, 3))
-    annulee, inconnue = _race("R4C4_24112026_TESTVILLE"), _race("R4C5_24112026_TESTVILLE", depart=None)
+    pleine, partielle, refusee = (_race(f"R4C{i}_{J_API}_TESTVILLE") for i in (1, 2, 3))
+    annulee, inconnue = _race(f"R4C4_{J_API}_TESTVILLE"), _race(f"R4C5_{J_API}_TESTVILLE", depart=None)
     for r in (pleine, partielle, refusee, annulee, inconnue):
         _ajoute(db, r, _runners())
     for h, hm in (("T_MATIN", "07:30"), ("T90", "12:21"), ("T30", "13:26"), ("T15", "13:43")):
@@ -319,8 +325,8 @@ def test_cas_moulins_et_pontchateau_huit_refuse(banc):
     Radar du 14/10 sur Moulins R11C1 et Pontchâteau R12C1 du 10/10) : quatre
     REFUSE chacune, huit en tout."""
     db, mgr = banc
-    moulins = dict(_race("R11C1_24112026_MOULINS", depart="15:05"), hippodrome="MOULINS")
-    pont = dict(_race("R12C1_24112026_PONTCHATEAU", depart="15:40"), hippodrome="PONTCHATEAU")
+    moulins = dict(_race(f"R11C1_{J_API}_MOULINS", depart="15:05"), hippodrome="MOULINS")
+    pont = dict(_race(f"R12C1_{J_API}_PONTCHATEAU", depart="15:40"), hippodrome="PONTCHATEAU")
     for r in (moulins, pont):
         _ajoute(db, r, _runners(12, 3))
     t = _t("07:00")
@@ -352,7 +358,7 @@ class _Programme:
 def test_rapport_quotidien(banc, tmp_path):
     db, mgr = banc
     pleine, partielle, refusee, annulee, inconnue = _journee_complete(db, mgr)
-    manquante = "R9C9_24112026_JAMAISVUE"
+    manquante = f"R9C9_{J_API}_JAMAISVUE"
     ids = [r["race_id"] for r in (pleine, partielle, refusee, annulee, inconnue)] + [manquante]
     with redirect_stdout(io.StringIO()):
         etat = verrous.passage(db, _Programme(ids), str(tmp_path), _t("00:05", LENDEMAIN))
@@ -438,3 +444,22 @@ def test_garde_de_la_bande_partiel(banc):
     with redirect_stdout(io.StringIO()):
         assert verrous.enregistrer_partiel(db, race, "T90", 0.5, (10, 5), _t("12:21").isoformat()) is True
     assert [l["part_cotee"] for l in _lignes(db, "verrous_tentatives")] == [0.5]
+
+
+def test_depart_avance_apres_les_refus_aucun_passage(banc):
+    """Correction du dev Radar du 20/11 : tous les passages refusés sont
+    postérieurs au départ enregistré dans races (départ avancé après les
+    refus). Aucun REFUSE (règle 1), mais l'horizon est « non observée »
+    (AUCUN_PASSAGE) et C1 reste à zéro : jamais absent des deux."""
+    db, mgr = banc
+    race = _race()
+    _ajoute(db, race, _runners())
+    for h, hm in (("T_MATIN", "12:05"), ("T90", "12:21"), ("T30", "13:26"), ("T15", "13:43")):
+        _verrou(mgr, race, _runners(10, 3), h, _t(hm))                     # refus avant le départ de 14h00…
+    db.save_race(dict(race, scheduled_start_time="12:00 GMT", start_time_utc=f"{JOUR}T12:00:00Z"))   # …avancé à 12h00
+    _statut(db, race["race_id"], "FINISHED")
+    assert _refuses(db, _t("16:00")) == 0
+    motifs = {(n["race_id"], n["horizon"]): n["motif"] for n in verrous.non_observes(db, JOUR)}
+    assert {motifs[(race["race_id"], h)] for h in verrous.HORIZONS} == {"AUCUN_PASSAGE"}
+    assert len(motifs) == 4
+    _sans_defaut(db)
