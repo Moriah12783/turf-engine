@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "6855359e1e5b8ffbb0458200490cd69564901288",
-  "run_id": "44895811433",
+  "commit": "74f43967e0b95fdc4bdf4c8637c4f7f19da7fc63",
+  "run_id": "44896273786",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-21",
- "genere_le_utc": "2026-11-21T10:47:58Z",
+ "genere_le_utc": "2026-11-21T10:54:08Z",
  "nb_courses": 48,
  "compte_par_statut": {
-  "EN_ATTENTE": 48,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 47,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 0,
   "ANNULEE": 0
  },
- "empreinte_sha256": "580a72dabf7a9adf39afa34448d9389f7c36033850ecd69d94e7d8b4a285eaae",
+ "empreinte_sha256": "bbbb58edce5a948e4bec177c82c36021329cd238d54161ab45e76e6780f4b56b",
  "courses": [
   {
    "course_id": "R1C1_21112026_AUTEUIL",
@@ -500,15 +500,51 @@
     "partants_actifs": 11
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "CHEVAUX_SOUS_ORDRES"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 11,
+     "nom": "KEOPS DU CHATAULT",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 7,
+     "nom": "KLIMT MERITE",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 10,
+     "nom": "KOREDE",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 12,
+     "nom": "JOLIKOVA D'ARIANE",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    11,
+    7,
+    10,
+    12
+   ],
+   "non_classes": [
+    {
+     "num": 2,
+     "nom": "KATIA MON NEVEU",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [
     {
      "num": 3,
@@ -525,21 +561,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/21112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-21T10:51:19Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-21T10:51:19Z",
+    "derniere_verification_utc": "2026-11-21T10:51:19Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-21T10:51:19Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       11,
+       7,
+       10,
+       12
+      ]
+     }
+    ]
    }
   },
   {
@@ -553,9 +603,9 @@
     "libelle": "PRIX DE LA TOULOUBRE",
     "discipline": "TROT_ATTELE",
     "distance_m": 3000,
-    "heure_depart_utc": "2026-11-21T10:55:00Z",
+    "heure_depart_utc": "2026-11-21T11:05:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "10:55 GMT (11:55 Paris)",
+    "heure_depart_affichee": "11:05 GMT (12:05 Paris)",
     "partants_declares": 12,
     "partants_actifs": 12
    },
