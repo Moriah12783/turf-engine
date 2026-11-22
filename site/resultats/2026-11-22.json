@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "9e0d51eb56321bbf014b74d1c45cf8fa680c8f7c",
-  "run_id": "45012729023",
+  "commit": "da393040f47dac6452ef9bcc12f787496c24bc4c",
+  "run_id": "45013235608",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-22",
- "genere_le_utc": "2026-11-22T10:32:58Z",
+ "genere_le_utc": "2026-11-22T10:39:19Z",
  "nb_courses": 98,
  "compte_par_statut": {
-  "EN_ATTENTE": 96,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 95,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "c96d13f9ff972793f9dfdba7570b8e58440cf52b7b95cdcd38c8becc9c615a85",
+ "empreinte_sha256": "e37e2f6c730283c7873d2360ee821d88030187617bec99ec5473f5decc1debd9",
  "courses": [
   {
    "course_id": "R1C1_22112026_VINCENNES",
@@ -632,7 +632,7 @@
     "verifiee_le_utc": "2026-11-22T09:51:25Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-22T09:51:25Z",
-    "derniere_verification_utc": "2026-11-22T10:30:29Z"
+    "derniere_verification_utc": "2026-11-22T10:36:19Z"
    },
    "correction": {
     "version": 2,
@@ -818,7 +818,7 @@
     "verifiee_le_utc": "2026-11-22T10:30:29Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-22T10:30:29Z",
-    "derniere_verification_utc": "2026-11-22T10:30:29Z"
+    "derniere_verification_utc": "2026-11-22T10:36:19Z"
    },
    "correction": {
     "version": 2,
@@ -1219,14 +1219,44 @@
     "partants_actifs": 9
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "CHEVAUX_SOUS_ORDRES"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 6,
+     "nom": "PARI",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 1,
+     "nom": "PLACE MORNY",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 5,
+     "nom": "GOOD LUCK CHARM",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 9,
+     "nom": "CHARLOTTE SMOOTHIE",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    6,
+    1,
+    5,
+    9
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
@@ -1239,21 +1269,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/22112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-22T10:36:19Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-22T10:36:19Z",
+    "derniere_verification_utc": "2026-11-22T10:36:19Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-22T10:36:19Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       6,
+       1,
+       5,
+       9
+      ]
+     }
+    ]
    }
   },
   {
