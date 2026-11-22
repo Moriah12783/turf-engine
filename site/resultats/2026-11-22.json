@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "0d91bf953229adef872ced320728da3152b2f4f6",
-  "run_id": "45013938232",
+  "commit": "265b2c19b952d7740b0509688eaa0542725ba2a4",
+  "run_id": "45014417623",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-22",
- "genere_le_utc": "2026-11-22T10:47:45Z",
+ "genere_le_utc": "2026-11-22T10:54:55Z",
  "nb_courses": 98,
  "compte_par_statut": {
-  "EN_ATTENTE": 95,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 94,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 3,
   "ANNULEE": 0
  },
- "empreinte_sha256": "b8c350c1d1838ae0d96d353009b58b0499118ae7846b971f96ff82eee45abc8d",
+ "empreinte_sha256": "2bca681c36f21fa095387aa322da11aa9ff9d599a7023082736bb2c2d223f1ea",
  "courses": [
   {
    "course_id": "R1C1_22112026_VINCENNES",
@@ -632,7 +632,7 @@
     "verifiee_le_utc": "2026-11-22T09:51:25Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-22T09:51:25Z",
-    "derniere_verification_utc": "2026-11-22T10:45:25Z"
+    "derniere_verification_utc": "2026-11-22T10:51:17Z"
    },
    "correction": {
     "version": 2,
@@ -818,7 +818,7 @@
     "verifiee_le_utc": "2026-11-22T10:30:29Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-22T10:30:29Z",
-    "derniere_verification_utc": "2026-11-22T10:45:25Z"
+    "derniere_verification_utc": "2026-11-22T10:51:17Z"
    },
    "correction": {
     "version": 2,
@@ -875,15 +875,51 @@
     "partants_actifs": 8
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_CONFIRME"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 5,
+     "nom": "BARROSA",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 4,
+     "nom": "RAFFLES PRINCE",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 1,
+     "nom": "L'AU REVOIR",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 3,
+     "nom": "MAGNIFICA",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    5,
+    4,
+    1,
+    3
+   ],
+   "non_classes": [
+    {
+     "num": 8,
+     "nom": "WHI PUMP PUMP",
+     "incident": "ARRETE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": false,
@@ -895,21 +931,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/22112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-22T10:51:17Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-22T10:51:17Z",
+    "derniere_verification_utc": "2026-11-22T10:51:17Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-22T10:51:17Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       5,
+       4,
+       1,
+       3
+      ]
+     }
+    ]
    }
   },
   {
@@ -1350,7 +1400,7 @@
     "verifiee_le_utc": "2026-11-22T10:45:25Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-22T10:45:25Z",
-    "derniere_verification_utc": "2026-11-22T10:45:25Z"
+    "derniere_verification_utc": "2026-11-22T10:51:17Z"
    },
    "correction": {
     "version": 2,
@@ -3412,7 +3462,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -3921,7 +3971,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
