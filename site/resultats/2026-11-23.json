@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "2d888bf466fb98cc8bd41cd12aef3a1cbdd973d5",
-  "run_id": "45156658445",
+  "commit": "c68d7a20b547c0bce1fc34d72cc60a0252067605",
+  "run_id": "45157575253",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-23",
- "genere_le_utc": "2026-11-23T10:34:08Z",
+ "genere_le_utc": "2026-11-23T10:39:56Z",
  "nb_courses": 36,
  "compte_par_statut": {
-  "EN_ATTENTE": 35,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 34,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 1,
   "ANNULEE": 0
  },
- "empreinte_sha256": "99f4dd4e8619e083c37b307470e5b5a58ad320724852cd3ac6192926a1e93325",
+ "empreinte_sha256": "3600c4a77a97865d6578b89916787ba99d55bf9d686cdf7cfe21f77bfde95067",
  "courses": [
   {
    "course_id": "R1C1_23112026_VINCENNES",
@@ -619,7 +619,7 @@
     "verifiee_le_utc": "2026-11-23T10:15:29Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-23T10:15:29Z",
-    "derniere_verification_utc": "2026-11-23T10:30:22Z"
+    "derniere_verification_utc": "2026-11-23T10:36:17Z"
    },
    "correction": {
     "version": 2,
@@ -675,15 +675,56 @@
     "partants_actifs": 8
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_CONFIRME"
+    "pmu_statut": "ARRIVEE_PROVISOIRE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 2,
+     "nom": "NANJAYA",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 6,
+     "nom": "CHAMPIONNE D'ANJOU",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 7,
+     "nom": "SOLESSENCE",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 4,
+     "nom": "COEUR DE BALLON",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    2,
+    6,
+    7,
+    4
+   ],
+   "non_classes": [
+    {
+     "num": 8,
+     "nom": "NO LIMIT STAR",
+     "incident": "ARRETE"
+    },
+    {
+     "num": 9,
+     "nom": "LABELLEGNAC",
+     "incident": "ARRETE"
+    }
+   ],
    "non_partants": [
     {
      "num": 1,
@@ -700,21 +741,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/23112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-23T10:36:17Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-23T10:36:17Z",
+    "derniere_verification_utc": "2026-11-23T10:36:17Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-23T10:36:17Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       2,
+       6,
+       7,
+       4
+      ]
+     }
+    ]
    }
   },
   {
