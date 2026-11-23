@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "67118cfbce3b28025bb1e93152bafd946cc8f27c",
-  "run_id": "45179586500",
+  "commit": "5d3915b3c050805a91d9984fb5d5e3b9183d66c7",
+  "run_id": "45180551638",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-23",
- "genere_le_utc": "2026-11-23T13:04:52Z",
+ "genere_le_utc": "2026-11-23T13:09:08Z",
  "nb_courses": 36,
  "compte_par_statut": {
-  "EN_ATTENTE": 26,
+  "EN_ATTENTE": 25,
   "PROVISOIRE": 2,
-  "DEFINITIVE": 8,
+  "DEFINITIVE": 9,
   "ANNULEE": 0
  },
- "empreinte_sha256": "eccfcc14f08ace78daf7a5b3b79e3f0aadb7e269d90319d545ab4215c73e097f",
+ "empreinte_sha256": "c6e022ce05ba2442ce3a18859e216974ee6da224dfa713d23a7a9f90dc4cb27d",
  "courses": [
   {
    "course_id": "R1C1_23112026_VINCENNES",
@@ -36,15 +36,68 @@
     "partants_actifs": 17
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "FAUX_DEPART"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 15,
+     "nom": "INDY ROCK",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 13,
+     "nom": "HOMARD LAND",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 3,
+     "nom": "CHITCHAT",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 16,
+     "nom": "IBIZA BELLA",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 9,
+     "nom": "JONGLEUSE DE LUNE",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    15,
+    13,
+    3,
+    16,
+    9
+   ],
+   "non_classes": [
+    {
+     "num": 10,
+     "nom": "RIKITA JP",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 11,
+     "nom": "JET EXPRESS",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 12,
+     "nom": "JE REVE DU BOIS",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": false,
@@ -56,21 +109,36 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/23112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-23T13:06:20Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-23T13:06:20Z",
+    "derniere_verification_utc": "2026-11-23T13:06:20Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-23T13:06:20Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       15,
+       13,
+       3,
+       16,
+       9
+      ]
+     }
+    ]
    }
   },
   {
@@ -95,7 +163,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -619,7 +687,7 @@
     "verifiee_le_utc": "2026-11-23T10:15:29Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-23T10:15:29Z",
-    "derniere_verification_utc": "2026-11-23T13:00:27Z"
+    "derniere_verification_utc": "2026-11-23T13:06:20Z"
    },
    "correction": {
     "version": 2,
@@ -801,7 +869,7 @@
     "verifiee_le_utc": "2026-11-23T10:45:29Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-23T10:45:29Z",
-    "derniere_verification_utc": "2026-11-23T13:00:27Z"
+    "derniere_verification_utc": "2026-11-23T13:06:20Z"
    },
    "correction": {
     "version": 2,
@@ -1024,7 +1092,7 @@
     "verifiee_le_utc": "2026-11-23T11:21:16Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-23T11:21:16Z",
-    "derniere_verification_utc": "2026-11-23T13:00:27Z"
+    "derniere_verification_utc": "2026-11-23T13:06:20Z"
    },
    "correction": {
     "version": 2,
@@ -1289,7 +1357,7 @@
     "verifiee_le_utc": "2026-11-23T12:00:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-23T12:00:24Z",
-    "derniere_verification_utc": "2026-11-23T13:00:27Z"
+    "derniere_verification_utc": "2026-11-23T13:06:20Z"
    },
    "correction": {
     "version": 1,
@@ -1511,7 +1579,7 @@
     "verifiee_le_utc": "2026-11-23T12:36:19Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-23T12:36:19Z",
-    "derniere_verification_utc": "2026-11-23T13:00:27Z"
+    "derniere_verification_utc": "2026-11-23T13:06:20Z"
    },
    "correction": {
     "version": 2,
@@ -1567,11 +1635,11 @@
     "partants_actifs": 8
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -1597,19 +1665,40 @@
      "num": 7,
      "nom": "MAIRYGARDE DE MEE",
      "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 6,
+     "nom": "ISULA SENAM",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 5,
+     "nom": "FUN LOVE",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 8,
+     "nom": "MERLIN DU LARGE",
+     "dead_heat": false
     }
    ],
    "arrivee": [
     3,
     1,
     2,
-    7
+    7,
+    6,
+    5,
+    8
    ],
    "non_classes": [
     {
      "num": 4,
      "nom": "MADE IN'K",
-     "incident": "DEROBE"
+     "incident": "TOMBE"
     }
    ],
    "non_partants": [],
@@ -1628,15 +1717,15 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-11-23T13:00:27Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-11-23T13:06:20Z",
+    "verifiee_le_utc": "2026-11-23T13:06:20Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-11-23T13:00:27Z",
-    "derniere_verification_utc": "2026-11-23T13:00:27Z"
+    "derniere_modification_utc": "2026-11-23T13:06:20Z",
+    "derniere_verification_utc": "2026-11-23T13:06:20Z"
    },
    "correction": {
-    "version": 1,
-    "nb_corrections": 0,
+    "version": 2,
+    "nb_corrections": 1,
     "historique": [
      {
       "version": 1,
@@ -1649,6 +1738,22 @@
        1,
        2,
        7
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "CORRECTION_CLASSEMENT",
+      "horodatage_utc": "2026-11-23T13:06:20Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       3,
+       1,
+       2,
+       7,
+       6,
+       5,
+       8
       ]
      }
     ]
@@ -1676,7 +1781,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -1895,7 +2000,7 @@
     "verifiee_le_utc": "2026-11-23T11:30:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-23T11:36:19Z",
-    "derniere_verification_utc": "2026-11-23T13:00:27Z"
+    "derniere_verification_utc": "2026-11-23T13:06:20Z"
    },
    "correction": {
     "version": 2,
@@ -2143,7 +2248,7 @@
     "verifiee_le_utc": "2026-11-23T12:15:26Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-23T12:15:26Z",
-    "derniere_verification_utc": "2026-11-23T13:00:27Z"
+    "derniere_verification_utc": "2026-11-23T13:06:20Z"
    },
    "correction": {
     "version": 2,
@@ -2387,7 +2492,7 @@
     "verifiee_le_utc": "2026-11-23T12:51:16Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-23T12:51:16Z",
-    "derniere_verification_utc": "2026-11-23T13:00:27Z"
+    "derniere_verification_utc": "2026-11-23T13:06:20Z"
    },
    "correction": {
     "version": 2,
@@ -2452,7 +2557,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "JOKEYS_MONTENT_A_CHEVAL"
    },
    "classement": [],
    "arrivee": [],
@@ -3182,7 +3287,7 @@
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-23T13:00:27Z",
-    "derniere_verification_utc": "2026-11-23T13:00:27Z"
+    "derniere_verification_utc": "2026-11-23T13:06:20Z"
    },
    "correction": {
     "version": 1,
@@ -3215,9 +3320,9 @@
     "libelle": "PRIX JEAN-CLAUDE CHASSENARD",
     "discipline": "PLAT",
     "distance_m": 1200,
-    "heure_depart_utc": "2026-11-23T13:15:00Z",
+    "heure_depart_utc": "2026-11-23T13:27:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "13:15 GMT (14:15 Paris)",
+    "heure_depart_affichee": "13:27 GMT (14:27 Paris)",
     "partants_declares": 9,
     "partants_actifs": 9
    },
