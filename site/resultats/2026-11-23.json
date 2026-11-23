@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "e45a1023be250b0eb53effdac6e2151527ef3b13",
-  "run_id": "45178181312",
+  "commit": "67118cfbce3b28025bb1e93152bafd946cc8f27c",
+  "run_id": "45179586500",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-23",
- "genere_le_utc": "2026-11-23T12:54:01Z",
+ "genere_le_utc": "2026-11-23T13:04:52Z",
  "nb_courses": 36,
  "compte_par_statut": {
-  "EN_ATTENTE": 28,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 26,
+  "PROVISOIRE": 2,
   "DEFINITIVE": 8,
   "ANNULEE": 0
  },
- "empreinte_sha256": "5f61b60e86e0943cee4019247344c742a4133e1e34c0ef29b51b796f27ff3cad",
+ "empreinte_sha256": "eccfcc14f08ace78daf7a5b3b79e3f0aadb7e269d90319d545ab4215c73e097f",
  "courses": [
   {
    "course_id": "R1C1_23112026_VINCENNES",
@@ -40,7 +40,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "FAUX_DEPART"
    },
    "classement": [],
    "arrivee": [],
@@ -619,7 +619,7 @@
     "verifiee_le_utc": "2026-11-23T10:15:29Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-23T10:15:29Z",
-    "derniere_verification_utc": "2026-11-23T12:51:16Z"
+    "derniere_verification_utc": "2026-11-23T13:00:27Z"
    },
    "correction": {
     "version": 2,
@@ -801,7 +801,7 @@
     "verifiee_le_utc": "2026-11-23T10:45:29Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-23T10:45:29Z",
-    "derniere_verification_utc": "2026-11-23T12:51:16Z"
+    "derniere_verification_utc": "2026-11-23T13:00:27Z"
    },
    "correction": {
     "version": 2,
@@ -1024,7 +1024,7 @@
     "verifiee_le_utc": "2026-11-23T11:21:16Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-23T11:21:16Z",
-    "derniere_verification_utc": "2026-11-23T12:51:16Z"
+    "derniere_verification_utc": "2026-11-23T13:00:27Z"
    },
    "correction": {
     "version": 2,
@@ -1289,7 +1289,7 @@
     "verifiee_le_utc": "2026-11-23T12:00:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-23T12:00:24Z",
-    "derniere_verification_utc": "2026-11-23T12:51:16Z"
+    "derniere_verification_utc": "2026-11-23T13:00:27Z"
    },
    "correction": {
     "version": 1,
@@ -1511,7 +1511,7 @@
     "verifiee_le_utc": "2026-11-23T12:36:19Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-23T12:36:19Z",
-    "derniere_verification_utc": "2026-11-23T12:51:16Z"
+    "derniere_verification_utc": "2026-11-23T13:00:27Z"
    },
    "correction": {
     "version": 2,
@@ -1567,15 +1567,51 @@
     "partants_actifs": 8
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_CONFIRME"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 3,
+     "nom": "GELINA",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 1,
+     "nom": "SHEZALA",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 2,
+     "nom": "MAJOR DU LARGE",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 7,
+     "nom": "MAIRYGARDE DE MEE",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    3,
+    1,
+    2,
+    7
+   ],
+   "non_classes": [
+    {
+     "num": 4,
+     "nom": "MADE IN'K",
+     "incident": "DEROBE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": false,
@@ -1587,21 +1623,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/23112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-23T13:00:27Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-23T13:00:27Z",
+    "derniere_verification_utc": "2026-11-23T13:00:27Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-23T13:00:27Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       3,
+       1,
+       2,
+       7
+      ]
+     }
+    ]
    }
   },
   {
@@ -1845,7 +1895,7 @@
     "verifiee_le_utc": "2026-11-23T11:30:24Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-23T11:36:19Z",
-    "derniere_verification_utc": "2026-11-23T12:51:16Z"
+    "derniere_verification_utc": "2026-11-23T13:00:27Z"
    },
    "correction": {
     "version": 2,
@@ -2093,7 +2143,7 @@
     "verifiee_le_utc": "2026-11-23T12:15:26Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-23T12:15:26Z",
-    "derniere_verification_utc": "2026-11-23T12:51:16Z"
+    "derniere_verification_utc": "2026-11-23T13:00:27Z"
    },
    "correction": {
     "version": 2,
@@ -2337,7 +2387,7 @@
     "verifiee_le_utc": "2026-11-23T12:51:16Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-23T12:51:16Z",
-    "derniere_verification_utc": "2026-11-23T12:51:16Z"
+    "derniere_verification_utc": "2026-11-23T13:00:27Z"
    },
    "correction": {
     "version": 2,
@@ -2391,9 +2441,9 @@
     "libelle": "PRIX DE L'ENCLOS DES KANGOUROUS",
     "discipline": "PLAT",
     "distance_m": 1600,
-    "heure_depart_utc": "2026-11-23T13:12:00Z",
+    "heure_depart_utc": "2026-11-23T13:14:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "13:12 GMT (14:12 Paris)",
+    "heure_depart_affichee": "13:14 GMT (14:14 Paris)",
     "partants_declares": 12,
     "partants_actifs": 11
    },
@@ -3066,21 +3116,51 @@
     "libelle": "PRIX SERGIO RAFFAELLO",
     "discipline": "PLAT",
     "distance_m": 1850,
-    "heure_depart_utc": "2026-11-23T12:45:00Z",
+    "heure_depart_utc": "2026-11-23T12:53:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "12:45 GMT (13:45 Paris)",
+    "heure_depart_affichee": "12:53 GMT (13:53 Paris)",
     "partants_declares": 8,
     "partants_actifs": 8
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_DANS_TROIS_MINUTES"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 2,
+     "nom": "DULCINA CHOP",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 1,
+     "nom": "WISH YOU JOY",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 4,
+     "nom": "JAPONESE GARDEN",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 7,
+     "nom": "FILLE D ARTISTE",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    2,
+    1,
+    4,
+    7
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
@@ -3093,21 +3173,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/23112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-23T13:00:27Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-23T13:00:27Z",
+    "derniere_verification_utc": "2026-11-23T13:00:27Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-23T13:00:27Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       2,
+       1,
+       4,
+       7
+      ]
+     }
+    ]
    }
   },
   {
@@ -3350,7 +3444,7 @@
     "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "15:15 GMT (16:15 Paris)",
     "partants_declares": 10,
-    "partants_actifs": 8
+    "partants_actifs": 7
    },
    "statut": {
     "code": "EN_ATTENTE",
@@ -3370,6 +3464,10 @@
     {
      "num": 8,
      "nom": "KUSHINDA"
+    },
+    {
+     "num": 10,
+     "nom": "ELLIE'STAR"
     }
    ],
    "rapports": {
