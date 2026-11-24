@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "a5efb8ec721689b5413eae0fd96ebe30c10516d8",
-  "run_id": "45394098299",
+  "commit": "3a380d9c55d9d39eceacefb2638ecb29007b089b",
+  "run_id": "45395072939",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-24",
- "genere_le_utc": "2026-11-24T12:33:16Z",
+ "genere_le_utc": "2026-11-24T12:38:17Z",
  "nb_courses": 24,
  "compte_par_statut": {
-  "EN_ATTENTE": 22,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 21,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "e65095fd98a0a112ccba0b0cde68bc8d239ed9ca321b4d7075fe481eb835a4b5",
+ "empreinte_sha256": "2470e1cc8c45eb3851d554a99f9271336e376e0bada10c6a2fa1f03c2f1e659a",
  "courses": [
   {
    "course_id": "R1C1_24112026_DEAUVILLE",
@@ -40,7 +40,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -663,7 +663,7 @@
     "verifiee_le_utc": "2026-11-24T11:30:23Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-24T11:36:20Z",
-    "derniere_verification_utc": "2026-11-24T12:30:26Z"
+    "derniere_verification_utc": "2026-11-24T12:36:19Z"
    },
    "correction": {
     "version": 2,
@@ -960,7 +960,7 @@
     "verifiee_le_utc": "2026-11-24T12:06:28Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-24T12:06:28Z",
-    "derniere_verification_utc": "2026-11-24T12:30:26Z"
+    "derniere_verification_utc": "2026-11-24T12:36:19Z"
    },
    "correction": {
     "version": 2,
@@ -1023,15 +1023,56 @@
     "partants_actifs": 8
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_CONFIRME"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 5,
+     "nom": "NEWMAN TURGOT",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 4,
+     "nom": "NICKNAME",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 6,
+     "nom": "NELSON DE BANVILLE",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 3,
+     "nom": "NE M'ATTENDS PAS",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    5,
+    4,
+    6,
+    3
+   ],
+   "non_classes": [
+    {
+     "num": 1,
+     "nom": "NICO ARCTIC",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 8,
+     "nom": "NEW YORK D'OYSE",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [
     {
      "num": 9,
@@ -1048,21 +1089,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/24112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-24T12:36:19Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-24T12:36:19Z",
+    "derniere_verification_utc": "2026-11-24T12:36:19Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-24T12:36:19Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       5,
+       4,
+       6,
+       3
+      ]
+     }
+    ]
    }
   },
   {
@@ -1087,7 +1142,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
