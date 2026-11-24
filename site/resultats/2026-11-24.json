@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "175c7d9cd7bd12db4b4b8747d565dd2018e1ba40",
-  "run_id": "45401488518",
+  "commit": "d0246140663d2ad65ce49fdb00579092a2d27f28",
+  "run_id": "45402514541",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-24",
- "genere_le_utc": "2026-11-24T13:19:03Z",
+ "genere_le_utc": "2026-11-24T13:24:04Z",
  "nb_courses": 24,
  "compte_par_statut": {
-  "EN_ATTENTE": 20,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 19,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 4,
   "ANNULEE": 0
  },
- "empreinte_sha256": "1a532c6185876d127fcc525930533cf1cbff248d021bc8000917740afd63efbc",
+ "empreinte_sha256": "2c41e1dbab123308d9d245e3d1db8fa5344753259485b82d1de87154bc412c9f",
  "courses": [
   {
    "course_id": "R1C1_24112026_DEAUVILLE",
@@ -334,7 +334,7 @@
     "verifiee_le_utc": "2026-11-24T13:15:23Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-24T13:15:23Z",
-    "derniere_verification_utc": "2026-11-24T13:15:23Z"
+    "derniere_verification_utc": "2026-11-24T13:21:17Z"
    },
    "correction": {
     "version": 2,
@@ -403,7 +403,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "JOKEYS_MONTENT_A_CHEVAL"
    },
    "classement": [],
    "arrivee": [],
@@ -971,7 +971,7 @@
     "verifiee_le_utc": "2026-11-24T11:30:23Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-24T11:36:20Z",
-    "derniere_verification_utc": "2026-11-24T13:15:23Z"
+    "derniere_verification_utc": "2026-11-24T13:21:17Z"
    },
    "correction": {
     "version": 2,
@@ -1268,7 +1268,7 @@
     "verifiee_le_utc": "2026-11-24T12:06:28Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-24T12:06:28Z",
-    "derniere_verification_utc": "2026-11-24T13:15:23Z"
+    "derniere_verification_utc": "2026-11-24T13:21:17Z"
    },
    "correction": {
     "version": 2,
@@ -1487,7 +1487,7 @@
     "verifiee_le_utc": "2026-11-24T12:45:30Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-24T12:45:30Z",
-    "derniere_verification_utc": "2026-11-24T13:15:23Z"
+    "derniere_verification_utc": "2026-11-24T13:21:17Z"
    },
    "correction": {
     "version": 2,
@@ -1542,15 +1542,71 @@
     "partants_actifs": 12
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_CONFIRME"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 7,
+     "nom": "OUBLON DE LA COTE",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 11,
+     "nom": "OPERA WOOD",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 4,
+     "nom": "OLLISTER CYJUS",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 10,
+     "nom": "ORACIO DE LAUNI",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    7,
+    11,
+    4,
+    10
+   ],
+   "non_classes": [
+    {
+     "num": 1,
+     "nom": "ORION DU PONT",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 5,
+     "nom": "OLYMPIC DU COQ",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 6,
+     "nom": "ORAGE VINCI",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 8,
+     "nom": "ORION JIEL",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 12,
+     "nom": "OLERON SEVEN",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": false,
@@ -1562,21 +1618,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/24112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-24T13:21:17Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-24T13:21:17Z",
+    "derniere_verification_utc": "2026-11-24T13:21:17Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-24T13:21:17Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       7,
+       11,
+       4,
+       10
+      ]
+     }
+    ]
    }
   },
   {
@@ -1601,7 +1671,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
