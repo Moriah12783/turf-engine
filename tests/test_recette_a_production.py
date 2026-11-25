@@ -383,9 +383,10 @@ def _cite_le_temoin(chemin):
 
 
 def test_seul_le_moteur_cite_le_temoin():
-    """Jusqu'à la lecture de la règle d'arrêt, le témoin n'est lu par aucun
-    code. Le lecteur du labo s'ajoutera ici, dans la PR qui le gèle."""
-    autorises = {os.path.join("turf_lab", "engine.py")}
+    """Jusqu'à la lecture de la règle d'arrêt, le témoin n'est cité que par le
+    moteur, qui l'écrit, et par le lecteur scellé du labo, qui ne rend aucun
+    gain avant le 30/12 (docs/REGLE_ARRET.md)."""
+    autorises = {os.path.join("turf_lab", "engine.py"), os.path.join("turf_lab", "regle_arret.py")}
     fautifs = sorted(os.path.relpath(p, RACINE) for p in _fichiers(RACINE, (".py",)) if _cite_le_temoin(p))
     assert [p for p in fautifs if p not in autorises] == []
 

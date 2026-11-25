@@ -122,23 +122,24 @@ def test_une_fuite_l_emporte_sur_un_site_injoignable(depot):
     assert code == 1 and rapport["statut"] == "FUITE"
 
 
-def test_marqueurs_du_workflow_sont_ceux_de_la_regle_gelee():
+def test_marqueurs_du_workflow_sont_ceux_des_regles_gelees():
+    """Clé de l'archive de l'ombre et, à partir du 25/11, clé du témoin NVE
+    (règle d'arrêt, docs/REGLE_ARRET.md). La recette et le préfixe de
+    model_version deviennent des identifiants de production le 30/11."""
     pytest.importorskip("numpy")
-    from turf_lab import fondamental_nuit, ombre, ombre_lecture
+    from turf_lab import ombre_lecture, regle_arret
     texte = open(os.path.join(RACINE, ".github", "workflows", "garde_ombre.yml"), encoding="utf-8").read()
     marqueurs = re.findall(r"--marqueur (\S+)", texte)
-    assert marqueurs[0] == ombre_lecture.META_OMBRE
-    assert marqueurs[1] == ombre.RECETTE
-    assert fondamental_nuit.model_version().startswith(marqueurs[2])
-    assert len(marqueurs) == 3 and "--site https://prono.elite-turf.fr" in texte
+    assert marqueurs == [ombre_lecture.META_OMBRE, regle_arret.META_TEMOIN]
+    assert "--site https://prono.elite-turf.fr" in texte
 
 
 def test_le_depot_reel_est_propre_aujourd_hui():
     """Les fichiers publics du dépôt ne contiennent aucun marqueur (l'historique
     et le site publié sont contrôlés par le workflow)."""
     pytest.importorskip("numpy")
-    from turf_lab import ombre, ombre_lecture
-    fichiers, traces = garde.scanner_depot(RACINE, [ombre_lecture.META_OMBRE, ombre.RECETTE, "fond-matin-"])
+    from turf_lab import ombre_lecture, regle_arret
+    fichiers, traces = garde.scanner_depot(RACINE, [ombre_lecture.META_OMBRE, regle_arret.META_TEMOIN])
     assert fichiers > 0 and traces == []
 
 
