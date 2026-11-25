@@ -13,15 +13,13 @@ name: Compteur de l'ombre
 # Jours : de DEBUT_OMBRE (08/10) au 25/11, date de lecture au plus tard en
 # cas de remise à zéro. L'horloge Cloudflare l'a lancé à 01h17 UTC jusqu'au
 # 25/11. Ombre terminée (lecture unique du 12/11) : plus aucun horaire, sinon
-# il se relancerait chaque automne ; lancement manuel seulement, pour archive.
+# il se relancerait chaque automne, ni lancement sur PR (il lit la base réelle,
+# où les jours après le 25/11 n'ont plus d'ombre) ; lancement manuel
+# seulement, pour archive. Le code reste testé par tests/test_ombre_compteur.py.
 # Voir turf_lab/ombre_compteur.py.
 
 on:
   workflow_dispatch:
-  pull_request:
-    paths:
-      - "turf_lab/ombre_compteur.py"
-      - ".github/workflows/ombre_compteur.yml"
 
 permissions:
   contents: read
