@@ -1,0 +1,96 @@
+name: Lecture unique de la règle d'arrêt
+
+# Lecture scellée unique de la règle d'arrêt de la recette A en production
+# (décision écrite de Steph du 13/11/2026 ; règle gelée : docs/REGLE_ARRET.md).
+# Fenêtre : jours de course du 30/11 au 29/12/2026 (30 jours) ; lecture le
+# 30/12 ou après, une seule fois. Dépôt public : agrégats et décision
+# seulement.
+#
+# Ce workflow ne se lance qu'à la main, une seule fois, depuis main :
+#   - aucun déclenchement sur pull_request ni sur horaire ;
+#   - il refuse de tourner avant le 30/12/2026 (UTC) ;
+#   - il refuse de tourner si une exécution précédente a réussi, ou si
+#     docs/REGLE_ARRET_LECTURE.md existe déjà ;
+#   - il vérifie dans le run les empreintes sha256 du lecteur et de ses
+#     modules, identiques à celles du gel (tests/test_regle_arret.py) ;
+#   - il lit une COPIE en lecture seule de la base (jamais renvoyée sur R2)
+#     et appelle le lecteur gelé tel quel. Sa ligne REGLE_ARRET_LECTURE ne
+#     contient que des agrégats : aucune probabilité, aucun gain course par
+#     course.
+# Il ne touche pas à la chaîne de production.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: regle-arret-lecture
+  cancel-in-progress: false
+
+jobs:
+  lecture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PYTHONUNBUFFERED: "1"
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET: ${{ secrets.R2_BUCKET }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Single reading guard
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if [ "$GITHUB_REF" != "refs/heads/main" ]; then
+            echo "LECTURE_REFUSEE : lancement autorisé depuis main uniquement ($GITHUB_REF)"; exit 1
+          fi
+          aujourdhui=$(date -u +%F)
+          if [[ "$aujourdhui" < "2026-12-30" ]]; then
+            echo "LECTURE_REFUSEE : lecture unique le 2026-12-30 ou après (aujourd'hui $aujourdhui UTC)"; exit 1
+          fi
+          if [ -e docs/REGLE_ARRET_LECTURE.md ]; then
+            echo "LECTURE_REFUSEE : docs/REGLE_ARRET_LECTURE.md existe, la lecture unique est déjà publiée"; exit 1
+          fi
+          deja=$(gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/regle_arret_lecture.yml/runs?status=success&per_page=1" --jq '.total_count')
+          if [ "$deja" != "0" ]; then
+            echo "LECTURE_REFUSEE : $deja exécution(s) réussie(s) de ce workflow, la lecture unique a déjà eu lieu"; exit 1
+          fi
+          echo "LECTURE_UNIQUE : aucune exécution réussie antérieure ; commit $GITHUB_SHA ; $(date -u +%FT%TZ)"
+
+      - name: Check frozen fingerprints
+        run: |
+          sha256sum -c - <<'EOF'
+          afe9c49ca8d32dddaa71266ac361de15373426483ee5fdbe040c7300def51d92  turf_lab/regle_arret.py
+          5c3b379b903378ac471c5e66562a51eeac23697d64b8ac94fe9f49dfee58fa61  turf_lab/ombre_lecture.py
+          79fee2b28ba07e1577a705086ae3866b3158cee0bf5813b3ad06dc74785fb5b7  turf_lab/ombre.py
+          4f3d5c4471dca1a15119bd15e65479d8cacb64b9eda272206d59c5edeaeb9a80  turf_lab/r2_store.py
+          EOF
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -q --retries 10 --timeout 60 "numpy>=1.26,<3" "boto3>=1.36,<2"
+
+      - name: Fetch a read-only copy of the bench (never pushed)
+        run: |
+          python -m turf_lab.r2_store fetch --db copie_banc.db
+          echo "COPIE_BANC sha256 $(sha256sum copie_banc.db | cut -c1-64)"
+
+      - name: Single sealed reading (aggregates and decision only)
+        run: |
+          set -euo pipefail
+          python -m turf_lab.regle_arret --banc copie_banc.db | tee sortie_lecture.txt
+          if ! grep -q '^REGLE_ARRET_LECTURE ' sortie_lecture.txt; then
+            echo "AUCUNE_LECTURE : le lecteur n'a pas produit de ligne REGLE_ARRET_LECTURE"; exit 1
+          fi

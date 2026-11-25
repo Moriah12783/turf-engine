@@ -6,15 +6,18 @@ name: Garde de confidentialité de l'ombre
 # benchmark_dashboard.html) et les lignes ajoutées à ces fichiers par les
 # commits des 26 dernières heures (une journée entière, avec recouvrement). Il
 # en faut zéro.
-# Lancement : horloge Cloudflare à 01h17 UTC (turf-horloge, à la minute) ; les
-# horaires GitHub ci-dessous restent en filet, souvent avec plusieurs heures de
-# retard.
+# Lancement : horloge Cloudflare à 01h17 UTC jusqu'au 25/11 (turf-horloge, à
+# la minute), puis les horaires GitHub ci-dessous, souvent avec plusieurs
+# heures de retard.
 # Il ne touche pas à la chaîne de production : aucune écriture, aucun secret,
 # aucune lecture de la base. Il n'imprime jamais d'extrait, seulement des
 # comptes. Une trace trouvée fait échouer le job : GitHub envoie l'alerte.
-# Les marqueurs sont ceux de la règle gelée (docs/OMBRE_FONDAMENTAL.md) : clé
-# de l'archive, recette, préfixe de model_version ; tests/test_garde_ombre.py
-# vérifie qu'ils sont à jour. Voir turf_lab/garde_ombre.py.
+# Marqueurs : clé de l'archive de l'ombre (docs/OMBRE_FONDAMENTAL.md) et, à
+# partir du 25/11, clé du témoin NVE de la recette A en production, qui ne
+# doit rien laisser paraître avant la lecture unique de la règle d'arrêt
+# (docs/REGLE_ARRET.md). La recette et le préfixe de model_version sont des
+# identifiants de production à partir du 30/11 : ils ne sont plus cherchés.
+# tests/test_garde_ombre.py vérifie les marqueurs. Voir turf_lab/garde_ombre.py.
 
 on:
   schedule:
@@ -56,5 +59,4 @@ jobs:
           --site https://prono.elite-turf.fr
           --heures 26
           --marqueur ombre_fondamental
-          --marqueur A_lineaire_0.90_0.10
-          --marqueur fond-matin-
+          --marqueur temoin_nve

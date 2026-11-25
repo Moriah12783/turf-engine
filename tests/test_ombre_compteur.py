@@ -107,7 +107,7 @@ def test_workflow_lecture_seule_et_jours_de_l_ombre():
     yaml = pytest.importorskip("yaml")
     doc = yaml.safe_load(open(os.path.join(RACINE, ".github", "workflows", "ombre_compteur.yml"), encoding="utf-8"))
     declencheurs = doc.get("on", doc.get(True))
-    assert {c["cron"] for c in declencheurs["schedule"]} == {"23 9 8-31 10 *", "23 9 1-25 11 *"}
+    assert "schedule" not in declencheurs          # ombre terminée le 25/11 : plus d'horaire annuel
     assert doc["permissions"] == {"contents": "read"}
     texte = " ".join(str(e.get("run", "")) for e in doc["jobs"]["compteur"]["steps"])
     assert "r2_store fetch" in texte and "r2_store pull" not in texte and "push" not in texte
