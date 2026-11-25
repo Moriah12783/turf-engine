@@ -195,7 +195,7 @@ def test_intervalle_a_zero_maintien(tmp_path):
 
 
 def test_gain_calcule_comme_le_critere_du_12_11(tmp_path):
-    path = make_bench(str(tmp_path / "b.db"), jours=3)
+    path = make_bench(str(tmp_path / "b.db"), jours=10)          # 20 réunions : le seuil
     rows = ra.collecter(path)["rows"]
     conn = sqlite3.connect(path)
     attendu = []
@@ -212,10 +212,19 @@ def test_gain_calcule_comme_le_critere_du_12_11(tmp_path):
     assert lu["ic95"] == [round(lo, 5), round(hi, 5)] and lu["gain_ll"] == round(float(np.mean(attendu)), 5)
 
 
-def test_moins_de_deux_reunions_non_mesurable(tmp_path):
+def test_moins_de_20_reunions_non_mesurable(tmp_path):
+    """Décision de Steph du 25/11 : sous 20 réunions, l'IC95 par réunion est
+    trop étroit (un retour à tort dans 25 % des cas à 2 réunions) ; la règle
+    ne déclenche pas le retour."""
+    assert ra.REUNIONS_MIN == 20
     lu = _lire(make_bench(str(tmp_path / "b.db"), jours=1, per_day=8, une_reunion=True, gain="negatif"))[0]["lecture"]
     assert lu["reunions"] == 1 and lu["decision"] == ra.DECISION_NON_MESURABLE
     assert "ic95" not in lu
+    # Une réunion par jour : 19 jours restent non mesurables, 20 jours sont lus.
+    lu = _lire(make_bench(str(tmp_path / "c.db"), jours=19, per_day=10, gain="negatif"))[0]["lecture"]
+    assert lu["reunions"] == 19 and lu["decision"] == ra.DECISION_NON_MESURABLE
+    lu = _lire(make_bench(str(tmp_path / "d.db"), jours=20, per_day=10, gain="negatif"))[0]["lecture"]
+    assert lu["reunions"] == 20 and lu["decision"] == ra.DECISION_RETOUR
 
 
 # ── Éditions lues ─────────────────────────────────────────────────────────

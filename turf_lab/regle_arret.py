@@ -21,7 +21,7 @@ clé gelée, avec un témoin complet. Une édition en repli publie NVE : son gai
 est nul par construction, elle est comptée et exclue.
 
 Décision : RETOUR_AU_MOTEUR_ACTUEL si la borne haute de l'IC95 est négative ;
-sinon MAINTIEN_RECETTE_A. NON_MESURABLE (moins de deux réunions) : la règle
+sinon MAINTIEN_RECETTE_A. NON_MESURABLE (moins de 20 réunions) : la règle
 ne déclenche pas le retour, Steph décide par écrit.
 
 Sortie : agrégats seulement (dépôt public) : aucune probabilité, aucun gain
@@ -58,7 +58,7 @@ NVE_TEMOIN = "nve-2026-10-07"                # version NVE du témoin (le moteur
 MODELE_ATTENDU = "fond-matin-e570d663793c"   # fondamental figé pendant la fenêtre
 META_TEMOIN = "temoin_nve"                   # {nve_version, probabilities, selection}
 NIVEAU = 0.95                                # IC95, comme la lecture du 12/11
-REUNIONS_MIN = 2                             # en dessous : NON_MESURABLE
+REUNIONS_MIN = 20                            # en dessous : NON_MESURABLE (décision de Steph du 25/11)
 
 DECISION_RETOUR = "RETOUR_AU_MOTEUR_ACTUEL"
 DECISION_MAINTIEN = "MAINTIEN_RECETTE_A"

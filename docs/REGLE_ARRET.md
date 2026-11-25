@@ -71,7 +71,7 @@ jours manqués (calcul de nuit absent) comptent dans les 30 jours.
 |---|---|
 | Borne haute de l'IC95 < 0 | `RETOUR_AU_MOTEUR_ACTUEL` : PR de retour (`RECETTE_A_FIN` = lendemain de la lecture), fusion sur GO écrit de Steph |
 | Sinon | `MAINTIEN_RECETTE_A` |
-| Moins de deux réunions lues | `NON_MESURABLE_DECISION_ECRITE_DE_STEPH` : la règle ne déclenche pas le retour |
+| Moins de 20 réunions lues | `NON_MESURABLE_DECISION_ECRITE_DE_STEPH` : la règle ne déclenche pas le retour |
 
 - **Ce qui est publié :** des agrégats seulement (dépôt public). On publie les
   comptes, le gain moyen, l'IC95, la décision et une empreinte des courses
@@ -100,7 +100,7 @@ jours manqués (calcul de nuit absent) comptent dans les 30 jours.
 | MODELE_ATTENDU | fond-matin-e570d663793c |
 | META_TEMOIN | temoin_nve |
 | NIVEAU | 0.95 |
-| REUNIONS_MIN | 2 |
+| REUNIONS_MIN | 20 |
 | BOOTSTRAP_TIRAGES | 4000 |
 | GRAINE | 20260928 |
 
@@ -122,7 +122,12 @@ Une lecture intermédiaire est impossible par construction :
    exclues ; part en recette A rendue à titre d'information, sans suspendre la
    décision.
 2. Aucune remise à zéro : toute autre clé est exclue (`cle_differente`).
-3. `NON_MESURABLE` sous deux réunions, sans retour automatique.
+3. `NON_MESURABLE` sous 20 réunions, sans retour automatique. Seuil proposé
+   par le dev NVE et décidé par Steph le 25/11 : avec un gain vrai nul, la
+   borne haute de l'IC95 passe sous zéro dans environ 25 % des cas à 2
+   réunions, 10 % à 5, 5 % à 10, 4 % à 20 et 2,5 % à 100 (le niveau visé),
+   par simulation avec `ombre.intervalle`. Sans effet en marche normale :
+   l'ombre a lu 149 réunions en 35 jours.
 4. Le lecteur cite le témoin : il rejoint le moteur dans la liste de
    `test_seul_le_moteur_cite_le_temoin`, une fois la PR du moteur fusionnée.
 5. Garde de confidentialité : marqueurs `ombre_fondamental` et `temoin_nve`
