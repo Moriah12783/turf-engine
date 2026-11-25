@@ -1,8 +1,8 @@
 # Règle d'arrêt de la recette A en production
 
-**Statut : PROJET, en relecture (PR du labo du 25/11/2026).** La règle est gelée
-à la fusion, avant le premier jour de production (30/11). Après la fusion,
-aucune de ses constantes ne change : le workflow de lecture vérifie les
+**Statut : GELÉE le 25/11/2026** (fusion de la PR #44 sur le GO écrit de Steph,
+après la relecture du dev NVE), avant le premier jour de production (30/11).
+Aucune de ses constantes ne change plus : le workflow de lecture vérifie les
 empreintes du lecteur et de ses modules.
 
 ## Décision de départ
