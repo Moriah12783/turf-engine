@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "fe49a8054c73ee260c94de60ea8886f4b8fed9f7",
-  "run_id": "45619157334",
+  "commit": "f5ccfa12ce80b7cff3664426a94ab615397d6716",
+  "run_id": "45620155154",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-25",
- "genere_le_utc": "2026-11-25T13:04:16Z",
+ "genere_le_utc": "2026-11-25T13:08:49Z",
  "nb_courses": 23,
  "compte_par_statut": {
-  "EN_ATTENTE": 18,
-  "PROVISOIRE": 1,
+  "EN_ATTENTE": 17,
+  "PROVISOIRE": 2,
   "DEFINITIVE": 4,
   "ANNULEE": 0
  },
- "empreinte_sha256": "9f25e6df208f5ddf5ce3c62cebefc8f1db70044b441501817c4308bc9e95792c",
+ "empreinte_sha256": "abb0ec94db0e5ff561ae971d0d52b342966941cd6f6ef9fbb5a8748c9beef11b",
  "courses": [
   {
    "course_id": "R1C1_25112026_DEAUVILLE",
@@ -40,7 +40,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_AVEC_PHOTO"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
    "classement": [
     {
@@ -51,15 +51,15 @@
     },
     {
      "rang": 2,
-     "num": 1,
-     "nom": "WEEKEN",
-     "dead_heat": true
-    },
-    {
-     "rang": 2,
      "num": 7,
      "nom": "SAINT SAENS",
-     "dead_heat": true
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 1,
+     "nom": "WEEKEN",
+     "dead_heat": false
     },
     {
      "rang": 4,
@@ -69,23 +69,16 @@
     },
     {
      "rang": 5,
-     "num": 2,
-     "nom": "TISSIMO",
-     "dead_heat": true
-    },
-    {
-     "rang": 5,
      "num": 5,
      "nom": "GRAND SCOOP",
-     "dead_heat": true
+     "dead_heat": false
     }
    ],
    "arrivee": [
     8,
-    1,
     7,
+    1,
     10,
-    2,
     5
    ],
    "non_classes": [],
@@ -108,12 +101,12 @@
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-11-25T13:00:32Z",
-    "derniere_verification_utc": "2026-11-25T13:00:32Z"
+    "derniere_modification_utc": "2026-11-25T13:06:31Z",
+    "derniere_verification_utc": "2026-11-25T13:06:31Z"
    },
    "correction": {
-    "version": 1,
-    "nb_corrections": 0,
+    "version": 2,
+    "nb_corrections": 1,
     "historique": [
      {
       "version": 1,
@@ -127,6 +120,20 @@
        7,
        10,
        2,
+       5
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "PROVISOIRE",
+      "raison": "CORRECTION_CLASSEMENT",
+      "horodatage_utc": "2026-11-25T13:06:31Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       8,
+       7,
+       1,
+       10,
        5
       ]
      }
@@ -683,7 +690,7 @@
     "verifiee_le_utc": "2026-11-25T10:51:21Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-25T10:51:21Z",
-    "derniere_verification_utc": "2026-11-25T13:00:32Z"
+    "derniere_verification_utc": "2026-11-25T13:06:31Z"
    },
    "correction": {
     "version": 2,
@@ -911,7 +918,7 @@
     "verifiee_le_utc": "2026-11-25T11:45:27Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-25T11:45:27Z",
-    "derniere_verification_utc": "2026-11-25T13:00:32Z"
+    "derniere_verification_utc": "2026-11-25T13:06:31Z"
    },
    "correction": {
     "version": 1,
@@ -1135,7 +1142,7 @@
     "verifiee_le_utc": "2026-11-25T12:15:26Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-25T12:15:26Z",
-    "derniere_verification_utc": "2026-11-25T13:00:32Z"
+    "derniere_verification_utc": "2026-11-25T13:06:31Z"
    },
    "correction": {
     "version": 2,
@@ -1423,7 +1430,7 @@
     "verifiee_le_utc": "2026-11-25T12:48:45Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-25T12:48:45Z",
-    "derniere_verification_utc": "2026-11-25T13:00:32Z"
+    "derniere_verification_utc": "2026-11-25T13:06:31Z"
    },
    "correction": {
     "version": 2,
@@ -1482,15 +1489,63 @@
     "partants_actifs": 16
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_CONFIRME"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 5,
+     "nom": "ORLANDO YOUNG",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 2,
+     "nom": "EXPRESS LOVE (SWE)",
+     "dead_heat": true
+    },
+    {
+     "rang": 2,
+     "num": 6,
+     "nom": "IN LOVE DE CHARDET",
+     "dead_heat": true
+    },
+    {
+     "rang": 4,
+     "num": 15,
+     "nom": "IENISSE DE BARBRAY",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 13,
+     "nom": "HEROS DHELPA",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    5,
+    2,
+    6,
+    15,
+    13
+   ],
+   "non_classes": [
+    {
+     "num": 3,
+     "nom": "MERCENARY",
+     "incident": "ARRETE"
+    },
+    {
+     "num": 14,
+     "nom": "HANA D'OCCAGNES",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
     "disponibles": false,
@@ -1502,21 +1557,36 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/25112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-25T13:06:31Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-25T13:06:31Z",
+    "derniere_verification_utc": "2026-11-25T13:06:31Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-25T13:06:31Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       5,
+       2,
+       6,
+       15,
+       13
+      ]
+     }
+    ]
    }
   },
   {
@@ -1541,7 +1611,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
