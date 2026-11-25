@@ -88,11 +88,20 @@ def _porte(runner):
     return any(k in runner for k in fv.CLES)
 
 
+def _statut_seul(out, runners, statut):
+    """Copie des partants qui ne porte que le statut de la ligne, aucune
+    probabilité ; les partants d'origine restent intacts."""
+    return (out is not runners and len(out) == len(runners)
+            and all(r[fv.CLE_STATUT] == statut and not _porte(r) for r in out)
+            and all({k: v for k, v in c.items() if k != fv.CLE_STATUT} == r for c, r in zip(out, runners))
+            and not any(fv.CLE_STATUT in r for r in runners))
+
+
 # ── 1. Ligne du verrou T_MATIN ───────────────────────────────────────────
 def test_table_absente_rien_ne_change():
     db, mgr, race, runners, seen = _setup(table=False)
     same, info = fv.porter_fondamental(db, RACE_ID, runners)
-    assert same is runners and info["statut"] == "TABLE_ABSENTE"
+    assert _statut_seul(same, runners, "TABLE_ABSENTE") and info["statut"] == "TABLE_ABSENTE"
     assert mgr._lock_horizon(race, runners, "T_MATIN", now_utc=NOON) == 1
     assert not any(_porte(r) for r in seen[0])
 
@@ -120,11 +129,28 @@ def test_jamais_hors_du_matin_meme_passe():
         assert not any(_porte(r) for r in seen[0])
 
 
+def test_statut_porte_au_matin_seulement():
+    """Quatrième clé (recette A en production) : chaque partant reçu par les
+    moteurs au matin porte le statut de la ligne ; jamais hors du matin, jamais
+    sur les partants d'origine ; CLES reste les trois clés du fondamental."""
+    assert fv.CLE_STATUT not in fv.CLES and len(fv.CLES) == 3 and fv.STATUT_PORTE == "PORTE"
+    db, mgr, race, runners, seen = _setup()
+    assert mgr._lock_horizon(race, runners, "T_MATIN", now_utc=NOON) == 1
+    assert mgr._lock_horizon(race, runners, "T90", now_utc=NOON) == 1
+    assert all(r[fv.CLE_STATUT] == fv.STATUT_PORTE for r in seen[0])
+    assert not any(fv.CLE_STATUT in r for r in seen[1])
+    assert not any(fv.CLE_STATUT in r for r in runners)
+    db, mgr, race, runners, seen = _setup(table=False)
+    assert mgr._lock_horizon(race, runners, "T_MATIN", now_utc=NOON) == 1
+    assert all(r[fv.CLE_STATUT] == "TABLE_ABSENTE" for r in seen[0])
+    assert not any(fv.CLE_STATUT in r for r in runners)
+
+
 def test_aucune_ligne_pour_la_course():
     rows = [("R9C9_01102026_AILLEURS", k, v, VERSION, "x", TRAIN_UNTIL) for k, v in _probs().items()]
     db, mgr, race, runners, seen = _setup(rows=rows)
     same, info = fv.porter_fondamental(db, RACE_ID, runners)
-    assert same is runners and info["statut"] == "AUCUNE_LIGNE"
+    assert _statut_seul(same, runners, "AUCUNE_LIGNE") and info["statut"] == "AUCUNE_LIGNE"
 
 
 def test_plusieurs_versions_rien():
@@ -132,7 +158,7 @@ def test_plusieurs_versions_rien():
             + [(RACE_ID, k, v, "fond-autre", "x", TRAIN_UNTIL) for k, v in _probs().items()])
     db, mgr, race, runners, seen = _setup(rows=rows)
     same, info = fv.porter_fondamental(db, RACE_ID, runners)
-    assert same is runners and info["statut"] == "VERSIONS_MULTIPLES"
+    assert _statut_seul(same, runners, "VERSIONS_MULTIPLES") and info["statut"] == "VERSIONS_MULTIPLES"
     assert info["versions"] == sorted([VERSION, "fond-autre"])
     assert mgr._lock_horizon(race, runners, "T_MATIN", now_utc=NOON) == 1
     assert not any(_porte(r) for r in seen[0])
@@ -142,7 +168,7 @@ def test_plusieurs_train_until_rien():
     rows = [(RACE_ID, k, v, VERSION, "x", TRAIN_UNTIL if k < 5 else "2026-09-29") for k, v in _probs().items()]
     db, mgr, race, runners, seen = _setup(rows=rows)
     same, info = fv.porter_fondamental(db, RACE_ID, runners)
-    assert same is runners and info["statut"] == "TRAIN_UNTIL_MULTIPLES"
+    assert _statut_seul(same, runners, "TRAIN_UNTIL_MULTIPLES") and info["statut"] == "TRAIN_UNTIL_MULTIPLES"
 
 
 def test_partant_sans_p_laisse_au_moteur():
@@ -170,7 +196,7 @@ def test_erreur_de_lecture_n_empeche_pas_le_verrou():
     conn.commit()
     conn.close()
     out, info = fv.porter_fondamental(db, RACE_ID, runners)
-    assert out is runners and info["statut"] == "ERREUR"
+    assert _statut_seul(out, runners, "ERREUR") and info["statut"] == "ERREUR"
     buf = io.StringIO()
     with contextlib.redirect_stdout(buf):
         assert mgr._lock_horizon(race, runners, "T_MATIN", now_utc=NOON) == 1

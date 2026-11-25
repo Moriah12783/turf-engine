@@ -25,7 +25,7 @@ echo.
 echo  ===== Test 7/10 : porte de publication (tests\test_publication_gate.py) =====
 python tests\test_publication_gate.py
 echo.
-echo  ===== Test 8/10 : verrouillage T-15 (test_verrouillage_t15.py, exige au moins 06h30 UTC) =====
+echo  ===== Test 8/10 : verrouillage T-15 (test_verrouillage_t15.py, a lancer apres l'ouverture de l'edition du matin : 06h30 GMT, 07h30 GMT en hiver a partir du 23/11/2026) =====
 python test_verrouillage_t15.py
 echo.
 echo  ===== Test 9/10 : pont retour, resume du banc vers Radar (tests\test_pont_retour.py) =====

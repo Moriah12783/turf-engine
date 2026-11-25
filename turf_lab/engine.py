@@ -1,24 +1,72 @@
 """New Probabilistic & Value Prediction Engine with NO_BET filtering, Master Couplé detection, and Smart Tickets."""
 
 import math
+import re
+from datetime import date
 from typing import Optional, Any, Dict, List, Tuple
 from turf_lab.features import extract_runner_features
+# Contrat avec la ligne du verrou T_MATIN (dev daily_sync) : noms des clés
+# posées sur les partants et statut « porté », importés de sa source unique,
+# jamais recopiés.
+from turf_lab.fondamental_verrou import CLE_MODEL_VERSION, CLE_P, CLE_STATUT, CLE_TRAIN_UNTIL, STATUT_PORTE
 
 # ── Ombre du fondamental (règle pré-enregistrée : docs/OMBRE_FONDAMENTAL.md) ──
-# Version de NVE, FIGÉE pendant l'ombre : tout changement de code du moteur
-# (engine.py, features.py, human_stats.py) crée une nouvelle version et remet
-# à zéro le compteur et l'horloge de la lecture (bug bloquant seulement).
+# Version du calcul NVE mesuré pendant l'ombre (08/10 au 11/11/2026) : la
+# moyenne 0,90 marché + 0,10 modèle. C'est toujours ce calcul qui produit
+# T-90, T-30 et T-15, les éditions du matin en repli, et le témoin.
 NVE_VERSION = "nve-2026-10-07"
 OMBRE_META = "ombre_fondamental"
 OMBRE_RECETTE = "A_lineaire_0.90_0.10"
-# Contrat avec la ligne du verrou T_MATIN (dev daily_sync) : noms des clés
-# posées sur les partants, importés de sa source unique. Repli sur les mêmes
-# noms si le module est absent : le moteur ne casse jamais, il ne fait
-# simplement aucune ombre tant que la ligne n'est pas en place.
-try:
-    from turf_lab.fondamental_verrou import CLE_MODEL_VERSION, CLE_P, CLE_TRAIN_UNTIL
-except ImportError:  # pragma: no cover
-    CLE_P, CLE_MODEL_VERSION, CLE_TRAIN_UNTIL = "p_fondamental", "fondamental_model_version", "fondamental_train_until"
+
+# ── Recette A en production sur l'édition du matin ───────────────────────
+# Décision écrite de Steph du 13/11/2026, après la lecture unique de l'ombre
+# (docs/OMBRE_LECTURE.md) : recette A (0,90 marché + 0,10 fondamental) sur
+# l'édition du matin à compter du 30/11/2026. Contrat : docs/RECETTE_A_PRODUCTION.md.
+#
+# Deux constantes datées, comparées à la DATE DE LA COURSE (jamais à l'heure
+# du calcul : aucune bascule en cours de journée, aucun déploiement de nuit) :
+#   RECETTE_A_DEBUT  premier jour de course en recette A ;
+#   RECETTE_A_FIN    fin EXCLUE : premier jour de course rendu au moteur
+#                    actuel ; None = pas de fin. Le retour arrière de la règle
+#                    d'arrêt tient en cette seule ligne.
+RECETTE_A_DEBUT = "2026-11-30"
+RECETTE_A_FIN = None
+NVE_VERSION_RECETTE_A = "nve-2026-11-30"   # éditions du matin publiées en recette A
+RECETTE_REPLI = "REPLI_NVE"                # édition du matin produite par le calcul NVE_VERSION
+TEMOIN_META = "temoin_nve"                 # ce que NVE_VERSION aurait publié, pour la règle d'arrêt
+# Champ de métadonnées demandé par le labo pour son lecteur. Même nom que la clé
+# portée par les partants, lue dans la source unique de la ligne du verrou.
+META_MODEL_VERSION = CLE_MODEL_VERSION
+MOTIF_MARCHE_ABSENT = "MARCHE_ABSENT"
+MOTIF_PARTANT_SANS_FONDAMENTAL = "PARTANT_SANS_FONDAMENTAL"
+MOTIF_VERSIONS_MULTIPLES = "VERSIONS_MULTIPLES"
+MOTIF_TRAIN_UNTIL_MULTIPLES = "TRAIN_UNTIL_MULTIPLES"
+MOTIF_STATUT_INCOHERENT = "STATUT_INCOHERENT"
+MOTIF_ERREUR_MOTEUR = "ERREUR_MOTEUR"
+
+
+_JOUR = re.compile(r"(\d{4})-(\d{2})-(\d{2})")
+
+
+def _jour(valeur: Any) -> date:
+    """Date au seul format AAAA-MM-JJ (celui de ``race["date"]``) ; ValueError sinon."""
+    lu = _JOUR.fullmatch(str(valeur))
+    if not lu:
+        raise ValueError(valeur)
+    return date(int(lu.group(1)), int(lu.group(2)), int(lu.group(3)))
+
+
+def recette_a_en_service(jour: Any) -> bool:
+    """True si la date de course ``jour`` (AAAA-MM-JJ) est dans
+    [RECETTE_A_DEBUT ; RECETTE_A_FIN[. Date absente ou illisible : False, le
+    moteur actuel s'applique (refus par défaut)."""
+    try:
+        d = _jour(jour)
+        if d < _jour(RECETTE_A_DEBUT):
+            return False
+        return RECETTE_A_FIN is None or d < _jour(RECETTE_A_FIN)
+    except (TypeError, ValueError):
+        return False
 
 
 class NewValueEngine:
@@ -335,6 +383,25 @@ class NewValueEngine:
         # Sinon (course sans cotes PMU) : les probabilités restent celles
         # du modèle pur, déjà en place — aucune calibration fictive.
 
+        # 2ter. RECETTE A EN PRODUCTION (édition du matin, dates en service)
+        # `matin` vaut None hors des dates en service et hors du matin : rien
+        # ne change alors, jusqu'au dernier champ. Sinon c'est le statut de la
+        # ligne du verrou. Recette complète ou rien : si elle est calculable,
+        # ses probabilités remplacent celles de NVE AVANT le classement, si
+        # bien que sélection, bases, tocard, confiance et tickets en découlent
+        # par le code habituel ; l'édition NVE est gardée en témoin. Sinon,
+        # l'édition reste celle de NVE et porte le motif du repli.
+        matin = self._edition_du_matin(race, valid_runners)
+        marqueurs: Optional[Dict[str, Any]] = None
+        if matin is not None:
+            try:
+                marqueurs = self._publier_recette_a(matin, scored_runners, valid_runners, market_available)
+            except Exception:
+                # Jamais d'erreur remontée au verrou : l'édition du matin est
+                # posée avec le calcul NVE, et le repli est compté.
+                marqueurs = {"recette": RECETTE_REPLI, "motif_repli": MOTIF_ERREUR_MOTEUR,
+                             "nve_version": NVE_VERSION, META_MODEL_VERSION: None}
+
         # 3. Classement par probabilité calibrée
         # Le top 8 est constitué des 8 chevaux LES PLUS PROBABLES (indice de
         # value en départage). Banc rétrospectif sur 382 courses à cotes
@@ -382,10 +449,13 @@ class NewValueEngine:
         value_dict = {str(r["num"]): r["value_index"] for r in scored_runners}
         signal_dict = {str(r["num"]): r["smart_signal"] for r in scored_runners}
 
-        # Ombre du fondamental : calculée seulement si les partants portent
-        # leur probabilité fondamentale (le verrouillage ne la pose qu'au
-        # matin) et si le marché est réel. N'influence AUCUN champ publié.
-        ombre = self._ombre_fondamental(scored_runners, valid_runners, market_available)
+        # Ombre du fondamental (avant RECETTE_A_DEBUT, et après RECETTE_A_FIN) :
+        # calculée seulement si les partants portent leur probabilité
+        # fondamentale (le verrouillage ne la pose qu'au matin) et si le
+        # marché est réel. N'influence AUCUN champ publié. En production, elle
+        # n'est plus archivée : la recette est publiée, NVE est le témoin.
+        ombre = (self._ombre_fondamental(scored_runners, valid_runners, market_available)
+                 if marqueurs is None else None)
 
         prediction = {
             "engine_name": self.engine_name,
@@ -424,37 +494,99 @@ class NewValueEngine:
         }
         if ombre is not None:
             prediction["metadata"][OMBRE_META] = ombre
+        if marqueurs is not None:
+            prediction["metadata"].update(marqueurs)
         return prediction
+
+    def _edition_du_matin(self, race: Dict[str, Any], valid_runners: List[Dict[str, Any]]) -> Optional[str]:
+        """Statut de la ligne du verrou si cet appel calcule une édition du
+        matin à une date en service, sinon None. Le moteur n'a aucune logique
+        d'horizon : c'est la ligne du verrou T_MATIN qui le lui dit, par la
+        clé de statut posée sur la copie des partants (ou, à défaut, par les
+        probabilités portées). T-90, T-30 et T-15 ne portent rien."""
+        if not recette_a_en_service(race.get("date")):
+            return None
+        statuts = {str(r[CLE_STATUT]) for r in valid_runners if r.get(CLE_STATUT) is not None}
+        if len(statuts) == 1:
+            return statuts.pop()
+        if statuts:
+            return MOTIF_STATUT_INCOHERENT
+        return STATUT_PORTE if any(CLE_P in r for r in valid_runners) else None
+
+    def _publier_recette_a(self, matin: str, scored_runners: List[Dict[str, Any]],
+                           valid_runners: List[Dict[str, Any]], market_available: bool) -> Dict[str, Any]:
+        """Édition du matin à une date en service : marqueurs de l'édition.
+        Si la recette A est calculable, ses probabilités et ses indices de
+        value remplacent ceux de NVE sur ``scored_runners`` (dernière étape,
+        après tous les calculs : rien n'est écrit à moitié) et l'édition NVE
+        est rendue en témoin. Sinon rien n'est modifié : repli et motif."""
+        recette, motif = (self._recette_a(scored_runners, valid_runners, market_available)
+                          if matin == STATUT_PORTE else (None, matin))
+        if recette is None:
+            return {"recette": RECETTE_REPLI, "motif_repli": motif, "nve_version": NVE_VERSION,
+                    META_MODEL_VERSION: self._version_portee(valid_runners)}
+        classement_nve = sorted(scored_runners, key=lambda x: (x["estimated_prob"], x["value_index"]), reverse=True)
+        temoin = {
+            "nve_version": NVE_VERSION,
+            "probabilities": {str(r["num"]): r["estimated_prob"] for r in scored_runners},
+            "selection": [r["num"] for r in classement_nve[:10]],
+        }
+        # Même convention que l'ombre mesurée : indice de value = probabilité
+        # publiée (4 décimales) × cote.
+        publie = [(r, recette["probabilities"][str(r["num"])]) for r in scored_runners]
+        valeurs = [(r, p, round(p * r["odds"], 2)) for r, p in publie]
+        marqueurs = {"recette": recette["recette"], "nve_version": NVE_VERSION_RECETTE_A,
+                     META_MODEL_VERSION: recette["model_version"], TEMOIN_META: temoin}
+        for r, p, v in valeurs:
+            r["estimated_prob"] = p
+            r["value_index"] = v
+        return marqueurs
+
+    @staticmethod
+    def _version_portee(valid_runners: List[Dict[str, Any]]) -> Optional[str]:
+        """Version du modèle fondamental portée par les partants, si elle est unique."""
+        versions = {r.get(CLE_MODEL_VERSION) for r in valid_runners} - {None}
+        return str(versions.pop()) if len(versions) == 1 else None
 
     def _ombre_fondamental(self, scored_runners: List[Dict[str, Any]], valid_runners: List[Dict[str, Any]],
                            market_available: bool) -> Optional[Dict[str, Any]]:
-        """Recette A de l'ombre : MARKET_WEIGHT × marché + (1 − MARKET_WEIGHT) ×
-        fondamental, à la place du modèle pur. Jamais d'ombre partielle :
-        un partant sans probabilité fondamentale, deux versions du modèle
-        mêlées ou un marché absent => aucune ombre (None). Un non-partant
-        tardif est exclu en amont : le fondamental est renormalisé sur les
-        partants valides. La sélection de l'ombre suit exactement le code et
-        le départage de la production (probabilité, puis indice de value)."""
+        """Archive de l'ombre : la recette A, ou None si elle n'est pas
+        calculable (jamais d'ombre partielle)."""
+        return self._recette_a(scored_runners, valid_runners, market_available)[0]
+
+    def _recette_a(self, scored_runners: List[Dict[str, Any]], valid_runners: List[Dict[str, Any]],
+                   market_available: bool) -> Tuple[Optional[Dict[str, Any]], Optional[str]]:
+        """Recette A : MARKET_WEIGHT × marché + (1 − MARKET_WEIGHT) ×
+        fondamental, à la place du modèle pur. UN SEUL calcul, pour l'ombre
+        mesurée du 08/10 au 11/11 comme pour l'édition publiée à partir de
+        RECETTE_A_DEBUT. Renvoie (recette, None), ou (None, motif) : jamais de
+        recette partielle. Un partant sans probabilité fondamentale, deux
+        versions du modèle mêlées ou un marché absent => aucune recette. Un
+        non-partant tardif est exclu en amont : le fondamental est renormalisé
+        sur les partants valides. La sélection suit exactement le code et le
+        départage de la production (probabilité, puis indice de value)."""
         if not market_available or not scored_runners:
-            return None
+            return None, MOTIF_MARCHE_ABSENT
         source = {r.get("num"): r for r in valid_runners}
         fond: Dict[Any, float] = {}
         versions, trains = set(), set()
         for sr in scored_runners:
             runner = source.get(sr["num"])
             if runner is None or "p_market" not in sr:
-                return None
+                return None, MOTIF_PARTANT_SANS_FONDAMENTAL
             try:
                 p = float(runner.get(CLE_P))
             except (TypeError, ValueError):
-                return None
+                return None, MOTIF_PARTANT_SANS_FONDAMENTAL
             if not (p > 0.0) or math.isinf(p):
-                return None
+                return None, MOTIF_PARTANT_SANS_FONDAMENTAL
             fond[sr["num"]] = p
             versions.add(runner.get(CLE_MODEL_VERSION))
             trains.add(runner.get(CLE_TRAIN_UNTIL))
-        if len(versions) != 1 or len(trains) != 1 or None in versions or None in trains:
-            return None
+        if len(versions) != 1 or None in versions:
+            return None, MOTIF_VERSIONS_MULTIPLES
+        if len(trains) != 1 or None in trains:
+            return None, MOTIF_TRAIN_UNTIL_MULTIPLES
         total = sum(fond.values())
         fond = {n: p / total for n, p in fond.items()}
         rows = []
@@ -470,4 +602,4 @@ class NewValueEngine:
             "probabilities": {str(x["num"]): x["estimated_prob"] for x in rows},
             "selection": [x["num"] for x in ranked[:10]],
             "fondamental": {str(n): round(p, 6) for n, p in fond.items()},
-        }
+        }, None
