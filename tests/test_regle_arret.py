@@ -148,7 +148,7 @@ def test_contrat_avec_le_compteur_et_le_moteur():
     assert ra.MODELE_ATTENDU == fondamental_nuit.model_version()      # fondamental figé pendant la fenêtre
     # Une fois le paquet moteur fusionné, ses constantes doivent concorder.
     for nom, attendu in (("RECETTE_A_DEBUT", ra.DEBUT_PRODUCTION), ("RECETTE_REPLI", ra.RECETTE_REPLI),
-                         ("NVE_VERSION_RECETTE_A", ra.NVE_RECETTE_A)):
+                         ("NVE_VERSION_RECETTE_A", ra.NVE_RECETTE_A), ("TEMOIN_META", ra.META_TEMOIN)):
         if hasattr(engine, nom):
             assert getattr(engine, nom) == attendu, nom
 

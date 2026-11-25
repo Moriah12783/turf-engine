@@ -47,7 +47,7 @@ réunies.
    `A_lineaire_0.90_0.10`, `nve_version` vaut `nve-2026-11-30` et
    `fondamental_model_version` vaut `fond-matin-e570d663793c`.
 5. Son témoin est complet : version `nve-2026-10-07`, une probabilité par
-   partant publié, toutes positives, de somme non nulle.
+   partant publié, aucune négative, de somme non nulle.
 6. Le gagnant figure parmi les partants de l'édition.
 
 **Éditions en repli.** Une édition en repli (`recette` = `REPLI_NVE`) publie
