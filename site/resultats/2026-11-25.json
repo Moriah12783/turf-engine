@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "0baa2eb3bddeb9bf7147642b4f051afcba0606c6",
-  "run_id": "45589305992",
+  "commit": "90c3bf924afc822ed1fd20721a89afb7896e183c",
+  "run_id": "45614343283",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-25",
- "genere_le_utc": "2026-11-25T09:53:45Z",
+ "genere_le_utc": "2026-11-25T12:32:50Z",
  "nb_courses": 23,
  "compte_par_statut": {
-  "EN_ATTENTE": 23,
+  "EN_ATTENTE": 20,
   "PROVISOIRE": 0,
-  "DEFINITIVE": 0,
+  "DEFINITIVE": 3,
   "ANNULEE": 0
  },
- "empreinte_sha256": "877c6e7589b5efa4f4faa883c3f48836326f7bbd06eb592296088137ad5128a0",
+ "empreinte_sha256": "7d9aeeec5a4e8e25c733db87664fa55dbfe4f3b74ecee97e66b1492ad4d8154e",
  "courses": [
   {
    "course_id": "R1C1_25112026_DEAUVILLE",
@@ -40,7 +40,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -476,41 +476,181 @@
     "partants_actifs": 13
    },
    "statut": {
-    "code": "EN_ATTENTE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "FIN_COURSE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 12,
+     "nom": "MAGYC BERRY",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 3,
+     "nom": "LOUKA DES AULNES",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 10,
+     "nom": "LONELY RIDER",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 7,
+     "nom": "LA GASTINE",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    12,
+    3,
+    10,
+    7
+   ],
+   "non_classes": [
+    {
+     "num": 8,
+     "nom": "MANHATTAN SYGA",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 11,
+     "nom": "MELISSE DES EPINES",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 13,
+     "nom": "MARLEY DE BAILLE",
+     "incident": "DISTANCE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "12": 68.4
+    },
+    "simple_place": {
+     "12": 10.6,
+     "3": 3.1,
+     "10": 3.0
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "12-3",
+      "dividende_pour_1_eur": 320.7
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "12-3",
+      "dividende_pour_1_eur": 70.9
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "12-10",
+      "dividende_pour_1_eur": 48.9
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "3-10",
+      "dividende_pour_1_eur": 10.6
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "12-3",
+      "dividende_pour_1_eur": 7.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "12-10",
+      "dividende_pour_1_eur": 7.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "12-7",
+      "dividende_pour_1_eur": 7.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "3-10",
+      "dividende_pour_1_eur": 7.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "3-7",
+      "dividende_pour_1_eur": 7.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "10-7",
+      "dividende_pour_1_eur": 7.0
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "12-3-10",
+      "dividende_pour_1_eur": 986.9
+     },
+     {
+      "type_pari": "MINI_MULTI",
+      "combinaison": "12-3-10-7",
+      "dividende_pour_1_eur": 47.5
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/25112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "premiere_lecture_utc": "2026-11-25T10:45:31Z",
+    "definitive_depuis_utc": "2026-11-25T10:51:21Z",
+    "verifiee_le_utc": "2026-11-25T10:51:21Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-25T10:51:21Z",
+    "derniere_verification_utc": "2026-11-25T12:30:31Z"
    },
    "correction": {
-    "version": 0,
-    "nb_corrections": 0,
-    "historique": []
+    "version": 2,
+    "nb_corrections": 1,
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-25T10:45:31Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       12,
+       13,
+       3,
+       10
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "CORRECTION_CLASSEMENT",
+      "horodatage_utc": "2026-11-25T10:51:21Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       12,
+       3,
+       10,
+       7
+      ]
+     }
+    ]
    }
   },
   {
@@ -524,22 +664,96 @@
     "libelle": "PRIX VILLE DE BROU & ETS DENIS",
     "discipline": "TROT_ATTELE",
     "distance_m": 2800,
-    "heure_depart_utc": "2026-11-25T10:55:00Z",
+    "heure_depart_utc": "2026-11-25T11:30:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "10:55 GMT (11:55 Paris)",
+    "heure_depart_affichee": "11:30 GMT (12:30 Paris)",
     "partants_declares": 12,
     "partants_actifs": 11
    },
    "statut": {
-    "code": "EN_ATTENTE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 9,
+     "nom": "NEVERS",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 8,
+     "nom": "NERLY D'OURVILLE",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 5,
+     "nom": "NAGUERE TURGOT",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 7,
+     "nom": "NOXUS JIEL",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 6,
+     "nom": "NEL DE QUELAINES",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 10,
+     "nom": "NAAMA BAY",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 12,
+     "nom": "NELLY DES CHARMES",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 2,
+     "nom": "NATASHA DES BAUX",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    9,
+    8,
+    5,
+    7,
+    6,
+    10,
+    12,
+    2
+   ],
+   "non_classes": [
+    {
+     "num": 1,
+     "nom": "NIGHT ERCA",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 4,
+     "nom": "NEVER EVER",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 11,
+     "nom": "NOGERO",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [
     {
      "num": 3,
@@ -547,30 +761,115 @@
     }
    ],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "9": 2.3
+    },
+    "simple_place": {
+     "9": 1.3,
+     "8": 1.7,
+     "5": 1.4
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "9-8",
+      "dividende_pour_1_eur": 8.6
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "9-8",
+      "dividende_pour_1_eur": 3.3
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "9-5",
+      "dividende_pour_1_eur": 2.6
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "8-5",
+      "dividende_pour_1_eur": 3.0
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "9-8",
+      "dividende_pour_1_eur": 1.4
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "9-5",
+      "dividende_pour_1_eur": 1.4
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "9-7",
+      "dividende_pour_1_eur": 1.4
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "8-5",
+      "dividende_pour_1_eur": 1.4
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "8-7",
+      "dividende_pour_1_eur": 1.4
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "5-7",
+      "dividende_pour_1_eur": 1.4
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "9-8-5",
+      "dividende_pour_1_eur": 6.6
+     },
+     {
+      "type_pari": "MINI_MULTI",
+      "combinaison": "9-8-5-7",
+      "dividende_pour_1_eur": 11.0
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/25112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "premiere_lecture_utc": "2026-11-25T11:45:27Z",
+    "definitive_depuis_utc": "2026-11-25T11:45:27Z",
+    "verifiee_le_utc": "2026-11-25T11:45:27Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-25T11:45:27Z",
+    "derniere_verification_utc": "2026-11-25T12:30:31Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "DEFINITIVE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-25T11:45:27Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       9,
+       8,
+       5,
+       7,
+       6,
+       10,
+       12,
+       2
+      ]
+     }
+    ]
    }
   },
   {
@@ -584,48 +883,232 @@
     "libelle": "PRIX JAUNEAU PEINTURE",
     "discipline": "TROT_ATTELE",
     "distance_m": 2800,
-    "heure_depart_utc": "2026-11-25T11:25:00Z",
+    "heure_depart_utc": "2026-11-25T11:55:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "11:25 GMT (12:25 Paris)",
+    "heure_depart_affichee": "11:55 GMT (12:55 Paris)",
     "partants_declares": 12,
     "partants_actifs": 12
    },
    "statut": {
-    "code": "EN_ATTENTE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
-   "classement": [],
-   "arrivee": [],
-   "non_classes": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 4,
+     "nom": "MADAME DELO",
+     "dead_heat": true
+    },
+    {
+     "rang": 1,
+     "num": 6,
+     "nom": "MARVELA DU DUDY",
+     "dead_heat": true
+    },
+    {
+     "rang": 3,
+     "num": 8,
+     "nom": "MINI MISS",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 3,
+     "nom": "MARACANA BEACH",
+     "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 12,
+     "nom": "MIBORA BUISSONAY",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 7,
+     "nom": "MICHKA",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 9,
+     "nom": "MOLLY DU CAUX",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 1,
+     "nom": "MA JOLIE PRINCESS",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 11,
+     "nom": "MAJESTIC LADY",
+     "dead_heat": false
+    },
+    {
+     "rang": 10,
+     "num": 2,
+     "nom": "MARIE JOSE LABELLE",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    4,
+    6,
+    8,
+    3,
+    12,
+    7,
+    9,
+    1,
+    11,
+    2
+   ],
+   "non_classes": [
+    {
+     "num": 5,
+     "nom": "MAGIC MAGGIE",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    },
+    {
+     "num": 10,
+     "nom": "MY FAVORITE THINGS",
+     "incident": "DISQUALIFIE_POUR_ALLURE_IRREGULIERE"
+    }
+   ],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "4": 3.2,
+     "6": 1.7
+    },
+    "simple_place": {
+     "4": 2.3,
+     "6": 1.6,
+     "8": 2.2
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "4-6",
+      "dividende_pour_1_eur": 14.6
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "4-6",
+      "dividende_pour_1_eur": 5.4
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "4-8",
+      "dividende_pour_1_eur": 7.6
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "6-8",
+      "dividende_pour_1_eur": 4.1
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "4-6",
+      "dividende_pour_1_eur": 3.2
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "4-8",
+      "dividende_pour_1_eur": 3.2
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "4-3",
+      "dividende_pour_1_eur": 3.2
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "6-8",
+      "dividende_pour_1_eur": 3.2
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "6-3",
+      "dividende_pour_1_eur": 3.2
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "8-3",
+      "dividende_pour_1_eur": 3.2
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "4-6-8",
+      "dividende_pour_1_eur": 24.2
+     },
+     {
+      "type_pari": "MINI_MULTI",
+      "combinaison": "4-6-8-3",
+      "dividende_pour_1_eur": 4.4
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/25112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "premiere_lecture_utc": "2026-11-25T12:06:28Z",
+    "definitive_depuis_utc": "2026-11-25T12:15:26Z",
+    "verifiee_le_utc": "2026-11-25T12:15:26Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-25T12:15:26Z",
+    "derniere_verification_utc": "2026-11-25T12:30:31Z"
    },
    "correction": {
-    "version": 0,
+    "version": 2,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-25T12:06:28Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       4,
+       6,
+       8,
+       3
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-11-25T12:15:26Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       4,
+       6,
+       8,
+       3,
+       12,
+       7,
+       9,
+       1,
+       11,
+       2
+      ]
+     }
+    ]
    }
   },
   {
@@ -639,23 +1122,28 @@
     "libelle": "PRIX DE LA MAISON DE LA PRESSE DE BROU",
     "discipline": "TROT_ATTELE",
     "distance_m": 2800,
-    "heure_depart_utc": "2026-11-25T11:55:00Z",
+    "heure_depart_utc": "2026-11-25T12:27:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "11:55 GMT (12:55 Paris)",
+    "heure_depart_affichee": "12:27 GMT (13:27 Paris)",
     "partants_declares": 13,
-    "partants_actifs": 13
+    "partants_actifs": 12
    },
    "statut": {
     "code": "EN_ATTENTE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "DEPART_CONFIRME"
    },
    "classement": [],
    "arrivee": [],
    "non_classes": [],
-   "non_partants": [],
+   "non_partants": [
+    {
+     "num": 5,
+     "nom": "LOVAT"
+    }
+   ],
    "rapports": {
     "disponibles": false,
     "unite": "EUR pour 1 EUR de mise",
@@ -694,9 +1182,9 @@
     "libelle": "PRIX MEUBLES & CUISINES COULOIR A BROU",
     "discipline": "TROT_ATTELE",
     "distance_m": 2825,
-    "heure_depart_utc": "2026-11-25T12:27:00Z",
+    "heure_depart_utc": "2026-11-25T12:55:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "12:27 GMT (13:27 Paris)",
+    "heure_depart_affichee": "12:55 GMT (13:55 Paris)",
     "partants_declares": 16,
     "partants_actifs": 16
    },
@@ -749,9 +1237,9 @@
     "libelle": "PRIX SALON ACTUEL A BROU",
     "discipline": "TROT_ATTELE",
     "distance_m": 2300,
-    "heure_depart_utc": "2026-11-25T12:57:00Z",
+    "heure_depart_utc": "2026-11-25T13:25:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "12:57 GMT (13:57 Paris)",
+    "heure_depart_affichee": "13:25 GMT (14:25 Paris)",
     "partants_declares": 12,
     "partants_actifs": 12
    },
@@ -804,9 +1292,9 @@
     "libelle": "PRIX DE L'ATELIER DE L'OZANNE A BROU",
     "discipline": "TROT_ATTELE",
     "distance_m": 2825,
-    "heure_depart_utc": "2026-11-25T13:22:00Z",
+    "heure_depart_utc": "2026-11-25T13:55:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "13:22 GMT (14:22 Paris)",
+    "heure_depart_affichee": "13:55 GMT (14:55 Paris)",
     "partants_declares": 12,
     "partants_actifs": 12
    },
@@ -859,9 +1347,9 @@
     "libelle": "PRIX DE CONDAT",
     "discipline": "TROT_MONTE",
     "distance_m": 2700,
-    "heure_depart_utc": "2026-11-25T13:12:00Z",
+    "heure_depart_utc": "2026-11-25T13:47:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "13:12 GMT (14:12 Paris)",
+    "heure_depart_affichee": "13:47 GMT (14:47 Paris)",
     "partants_declares": 10,
     "partants_actifs": 10
    },
@@ -914,9 +1402,9 @@
     "libelle": "PRIX DE BONNIEUX",
     "discipline": "TROT_ATTELE",
     "distance_m": 2100,
-    "heure_depart_utc": "2026-11-25T13:47:00Z",
+    "heure_depart_utc": "2026-11-25T14:22:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "13:47 GMT (14:47 Paris)",
+    "heure_depart_affichee": "14:22 GMT (15:22 Paris)",
     "partants_declares": 16,
     "partants_actifs": 16
    },
@@ -969,9 +1457,9 @@
     "libelle": "PRIX DE SAINT-REMY LES CHEVREUSE",
     "discipline": "TROT_ATTELE",
     "distance_m": 2850,
-    "heure_depart_utc": "2026-11-25T14:22:00Z",
+    "heure_depart_utc": "2026-11-25T14:57:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "14:22 GMT (15:22 Paris)",
+    "heure_depart_affichee": "14:57 GMT (15:57 Paris)",
     "partants_declares": 16,
     "partants_actifs": 16
    },
@@ -1024,9 +1512,9 @@
     "libelle": "PRIX DES CAMPANULES",
     "discipline": "TROT_ATTELE",
     "distance_m": 2200,
-    "heure_depart_utc": "2026-11-25T14:57:00Z",
+    "heure_depart_utc": "2026-11-25T15:32:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "14:57 GMT (15:57 Paris)",
+    "heure_depart_affichee": "15:32 GMT (16:32 Paris)",
     "partants_declares": 11,
     "partants_actifs": 11
    },
@@ -1079,9 +1567,9 @@
     "libelle": "PRIX DE BRICQUEBEC",
     "discipline": "TROT_MONTE",
     "distance_m": 2850,
-    "heure_depart_utc": "2026-11-25T15:32:00Z",
+    "heure_depart_utc": "2026-11-25T16:07:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "15:32 GMT (16:32 Paris)",
+    "heure_depart_affichee": "16:07 GMT (17:07 Paris)",
     "partants_declares": 9,
     "partants_actifs": 9
    },
@@ -1134,9 +1622,9 @@
     "libelle": "PRIX DE MAISONS-ALFORT",
     "discipline": "TROT_ATTELE",
     "distance_m": 2850,
-    "heure_depart_utc": "2026-11-25T16:07:00Z",
+    "heure_depart_utc": "2026-11-25T16:42:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "16:07 GMT (17:07 Paris)",
+    "heure_depart_affichee": "16:42 GMT (17:42 Paris)",
     "partants_declares": 10,
     "partants_actifs": 10
    },
@@ -1189,9 +1677,9 @@
     "libelle": "PRIX DE LENTIGNY",
     "discipline": "TROT_MONTE",
     "distance_m": 2200,
-    "heure_depart_utc": "2026-11-25T16:42:00Z",
+    "heure_depart_utc": "2026-11-25T17:20:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "16:42 GMT (17:42 Paris)",
+    "heure_depart_affichee": "17:20 GMT (18:20 Paris)",
     "partants_declares": 10,
     "partants_actifs": 10
    },
@@ -1244,9 +1732,9 @@
     "libelle": "PRIX DE BOURBON-LANCY",
     "discipline": "TROT_ATTELE",
     "distance_m": 2200,
-    "heure_depart_utc": "2026-11-25T17:20:00Z",
+    "heure_depart_utc": "2026-11-25T17:54:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "17:20 GMT (18:20 Paris)",
+    "heure_depart_affichee": "17:54 GMT (18:54 Paris)",
     "partants_declares": 14,
     "partants_actifs": 14
    },
