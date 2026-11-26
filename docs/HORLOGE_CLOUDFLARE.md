@@ -133,6 +133,9 @@ compteur. Le calcul de nuit de 05h05 et 05h50 ne change pas.
 
 ## Mise à jour du 22/11 : calcul de nuit permanent et compteur de la recette A (environ 10 minutes)
 
+**Faite le 25/11 par Steph** : version `0f1be152`, quatre horaires vérifiés. Premier calcul
+de nuit lancé par l'horloge le 26/11 à 05h05 UTC (registre de l'ombre).
+
 À faire le dimanche 22/11, dans la journée (décision de Steph du 13/11). Un
 seul redéploiement : il couvre le calcul de nuit après le 24/11 et le compteur
 de la recette A, actif seul à partir du 30/11. Aucun nouveau secret.
