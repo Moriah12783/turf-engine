@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "20615dd77b30916c86edb6c20a0342dd84f39fa0",
-  "run_id": "45807446648",
+  "commit": "fd78d8b03f55f3d61fc9892cf409e8599620c8cf",
+  "run_id": "45808861965",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-26",
- "genere_le_utc": "2026-11-26T11:08:19Z",
+ "genere_le_utc": "2026-11-26T11:17:38Z",
  "nb_courses": 33,
  "compte_par_statut": {
-  "EN_ATTENTE": 31,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 30,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "da0761cbfc6a9273ac42c880d28f1f05696ac5d7e768148f6acdc32432db860d",
+ "empreinte_sha256": "e4d5215abdb02cf87a84fa728effd7e2cb760f2c8b2d58571f4219e8eb37c558",
  "courses": [
   {
    "course_id": "R1C1_26112026_VINCENNES",
@@ -612,7 +612,7 @@
     "verifiee_le_utc": "2026-11-26T10:15:26Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-26T10:15:26Z",
-    "derniere_verification_utc": "2026-11-26T11:06:19Z"
+    "derniere_verification_utc": "2026-11-26T11:15:22Z"
    },
    "correction": {
     "version": 2,
@@ -873,7 +873,7 @@
     "verifiee_le_utc": "2026-11-26T10:45:26Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-26T10:45:26Z",
-    "derniere_verification_utc": "2026-11-26T11:06:19Z"
+    "derniere_verification_utc": "2026-11-26T11:15:22Z"
    },
    "correction": {
     "version": 2,
@@ -938,14 +938,44 @@
     "partants_actifs": 13
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "DEPART_CONFIRME"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 11,
+     "nom": "NORMALIEN",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 7,
+     "nom": "N'HESITE PAS",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 8,
+     "nom": "NOWYAS",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 9,
+     "nom": "NOEL EN FAMILLE",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    11,
+    7,
+    8,
+    9
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
@@ -958,21 +988,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/26112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-26T11:15:22Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-26T11:15:22Z",
+    "derniere_verification_utc": "2026-11-26T11:15:22Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-26T11:15:22Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       11,
+       7,
+       8,
+       9
+      ]
+     }
+    ]
    }
   },
   {
@@ -1321,9 +1365,9 @@
     "libelle": "PRIX DU PETIT ETANG DE LA VILLETERTRE",
     "discipline": "PLAT",
     "distance_m": 1600,
-    "heure_depart_utc": "2026-11-26T11:19:00Z",
+    "heure_depart_utc": "2026-11-26T11:20:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "11:19 GMT (12:19 Paris)",
+    "heure_depart_affichee": "11:20 GMT (12:20 Paris)",
     "partants_declares": 7,
     "partants_actifs": 7
    },
@@ -1332,7 +1376,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
    },
    "classement": [],
    "arrivee": [],
