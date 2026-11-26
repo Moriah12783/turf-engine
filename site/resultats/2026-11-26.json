@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "dd7010eae071730779b3d400ee351125a3d235dc",
-  "run_id": "45809784392",
+  "commit": "e1aa3a156eb97d6bd7cb5f9f52bc716883db2ce2",
+  "run_id": "45811137336",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-26",
- "genere_le_utc": "2026-11-26T11:24:21Z",
+ "genere_le_utc": "2026-11-26T11:34:13Z",
  "nb_courses": 33,
  "compte_par_statut": {
-  "EN_ATTENTE": 30,
-  "PROVISOIRE": 0,
+  "EN_ATTENTE": 29,
+  "PROVISOIRE": 1,
   "DEFINITIVE": 3,
   "ANNULEE": 0
  },
- "empreinte_sha256": "28dad2e3e616669c4e7d612e7eaad36a34853f40a34944014f0adeda25992c15",
+ "empreinte_sha256": "901bda5045b57af537edc625ba90843de80a6eb90d07db6dcb37a7299ea51491",
  "courses": [
   {
    "course_id": "R1C1_26112026_VINCENNES",
@@ -88,7 +88,7 @@
     "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "13:30 GMT (14:30 Paris)",
     "partants_declares": 12,
-    "partants_actifs": 12
+    "partants_actifs": 11
    },
    "statut": {
     "code": "EN_ATTENTE",
@@ -100,7 +100,12 @@
    "classement": [],
    "arrivee": [],
    "non_classes": [],
-   "non_partants": [],
+   "non_partants": [
+    {
+     "num": 6,
+     "nom": "MELKIOR DE BAILLY"
+    }
+   ],
    "rapports": {
     "disponibles": false,
     "unite": "EUR pour 1 EUR de mise",
@@ -612,7 +617,7 @@
     "verifiee_le_utc": "2026-11-26T10:15:26Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-26T10:15:26Z",
-    "derniere_verification_utc": "2026-11-26T11:21:25Z"
+    "derniere_verification_utc": "2026-11-26T11:30:29Z"
    },
    "correction": {
     "version": 2,
@@ -873,7 +878,7 @@
     "verifiee_le_utc": "2026-11-26T10:45:26Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-26T10:45:26Z",
-    "derniere_verification_utc": "2026-11-26T11:21:25Z"
+    "derniere_verification_utc": "2026-11-26T11:30:29Z"
    },
    "correction": {
     "version": 2,
@@ -1127,7 +1132,7 @@
     "verifiee_le_utc": "2026-11-26T11:21:25Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-26T11:21:25Z",
-    "derniere_verification_utc": "2026-11-26T11:21:25Z"
+    "derniere_verification_utc": "2026-11-26T11:30:29Z"
    },
    "correction": {
     "version": 2,
@@ -1193,7 +1198,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "ROUGE_AUX_PARTANTS"
+    "pmu_statut": "JOKEYS_MONTENT_A_CHEVAL"
    },
    "classement": [],
    "arrivee": [],
@@ -1524,14 +1529,44 @@
     "partants_actifs": 7
    },
    "statut": {
-    "code": "EN_ATTENTE",
+    "code": "PROVISOIRE",
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "CHEVAUX_SOUS_ORDRES"
+    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
    },
-   "classement": [],
-   "arrivee": [],
+   "classement": [
+    {
+     "rang": 1,
+     "num": 5,
+     "nom": "KORSAKOV",
+     "dead_heat": false
+    },
+    {
+     "rang": 2,
+     "num": 7,
+     "nom": "PIANISTE",
+     "dead_heat": false
+    },
+    {
+     "rang": 3,
+     "num": 4,
+     "nom": "PARZIVAL",
+     "dead_heat": false
+    },
+    {
+     "rang": 4,
+     "num": 1,
+     "nom": "TISSLAM",
+     "dead_heat": false
+    }
+   ],
+   "arrivee": [
+    5,
+    7,
+    4,
+    1
+   ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
@@ -1544,21 +1579,35 @@
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
     "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
-    "canal": null,
-    "url_origine": null
+    "canal": "PMU_PROGRAMME",
+    "url_origine": "https://online.turfinfo.api.pmu.fr/rest/client/7/programme/26112026"
    },
    "horodatages": {
-    "premiere_lecture_utc": null,
+    "premiere_lecture_utc": "2026-11-26T11:30:29Z",
     "definitive_depuis_utc": null,
     "verifiee_le_utc": null,
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": null,
-    "derniere_verification_utc": null
+    "derniere_modification_utc": "2026-11-26T11:30:29Z",
+    "derniere_verification_utc": "2026-11-26T11:30:29Z"
    },
    "correction": {
-    "version": 0,
+    "version": 1,
     "nb_corrections": 0,
-    "historique": []
+    "historique": [
+     {
+      "version": 1,
+      "statut": "PROVISOIRE",
+      "raison": "INITIAL",
+      "horodatage_utc": "2026-11-26T11:30:29Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       5,
+       7,
+       4,
+       1
+      ]
+     }
+    ]
    }
   },
   {
