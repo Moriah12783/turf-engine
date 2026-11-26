@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "fd78d8b03f55f3d61fc9892cf409e8599620c8cf",
-  "run_id": "45808861965",
+  "commit": "dd7010eae071730779b3d400ee351125a3d235dc",
+  "run_id": "45809784392",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-26",
- "genere_le_utc": "2026-11-26T11:17:38Z",
+ "genere_le_utc": "2026-11-26T11:24:21Z",
  "nb_courses": 33,
  "compte_par_statut": {
   "EN_ATTENTE": 30,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 2,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 3,
   "ANNULEE": 0
  },
- "empreinte_sha256": "e4d5215abdb02cf87a84fa728effd7e2cb760f2c8b2d58571f4219e8eb37c558",
+ "empreinte_sha256": "28dad2e3e616669c4e7d612e7eaad36a34853f40a34944014f0adeda25992c15",
  "courses": [
   {
    "course_id": "R1C1_26112026_VINCENNES",
@@ -612,7 +612,7 @@
     "verifiee_le_utc": "2026-11-26T10:15:26Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-26T10:15:26Z",
-    "derniere_verification_utc": "2026-11-26T11:15:22Z"
+    "derniere_verification_utc": "2026-11-26T11:21:25Z"
    },
    "correction": {
     "version": 2,
@@ -873,7 +873,7 @@
     "verifiee_le_utc": "2026-11-26T10:45:26Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-26T10:45:26Z",
-    "derniere_verification_utc": "2026-11-26T11:15:22Z"
+    "derniere_verification_utc": "2026-11-26T11:21:25Z"
    },
    "correction": {
     "version": 2,
@@ -938,11 +938,11 @@
     "partants_actifs": 13
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -968,22 +968,152 @@
      "num": 9,
      "nom": "NOEL EN FAMILLE",
      "dead_heat": false
+    },
+    {
+     "rang": 5,
+     "num": 3,
+     "nom": "NALEWA VALLEY",
+     "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 6,
+     "nom": "NICKEL D'ANGOS",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 2,
+     "nom": "NEW VINGA",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 13,
+     "nom": "NUSHABA",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 5,
+     "nom": "NIGHTINGAL BURGOND",
+     "dead_heat": false
+    },
+    {
+     "rang": 10,
+     "num": 1,
+     "nom": "NAPPLE'S",
+     "dead_heat": false
+    },
+    {
+     "rang": 11,
+     "num": 4,
+     "nom": "NARCISSE D'ARTHEL",
+     "dead_heat": false
+    },
+    {
+     "rang": 12,
+     "num": 12,
+     "nom": "NE LACHE PAS",
+     "dead_heat": false
+    },
+    {
+     "rang": 13,
+     "num": 10,
+     "nom": "NENUPHAR BALL",
+     "dead_heat": false
     }
    ],
    "arrivee": [
     11,
     7,
     8,
-    9
+    9,
+    3,
+    6,
+    2,
+    13,
+    5,
+    1,
+    4,
+    12,
+    10
    ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "11": 6.7
+    },
+    "simple_place": {
+     "11": 2.3,
+     "7": 4.7,
+     "8": 2.9
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "11-7",
+      "dividende_pour_1_eur": 57.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "11-7",
+      "dividende_pour_1_eur": 16.1
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "11-8",
+      "dividende_pour_1_eur": 12.5
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "7-8",
+      "dividende_pour_1_eur": 18.1
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "11-7",
+      "dividende_pour_1_eur": 5.4
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "11-8",
+      "dividende_pour_1_eur": 5.4
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "11-9",
+      "dividende_pour_1_eur": 5.4
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "7-8",
+      "dividende_pour_1_eur": 5.4
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "7-9",
+      "dividende_pour_1_eur": 5.4
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "8-9",
+      "dividende_pour_1_eur": 5.4
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "11-7-8",
+      "dividende_pour_1_eur": 327.7
+     },
+     {
+      "type_pari": "MINI_MULTI",
+      "combinaison": "11-7-8-9",
+      "dividende_pour_1_eur": 10.3
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -993,14 +1123,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-11-26T11:15:22Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-11-26T11:21:25Z",
+    "verifiee_le_utc": "2026-11-26T11:21:25Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-11-26T11:15:22Z",
-    "derniere_verification_utc": "2026-11-26T11:15:22Z"
+    "derniere_modification_utc": "2026-11-26T11:21:25Z",
+    "derniere_verification_utc": "2026-11-26T11:21:25Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -1014,6 +1144,28 @@
        7,
        8,
        9
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-11-26T11:21:25Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       11,
+       7,
+       8,
+       9,
+       3,
+       6,
+       2,
+       13,
+       5,
+       1,
+       4,
+       12,
+       10
       ]
      }
     ]
@@ -1030,9 +1182,9 @@
     "libelle": "PRIX SN AGRIP",
     "discipline": "PLAT",
     "distance_m": 2000,
-    "heure_depart_utc": "2026-11-26T11:35:00Z",
+    "heure_depart_utc": "2026-11-26T11:36:00Z",
     "heure_depart_source": "PMU_HEUREDEPART",
-    "heure_depart_affichee": "11:35 GMT (12:35 Paris)",
+    "heure_depart_affichee": "11:36 GMT (12:36 Paris)",
     "partants_declares": 16,
     "partants_actifs": 16
    },
@@ -1041,7 +1193,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -1376,7 +1528,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
+    "pmu_statut": "CHEVAUX_SOUS_ORDRES"
    },
    "classement": [],
    "arrivee": [],
