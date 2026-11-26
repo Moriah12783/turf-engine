@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "2402a8d836b8a51f019b9e6f26f4fecd75b01085",
-  "run_id": "45818797759",
+  "commit": "04a244951e48eba7d99c7b9e66d9a9e7c814204b",
+  "run_id": "45820212366",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-26",
- "genere_le_utc": "2026-11-26T12:23:32Z",
+ "genere_le_utc": "2026-11-26T12:33:25Z",
  "nb_courses": 33,
  "compte_par_statut": {
   "EN_ATTENTE": 26,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 6,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 7,
   "ANNULEE": 0
  },
- "empreinte_sha256": "a51873f8f44fc76b03bbefcf7c6319649b48841c78c67ed8abd35b3773eb8af1",
+ "empreinte_sha256": "d5b2e112e9ca9bdcb0f97e5bc39a7e073fc38ce0d39d126771b7e9c460e813c6",
  "courses": [
   {
    "course_id": "R1C1_26112026_VINCENNES",
@@ -617,7 +617,7 @@
     "verifiee_le_utc": "2026-11-26T10:15:26Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-26T10:15:26Z",
-    "derniere_verification_utc": "2026-11-26T12:21:11Z"
+    "derniere_verification_utc": "2026-11-26T12:30:31Z"
    },
    "correction": {
     "version": 2,
@@ -878,7 +878,7 @@
     "verifiee_le_utc": "2026-11-26T10:45:26Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-26T10:45:26Z",
-    "derniere_verification_utc": "2026-11-26T12:21:11Z"
+    "derniere_verification_utc": "2026-11-26T12:30:31Z"
    },
    "correction": {
     "version": 2,
@@ -1132,7 +1132,7 @@
     "verifiee_le_utc": "2026-11-26T11:21:25Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-26T11:21:25Z",
-    "derniere_verification_utc": "2026-11-26T12:21:11Z"
+    "derniere_verification_utc": "2026-11-26T12:30:31Z"
    },
    "correction": {
     "version": 2,
@@ -1404,7 +1404,7 @@
     "verifiee_le_utc": "2026-11-26T12:00:37Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-26T12:00:37Z",
-    "derniere_verification_utc": "2026-11-26T12:21:11Z"
+    "derniere_verification_utc": "2026-11-26T12:30:31Z"
    },
    "correction": {
     "version": 2,
@@ -1470,11 +1470,11 @@
     "partants_actifs": 16
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE_NON_VALIDEE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -1506,6 +1506,72 @@
      "num": 6,
      "nom": "STAR CREEK",
      "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 13,
+     "nom": "THE PRESIDENT",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 15,
+     "nom": "ILDOUCE FLECHOIS",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 3,
+     "nom": "PINGO",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 4,
+     "nom": "GRAND MACHO",
+     "dead_heat": false
+    },
+    {
+     "rang": 10,
+     "num": 8,
+     "nom": "KUMRAN",
+     "dead_heat": false
+    },
+    {
+     "rang": 11,
+     "num": 12,
+     "nom": "BLOWN BY THE WIND",
+     "dead_heat": false
+    },
+    {
+     "rang": 12,
+     "num": 11,
+     "nom": "DON'T WATCH ME CRY",
+     "dead_heat": false
+    },
+    {
+     "rang": 13,
+     "num": 10,
+     "nom": "ZARAKIVA",
+     "dead_heat": false
+    },
+    {
+     "rang": 14,
+     "num": 7,
+     "nom": "ALYAQUT",
+     "dead_heat": false
+    },
+    {
+     "rang": 15,
+     "num": 9,
+     "nom": "LIKING",
+     "dead_heat": false
+    },
+    {
+     "rang": 16,
+     "num": 16,
+     "nom": "SPRING LILY",
+     "dead_heat": false
     }
    ],
    "arrivee": [
@@ -1513,16 +1579,104 @@
     2,
     1,
     5,
-    6
+    6,
+    13,
+    15,
+    3,
+    4,
+    8,
+    12,
+    11,
+    10,
+    7,
+    9,
+    16
    ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "14": 13.9
+    },
+    "simple_place": {
+     "14": 5.1,
+     "2": 6.5,
+     "1": 4.4
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "14-2",
+      "dividende_pour_1_eur": 163.7
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "14-2",
+      "dividende_pour_1_eur": 40.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "14-1",
+      "dividende_pour_1_eur": 22.0
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "2-1",
+      "dividende_pour_1_eur": 25.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "14-2",
+      "dividende_pour_1_eur": 6.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "14-1",
+      "dividende_pour_1_eur": 6.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "14-5",
+      "dividende_pour_1_eur": 6.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "2-1",
+      "dividende_pour_1_eur": 6.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "2-5",
+      "dividende_pour_1_eur": 6.8
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "1-5",
+      "dividende_pour_1_eur": 6.8
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "14-2-1",
+      "dividende_pour_1_eur": 522.4
+     },
+     {
+      "type_pari": "MULTI",
+      "combinaison": "14-2-1-5",
+      "dividende_pour_1_eur": 9.3
+     },
+     {
+      "type_pari": "QUARTE_PLUS",
+      "combinaison": "14-2-1-5",
+      "dividende_pour_1_eur": 261.3
+     },
+     {
+      "type_pari": "QUARTE_PLUS",
+      "combinaison": "14-2-1",
+      "dividende_pour_1_eur": 38.3
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -1532,14 +1686,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-11-26T12:21:11Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-11-26T12:30:31Z",
+    "verifiee_le_utc": "2026-11-26T12:30:31Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-11-26T12:21:11Z",
-    "derniere_verification_utc": "2026-11-26T12:21:11Z"
+    "derniere_modification_utc": "2026-11-26T12:30:31Z",
+    "derniere_verification_utc": "2026-11-26T12:30:31Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -1554,6 +1708,31 @@
        1,
        5,
        6
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-11-26T12:30:31Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       14,
+       2,
+       1,
+       5,
+       6,
+       13,
+       15,
+       3,
+       4,
+       8,
+       12,
+       11,
+       10,
+       7,
+       9,
+       16
       ]
      }
     ]
@@ -1581,7 +1760,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
@@ -1903,7 +2082,7 @@
     "verifiee_le_utc": "2026-11-26T11:36:21Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-26T11:36:21Z",
-    "derniere_verification_utc": "2026-11-26T12:21:11Z"
+    "derniere_verification_utc": "2026-11-26T12:30:31Z"
    },
    "correction": {
     "version": 2,
@@ -2134,7 +2313,7 @@
     "verifiee_le_utc": "2026-11-26T12:06:30Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-26T12:06:30Z",
-    "derniere_verification_utc": "2026-11-26T12:21:11Z"
+    "derniere_verification_utc": "2026-11-26T12:30:31Z"
    },
    "correction": {
     "version": 2,
@@ -2198,7 +2377,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "CHEVAUX_ENTRENT_EN_PISTE"
+    "pmu_statut": "DEPART_CONFIRME"
    },
    "classement": [],
    "arrivee": [],
@@ -2466,7 +2645,7 @@
     "heure_depart_source": "PMU_HEUREDEPART",
     "heure_depart_affichee": "15:32 GMT (16:32 Paris)",
     "partants_declares": 15,
-    "partants_actifs": 15
+    "partants_actifs": 14
    },
    "statut": {
     "code": "EN_ATTENTE",
@@ -2478,7 +2657,12 @@
    "classement": [],
    "arrivee": [],
    "non_classes": [],
-   "non_partants": [],
+   "non_partants": [
+    {
+     "num": 11,
+     "nom": "KIEVSKY"
+    }
+   ],
    "rapports": {
     "disponibles": false,
     "unite": "EUR pour 1 EUR de mise",
