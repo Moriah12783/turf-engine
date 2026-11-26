@@ -3,20 +3,20 @@
  "fournisseur": "Elite Turf — prono.elite-turf.fr",
  "origine": "PMU (flux public turfinfo, lecture HTTPS vérifiée)",
  "version_code": {
-  "commit": "1ffaff66311fe8d9a2e89a70e11b984ff2aecf5a",
-  "run_id": "45802837930",
+  "commit": "ef7c1508bd6104b0918e135498f520ab31cb1f88",
+  "run_id": "45804214856",
   "depot": "Moriah12783/turf-engine"
  },
  "date_course": "2026-11-26",
- "genere_le_utc": "2026-11-26T10:39:27Z",
+ "genere_le_utc": "2026-11-26T10:49:15Z",
  "nb_courses": 33,
  "compte_par_statut": {
   "EN_ATTENTE": 31,
-  "PROVISOIRE": 1,
-  "DEFINITIVE": 1,
+  "PROVISOIRE": 0,
+  "DEFINITIVE": 2,
   "ANNULEE": 0
  },
- "empreinte_sha256": "2ab6cdbf77901c16615c277ec4c4b28f75360ce2197af15d464ebc5ef1a5f75e",
+ "empreinte_sha256": "a6cc8498d0b08f42c4bdfd41377eb7e11d0f5ecbdf0d23271bc5c1915974029b",
  "courses": [
   {
    "course_id": "R1C1_26112026_VINCENNES",
@@ -612,7 +612,7 @@
     "verifiee_le_utc": "2026-11-26T10:15:26Z",
     "enregistree_ancien_systeme_utc": null,
     "derniere_modification_utc": "2026-11-26T10:15:26Z",
-    "derniere_verification_utc": "2026-11-26T10:36:20Z"
+    "derniere_verification_utc": "2026-11-26T10:45:26Z"
    },
    "correction": {
     "version": 2,
@@ -670,11 +670,11 @@
     "partants_actifs": 15
    },
    "statut": {
-    "code": "PROVISOIRE",
-    "definitive": false,
-    "finalite": null,
+    "code": "DEFINITIVE",
+    "definitive": true,
+    "finalite": "VERIFIEE_PMU",
     "annulee": false,
-    "pmu_statut": "ARRIVEE_PROVISOIRE"
+    "pmu_statut": "ARRIVEE_DEFINITIVE_COMPLETE"
    },
    "classement": [
     {
@@ -706,6 +706,66 @@
      "num": 12,
      "nom": "MARVEL BELLE",
      "dead_heat": false
+    },
+    {
+     "rang": 6,
+     "num": 13,
+     "nom": "NOVA MAG",
+     "dead_heat": false
+    },
+    {
+     "rang": 7,
+     "num": 9,
+     "nom": "NOTHING ELSE RASKO",
+     "dead_heat": false
+    },
+    {
+     "rang": 8,
+     "num": 5,
+     "nom": "SWEET ESCAPE",
+     "dead_heat": false
+    },
+    {
+     "rang": 9,
+     "num": 1,
+     "nom": "ALYSTAIR",
+     "dead_heat": false
+    },
+    {
+     "rang": 10,
+     "num": 14,
+     "nom": "QUEEN MERCURY",
+     "dead_heat": false
+    },
+    {
+     "rang": 11,
+     "num": 4,
+     "nom": "ZITA'S DAUGHTER",
+     "dead_heat": false
+    },
+    {
+     "rang": 12,
+     "num": 15,
+     "nom": "GIN TA DE BELLEVUE",
+     "dead_heat": false
+    },
+    {
+     "rang": 13,
+     "num": 7,
+     "nom": "FRANKIRCO",
+     "dead_heat": false
+    },
+    {
+     "rang": 14,
+     "num": 10,
+     "nom": "SAMIRA NONANTAISE",
+     "dead_heat": false
+    },
+    {
+     "rang": 15,
+     "num": 6,
+     "nom": "GATSBO",
+     "dead_heat": false
     }
    ],
    "arrivee": [
@@ -713,16 +773,93 @@
     8,
     3,
     11,
-    12
+    12,
+    13,
+    9,
+    5,
+    1,
+    14,
+    4,
+    15,
+    7,
+    10,
+    6
    ],
    "non_classes": [],
    "non_partants": [],
    "rapports": {
-    "disponibles": false,
+    "disponibles": true,
     "unite": "EUR pour 1 EUR de mise",
-    "simple_gagnant": {},
-    "simple_place": {},
-    "autres": []
+    "simple_gagnant": {
+     "2": 2.9
+    },
+    "simple_place": {
+     "2": 1.4,
+     "8": 1.9,
+     "3": 2.9
+    },
+    "autres": [
+     {
+      "type_pari": "COUPLE_GAGNANT",
+      "combinaison": "2-8",
+      "dividende_pour_1_eur": 5.9
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "2-8",
+      "dividende_pour_1_eur": 3.5
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "2-3",
+      "dividende_pour_1_eur": 5.6
+     },
+     {
+      "type_pari": "COUPLE_PLACE",
+      "combinaison": "8-3",
+      "dividende_pour_1_eur": 9.3
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "2-8",
+      "dividende_pour_1_eur": 2.7
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "2-3",
+      "dividende_pour_1_eur": 2.7
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "2-11",
+      "dividende_pour_1_eur": 2.7
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "8-3",
+      "dividende_pour_1_eur": 2.7
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "8-11",
+      "dividende_pour_1_eur": 2.7
+     },
+     {
+      "type_pari": "DEUX_SUR_QUATRE",
+      "combinaison": "3-11",
+      "dividende_pour_1_eur": 2.7
+     },
+     {
+      "type_pari": "TRIO",
+      "combinaison": "2-8-3",
+      "dividende_pour_1_eur": 28.1
+     },
+     {
+      "type_pari": "MULTI",
+      "combinaison": "2-8-3-11",
+      "dividende_pour_1_eur": 4.8
+     }
+    ]
    },
    "source": {
     "fournisseur": "Elite Turf — prono.elite-turf.fr",
@@ -732,14 +869,14 @@
    },
    "horodatages": {
     "premiere_lecture_utc": "2026-11-26T10:36:20Z",
-    "definitive_depuis_utc": null,
-    "verifiee_le_utc": null,
+    "definitive_depuis_utc": "2026-11-26T10:45:26Z",
+    "verifiee_le_utc": "2026-11-26T10:45:26Z",
     "enregistree_ancien_systeme_utc": null,
-    "derniere_modification_utc": "2026-11-26T10:36:20Z",
-    "derniere_verification_utc": "2026-11-26T10:36:20Z"
+    "derniere_modification_utc": "2026-11-26T10:45:26Z",
+    "derniere_verification_utc": "2026-11-26T10:45:26Z"
    },
    "correction": {
-    "version": 1,
+    "version": 2,
     "nb_corrections": 0,
     "historique": [
      {
@@ -754,6 +891,30 @@
        3,
        11,
        12
+      ]
+     },
+     {
+      "version": 2,
+      "statut": "DEFINITIVE",
+      "raison": "PROVISOIRE_VERS_DEFINITIVE",
+      "horodatage_utc": "2026-11-26T10:45:26Z",
+      "source": "PMU_PROGRAMME",
+      "classement": [
+       2,
+       8,
+       3,
+       11,
+       12,
+       13,
+       9,
+       5,
+       1,
+       14,
+       4,
+       15,
+       7,
+       10,
+       6
       ]
      }
     ]
@@ -781,7 +942,7 @@
     "definitive": false,
     "finalite": null,
     "annulee": false,
-    "pmu_statut": "PROGRAMMEE"
+    "pmu_statut": "ROUGE_AUX_PARTANTS"
    },
    "classement": [],
    "arrivee": [],
