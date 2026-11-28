@@ -15747,7 +15747,7 @@
       "provisoire_reason": null,
       "publishable": true,
       "publication_reason": "OK",
-      "display_horizon": "T90",
+      "display_horizon": "T30",
       "editions_moteur": {
         "T_MATIN": {
           "sel": "4-5-2-3-1-6",
@@ -15760,6 +15760,13 @@
           "sel": "1-2-5-4-3-6",
           "nominal": false,
           "lock": "17:00",
+          "priced_ratio": 1.0,
+          "odds_real": true
+        },
+        "T30": {
+          "sel": "1-2-5-4-3-6",
+          "nominal": false,
+          "lock": "18:00",
           "priced_ratio": 1.0,
           "odds_real": true
         }
@@ -15778,6 +15785,13 @@
           "lock": "17:00",
           "priced_ratio": 1.0,
           "odds_real": true
+        },
+        "T30": {
+          "sel": "1-2-5-4-3-6",
+          "nominal": false,
+          "lock": "18:00",
+          "priced_ratio": 1.0,
+          "odds_real": true
         }
       },
       "date": "2026-11-28",
@@ -15794,10 +15808,10 @@
       "is_started": false,
       "start_time_utc": "2026-11-28T18:34:00Z",
       "contract_recorded": true,
-      "confidence_stars": 4,
-      "confidence_label": "⭐⭐⭐⭐ (Course Favorable - Bon niveau de confiance)",
+      "confidence_stars": 5,
+      "confidence_label": "⭐⭐⭐⭐⭐ (Course Très Fiable - Bases Ultra-Solides)",
       "is_no_bet": false,
-      "is_master": true,
+      "is_master": false,
       "np_nums": [],
       "sel_moteur": "1-2-5-4-3-6",
       "sel_moteur_list": [
@@ -15819,8 +15833,8 @@
         "no_bet": false,
         "tickets": [
           {
-            "produit": "COUPLE_GAGNANT",
-            "libelle": "Couplé Maître du jour (Gagnant & Placé)",
+            "produit": "COUPLE_PLACE",
+            "libelle": "Couplé Placé (ou 2sur4)",
             "chevaux": [
               1,
               2
@@ -15889,7 +15903,7 @@
           }
         ],
         "ticket_securite": {
-          "pari": "Couplé Maître du jour (Gagnant & Placé)",
+          "pari": "Couplé Placé (ou 2sur4)",
           "chevaux": [
             1,
             2
@@ -15924,13 +15938,13 @@
           "budget_conseille_eur": null
         }
       },
-      "sel_marche": "1-2-5-3-4-6",
+      "sel_marche": "1-2-5-4-3-6",
       "sel_marche_list": [
         1,
         2,
         5,
-        3,
         4,
+        3,
         6
       ],
       "common_count": 6,
@@ -15943,8 +15957,8 @@
       "couv_marche": "0/5",
       "couv_marche_count": 0,
       "couverture_label": "Course à venir",
-      "decision": "⭐ COUPLE MAITRE: 1 - 2",
-      "decision_badge": "badge-master",
+      "decision": "Bases: 1 - 2",
+      "decision_badge": "badge-base",
       "runners": [
         {
           "num": 1,
@@ -15956,9 +15970,9 @@
           "morning_odds": 1.1,
           "live_odds": 1.9,
           "o_t90": 2.2,
-          "o_t30": null,
+          "o_t30": 1.9,
           "o_t15": null,
-          "prob_pct": 35.5,
+          "prob_pct": 41.2,
           "value_index": 0.78,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
@@ -15974,10 +15988,10 @@
           "morning_odds": 6.7,
           "live_odds": 4.5,
           "o_t90": 3.4,
-          "o_t30": null,
+          "o_t30": 4.5,
           "o_t15": null,
-          "prob_pct": 26.6,
-          "value_index": 0.9,
+          "prob_pct": 21.3,
+          "value_index": 0.96,
           "smart_signal": "FORTE_BAISSE_INSIDER",
           "is_np": false,
           "odds_real": true
@@ -15992,10 +16006,10 @@
           "morning_odds": 6.4,
           "live_odds": 4.8,
           "o_t90": 4.5,
-          "o_t30": null,
+          "o_t30": 4.8,
           "o_t15": null,
-          "prob_pct": 19.4,
-          "value_index": 0.87,
+          "prob_pct": 18.5,
+          "value_index": 0.89,
           "smart_signal": "BAISSE_CONFIRMEE",
           "is_np": false,
           "odds_real": true
@@ -16010,11 +16024,11 @@
           "morning_odds": 8.1,
           "live_odds": 8.5,
           "o_t90": 11.0,
-          "o_t30": null,
+          "o_t30": 8.5,
           "o_t15": null,
-          "prob_pct": 7.3,
+          "prob_pct": 9.5,
           "value_index": 0.81,
-          "smart_signal": "LEGERE_HAUSSE",
+          "smart_signal": "STABLE",
           "is_np": false,
           "odds_real": true
         },
@@ -16028,10 +16042,10 @@
           "morning_odds": 1.7,
           "live_odds": 14.0,
           "o_t90": 11.0,
-          "o_t30": null,
+          "o_t30": 14.0,
           "o_t15": null,
-          "prob_pct": 7.2,
-          "value_index": 0.79,
+          "prob_pct": 5.8,
+          "value_index": 0.81,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
@@ -16046,10 +16060,10 @@
           "morning_odds": 6.4,
           "live_odds": 22.0,
           "o_t90": 21.0,
-          "o_t30": null,
+          "o_t30": 22.0,
           "o_t15": null,
-          "prob_pct": 3.9,
-          "value_index": 0.82,
+          "prob_pct": 3.8,
+          "value_index": 0.83,
           "smart_signal": "FORTE_HAUSSE_DELAISSE",
           "is_np": false,
           "odds_real": true
